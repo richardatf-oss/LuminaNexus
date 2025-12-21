@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LuminaNexus — Chavruta</title>
+  <link rel="stylesheet" href="../styles/main.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <a class="brand__title" href="../index.html">LuminaNexus</a>
+      <div class="brand__tag">ChavrutaGPT — Torah-first study partner</div>
+    </div>
+
+    <nav class="nav">
+      <a href="../index.html">The Gate</a>
+      <a href="./torah-first.html">Torah First</a>
+      <a href="./seven-laws.html">The Seven Laws</a>
+      <a href="./study-paths.html">Study Paths</a>
+      <a href="./chavruta.html" aria-current="page">Chavruta</a>
+      <a href="./trees.html">The Trees</a>
+      <a href="./library.html">The Library</a>
+      <a href="./ivrit-haor.html">Ivrit HaOr</a>
+      <a href="./about.html">About</a>
+      <a href="./blessing.html">Blessing</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero hero--tight">
+      <h1>Chavruta</h1>
+      <p class="lead">
+        Ask a Torah question, paste a verse, explore a Hebrew root, or choose “Physics & Order.”
+        ChavrutaGPT responds: <strong>peshat first</strong>, then one classic note, then questions back.
+      </p>
+    </section>
+
+    <section class="card">
+      <div class="row">
+        <label class="label" for="mode">Mode</label>
+        <select id="mode" class="select">
+          <option value="torah" selected>Torah</option>
+          <option value="ivrit">Ivrit</option>
+          <option value="kabbalah">Kabbalah (ethical/cosmological)</option>
+          <option value="physics">Physics &amp; Order</option>
+        </select>
+      </div>
+
+      <label class="label" for="prompt">Your prompt</label>
+      <textarea id="prompt" class="textarea" rows="5" placeholder="Example: Explain Genesis 1:1 peshat first, then one commentator note, then questions."></textarea>
+
+      <div class="cta-row">
+        <button id="send" class="btn">Send</button>
+        <button id="clear" class="btn btn--ghost">Clear</button>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="label">Response</div>
+      <pre id="output" class="output" aria-live="polite"></pre>
+      <div id="status" class="status"></div>
+    </section>
+
+    <footer class="footer">
+      <div>Tip: Be specific. Paste the exact verse or question you want to study.</div>
+    </footer>
+  </main>
+
+  <script src="../scripts/main.js" type="module"></script>
+</body>
+</html>
