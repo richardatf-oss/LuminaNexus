@@ -1,80 +1,190 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LuminaNexus — Chavruta</title>
-  <link rel="stylesheet" href="../styles/main.css" />
-</head>
-<body>
-  <header class="site-header">
-    <div class="brand">
-      <a class="brand__title" href="../index.html">LuminaNexus</a>
-      <div class="brand__tag">ChavrutaGPT — Torah-first study partner</div>
-    </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>LuminaNexus — Chavruta</title>
+    <meta
+      name="description"
+      content="ChavrutaGPT — a Torah-first study partner: peshat first, one classical note, then questions. Clear boundaries, no psak."
+    />
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
 
-    <nav class="nav">
-      <a href="../index.html">The Gate</a>
-      <a href="./torah-first.html">Torah First</a>
-      <a href="./seven-laws.html">The Seven Laws</a>
-      <a href="./study-paths.html">Study Paths</a>
-      <a href="./chavruta.html" aria-current="page">Chavruta</a>
-      <a href="./trees.html">The Trees</a>
-      <a href="./library.html">The Library</a>
-      <a href="./ivrit-haor.html">Ivrit HaOr</a>
-      <a href="./about.html">About</a>
-      <a href="./blessing.html">Blessing</a>
-    </nav>
-  </header>
-
-  <main class="container">
-    <section class="hero hero--tight">
-      <h1>Chavruta</h1>
-      <p class="lead">
-        Ask a Torah question, paste a verse, explore a Hebrew root, or choose “Physics & Order.”
-        ChavrutaGPT responds: <strong>peshat first</strong>, then one classic note, then questions back.
-      </p>
-    </section>
-
-    <section class="card">
-      <div class="row">
-        <label class="label" for="mode">Mode</label>
-        <select id="mode" class="select">
-          <option value="torah" selected>Torah</option>
-          <option value="ivrit">Ivrit</option>
-          <option value="kabbalah">Kabbalah (ethical/cosmological)</option>
-          <option value="physics">Physics &amp; Order</option>
-        </select>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <a class="brand__title" href="../index.html">LuminaNexus</a>
+        <div class="brand__tag">ChavrutaGPT — peshat first, then questions</div>
       </div>
 
-      <label class="label" for="prompt">Your prompt</label>
-      <textarea id="prompt" class="textarea" rows="5" placeholder="Example: Explain Genesis 1:1 peshat first, then one commentator note, then questions."></textarea>
+      <nav class="nav">
+        <a href="../index.html">The Gate</a>
+        <a href="./torah-first.html">Torah First</a>
+        <a href="./seven-laws.html">The Seven Laws</a>
+        <a href="./study-paths.html">Study Paths</a>
+        <a href="./chavruta.html" aria-current="page">Chavruta</a>
+        <a href="./trees.html">The Trees</a>
+        <a href="./library.html">The Library</a>
+        <a href="./ivrit-haor.html">Ivrit HaOr</a>
+        <a href="./about.html">About</a>
+        <a href="./blessing.html">Blessing</a>
+      </nav>
+    </header>
 
-      <div class="cta-row">
-        <button id="send" class="btn">Send</button>
-        <button id="clear" class="btn btn--ghost">Clear</button>
-      </div>
+    <main class="container">
+      <section class="hero hero--tight">
+        <h1>Chavruta</h1>
+        <p class="lead">
+          A Torah-first study partner. No guru tone. No spiritual inflation.
+          Just a clean learning rhythm: text → clarity → questions.
+        </p>
+      </section>
 
-      <div class="hr"></div>
+      <section class="card">
+        <h2>The Chavruta Rhythm</h2>
+        <ol>
+          <li><strong>Text (peshat):</strong> What does it plainly say?</li>
+          <li><strong>One steady note:</strong> A single classical lens (when helpful), not a flood.</li>
+          <li><strong>Questions:</strong> What does it demand of thought, character, and action?</li>
+          <li><strong>One next step:</strong> A practical takeaway you can actually live.</li>
+        </ol>
+        <p class="small">
+          This is designed to build steadiness, not dependency.
+        </p>
+      </section>
 
-      <div class="label">Response</div>
-      <pre id="output" class="output" aria-live="polite"></pre>
-      <div id="status" class="status"></div>
-    </section>
+      <section class="card">
+        <h2>Boundaries (Read This Once)</h2>
+        <ul>
+          <li><strong>No psak:</strong> this site does not issue halachic rulings or personal legal decisions.</li>
+          <li><strong>No conversion engine:</strong> we do not guide conversion processes or claim authority.</li>
+          <li><strong>No theurgy / magic:</strong> no manipulative practices, incantations, or power-claims.</li>
+          <li><strong>Speculation labeled:</strong> metaphor and analogy are clearly distinguished from sources.</li>
+        </ul>
+        <p>
+          If a response ever feels urgent, coercive, or inflated—pause.
+          Return to <a class="textlink" href="./torah-first.html">Torah First</a>.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Study Modes</h2>
+        <p>
+          Choose one mode per session. Keep it simple. Short sessions win.
+        </p>
+
+        <div class="grid">
+          <article class="card">
+            <h3>Torah (Peshat First)</h3>
+            <p>
+              Read a passage slowly. Clarify plain meaning. Then ask:
+              “What is the text actually doing?”
+            </p>
+            <ul>
+              <li>Output: peshat summary + 3 questions</li>
+              <li>Optional: 1 classical note</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Seven Laws (Practice)</h3>
+            <p>
+              Work one law at a time. Small, real-life applications.
+              Repair beats intensity.
+            </p>
+            <ul>
+              <li>Output: principle + examples + one next step</li>
+              <li>Optional: a short reflection question</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Hebrew (Ivrit)</h3>
+            <p>
+              Learn a word/root with pronunciation guidance and usage,
+              staying concrete and respectful.
+            </p>
+            <ul>
+              <li>Output: root meaning + 3 related words</li>
+              <li>Optional: simple grammar note</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Ethical Kabbalah (Bounded)</h3>
+            <p>
+              Only as metaphor for character and responsibility.
+              Never as power, never as performance.
+            </p>
+            <ul>
+              <li>Output: ethical reading + 3 reflection prompts</li>
+              <li>Boundary reminder included</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Physics &amp; Order (Analogy Only)</h3>
+            <p>
+              Wonder is allowed. Claims are not.
+              Torah remains primary; science is analogy, not proof.
+            </p>
+            <ul>
+              <li>Output: metaphor + caution + grounded takeaway</li>
+              <li>Clear “analogy only” labeling</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Start a Session</h2>
+        <p>
+          Copy one of these prompts into your Chavruta chat and begin.
+        </p>
+
+        <h3>Prompt A — Torah (peshat first)</h3>
+        <p class="small">
+          Paste a short passage and say: “Peshat first. One classical note max. Then ask me 3 questions.”
+        </p>
+
+        <h3>Prompt B — Seven Laws (practice)</h3>
+        <p class="small">
+          Say: “Today I’m working on (one law). Give me 2 examples, 1 boundary, and 1 next step.”
+        </p>
+
+        <h3>Prompt C — Hebrew (concrete)</h3>
+        <p class="small">
+          Say: “Teach me the Hebrew word ____ : pronunciation, root, meaning, 3 related words, and one example sentence.”
+        </p>
+
+        <p class="small">
+          Tip: keep passages short. One paragraph is plenty.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>What “Good Chavruta” Feels Like</h2>
+        <ul>
+          <li>Less urgency. More steadiness.</li>
+          <li>More honesty. Less performance.</li>
+          <li>More responsibility. Less escapism.</li>
+          <li>Clearer boundaries. Deeper peace.</li>
+        </ul>
+        <p>
+          If that’s happening, it’s working.
+        </p>
+      </section>
+    </main>
 
     <footer class="footer">
-      <div>Tip: Be specific. Paste the exact verse or question you want to study.</div>
+      <div class="container">
+        <p class="small">© LuminaNexus — offered freely for learning.</p>
+        <p class="small">
+          Torah First: peshat before abstraction, tradition before novelty,
+          learning as service — with clear boundaries and gentle dignity.
+        </p>
+      </div>
     </footer>
-  </main>
-
-  <script src="../scripts/main.js" type="module"></script>
-</body>
-  <footer class="site-footer">
-  <div class="container">
-    <p class="muted">
-      Torah First: peshat before abstraction, tradition before novelty, learning as service — with clear boundaries and gentle dignity.
-    </p>
-  </div>
-</footer>
-
+  </body>
 </html>
