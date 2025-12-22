@@ -453,3 +453,28 @@ main,
   font-size:.92rem;
   line-height:1.4;
 }
+/* Tighten contrast so the UI doesn't look washed */
+.card,
+.output{
+  background: rgba(10,12,18,.62);
+  border-color: rgba(255,255,255,.14);
+}
+
+/* Crisp the pre block and reduce haze */
+.output pre{
+  color: rgba(255,255,255,.94);
+}
+
+/* Increase separation between stacked panels */
+.card{ box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+
+/* Inputs slightly brighter for readability */
+.field input,
+.field select,
+.field textarea{
+  background: rgba(0,0,0,.35);
+  border-color: rgba(255,255,255,.14);
+}
+
+/* The glow overlay is pretty — but tone it down a hair */
+body::before{ opacity:.72; }
