@@ -4,14 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>LuminaNexus — Chavruta</title>
-    <meta
-      name="description"
-      content="ChavrutaGPT: a Torah-first study partner prompt builder — peshat first, one classical note if it helps, then questions and a practical next step."
-    />
     <link rel="stylesheet" href="../styles/main.css" />
   </head>
 
-  <body class="page-chavruta">
+  <body>
     <header class="site-header">
       <div class="brand">
         <a class="brand__title" href="../index.html">LuminaNexus</a>
@@ -33,107 +29,79 @@
     </header>
 
     <main class="container">
-      <!-- HERO -->
-      <section class="hero hero--tight hero--bg">
-        <div class="hero__inner">
-          <h1>Chavruta</h1>
-          <p class="lead">
-            Build a clean, Torah-first prompt — <strong>peshat first</strong>, one classical note only if it clarifies,
-            then questions and a practical next step.
-          </p>
-        </div>
-      </section>
-
-      <!-- TORAH-FIRST BOUNDARIES -->
-      <section class="card">
-        <h2>Torah-first boundaries</h2>
-        <ul class="bullets">
-          <li><strong>Peshat first:</strong> plain meaning before abstraction.</li>
-          <li><strong>One note only:</strong> Rashi / Ramban / Ibn Ezra etc. only if it clarifies the peshat.</li>
-          <li><strong>No psak:</strong> learning support, not halachic rulings.</li>
-          <li><strong>No conversion guidance:</strong> dignity and clear boundaries.</li>
-          <li><strong>No theurgy / “magic”:</strong> no incantations, manipulation, urgency, or power-claims.</li>
-          <li><strong>Speculation labeled:</strong> analogy stays analogy; sources stay sources.</li>
-        </ul>
-        <p class="small muted">
-          If anything feels coercive, inflated, or urgent — pause. Return to Torah First and the plain text.
+      <section class="hero hero--tight hero--glow">
+        <h1>ChavrutaGPT</h1>
+        <p class="lead">
+          Build a clean, Torah-first prompt. Copy it into your chavruta chat. Keep it honest. Keep it grounded.
         </p>
       </section>
 
-      <!-- START A SESSION -->
-      <section class="card">
-        <h2>Start a session</h2>
+      <section class="panel panel--glow">
+        <div class="panel__head">
+          <h2 class="panel__title">Start a Session</h2>
+          <p class="panel__sub">
+            Pick a mode. Add a reference/topic. Paste a passage or describe your question. Then copy your prompt.
+          </p>
+        </div>
 
         <div class="form-grid">
           <div class="field">
-            <label for="mode">Session preset</label>
+            <label for="mode">Mode</label>
             <select id="mode" name="mode">
-              <option value="peshat">Torah (Peshat first)</option>
-              <option value="laws">Seven Laws (Practice)</option>
-              <option value="ivrit">Ivrit (Hebrew word help)</option>
-              <option value="kabbalah">Kabbalah (Ethical / cosmological only)</option>
-              <option value="physics">Physics &amp; Order (Analogy only)</option>
+              <option value="peshat" selected>Torah (Peshat first)</option>
+              <option value="laws">Seven Laws (practice)</option>
+              <option value="ivrit">Hebrew (concrete)</option>
+              <option value="kabbalah">Ethical Kabbalah (bounded)</option>
+              <option value="physics">Physics & Order (analogy only)</option>
             </select>
-            <div class="hint">Choose one mode per session. Keep it short. Clean work wins.</div>
+            <div class="hint">One mode per session. Short and clean wins.</div>
           </div>
 
           <div class="field">
-            <label for="source">Text / topic</label>
-            <input
-              id="source"
-              name="source"
-              type="text"
-              placeholder="Example: Gen 1:1–5, or: ‘honesty at work’, or: אמת (emet)"
-              autocomplete="off"
-            />
-            <div class="hint">For Torah: put the reference here and paste the passage below.</div>
+            <label for="source">Reference / Topic</label>
+            <input id="source" name="source" type="text" placeholder="Example: Gen 1:1  •  Shabbat  •  Justice  •  Gevurah as restraint" />
+            <div class="hint">For Torah mode, put the verse reference here (optional).</div>
+          </div>
+
+          <div class="field field--full">
+            <label for="input">Text / Question</label>
+            <textarea
+              id="input"
+              name="input"
+              rows="7"
+              placeholder="Paste the passage here, or write your question in 3–8 sentences. Keep it simple and specific."
+            ></textarea>
+            <div class="hint">
+              Tip: If you only have a reference, paste just 1–5 verses (best results). If it’s a situation, describe it plainly.
+            </div>
           </div>
         </div>
 
-        <div class="field">
-          <label for="input">Paste text or describe the case</label>
-          <textarea
-            id="input"
-            name="input"
-            rows="7"
-            placeholder="For Torah: paste the verse(s) here. For practice modes: describe your situation in 3–6 sentences."
-          ></textarea>
-          <div class="hint">Tip: for Torah, paste the Hebrew/English text. For practice, keep it concrete.</div>
-        </div>
-
-        <div class="btn-row">
-          <button class="btn" id="build" type="button">Build Prompt</button>
+        <div class="actions">
+          <button class="btn btn--primary" id="build" type="button">Build Prompt</button>
           <button class="btn" id="copy" type="button">Copy Prompt</button>
-          <a class="btn btn--ghost" id="openChatGPT" href="https://chatgpt.com/" target="_blank" rel="noreferrer">
-            Open ChatGPT
-          </a>
+          <button class="btn btn--ghost" id="reset" type="button" title="Clear fields and saved state">Reset</button>
+          <span class="actions__note" id="status" role="status" aria-live="polite"></span>
         </div>
+      </section>
 
-        <div class="output">
-          <div class="output__title">ChavrutaGPT Prompt</div>
-          <pre id="promptOut" class="output__pre" aria-live="polite"></pre>
-          <p class="small muted">
-            Use the copied prompt in your chavruta chat. Begin with honesty. Stay with the text.
+      <section class="panel panel--glow">
+        <div class="panel__head">
+          <h2 class="panel__title">Your Prompt</h2>
+          <p class="panel__sub">
+            This is what you’ll paste into your chavruta chat. (Autosaves as you type.)
           </p>
         </div>
-      </section>
 
-      <!-- OPTIONAL QUICK START -->
-      <section class="grid">
-        <article class="card">
-          <h2>Quick start: Torah</h2>
-          <p>Put “Gen 1:1–5” in Text/topic, paste the verses, click <em>Build Prompt</em>.</p>
-        </article>
-        <article class="card">
-          <h2>Quick start: Seven Laws</h2>
-          <p>Pick “Seven Laws (Practice)”, set a law/topic, describe your situation, then build.</p>
-        </article>
-        <article class="card">
-          <h2>Quick start: Ivrit</h2>
-          <p>Pick “Ivrit”, enter a Hebrew word/root, add context, and build for a clean explanation.</p>
-        </article>
+        <pre class="prompt" id="promptOut">Your prompt will appear here…</pre>
+
+        <div class="fineprint">
+          <strong>Boundaries:</strong> no psak, no conversion guidance, no urgency, no “power claims.” Torah-first, calm, and real.
+        </div>
       </section>
     </main>
+
+    <script src="../scripts/chavruta.js" type="module"></script>
 
     <footer class="footer">
       <div class="container">
@@ -143,99 +111,5 @@
         </p>
       </div>
     </footer>
-
-    <script src="../scripts/chavruta.js" type="module"></script>
-
-    <!-- Minimal page-specific styling (safe even if main.css changes) -->
-    <style>
-      .hero--bg {
-        border-radius: 18px;
-        overflow: hidden;
-        position: relative;
-      }
-      .hero--bg::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(1200px 380px at 50% 20%, rgba(255, 230, 170, 0.14), transparent 60%),
-          radial-gradient(900px 380px at 15% 40%, rgba(120, 180, 255, 0.10), transparent 60%),
-          radial-gradient(900px 380px at 85% 40%, rgba(255, 255, 255, 0.06), transparent 60%);
-        pointer-events: none;
-      }
-      .hero__inner {
-        position: relative;
-        z-index: 1;
-      }
-
-      .bullets {
-        margin: 0.6rem 0 0;
-        padding-left: 1.2rem;
-      }
-      .bullets li {
-        margin: 0.35rem 0;
-      }
-      .muted {
-        opacity: 0.8;
-      }
-
-      .form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-top: 10px;
-      }
-      @media (max-width: 820px) {
-        .form-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .field label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 6px;
-      }
-      .field input,
-      .field select,
-      .field textarea {
-        width: 100%;
-        box-sizing: border-box;
-      }
-      .hint {
-        font-size: 0.85rem;
-        opacity: 0.78;
-        margin-top: 6px;
-      }
-
-      .btn-row {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 14px;
-      }
-      .btn {
-        cursor: pointer;
-      }
-
-      .output {
-        margin-top: 16px;
-        padding: 14px;
-        border-radius: 14px;
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        background: rgba(10, 12, 18, 0.58);
-      }
-      .output__title {
-        font-weight: 700;
-        margin-bottom: 8px;
-      }
-      .output__pre {
-        margin: 0;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        font-size: 0.95rem;
-        line-height: 1.35;
-      }
-    </style>
   </body>
 </html>
