@@ -1,7 +1,9 @@
-const mode = document.getElementById("mode");
-const source = document.getElementById("source");
-const input = document.getElementById("input");
+// Hardening: grab by id, but also support name fallback if the markup drifted.
+const mode = document.getElementById("mode") || document.querySelector('[name="mode"]');
+const source = document.getElementById("source") || document.querySelector('[name="source"]');
+const input = document.getElementById("input") || document.querySelector('[name="input"]');
 const promptOut = document.getElementById("promptOut");
+
 const buildBtn = document.getElementById("build");
 const copyBtn = document.getElementById("copy");
 
@@ -95,47 +97,58 @@ Tone: sober, honest, non-coercive.
 };
 
 function saveState() {
-  localStorage.setItem("lnx_chavruta_mode", mode.value);
-  localStorage.setItem("lnx_chavruta_source", source.value);
-  localStorage.setItem("lnx_chavruta_input", input.value);
+  if (mode) localStorage.setItem("lnx_chavruta_mode", mode.value);
+  if (source) localStorage.setItem("lnx_chavruta_source", source.value);
+  if (input) localStorage.setItem("lnx_chavruta_input", input.value);
 }
 
 function loadState() {
   const m = localStorage.getItem("lnx_chavruta_mode");
   const s = localStorage.getItem("lnx_chavruta_source");
   const i = localStorage.getItem("lnx_chavruta_input");
-  if (m) mode.value = m;
-  if (s) source.value = s;
-  if (i) input.value = i;
+  if (mode && m) mode.value = m;
+  if (source && s) source.value = s;
+  if (input && i) input.value = i;
 }
 
 function buildPrompt() {
-  const key = mode.value;
+  const key = mode?.value || "peshat";
   const tmpl = templates[key] || templates.peshat;
-  const out = tmpl({ source: source.value.trim(), input: input.value.trim() });
-  promptOut.textContent = out;
+
+  const src = (source?.value || "").trim();
+  const inp = (input?.value || "").trim();
+
+  const out = tmpl({ source: src, input: inp });
+  if (promptOut) promptOut.textContent = out;
+
   saveState();
 }
 
 async function copyPrompt() {
-  const text = promptOut.textContent || "";
+  const text = promptOut?.textContent || "";
   if (!text.trim()) return;
   try {
     await navigator.clipboard.writeText(text);
-    copyBtn.textContent = "Copied ✓";
-    setTimeout(() => (copyBtn.textContent = "Copy Prompt"), 1200);
+    if (copyBtn) {
+      copyBtn.textContent = "Copied ✓";
+      setTimeout(() => (copyBtn.textContent = "Copy Prompt"), 1200);
+    }
   } catch {
-    // fallback: select text in-place
-    copyBtn.textContent = "Copy failed";
-    setTimeout(() => (copyBtn.textContent = "Copy Prompt"), 1200);
+    if (copyBtn) {
+      copyBtn.textContent = "Copy failed";
+      setTimeout(() => (copyBtn.textContent = "Copy Prompt"), 1200);
+    }
   }
 }
 
 loadState();
 
-buildBtn.addEventListener("click", buildPrompt);
-copyBtn.addEventListener("click", copyPrompt);
+buildBtn?.addEventListener("click", buildPrompt);
+copyBtn?.addEventListener("click", copyPrompt);
 
-mode.addEventListener("change", saveState);
-source.addEventListener("input", saveState);
-input.addEventListener("input", saveState);
+mode?.addEventListener("change", saveState);
+source?.addEventListener("input", saveState);
+input?.addEventListener("input", saveState);
+
+// Optional: build once on load so it "feels alive"
+setTimeout(buildPrompt, 50);
