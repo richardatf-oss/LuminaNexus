@@ -21,6 +21,9 @@ body {
 
 a { color: inherit; text-decoration: none; }
 a:hover { text-decoration: underline; }
+:root{
+  --header-height: 64px;
+}
 
 .container {
   max-width: 980px;
