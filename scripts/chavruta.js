@@ -1,28 +1,28 @@
-// LuminaNexus — ChavrutaGPT (prompt builder)
-// Friendly UX: autosave, live prompt, clear status, no "Open ChatGPT" button.
+// LuminaNexus — ChavrutaGPT prompt builder (Torah-first)
 
-const $ = (sel) => document.querySelector(sel);
+const mode = document.getElementById("mode");
+const source = document.getElementById("source");
+const input = document.getElementById("input");
+const promptOut = document.getElementById("promptOut");
 
-const mode = $("#mode");
-const source = $("#source");
-const input = $("#input");
-const promptOut = $("#promptOut");
+const buildBtn = document.getElementById("build");
+const copyBtn = document.getElementById("copy");
+const clearBtn = document.getElementById("clear");
 
-const buildBtn = $("#build");
-const copyBtn = $("#copy");
-const resetBtn = $("#reset");
-const status = $("#status");
-
-const KEY = "lnx_chavruta_v2";
+const KEY = {
+  mode: "lnx_chavruta_mode",
+  source: "lnx_chavruta_source",
+  input: "lnx_chavruta_input",
+};
 
 const templates = {
   peshat: ({ source, input }) => `
 ChavrutaGPT — Torah (peshat first)
 
-Reference (optional):
+Text/Reference:
 ${source || "(none provided)"}
 
-Text (paste 1–5 verses if possible):
+Passage:
 ${input || "(paste passage here)"}
 
 Instructions:
@@ -33,8 +33,7 @@ Instructions:
    - one about character,
    - one about action.
 4) Give ONE next step I can practice today (small, real, not performative).
-
-Boundaries: no psak, no conversion guidance, no inflated claims, no urgency.
+Boundaries: no psak, no conversion guidance, no inflated claims.
 `.trim(),
 
   laws: ({ source, input }) => `
@@ -43,15 +42,14 @@ ChavrutaGPT — Seven Laws (practice)
 Law/Topic:
 ${source || "(choose one law or theme)"}
 
-Situation / Question:
-${input || "(describe your situation in 3–8 sentences)"}
+Situation:
+${input || "(describe your situation in 3–6 sentences)"}
 
 Instructions:
 1) State the principle plainly (simple and clear).
 2) Give 2 practical examples (everyday, non-technical).
-3) Name 1 boundary: where I should seek qualified guidance or avoid overreach.
+3) Name 1 boundary (where I should seek qualified guidance or avoid overreach).
 4) Give 1 next step I can do today (small and honest).
-
 Tone: calm, dignified, Torah-first.
 `.trim(),
 
@@ -62,14 +60,13 @@ Word/Root:
 ${source || "(enter a Hebrew word/root)"}
 
 Context (optional):
-${input || "(optional: paste a verse/sentence or describe what you want to express)"}
+${input || "(optional: paste the verse/sentence, or describe what you want to express)"}
 
 Instructions:
-1) Give pronunciation guidance (simple and readable).
-2) Give the root meaning + 3 related words/forms.
-3) Give one short example sentence.
+1) Give pronunciation guidance (simple, readable).
+2) Give root meaning and 3 related words (or forms).
+3) Give one usage example in a short sentence.
 4) Optional: one gentle grammar note (only if helpful).
-
 Keep it concrete and respectful.
 `.trim(),
 
@@ -77,25 +74,23 @@ Keep it concrete and respectful.
 ChavrutaGPT — Ethical Kabbalah (bounded)
 
 Theme:
-${source || "(example: gevurah as restraint; truth; humility; repair)"}
+${source || "(example: restraint, truth, humility, repair)"}
 
 Context:
-${input || "(describe what you’re working on inwardly—plain and honest)"}
+${input || "(describe what you’re working on inwardly—no grand claims, just honest detail)"}
 
 Instructions:
-1) Treat Kabbalah as metaphor for character and responsibility (not power).
+1) Treat Kabbalah as metaphor for character and responsibility.
 2) Give 3 reflection prompts that lead to practical repair.
-3) Give 1 boundary reminder (no theurgy, no incantations, no urgency).
+3) Give 1 boundary reminder (no theurgy, no power-claims, no urgency).
 4) Give 1 next step that is concrete and modest.
-
-Tone: sober, gentle, accountable.
 `.trim(),
 
   physics: ({ source, input }) => `
 ChavrutaGPT — Physics & Order (analogy only)
 
 Topic:
-${source || "(example: fields, resonance, measurement, symmetry, entropy)"}
+${source || "(example: fields, resonance, order, measurement)"}
 
 Question/Context:
 ${input || "(state your question clearly)"}
@@ -105,115 +100,72 @@ Instructions:
 2) Give an “analogy-only” bridge to Torah ethics (label it as analogy).
 3) Include one caution: science is not proof of theology.
 4) Give one grounded takeaway (humility, clarity, discipline, responsibility).
-
-Tone: honest, non-coercive.
+Tone: sober, honest, non-coercive.
 `.trim(),
 };
 
-function setStatus(msg) {
-  if (!status) return;
-  status.textContent = msg || "";
-  if (msg) setTimeout(() => (status.textContent = ""), 1400);
-}
-
-function readState() {
-  try {
-    const raw = localStorage.getItem(KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-function writeState() {
-  const data = {
-    mode: mode?.value || "peshat",
-    source: source?.value || "",
-    input: input?.value || "",
-  };
-  try {
-    localStorage.setItem(KEY, JSON.stringify(data));
-  } catch {
-    // ignore storage failures
-  }
+function saveState() {
+  localStorage.setItem(KEY.mode, mode.value);
+  localStorage.setItem(KEY.source, source.value);
+  localStorage.setItem(KEY.input, input.value);
 }
 
 function loadState() {
-  const s = readState();
-  if (!s) return;
-  if (mode && s.mode) mode.value = s.mode;
-  if (source && typeof s.source === "string") source.value = s.source;
-  if (input && typeof s.input === "string") input.value = s.input;
+  const m = localStorage.getItem(KEY.mode);
+  const s = localStorage.getItem(KEY.source);
+  const i = localStorage.getItem(KEY.input);
+  if (m) mode.value = m;
+  if (s) source.value = s;
+  if (i) input.value = i;
 }
 
 function buildPrompt() {
-  const key = mode?.value || "peshat";
+  const key = mode.value || "peshat";
   const tmpl = templates[key] || templates.peshat;
 
-  const src = (source?.value || "").trim();
-  const inp = (input?.value || "").trim();
+  const src = (source.value || "").trim();
+  const inp = (input.value || "").trim();
 
   const out = tmpl({ source: src, input: inp });
-  if (promptOut) promptOut.textContent = out;
+  promptOut.textContent = out;
 
-  writeState();
-  setStatus("Prompt built.");
+  saveState();
 }
 
 async function copyPrompt() {
-  const text = promptOut?.textContent || "";
-  if (!text.trim()) {
-    setStatus("Nothing to copy yet.");
-    return;
-  }
+  const text = (promptOut.textContent || "").trim();
+  if (!text) return;
 
   try {
     await navigator.clipboard.writeText(text);
-    setStatus("Copied ✓");
+    copyBtn.textContent = "Copied ✓";
+    setTimeout(() => (copyBtn.textContent = "Copy Prompt"), 1100);
   } catch {
-    // Fallback
-    try {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.left = "-9999px";
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      setStatus("Copied ✓");
-    } catch {
-      setStatus("Copy failed.");
-    }
+    copyBtn.textContent = "Copy failed";
+    setTimeout(() => (copyBtn.textContent = "Copy Prompt"), 1100);
   }
 }
 
-function resetAll() {
-  if (mode) mode.value = "peshat";
-  if (source) source.value = "";
-  if (input) input.value = "";
-  try {
-    localStorage.removeItem(KEY);
-  } catch {}
-  buildPrompt();
-  setStatus("Reset.");
+function clearAll() {
+  localStorage.removeItem(KEY.mode);
+  localStorage.removeItem(KEY.source);
+  localStorage.removeItem(KEY.input);
+  mode.value = "peshat";
+  source.value = "";
+  input.value = "";
+  promptOut.textContent = "";
 }
 
 loadState();
 buildPrompt();
 
-// Live feel: rebuild on input (debounced)
-let t = null;
-function scheduleBuild() {
-  writeState();
-  clearTimeout(t);
-  t = setTimeout(buildPrompt, 180);
-}
+buildBtn.addEventListener("click", buildPrompt);
+copyBtn.addEventListener("click", copyPrompt);
+clearBtn.addEventListener("click", clearAll);
 
-mode?.addEventListener("change", scheduleBuild);
-source?.addEventListener("input", scheduleBuild);
-input?.addEventListener("input", scheduleBuild);
-
-buildBtn?.addEventListener("click", buildPrompt);
-copyBtn?.addEventListener("click", copyPrompt);
-resetBtn?.addEventListener("click", resetAll);
+mode.addEventListener("change", () => {
+  saveState();
+  buildPrompt();
+});
+source.addEventListener("input", saveState);
+input.addEventListener("input", saveState);
