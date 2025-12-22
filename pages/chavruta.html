@@ -4,100 +4,94 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>LuminaNexus — ChavrutaGPT</title>
-    <meta name="description" content="ChavrutaGPT — Torah-first prompt builder: peshat, one classical note, questions, and a practical next step." />
-    <link rel="stylesheet" href="/styles/main.css" />
+    <link rel="stylesheet" href="../styles/main.css" />
   </head>
 
-  <body class="with-glow">
+  <body>
     <header class="site-header">
-      <div class="container header-inner">
-        <div class="brand">
-          <a class="brand__title" href="/index.html">LuminaNexus</a>
-          <div class="brand__tag">ChavrutaGPT — Torah-first study partner</div>
-        </div>
-
-        <nav class="nav" aria-label="Primary">
-          <a class="pill" href="/index.html">The Gate</a>
-          <a class="pill" href="/pages/torah-first.html">Torah First</a>
-          <a class="pill" href="/pages/seven-laws.html">The Seven Laws</a>
-          <a class="pill" href="/pages/study-paths.html">Study Paths</a>
-          <a class="pill is-active" href="/pages/chavruta.html" aria-current="page">Chavruta</a>
-          <a class="pill" href="/pages/trees.html">The Trees</a>
-          <a class="pill" href="/pages/library.html">The Library</a>
-          <a class="pill" href="/pages/ivrit-haor.html">Ivrit HaOr</a>
-          <a class="pill" href="/pages/about.html">About</a>
-          <a class="pill" href="/pages/blessing.html">Blessing</a>
-        </nav>
+      <div class="brand">
+        <a class="brand__title" href="../index.html">LuminaNexus</a>
+        <div class="brand__tag">ChavrutaGPT — Torah-first study partner</div>
       </div>
+
+      <nav class="nav">
+        <a href="../index.html">The Gate</a>
+        <a href="./torah-first.html">Torah First</a>
+        <a href="./seven-laws.html">The Seven Laws</a>
+        <a href="./study-paths.html">Study Paths</a>
+        <a href="./chavruta.html" aria-current="page">Chavruta</a>
+        <a href="./trees.html">The Trees</a>
+        <a href="./library.html">The Library</a>
+        <a href="./ivrit-haor.html">Ivrit HaOr</a>
+        <a href="./about.html">About</a>
+        <a href="./blessing.html">Blessing</a>
+      </nav>
     </header>
 
-    <main class="container section">
-      <section class="panel panel--glass panel--glow hero-glow">
-        <div class="panel__head">
-          <h1 class="panel__title">ChavrutaGPT</h1>
-          <p class="panel__sub">
-            Build a Torah-first session prompt (peshat → one classical note (optional) → questions → one practical next step).
+    <main class="container">
+      <section class="hero hero--tight hero--image hero--glow">
+        <div class="hero__overlay"></div>
+        <div class="hero__inner">
+          <h1>ChavrutaGPT</h1>
+          <p class="lead">
+            A simple Torah-first chat. Ask a question, paste a passage, or describe a situation. Calm, clear, bounded.
           </p>
         </div>
+      </section>
 
-        <div class="panel__body">
-          <div class="note">
-            <strong>How it works:</strong> choose a mode, paste your text (or describe your situation), then click <em>Build Prompt</em>.
-            Copy it into your Chavruta chat. No psak. No coercion. No hype.
+      <section class="panel panel--glow">
+        <div class="panel__head">
+          <div>
+            <h2 class="panel__title">Session</h2>
+            <p class="panel__sub">Choose a mode. Then just chat.</p>
           </div>
 
-          <div class="form-grid">
-            <div class="field">
-              <label for="mode">Session mode</label>
-              <select id="mode" name="mode">
-                <option value="peshat">Torah (Peshat first)</option>
-                <option value="laws">Seven Laws (practice)</option>
-                <option value="ivrit">Hebrew (concrete)</option>
-                <option value="kabbalah">Ethical Kabbalah (bounded)</option>
-                <option value="physics">Physics &amp; Order (analogy only)</option>
-              </select>
-              <div class="help">Choose one mode per session. Keep it short. Clean work wins.</div>
-            </div>
+          <div class="panel__controls">
+            <label class="sr-only" for="mode">Mode</label>
+            <select id="mode" class="select">
+              <option value="peshat" selected>Torah (peshat first)</option>
+              <option value="laws">Seven Laws (practice)</option>
+              <option value="ivrit">Hebrew (concrete)</option>
+              <option value="kabbalah">Ethical Kabbalah (bounded)</option>
+              <option value="physics">Physics &amp; Order (analogy-only)</option>
+            </select>
 
-            <div class="field">
-              <label for="source">Text / topic</label>
-              <input id="source" name="source" type="text" placeholder="Example: Gen 1:1, or “Honesty at work”, or a Hebrew word" />
-              <div class="help">A reference or a short topic label.</div>
-            </div>
-
-            <div class="field field--full">
-              <label for="input">Paste text or describe the case</label>
-              <textarea
-                id="input"
-                name="input"
-                rows="7"
-                placeholder="For Torah: paste the passage.
-For practice modes: describe your situation in 3–6 sentences."
-              ></textarea>
-            </div>
-          </div>
-
-          <div class="actions">
-            <button class="btn btn-primary" id="build" type="button">Build Prompt</button>
-            <button class="btn btn-ghost" id="copy" type="button">Copy Prompt</button>
-            <button class="btn btn-ghost" id="clear" type="button" title="Clear saved inputs">Clear</button>
-            <div class="actions__note">Tip: it auto-saves locally so you don’t lose your draft.</div>
-          </div>
-
-          <div class="prompt">
-            <div class="prompt__header">
-              <div class="prompt__title">Generated Prompt</div>
-              <div class="prompt__sub">This is what you paste into your Chavruta session.</div>
-            </div>
-            <pre id="promptOut" class="prompt__box" aria-live="polite"></pre>
-          </div>
-
-          <div class="fineprint">
-            Boundaries: No psak. No conversion guidance. No “power-claims.” If something feels urgent/coercive/inflated — pause and return to Torah First.
+            <button id="newChat" class="btn btn--ghost" type="button" title="Clear this session on this device">
+              New chat
+            </button>
           </div>
         </div>
+
+        <div id="chat" class="chat" aria-live="polite">
+          <div class="msg msg--ai">
+            <div class="msg__bubble">
+              Shalom. Choose a mode above, then send your question (or paste a short passage). I’ll keep it Torah-first and practical.
+            </div>
+          </div>
+        </div>
+
+        <form id="composer" class="composer" autocomplete="off">
+          <label class="sr-only" for="message">Message</label>
+          <textarea
+            id="message"
+            class="composer__input"
+            rows="3"
+            placeholder="Type your question… (Shift+Enter for a new line)"
+          ></textarea>
+
+          <div class="composer__actions">
+            <button id="send" class="btn btn--primary" type="submit">Send</button>
+            <div id="status" class="composer__status" role="status" aria-live="polite"></div>
+          </div>
+        </form>
+
+        <p class="fineprint">
+          Boundaries: no psak, no conversion guidance, no coercion, no urgency. If something needs a qualified authority, we’ll say so.
+        </p>
       </section>
     </main>
+
+    <script src="../scripts/chavruta-chat.js" type="module"></script>
 
     <footer class="footer">
       <div class="container">
@@ -107,7 +101,5 @@ For practice modes: describe your situation in 3–6 sentences."
         </p>
       </div>
     </footer>
-
-    <script src="/scripts/chavruta.js" type="module"></script>
   </body>
 </html>
