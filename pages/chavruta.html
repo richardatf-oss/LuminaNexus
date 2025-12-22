@@ -31,33 +31,86 @@
     </header>
 
     <main class="container">
-      <section class="hero has-bg" style="--hero-img: url('../assets/img/gate-hero.png');">
-        <h1>ChavrutaGPT</h1>
+      <section class="hero hero--tight">
+        <h1>Chavruta</h1>
         <p class="lead">
-          Torah-first study partner — peshat first, one steady note, then questions. No coercion. No “guru” tone.
+          A Torah-first study partner. No guru tone. No spiritual inflation.
+          Just a clean rhythm: text → clarity → questions.
         </p>
       </section>
 
-      <section class="section">
-        <h2>How to use this</h2>
-        <ul>
-          <li><b>Paste a passage</b> (a verse, a paragraph, or a short excerpt).</li>
-          <li>Ask for <b>Peshat first</b>, then <b>one classical note</b>, then <b>3 questions</b>.</li>
-          <li>Keep it short. We aim for clarity, not overload.</li>
-        </ul>
+      <section class="card">
+        <h2>The Chavruta Rhythm</h2>
+        <ol>
+          <li><strong>Text (peshat):</strong> What does it plainly say?</li>
+          <li><strong>One steady note:</strong> One classical lens (when helpful), not a flood.</li>
+          <li><strong>Questions:</strong> What does it demand of thought, character, and action?</li>
+          <li><strong>One next step:</strong> A practical takeaway you can actually live.</li>
+        </ol>
+        <p class="small">
+          This is designed to build steadiness, not dependency.
+        </p>
       </section>
 
-      <section class="section chat">
-        <div id="chatWindow" class="chat-window" aria-live="polite"></div>
+      <section class="card">
+        <h2>Boundaries (Read This Once)</h2>
+        <ul>
+          <li><strong>No psak:</strong> this site does not issue halachic rulings or personal legal decisions.</li>
+          <li><strong>No conversion engine:</strong> we do not guide conversion processes or claim authority.</li>
+          <li><strong>No theurgy / magic:</strong> no manipulative practices, incantations, or power-claims.</li>
+          <li><strong>Speculation labeled:</strong> metaphor and analogy are distinguished from sources.</li>
+        </ul>
+        <p class="small">
+          If a response ever feels urgent, coercive, or inflated—pause. Return to Torah First.
+        </p>
+      </section>
 
-        <div class="chatbar">
-          <textarea id="chatInput" placeholder="Paste a short passage and say what you want (e.g., 'Peshat first. One classical note. Then ask me 3 questions.')."></textarea>
-          <button id="sendBtn" class="btn">Send →</button>
-          <button id="clearBtn" class="btn secondary">Clear</button>
+      <section class="card">
+        <h2>Start a Session</h2>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="mode">Session preset</label>
+            <select id="mode">
+              <option value="peshat">Torah (Peshat first)</option>
+              <option value="laws">Seven Laws (Practice)</option>
+              <option value="ivrit">Hebrew (Concrete)</option>
+              <option value="kabbalah">Ethical Kabbalah (Bounded)</option>
+              <option value="physics">Physics & Order (Analogy only)</option>
+            </select>
+            <div class="helper">
+              Choose one mode per session. Keep it short. Clean work wins.
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="source">Text / topic</label>
+            <input id="source" type="text" placeholder="Example: Genesis 1:1–5 (or: Law 2 — speech / reverence)" />
+            <div class="helper">
+              Tip: for Torah, paste the passage below. For practice modes, describe the situation.
+            </div>
+          </div>
         </div>
 
-        <p class="small">
-          Note: This is a learning aid. It does not issue halachic rulings. For detailed legal guidance, consult qualified authority.
+        <div class="field" style="margin-top:16px;">
+          <label for="input">Paste text or describe the case</label>
+          <textarea id="input" placeholder="Paste a short passage, or write 3–6 sentences describing your situation."></textarea>
+        </div>
+
+        <div style="margin-top:14px; display:flex; gap:12px; flex-wrap:wrap;">
+          <button class="btn" id="build">Build Prompt</button>
+          <button class="btn secondary" id="copy">Copy Prompt</button>
+          <a class="btn secondary" id="openChat" href="https://chat.openai.com/" target="_blank" rel="noopener">
+            Open ChatGPT
+          </a>
+        </div>
+
+        <div class="output" aria-live="polite">
+          <pre id="promptOut">Choose a preset, add a text/topic, then click “Build Prompt.”</pre>
+        </div>
+
+        <p class="small" style="margin-top:10px;">
+          Use the copied prompt inside your Chavruta chat. Begin with honesty. Stay with the text.
         </p>
       </section>
     </main>
