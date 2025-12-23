@@ -527,3 +527,65 @@ input:focus, select:focus, textarea:focus{
   opacity: 0.8;
   margin-left: 12px;
 }
+.chat-log {
+  height: 260px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.35);
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.chat-row {
+  display: flex;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.chat-row--user {
+  justify-content: flex-end;
+}
+
+.chat-row--assistant {
+  justify-content: flex-start;
+}
+
+.chat-row--system {
+  justify-content: center;
+}
+
+.chat-bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  line-height: 1.4;
+}
+
+.chat-row--user .chat-bubble {
+  background: rgba(255, 232, 180, 0.14);
+  border: 1px solid rgba(255, 232, 180, 0.35);
+}
+
+.chat-row--assistant .chat-bubble {
+  background: rgba(18, 26, 48, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.chat-row--system .chat-bubble {
+  background: rgba(40, 40, 40, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.85rem;
+}
+
+.chat-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.chat-status {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
