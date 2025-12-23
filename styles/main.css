@@ -463,3 +463,67 @@ input:focus, select:focus, textarea:focus{
     text-align: center;
   }
 }
+.chat-log {
+  max-height: 520px;
+  overflow-y: auto;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(4, 10, 20, 0.85);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.55);
+}
+
+.chat-message {
+  margin-bottom: 16px;
+}
+
+.chat-message--user .chat-text {
+  background: rgba(40, 170, 255, 0.12);
+}
+
+.chat-message--assistant .chat-text {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.chat-role {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.chat-text {
+  padding: 10px 12px;
+  border-radius: 10px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.session-title {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.session-actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.14);
+}
+
+.status-text {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin-left: 12px;
+}
