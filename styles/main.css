@@ -291,3 +291,175 @@ input:focus, select:focus, textarea:focus{
   .actions__note{margin-left:0; width:100%}
   .hero--gate{min-height: 380px}
 }
+/* --- ChavrutaGPT chat layout ------------------------------------ */
+
+.chat {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: radial-gradient(120% 200% at 0% 0%,
+      rgba(255, 232, 180, 0.04),
+      rgba(0, 0, 0, 0.92));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.70);
+  max-height: 460px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Scrollbar subtle */
+.chat::-webkit-scrollbar {
+  width: 6px;
+}
+.chat::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chat::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+
+/* Messages */
+
+.msg {
+  display: flex;
+  margin-bottom: 6px;
+}
+
+.msg--ai {
+  justify-content: flex-start;
+}
+
+.msg--user {
+  justify-content: flex-end;
+}
+
+.msg__bubble {
+  max-width: 72ch;
+  padding: 9px 13px;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* AI bubble — soft panel look */
+.msg--ai .msg__bubble {
+  background: rgba(15, 18, 28, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.65);
+}
+
+/* User bubble — warm highlight */
+.msg--user .msg__bubble {
+  background: radial-gradient(circle at 0% 0%,
+      rgba(255, 232, 180, 0.18),
+      rgba(45, 37, 24, 0.96));
+  border: 1px solid rgba(255, 232, 180, 0.35);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.75);
+}
+
+/* Composer (input area) */
+
+.composer {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.composer__input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(4, 6, 12, 0.9);
+  color: inherit;
+  resize: vertical;
+  min-height: 70px;
+  max-height: 200px;
+  font-size: 0.96rem;
+  line-height: 1.4;
+}
+
+.composer__input:focus {
+  outline: none;
+  border-color: rgba(255, 232, 180, 0.8);
+  box-shadow: 0 0 0 1px rgba(255, 232, 180, 0.32);
+}
+
+.composer__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.composer__status {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* Make the Send button a bit tighter here */
+.composer .btn--primary {
+  padding-inline: 18px;
+  height: 34px;
+  font-size: 0.9rem;
+}
+
+/* Panel tweaks specific to Chavruta page */
+
+.panel__controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.panel__controls .select {
+  min-width: 210px;
+}
+
+/* Simple select styling if not already defined */
+.select {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(8, 10, 18, 0.95);
+  color: inherit;
+  font-size: 0.92rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 720px) {
+  .chat {
+    max-height: 380px;
+    padding: 12px 10px;
+  }
+
+  .msg__bubble {
+    max-width: 100%;
+  }
+
+  .panel__controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .panel__controls .select {
+    width: 100%;
+  }
+
+  .composer__actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .composer .btn--primary {
+    width: 100%;
+    text-align: center;
+  }
+}
