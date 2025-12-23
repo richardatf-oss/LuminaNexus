@@ -1,98 +1,96 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>ChavrutaGPT — LuminaNexus</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="../styles/main.css" />
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>LuminaNexus — ChavrutaGPT</title>
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
 
-<body>
-<header class="site-header">
-  <div class="brand">
-    <a class="brand__title" href="../index.html">LuminaNexus</a>
-    <div class="brand__tag">ChavrutaGPT — Torah-first study partner</div>
-  </div>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <a class="brand__title" href="../index.html">LuminaNexus</a>
+        <div class="brand__tag">ChavrutaGPT — Torah-first study partner</div>
+      </div>
 
-  <nav class="nav">
-    <a href="../index.html">The Gate</a>
-    <a href="./torah-first.html">Torah First</a>
-    <a href="./seven-laws.html">The Seven Laws</a>
-    <a href="./study-paths.html">Study Paths</a>
-    <a href="./chavruta.html" aria-current="page">Chavruta</a>
-    <a href="./trees.html">The Trees</a>
-    <a href="./library.html">The Library</a>
-    <a href="./ivrit-haor.html">Ivrit HaOr</a>
-    <a href="./about.html">About</a>
-    <a href="./blessing.html">Blessing</a>
-  </nav>
-</header>
+      <nav class="nav">
+        <a href="../index.html">The Gate</a>
+        <a href="./torah-first.html">Torah First</a>
+        <a href="./seven-laws.html">The Seven Laws</a>
+        <a href="./study-paths.html">Study Paths</a>
+        <a href="./chavruta.html" aria-current="page">Chavruta</a>
+        <a href="./trees.html">The Trees</a>
+        <a href="./library.html">The Library</a>
+        <a href="./ivrit-haor.html">Ivrit HaOr</a>
+        <a href="./about.html">About</a>
+        <a href="./blessing.html">Blessing</a>
+      </nav>
+    </header>
 
-<main class="container hero-glow">
-  <!-- Session header -->
-  <section class="panel panel-glow">
-    <div class="panel_head">
-      <h1>ChavrutaGPT</h1>
-      <p class="panel_sub">
-        A simple Torah-first chat. Choose a mode, then talk. Peshat before speculation, ethics before excitement.
-      </p>
-    </div>
+    <main class="container">
+      <section class="panel panel--glow">
+        <h1>ChavrutaGPT</h1>
+        <p class="lead">
+          A simple Torah-first chat. Choose a mode, then talk. Peshat before
+          speculation, ethics before excitement.
+        </p>
 
-    <div class="form-grid">
-      <div class="field">
-        <label for="mode">Mode</label>
-        <select id="mode">
-          <option value="peshat">Torah (peshat first)</option>
-          <option value="laws">Seven Laws (practice)</option>
-          <option value="ivrit">Hebrew (Ivrit)</option>
-          <option value="kabbalah">Ethical Kabbalah (bounded)</option>
-          <option value="physics">Physics &amp; Order (analogy only)</option>
-        </select>
-        <p class="field_hint">
-          Changing the mode starts a new session, so each conversation stays clean.
+        <div id="chat">
+          <div id="chat-log" class="chat-log">
+            <!-- Messages appear here -->
+          </div>
+
+          <form id="chavruta-form" class="chat-form">
+            <div class="form-grid">
+              <div class="field">
+                <label for="mode">Mode</label>
+                <select id="mode" name="mode">
+                  <option value="torah">Torah (peshat first)</option>
+                  <option value="laws">Seven Laws (practice)</option>
+                  <option value="ivrit">Hebrew (concrete)</option>
+                  <option value="kabbalah">Ethical Kabbalah (bounded)</option>
+                  <option value="physics">Physics &amp; Order (analogy only)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field field--full">
+              <label for="message">Message</label>
+              <textarea
+                id="message"
+                rows="4"
+                placeholder="Paste a verse, ask a question, or describe a situation…"
+              ></textarea>
+            </div>
+
+            <div class="chat-actions">
+              <button id="sendBtn" type="submit" class="btn btn--primary">
+                Send
+              </button>
+              <span id="chat-status" class="chat-status"></span>
+            </div>
+
+            <p class="fineprint">
+              Torah-first boundaries: no psak, no conversion guidance, no
+              theurgy or power-claims, no urgency or coercion. Wonder is welcome;
+              hype is not.
+            </p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p class="small">© LuminaNexus — offered freely for learning.</p>
+        <p class="small">
+          Torah First: peshat before abstraction, tradition before novelty,
+          learning as service — with clear boundaries and gentle dignity.
         </p>
       </div>
+    </footer>
 
-      <div class="field">
-        <label>Session</label>
-        <div id="session-title" class="session-title">
-          New session
-        </div>
-        <div class="session-actions">
-          <button id="new-chat" class="btn btn-ghost" type="button">New chat</button>
-          <button id="export-chat" class="btn btn-ghost" type="button">Export</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Chat log -->
-  <section id="chat-log" class="panel panel-glow chat-log">
-    <!-- Messages are injected here by JS -->
-  </section>
-
-  <!-- Input -->
-  <section class="panel panel-glow">
-    <div class="field">
-      <label for="message">Message</label>
-      <textarea
-        id="message"
-        rows="4"
-        placeholder="Type your question, paste a passage, or describe a situation… (Shift+Enter for new line)"
-      ></textarea>
-    </div>
-
-    <div class="actions-row">
-      <button id="send" class="btn btn-primary" type="button">Send</button>
-      <span id="status" class="status-text"></span>
-    </div>
-
-    <p class="fineprint">
-      Torah-first boundaries: no psak, no conversion guidance, no theurgy or power-claims, no urgency or coercion. Wonder is welcome; hype is not.
-    </p>
-  </section>
-</main>
-
-<script src="../scripts/chavruta.js"></script>
-</body>
+    <script src="../scripts/chavruta.js" defer></script>
+  </body>
 </html>
