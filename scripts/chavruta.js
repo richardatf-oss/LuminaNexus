@@ -1,153 +1,92 @@
 // scripts/chavruta.js
-// Simple Torah-first chat UI that talks to the Netlify function.
-// No API key lives in the browser. All secrets stay on Netlify.
 
-const modeSelect = document.getElementById("mode");
-const sessionSelect = document.getElementById("session");
-const inputEl = document.getElementById("input");
-const sendBtn = document.getElementById("send");
-const logEl = document.getElementById("log");
-const statusEl = document.getElementById("status");
+document.addEventListener("DOMContentLoaded", () => {
+  const modeSelect = document.getElementById("mode");
+  const messageInput = document.getElementById("message");
+  const form = document.getElementById("chavruta-form");
+  const log = document.getElementById("chat-log");
+  const sendBtn = document.getElementById("sendBtn");
+  const statusEl = document.getElementById("chat-status");
 
-let currentSessionId = null;
-
-// --- helpers --------------------------------------------------------------
-
-function makeSessionId() {
-  if (typeof crypto !== "undefined" && crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-  return "sess_" + Date.now() + "_" + Math.floor(Math.random() * 1e6);
-}
-
-function setStatus(text) {
-  if (statusEl) statusEl.textContent = text;
-}
-
-function appendMessage(role, text) {
-  if (!logEl) return;
-  const block = document.createElement("div");
-  block.className = "msg msg--" + role;
-
-  const label = document.createElement("div");
-  label.className = "msg__label";
-  label.textContent = role === "user" ? "You" :
-                      role === "assistant" ? "ChavrutaGPT" :
-                      "Notice";
-
-  const body = document.createElement("div");
-  body.className = "msg__body";
-  body.textContent = text;
-
-  block.appendChild(label);
-  block.appendChild(body);
-  logEl.appendChild(block);
-  logEl.scrollTop = logEl.scrollHeight;
-}
-
-function clearLog() {
-  if (logEl) logEl.innerHTML = "";
-}
-
-// --- session controls -----------------------------------------------------
-
-function startNewSession() {
-  currentSessionId = makeSessionId();
-  clearLog();
-  appendMessage(
-    "system",
-    "New Chavruta session started. Torah-first: peshat before speculation, ethics before excitement."
-  );
-  if (sessionSelect) {
-    sessionSelect.value = "new";
-  }
-}
-
-if (sessionSelect) {
-  sessionSelect.addEventListener("change", () => {
-    if (sessionSelect.value === "new") {
-      startNewSession();
-    }
-  });
-}
-
-// --- send message ---------------------------------------------------------
-
-async function sendMessage() {
-  const text = (inputEl?.value || "").trim();
-  if (!text) return;
-
-  if (!currentSessionId) {
-    currentSessionId = makeSessionId();
+  if (!form || !modeSelect || !messageInput || !log) {
+    console.error("Chavruta DOM elements not found. Check IDs in chavruta.html.");
+    return;
   }
 
-  appendMessage("user", text);
-  if (inputEl) inputEl.value = "";
-  setStatus("Thinking…");
+  let history = [];
 
-  try {
-    const res = await fetch("/.netlify/functions/chavruta", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        mode: modeSelect ? modeSelect.value : "torah",
-        message: text,
-        sessionId: currentSessionId
-      })
-    });
+  function appendMessage(role, text) {
+    const row = document.createElement("div");
+    row.className = `chat-row chat-row--${role}`;
 
-    if (!res.ok) {
-      const bodyText = await res.text();
-      throw new Error(`HTTP ${res.status}: ${bodyText}`);
-    }
+    const bubble = document.createElement("div");
+    bubble.className = "chat-bubble";
+    bubble.textContent = text;
 
-    const data = await res.json();
-    if (data.sessionId) {
-      currentSessionId = data.sessionId;
-    }
+    row.appendChild(bubble);
+    log.appendChild(row);
+    log.scrollTop = log.scrollHeight;
+  }
 
-    if (data.reply) {
-      appendMessage("assistant", data.reply);
+  function setBusy(isBusy) {
+    if (isBusy) {
+      sendBtn.disabled = true;
+      statusEl.textContent = "Chavruta is thinking…";
     } else {
+      sendBtn.disabled = false;
+      statusEl.textContent = "";
+    }
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const text = messageInput.value.trim();
+    if (!text) return;
+
+    const mode = modeSelect.value || "torah";
+
+    // Show user message
+    appendMessage("user", text);
+
+    // Add to local history we send to the function
+    history.push({ role: "user", content: text });
+
+    messageInput.value = "";
+    messageInput.focus();
+
+    setBusy(true);
+
+    try {
+      const res = await fetch("/.netlify/functions/chavruta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mode, message: text, history }),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error("Server error:", res.status, errText);
+        appendMessage(
+          "system",
+          "Sorry, something went wrong talking to Chavruta. Please try again."
+        );
+        return;
+      }
+
+      const data = await res.json();
+      const reply = data.reply || data.error || "(no reply)";
+      appendMessage("assistant", reply);
+
+      // Update history with assistant turn
+      history.push({ role: "assistant", content: reply });
+    } catch (err) {
+      console.error("Fetch error:", err);
       appendMessage(
         "system",
-        "Chavruta replied with an empty message. This usually means the server had trouble."
+        "Network error while talking to Chavruta. Check your connection and try again."
       );
-    }
-
-    setStatus(
-      "Torah-first boundaries: no psak, no conversion guidance, no theurgy or power-claims, no urgency or coercion."
-    );
-  } catch (err) {
-    console.error("Chavruta error:", err);
-    appendMessage(
-      "system",
-      "Sorry — Chavruta is having trouble right now. If this keeps happening, please tell Kiah Aviyu."
-    );
-    setStatus("Error talking to Chavruta.");
-  }
-}
-
-// --- wire up UI -----------------------------------------------------------
-
-if (sendBtn) {
-  sendBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    sendMessage();
-  });
-}
-
-if (inputEl) {
-  inputEl.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
+    } finally {
+      setBusy(false);
     }
   });
-}
-
-// Kick things off with a fresh session
-startNewSession();
-setStatus(
-  "Torah-first boundaries: no psak, no conversion guidance, no theurgy or power-claims, no urgency or coercion."
-);
+});
