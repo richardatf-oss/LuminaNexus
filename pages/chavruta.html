@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ChavrutaGPT — Study Space | LuminaNexus</title>
-  <meta name="description" content="ChavrutaGPT — a Torah-first study partner." />
+  <title>Chavruta — LuminaNexus</title>
+  <meta name="description" content="Chavruta study space: Torah-first, source-first, one classical note, then questions." />
   <link rel="stylesheet" href="/styles/main.css" />
 </head>
+
 <body class="with-glow">
   <a class="skip-link" href="#main">Skip to content</a>
 
@@ -38,69 +39,59 @@
   <main id="main">
     <section class="hero gate-hero hero-compact">
       <div class="hero-bg"></div>
-
       <div class="wrap hero-content">
         <p class="eyebrow">ChavrutaGPT · <span class="hebrew-inline">חברותא</span></p>
         <h1>Chavruta Study Space</h1>
 
         <div class="hero-text">
-          <p>You’ve entered through the Gate with intention. Text first, questions next.</p>
-          <p class="hebrew">נכנסת דרך השער מתוך כוונה. טקסט תחילה, שאלות אחר כך.</p>
+          <p>
+            You’ve entered through the Gate with intention. This space is for slow, honest learning:
+            text first, then questions — speculation clearly labeled.
+          </p>
+          <p class="hebrew">
+            נכנסת דרך השער מתוך כוונה. כאן המקום ללימוד איטי וישר:
+            טקסט תחילה, ואז שאלות — ספקולציה מסומנת בבירור.
+          </p>
         </div>
 
         <div class="hero-actions">
-          <a class="btn primary" href="#live-chavruta">Jump to live Chavruta session →</a>
+          <a class="btn primary" href="/pages/library.html">Pick a text from the Library →</a>
           <a class="btn ghost" href="/pages/torah-first.html">Review covenant →</a>
         </div>
-      </div>
-    </section>
 
-    <section class="wrap chat-section" id="live-chavruta">
-      <div class="card chat-card">
-        <h2>Live Chavruta Session</h2>
-        <p class="chat-note">Torah-first, source-first. No coercion. No prophecy claims.</p>
-
-        <div id="chat-log" class="chat-log">
-          <div class="chat-message assistant">
-            <div class="chat-bubble">
-              Shalom. Bring a passage or a question, and we’ll learn slowly and honestly.
-            </div>
-          </div>
-        </div>
-
-        <form id="chat-form" class="chat-form">
-          <label for="chat-input" class="field-note">
-            Ask your first question / <span class="hebrew-inline">שאל את שאלתך הראשונה</span>
-          </label>
-          <textarea id="chat-input" name="input" placeholder="Type your question…"></textarea>
-          <div style="display:flex; justify-content:flex-end; margin-top:0.4rem;">
-            <button type="submit" class="btn primary" id="chat-send">Send to Chavruta →</button>
-          </div>
-        </form>
-
-        <p class="chat-note">
-          For halachic or life-changing decisions, consult a qualified human rabbinic authority.
+        <p class="hero-note">
+          Note: the chat UI wiring lives in your existing scripts.
+          <span class="hebrew-inline">הערה: חיבור ה־chat נמצא בסקריפטים הקיימים שלך.</span>
         </p>
       </div>
     </section>
 
-    <section class="wrap card-row">
-      <article class="card">
-        <h2>How to Use This Space</h2>
-        <p>Bring one question at a time. If needed, we’ll narrow, cite, and clarify.</p>
-      </article>
+    <section class="wrap">
+      <div class="card-row">
+        <article class="card">
+          <div class="card-tag">HOW · <span class="hebrew-inline">איך</span></div>
+          <h2>How to use this space</h2>
+          <p>Bring a question, a passage, or a problem. One thing at a time.</p>
+          <p class="hebrew">הבא שאלה, קטע, או בעיה. דבר אחד בכל פעם.</p>
+          <a class="card-link" href="/pages/library.html">Open the Library →</a>
+        </article>
 
-      <article class="card">
-        <h2>Within the Covenant</h2>
-        <p>Speculation is labeled. Peshat comes first. Dignity is guarded.</p>
-        <a class="card-link" href="/pages/torah-first.html">Read the covenant →</a>
-      </article>
+        <article class="card">
+          <div class="card-tag">BOUNDARIES · <span class="hebrew-inline">גבולות</span></div>
+          <h2>Within the covenant</h2>
+          <p>No prophecy claims, no magical techniques, no coercion.</p>
+          <p class="hebrew">בלי נבואה, בלי טכניקות “קסם”, בלי כפייה.</p>
+          <a class="card-link" href="/pages/torah-first.html">Read the covenant →</a>
+        </article>
 
-      <article class="card">
-        <h2>Return to the Gate</h2>
-        <p>You may step back at any time — leaving is also wisdom.</p>
-        <a class="card-link" href="/index.html">Return →</a>
-      </article>
+        <article class="card">
+          <div class="card-tag">RETURN · <span class="hebrew-inline">חזרה</span></div>
+          <h2>Return to the Gate</h2>
+          <p>You may step back at any time — leaving is also wisdom.</p>
+          <p class="hebrew">אפשר לחזור אחורה בכל עת — גם יציאה היא חכמה.</p>
+          <a class="card-link" href="/index.html">Return to the Gate →</a>
+        </article>
+      </div>
     </section>
   </main>
 
@@ -109,65 +100,6 @@
       <p>© LuminaNexus — offered freely for learning.</p>
     </div>
   </footer>
-
-  <script>
-    const apiUrl = "/.netlify/functions/chavruta";
-    const chatLog = document.getElementById("chat-log");
-    const chatForm = document.getElementById("chat-form");
-    const chatInput = document.getElementById("chat-input");
-    const chatSend = document.getElementById("chat-send");
-
-    let messages = [{ role: "system", content: "User has come through the LuminaNexus Gate and Orientation." }];
-
-    function addMessage(role, text) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "chat-message " + role;
-
-      const bubble = document.createElement("div");
-      bubble.className = "chat-bubble";
-      bubble.textContent = text;
-
-      wrapper.appendChild(bubble);
-      chatLog.appendChild(wrapper);
-      chatLog.scrollTop = chatLog.scrollHeight;
-    }
-
-    chatForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const text = chatInput.value.trim();
-      if (!text) return;
-
-      addMessage("user", text);
-      messages.push({ role: "user", content: text });
-      chatInput.value = "";
-
-      chatSend.disabled = true;
-      chatSend.textContent = "Thinking…";
-
-      try {
-        const res = await fetch(apiUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages }),
-        });
-
-        if (!res.ok) throw new Error("HTTP " + res.status);
-
-        const data = await res.json();
-        const reply = data.reply || "(No reply received.)";
-
-        addMessage("assistant", reply);
-        messages.push({ role: "assistant", content: reply });
-      } catch (err) {
-        console.error(err);
-        addMessage("assistant", "Error reaching Chavruta. Please try again.");
-      } finally {
-        chatSend.disabled = false;
-        chatSend.textContent = "Send to Chavruta →";
-        chatInput.focus();
-      }
-    });
-  </script>
 
   <script src="/scripts/nav-active.js" defer></script>
 </body>
