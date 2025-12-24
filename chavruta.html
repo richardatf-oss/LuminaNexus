@@ -70,10 +70,57 @@
             תורה תחילה, מקורות תחילה, ללא כפייה וללא שפת מכירות רוחנית.
           </p>
         </div>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="#live-chavruta">
+            Jump to live Chavruta session →
+          </a>
+        </div>
       </div>
     </section>
 
-    <!-- Three Cards -->
+    <!-- Live Chat Section (now near top) -->
+    <section class="wrap chat-section" id="live-chavruta">
+      <div class="card chat-card">
+        <h2>Live Chavruta Session</h2>
+        <p class="chat-note">
+          Your questions here are handled within the Torah-first, source-first covenant.
+        </p>
+
+        <div id="chat-log" class="chat-log">
+          <div class="chat-message assistant">
+            <div class="chat-bubble">
+              Shalom, and welcome through the Gate.
+              Share a passage, a question, or a problem you’d like to explore together.
+            </div>
+          </div>
+        </div>
+
+        <form id="chat-form" class="chat-form">
+          <label for="chat-input" class="field-note">
+            Ask your first question /
+            <span class="hebrew">שאל את שאלתך הראשונה</span>
+          </label>
+          <textarea
+            id="chat-input"
+            name="input"
+            placeholder="For example: “I came through the LuminaNexus Gate. Please help me understand the idea of peshat in Torah study.”"
+          ></textarea>
+          <div style="display:flex; justify-content:flex-end; margin-top:0.4rem;">
+            <button type="submit" class="btn primary" id="chat-send">
+              Send to Chavruta →
+            </button>
+          </div>
+        </form>
+
+        <p class="chat-note">
+          Please avoid sharing highly sensitive personal data.
+          For halachic or life-changing decisions, always consult a qualified human rabbinic authority.
+        </p>
+      </div>
+    </section>
+
+    <!-- Three Cards (supporting info below chat) -->
     <section class="wrap card-row">
       <article class="card">
         <h2>How to Use This Space</h2>
@@ -116,47 +163,6 @@
         </p>
         <a class="card-link" href="/index.html">Return to The Gate →</a>
       </article>
-    </section>
-
-    <!-- Live Chat Section -->
-    <section class="wrap chat-section">
-      <div class="card chat-card">
-        <h2>Live Chavruta Session</h2>
-        <p class="chat-note">
-          Your questions here are handled within the Torah-first, source-first covenant.
-        </p>
-
-        <div id="chat-log" class="chat-log">
-          <div class="chat-message assistant">
-            <div class="chat-bubble">
-              Shalom, and welcome through the Gate.
-              Share a passage, a question, or a problem you’d like to explore together.
-            </div>
-          </div>
-        </div>
-
-        <form id="chat-form" class="chat-form">
-          <label for="chat-input" class="field-note">
-            Ask your first question /
-            <span class="hebrew">שאל את שאלתך הראשונה</span>
-          </label>
-          <textarea
-            id="chat-input"
-            name="input"
-            placeholder="For example: “I came through the LuminaNexus Gate. Please help me understand the idea of peshat in Torah study.”"
-          ></textarea>
-          <div style="display:flex; justify-content:flex-end; margin-top:0.4rem;">
-            <button type="submit" class="btn primary" id="chat-send">
-              Send to Chavruta →
-            </button>
-          </div>
-        </form>
-
-        <p class="chat-note">
-          Please avoid sharing highly sensitive personal data.
-          For halachic or life-changing decisions, always consult a qualified human rabbinic authority.
-        </p>
-      </div>
     </section>
   </main>
 
