@@ -6,12 +6,11 @@
   <title>ChavrutaGPT — Study Space | LuminaNexus</title>
   <meta name="description" content="ChavrutaGPT — a Torah-first study partner: peshat first, one classical note, then questions, within clear boundaries." />
   <link rel="stylesheet" href="/styles/main.css" />
-  <!-- Optional: if you already have a dedicated chavruta.css, you can include it too -->
-  <!-- <link rel="stylesheet" href="/styles/chavruta.css" /> -->
 </head>
 <body class="with-glow">
   <a class="skip-link" href="#main">Skip to content</a>
 
+  <!-- Header / Nav -->
   <header class="site-header">
     <div class="wrap header-row">
       <div class="brand">
@@ -38,6 +37,7 @@
   </header>
 
   <main id="main">
+    <!-- Hero -->
     <section class="hero gate-hero hero-compact">
       <div class="hero-bg"></div>
 
@@ -73,6 +73,7 @@
       </div>
     </section>
 
+    <!-- Three Cards -->
     <section class="wrap card-row">
       <article class="card">
         <h2>How to Use This Space</h2>
@@ -83,27 +84,24 @@
         </p>
         <p class="hebrew">
           הבא שאלה, קטע טקסט, או קושי. נסה לנסח בבהירות.
-          בכל נושא הנוגע להלכה, למדיניות קהילה, או החלטות חיים,
+          בכל נושא הנוגע להלכה, למדיניות קהילה, או להחלטות חיים,
           ההפניה תהיה תמיד לפוסק אנושי מוסמך.
         </p>
       </article>
 
       <article class="card">
-        <h2>Begin a Session</h2>
+        <h2>Within the Covenant</h2>
         <p>
-          When you’re ready, open ChavrutaGPT in a new tab and start with a clear line:
-        </p>
-        <p><code>“I came through the LuminaNexus Gate. Here is what I want to learn…”</code></p>
-        <p>
-          This keeps the tone aligned with the covenant you just read and accepted.
+          Every conversation here stays inside the Torah-first covenant you read:
+          no prophecy claims, no secret techniques, no promises of salvation.
+          Peshat comes first, speculation is labeled, and dignity is guarded.
         </p>
         <p class="hebrew">
-          כשתהיה מוכן, פתח את ChavrutaGPT בלשונית חדשה
-          והתחל במשפט ברור:
+          כל דיבור כאן מתקיים בתוך ברית "תורה תחילה" שקראת:
+          אין טענות נבואה, אין "שיטות סודיות", אין הבטחות ישועה.
+          הפשט קודם, הספקולציה מסומנת, והכבוד נשמר.
         </p>
-        <p class="hebrew">
-          <code>“באתי דרך שער לומינה־נקוס. זה מה שאני מבקש ללמוד…”</code>
-        </p>
+        <a class="card-link" href="/torah-first.html">Review the covenant →</a>
       </article>
 
       <article class="card">
@@ -119,8 +117,50 @@
         <a class="card-link" href="/index.html">Return to The Gate →</a>
       </article>
     </section>
+
+    <!-- Live Chat Section -->
+    <section class="wrap chat-section">
+      <div class="card chat-card">
+        <h2>Live Chavruta Session</h2>
+        <p class="chat-note">
+          Your questions here are handled within the Torah-first, source-first covenant.
+        </p>
+
+        <div id="chat-log" class="chat-log">
+          <div class="chat-message assistant">
+            <div class="chat-bubble">
+              Shalom, and welcome through the Gate.
+              Share a passage, a question, or a problem you’d like to explore together.
+            </div>
+          </div>
+        </div>
+
+        <form id="chat-form" class="chat-form">
+          <label for="chat-input" class="field-note">
+            Ask your first question /
+            <span class="hebrew">שאל את שאלתך הראשונה</span>
+          </label>
+          <textarea
+            id="chat-input"
+            name="input"
+            placeholder="For example: “I came through the LuminaNexus Gate. Please help me understand the idea of peshat in Torah study.”"
+          ></textarea>
+          <div style="display:flex; justify-content:flex-end; margin-top:0.4rem;">
+            <button type="submit" class="btn primary" id="chat-send">
+              Send to Chavruta →
+            </button>
+          </div>
+        </form>
+
+        <p class="chat-note">
+          Please avoid sharing highly sensitive personal data.
+          For halachic or life-changing decisions, always consult a qualified human rabbinic authority.
+        </p>
+      </div>
+    </section>
   </main>
 
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="wrap">
       <p>© LuminaNexus — offered freely for learning.</p>
@@ -130,5 +170,78 @@
       </p>
     </div>
   </footer>
+
+  <!-- Chat client code -->
+  <script>
+    const apiUrl = "/.netlify/functions/chavruta"; // Netlify function endpoint
+
+    const chatLog = document.getElementById("chat-log");
+    const chatForm = document.getElementById("chat-form");
+    const chatInput = document.getElementById("chat-input");
+    const chatSend = document.getElementById("chat-send");
+
+    // Conversation history sent to the API
+    let messages = [
+      {
+        role: "system",
+        content: "User has come through the LuminaNexus Gate and Orientation.",
+      },
+    ];
+
+    function addMessage(role, text) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "chat-message " + role;
+
+      const bubble = document.createElement("div");
+      bubble.className = "chat-bubble";
+      bubble.textContent = text;
+
+      wrapper.appendChild(bubble);
+      chatLog.appendChild(wrapper);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    chatForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      // show user message
+      addMessage("user", text);
+      messages.push({ role: "user", content: text });
+      chatInput.value = "";
+
+      chatSend.disabled = true;
+      chatSend.textContent = "Thinking…";
+
+      try {
+        const res = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages }),
+        });
+
+        if (!res.ok) {
+          throw new Error("HTTP " + res.status);
+        }
+
+        const data = await res.json();
+        const reply = data.reply || "(No reply received.)";
+
+        addMessage("assistant", reply);
+        messages.push({ role: "assistant", content: reply });
+      } catch (err) {
+        console.error(err);
+        addMessage(
+          "assistant",
+          "An error occurred trying to reach Chavruta. Please try again in a moment."
+        );
+      } finally {
+        chatSend.disabled = false;
+        chatSend.textContent = "Send to Chavruta →";
+        chatInput.focus();
+      }
+    });
+  </script>
 </body>
 </html>
