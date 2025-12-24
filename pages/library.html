@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Library — LuminaNexus</title>
-  <meta name="description" content="A real Torah-first library: curated entry points with Sefaria tie-ins, search, filters, and a personal shelf." />
+  <meta name="description" content="A Torah-first library with an embedded Sefaria reader, search, filters, and a personal shelf." />
   <link rel="stylesheet" href="/styles/main.css" />
 </head>
 
@@ -45,12 +45,12 @@
 
         <div class="hero-text">
           <p>
-            A living catalog: curated entry points, not everything — just enough to begin well.
-            Every text can open directly on Sefaria.
+            A living catalog: curated entry points — and an embedded Sefaria reader.
+            Start small. Read slowly. Bring one question to Chavruta.
           </p>
           <p class="hebrew">
-            קטלוג חי: שערי כניסה מסודרים — לא הכול, רק מספיק כדי להתחיל נכון.
-            כל טקסט נפתח ישירות בספריא.
+            קטלוג חי: שערי כניסה מסודרים — עם קורא ספריא משולב בתוך הדף.
+            התחל קטן. קרא לאט. הבא שאלה אחת לחברותא.
           </p>
         </div>
 
@@ -66,43 +66,84 @@
       </div>
     </section>
 
-    <section class="wrap">
-      <div class="card">
-        <h2>Search & Filters / <span class="hebrew-inline">חיפוש וסינון</span></h2>
+    <section class="wrap" style="padding-top: 18px;">
+      <!-- Layout grid: left = catalog, right = embedded reader -->
+      <div class="library-grid">
+        <!-- LEFT: Catalog -->
+        <div class="library-left">
+          <div class="card">
+            <h2>Search & Filters / <span class="hebrew-inline">חיפוש וסינון</span></h2>
 
-        <div class="library-controls">
-          <label class="field-note" for="library-search">
-            Search titles, refs, Hebrew / <span class="hebrew-inline">חיפוש לפי כותרת/מקור/עברית</span>
-          </label>
+            <div class="library-controls">
+              <label class="field-note" for="library-search">
+                Search titles, refs, Hebrew / <span class="hebrew-inline">חיפוש לפי כותרת/מקור/עברית</span>
+              </label>
 
-          <input id="library-search" class="library-search" type="search" placeholder="Search… / חפש…" />
+              <input id="library-search" class="library-search" type="search" placeholder="Search… / חפש…" />
 
-          <div id="library-filters" class="library-filters" aria-label="Library filters"></div>
+              <div id="library-filters" class="library-filters" aria-label="Library filters"></div>
 
-          <p class="muted">
-            Results: <span id="library-count">0</span>
-            <span class="hebrew-inline"> · תוצאות</span>
-          </p>
+              <p class="muted">
+                Results: <span id="library-count">0</span>
+                <span class="hebrew-inline"> · תוצאות</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>My Shelf / <span class="hebrew-inline">המדף שלי</span></h2>
+            <p class="muted">
+              Saved locally in your browser (no account).
+              <span class="hebrew-inline"> · נשמר מקומית בדפדפן (ללא חשבון)</span>
+            </p>
+            <p id="my-shelf-empty" class="muted">
+              Your shelf is empty — add a text below.
+              <span class="hebrew-inline"> · המדף ריק — הוסף טקסט מלמטה</span>
+            </p>
+            <div id="my-shelf" class="card-row"></div>
+          </div>
+
+          <h2 style="margin: 18px 0 10px;">Catalog / <span class="hebrew-inline">קטלוג</span></h2>
+          <div id="library-list" class="card-row"></div>
         </div>
-      </div>
-    </section>
 
-    <section class="wrap">
-      <div class="card">
-        <h2>My Shelf / <span class="hebrew-inline">המדף שלי</span></h2>
-        <p class="muted">
-          Saved locally in your browser (no account). / <span class="hebrew-inline">נשמר מקומית בדפדפן (ללא חשבון)</span>
-        </p>
-        <p id="my-shelf-empty" class="muted">
-          Your shelf is empty — add a text below. / <span class="hebrew-inline">המדף ריק — הוסף טקסט מלמטה</span>
-        </p>
-        <div id="my-shelf" class="card-row"></div>
-      </div>
-    </section>
+        <!-- RIGHT: Reader -->
+        <aside class="library-right">
+          <div class="card reader-card">
+            <div class="reader-top">
+              <div class="reader-title">
+                <div class="card-tag">READER · <span class="hebrew-inline">קורא</span></div>
+                <h2 id="reader-heading" style="margin: 0 0 6px;">Select a text to read</h2>
+                <p id="reader-sub" class="muted" style="margin:0;">
+                  Click “Read in Reader” on any card to load it here.
+                  <span class="hebrew-inline"> · לחץ “Read in Reader” כדי לטעון כאן</span>
+                </p>
+              </div>
 
-    <section class="wrap">
-      <h2 style="margin: 0.5rem 0 1rem;">Catalog / <span class="hebrew-inline">קטלוג</span></h2>
-      <div id="library-list" class="card-row"></div>
+              <div class="reader-actions">
+                <a id="reader-open" class="btn primary" href="https://www.sefaria.org" target="_blank" rel="noreferrer">Open on Sefaria →</a>
+                <button id="reader-copy" class="btn ghost" type="button">Copy prompt</button>
+                <button id="reader-clear" class="btn ghost" type="button">Clear</button>
+              </div>
+            </div>
+
+            <div class="reader-frame-wrap" aria-label="Sefaria embedded reader">
+              <iframe
+                id="sefaria-frame"
+                title="Sefaria Reader"
+                src="about:blank"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+              ></iframe>
+            </div>
+
+            <p class="muted" style="margin-top:10px;">
+              If the embed is blocked on a specific page, use “Open on Sefaria.”
+              <span class="hebrew-inline"> · אם ההטמעה נחסמת, השתמש “Open on Sefaria”</span>
+            </p>
+          </div>
+        </aside>
+      </div>
     </section>
   </main>
 
@@ -113,8 +154,50 @@
     </div>
   </footer>
 
+  <!-- Minimal page-scoped layout CSS (no need to touch main.css) -->
+  <style>
+    .library-grid{
+      display:grid;
+      grid-template-columns: 1.35fr .95fr;
+      gap: 18px;
+      align-items:start;
+    }
+    .library-right{ position: sticky; top: 92px; }
+    .reader-card{ padding: 16px 16px 14px; }
+    .reader-top{
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom: 12px;
+    }
+    .reader-actions{ display:flex; flex-wrap:wrap; gap:10px; }
+    .reader-frame-wrap{
+      border-radius: 14px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+    }
+    #sefaria-frame{
+      width:100%;
+      height: 72vh;
+      border:0;
+      background: #000;
+    }
+    @media (max-width: 980px){
+      .library-grid{ grid-template-columns: 1fr; }
+      .library-right{ position: static; top:auto; }
+      #sefaria-frame{ height: 60vh; }
+    }
+  </style>
+
+  <!-- Library system -->
   <script src="/scripts/library-data.js" defer></script>
   <script src="/scripts/library-ui.js" defer></script>
+
+  <!-- Nav active highlighter -->
   <script src="/scripts/nav-active.js" defer></script>
 </body>
 </html>
