@@ -1,82 +1,88 @@
-// netlify/functions/chavruta.mjs
 import OpenAI from "openai";
 
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY, // Netlify env var
 });
 
-const SYSTEM_BASE = `
-You are ChavrutaGPT, a Torah-first study partner.
+function buildSystemPrompt() {
+  return `
+You are ChavrutaGPT, a Torah-first study partner for Noahide seekers and other students.
+Core boundaries:
 
-Boundaries:
-- No psak (no halachic rulings).
-- No conversion guidance or invitations.
-- No theurgy, magic, or power-claims.
-- No urgency or coercion.
-- Wonder is welcome; hype is not.
-- Respect traditional sources; stay humble and concrete.
+- You are NOT a rabbi, NOT a prophet, NOT an oracle, and do NOT claim personal authority.
+- You do NOT issue psak halacha (legal rulings). For halachic or life-changing questions,
+  you gently redirect to qualified human rabbinic authority.
+- You avoid spiritual sales language, promises of salvation, or "unlocking destiny".
+- You keep a calm, respectful tone, honoring the dignity of the learner.
 
-Style:
-- Peshat before speculation.
-- Ethics before excitement.
-- Calm, clear, and dignified.
+Learning style:
+
+- Peshat (plain textual meaning) before derash, remez, or sod.
+- When citing Torah, Tanakh, Mishnah, Talmud, Rishonim, etc., be as precise as you can:
+  name the source and keep quotations short.
+- Clearly label speculation as speculation.
+- Kabbalah only in ethical/cosmological framing, never as magical technique or prediction.
+
+Bilingual style:
+
+- When reasonable, include SHORT supporting Hebrew phrases or terms,
+  but keep the main flow readable in English unless asked otherwise.
+- You may mirror a little Hebrew at the end of an answer, like a soft blessing.
+
+If the user shares something vulnerable or painful, respond with gentleness and kavod,
+without overstepping your role.
 `.trim();
-
-function modeInstructions(mode) {
-  switch (mode) {
-    case "laws":
-      return "Mode: Seven Laws (practice). Emphasize concrete examples and boundaries.";
-    case "ivrit":
-      return "Mode: Hebrew (concrete). Focus on pronunciation, root meaning, a few related words, and one example sentence.";
-    case "kabbalah":
-      return "Mode: Ethical Kabbalah (bounded). Treat all Kabbalah as metaphor for character and responsibility, not as power-technique.";
-    case "physics":
-      return "Mode: Physics & Order (analogy only). Be explicit that science is analogy, not proof of theology.";
-    case "torah":
-    default:
-      return "Mode: Torah (peshat first). Begin with plain meaning before any classical note.";
-  }
 }
 
 export async function handler(event) {
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+    return {
+      statusCode: 405,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: "Method not allowed" }),
+    };
+  }
+
+  let body;
+  try {
+    body = JSON.parse(event.body || "{}");
+  } catch (err) {
+    return {
+      statusCode: 400,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: "Invalid JSON body" }),
+    };
+  }
+
+  const { messages = [] } = body;
+
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return {
+      statusCode: 400,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: "messages[] required" }),
+    };
   }
 
   try {
-    const { mode = "torah", message = "", sessionId } = JSON.parse(event.body || "{}");
-
-    if (!message.trim()) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: "Empty message" })
-      };
-    }
-
     const completion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4o",
       messages: [
-        { role: "system", content: SYSTEM_BASE },
-        { role: "system", content: modeInstructions(mode) },
-        {
-          role: "user",
-          content: message
-        }
+        { role: "system", content: buildSystemPrompt() },
+        ...messages,
       ],
-      temperature: 0.4
+      temperature: 0.6,
     });
 
-    const reply =
-      completion.choices?.[0]?.message?.content?.trim() ||
-      "I had trouble forming a response. Please try asking again more simply.";
+    const reply = completion.choices?.[0]?.message?.content ?? "";
 
     return {
       statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        reply,
-        sessionId: sessionId || `sess_${Date.now()}`
-      })
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ reply }),
     };
   } catch (err) {
     console.error("Chavruta function error:", err);
@@ -84,8 +90,8 @@ export async function handler(event) {
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        error: "Server error talking to Chavruta."
-      })
+        error: "Server error talking to Chavruta",
+      }),
     };
   }
 }
