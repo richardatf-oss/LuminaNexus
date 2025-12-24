@@ -1,176 +1,137 @@
 // netlify/functions/chavruta.js
 
 exports.handler = async (event) => {
-  // CORS + method guard
-  if (event.httpMethod === "OPTIONS") {
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-      },
-      body: "",
-    };
-  }
-
+  // Only allow POST
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      headers: { "Access-Control-Allow-Origin": "*" },
       body: JSON.stringify({ error: "Method not allowed" }),
     };
   }
 
-  if (!process.env.OPENAI_API_KEY) {
-    console.error("Missing OPENAI_API_KEY in environment.");
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
     return {
       statusCode: 500,
-      headers: { "Access-Control-Allow-Origin": "*" },
-      body: JSON.stringify({ error: "Server misconfigured (no API key)." }),
+      body: JSON.stringify({
+        error:
+          "OPENAI_API_KEY is not configured. Set it in Netlify Environment variables.",
+      }),
     };
   }
 
   try {
-    const { mode = "torah", message = "", history = [] } = JSON.parse(
-      event.body || "{}"
-    );
+    const { mode, message, history = [] } = JSON.parse(event.body || "{}");
 
-    if (!message.trim()) {
+    if (!message || !mode) {
       return {
         statusCode: 400,
-        headers: { "Access-Control-Allow-Origin": "*" },
-        body: JSON.stringify({ error: "Empty message." }),
+        body: JSON.stringify({ error: "Missing mode or message." }),
       };
     }
 
-    // Different “voices” for each mode
-    const systemPrompts = {
-      torah: `
-You are ChavrutaGPT, a calm Torah-first study partner.
+    // System prompt – Torah-first, bounded, no psak, no conversion, etc.
+    const systemPrompt = `
+You are ChavrutaGPT, a calm, Torah-first study partner for LuminaNexus.org.
 
-Boundaries:
-- No psak (no halachic rulings).
+Core boundaries (non-negotiable):
+- No halachic rulings (psak) and no pretending to be a rabbi.
 - No conversion guidance.
-- No theurgy, magic, power-claims, or spiritual "hacks".
-- No urgency or coercion.
-- Wonder is welcome; hype is not.
+- No theurgy, magic, or power-claims.
+- No urgency, coercion, or pressure.
+- Explicitly label speculation and analogy when you use them.
 
-Mode: Torah (peshat first)
-1) Start with peshat — the plain meaning of the text.
-2) At most ONE classical note (Rashi / Ramban / Ibn Ezra / etc.), only if it clarifies the peshat.
-3) Offer 2–3 gentle questions (about text, character, and action).
-4) Finish with ONE small, realistic next step the learner could practice today.
-Use clear, simple English.
-`.trim(),
+General style:
+- Peshat and tradition before abstraction or mysticism.
+- Short, clear paragraphs.
+- One solid main answer, then a few questions for reflection, and one practical next step.
 
-      laws: `
-You are ChavrutaGPT, helping with the Sheva Mitzvot Bnei Noach (Seven Laws) in a gentle, practical way.
+Mode-specific behavior:
 
-Boundaries:
-- No psak, no conversion guidance.
-- No coercion, no manipulation, no "threat-based" language.
-- You are not a posek, only a study partner.
+1) "peshat" — Torah (peshat first)
+   - Start with the plain meaning of the passage.
+   - Bring ONE classical note (Rashi / Ramban / Ibn Ezra / etc.) only if it truly clarifies the peshat.
+   - Then ask 2–3 questions (about text, character, and action).
+   - End with ONE small, realistic next step.
 
-Mode: Seven Laws (practice)
-1) Name which law you are addressing.
-2) Give the principle in plain language.
-3) Give 2–3 everyday examples.
-4) Name 1 clear boundary where the learner should ask a qualified human teacher.
-5) Offer ONE small, honest next step, without pressure.
-`.trim(),
+2) "laws" — Seven Laws (practice)
+   - Gently connect the question to one or more of the Sheva Mitzvot Bnei Noach.
+   - Give 2 simple, everyday examples.
+   - Name a clear boundary: where to seek qualified guidance, and what to avoid.
+   - End with ONE modest, doable step for today.
 
-      ivrit: `
-You are ChavrutaGPT helping with Hebrew (Ivrit) in a concrete, respectful way.
+3) "ivrit" — Hebrew (concrete)
+   - Give pronunciation in easy Latin letters.
+   - Give root meaning and 2–3 related forms or words.
+   - Include ONE short example sentence (with translation).
+   - Optional: one simple grammar note, only if helpful.
 
-Mode: Hebrew (concrete)
-1) Give pronunciation in simple Latin letters.
-2) Give the root and 3 related words or forms.
-3) Give one short example sentence.
-4) Optional: one gentle grammar note if truly helpful.
-Keep things grounded and non-mystical.
-`.trim(),
+4) "kabbalah" — Ethical Kabbalah (bounded)
+   - Treat Kabbalah as metaphor for character and responsibility.
+   - No power-language, no “unlocking realities,” no promises.
+   - Offer a few reflection prompts and ONE small practice.
+   - Frequently remind the user that Kabbalah is not a shortcut or magic.
 
-      kabbalah: `
-You are ChavrutaGPT focusing on ETHICAL Kabbalah only.
+5) "physics" — Physics & Order (analogy only)
+   - Explain the physics plainly, with no hype.
+   - If relating to Torah/ethics, label it clearly as analogy, not proof.
+   - Include one caution that science does not prove theology.
+   - End with a grounded takeaway about humility, clarity, or responsibility.
+`.trim();
 
-Boundaries:
-- No theurgy, no power-claims, no promises of spiritual control.
-- Kabbalah is used ONLY as metaphor for character, responsibility, and teshuvah.
-- No urgency or fear language.
+    // Convert history from the browser into OpenAI messages.
+    // history is expected as [{ role: "user"|"assistant", content: "..." }, ...]
+    const chatHistory = Array.isArray(history) ? history : [];
 
-Mode: Ethical Kabbalah (bounded)
-1) Treat the theme as a mirror for inner work (e.g., gevurah as restraint).
-2) Offer 3 reflection questions.
-3) Give 1 clear boundary reminder.
-4) Offer ONE small, modest next step.
-`.trim(),
-
-      physics: `
-You are ChavrutaGPT working at the boundary of physics and Torah as ANALOGY ONLY.
-
-Boundaries:
-- You do not "prove" theology from physics.
-- You mark all connections as analogy or metaphor.
-- You respect both science and Torah.
-
-Mode: Physics & Order (analogy only)
-1) Explain the physics idea in plain language.
-2) Offer an explicitly labeled analogy to Torah ethics or middot.
-3) Include one caution that science is not theological proof.
-4) Offer one grounded takeaway: humility, clarity, responsibility, etc.
-`.trim(),
-    };
-
-    const system = systemPrompts[mode] || systemPrompts.torah;
-
-    // Build messages list from history + new user turn
     const messages = [
-      { role: "system", content: system },
-      ...history,
-      { role: "user", content: message },
+      { role: "system", content: systemPrompt },
+      ...chatHistory,
+      {
+        role: "user",
+        content: `[mode: ${mode}] ${message}`,
+      },
     ];
 
-    const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+    // Call OpenAI (chat completions)
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
         "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: "gpt-4o-mini", // you can change this if you like
         messages,
         temperature: 0.4,
       }),
     });
 
-    if (!openaiRes.ok) {
-      const text = await openaiRes.text();
-      console.error("OpenAI error:", openaiRes.status, text);
+    if (!response.ok) {
+      const text = await response.text();
+      console.error("OpenAI error:", text);
       return {
-        statusCode: 502,
-        headers: { "Access-Control-Allow-Origin": "*" },
-        body: JSON.stringify({ error: "Upstream error talking to model." }),
+        statusCode: 500,
+        body: JSON.stringify({
+          error: "OpenAI request failed.",
+          details: text.slice(0, 4000),
+        }),
       };
     }
 
-    const data = await openaiRes.json();
-    const reply = data.choices?.[0]?.message?.content || "(no reply)";
+    const data = await response.json();
+    const reply =
+      data.choices?.[0]?.message?.content?.trim() ||
+      "Sorry, I could not generate a reply.";
 
     return {
       statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({ reply }),
     };
   } catch (err) {
     console.error("Function error:", err);
     return {
       statusCode: 500,
-      headers: { "Access-Control-Allow-Origin": "*" },
-      body: JSON.stringify({ error: "Unexpected server error." }),
+      body: JSON.stringify({ error: "Server error.", details: String(err) }),
     };
   }
 };
