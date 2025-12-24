@@ -1,150 +1,174 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>ChavrutaGPT — LuminaNexus</title>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ChavrutaGPT — Study Space | LuminaNexus</title>
+  <meta name="description" content="ChavrutaGPT — a Torah-first study partner." />
+  <link rel="stylesheet" href="/styles/main.css" />
+</head>
+<body class="with-glow">
+  <a class="skip-link" href="#main">Skip to content</a>
 
-    <!-- Global styles -->
-    <link rel="stylesheet" href="../styles/main.css" />
-    <!-- Chavruta-specific polish -->
-    <link rel="stylesheet" href="../styles/chavruta.css" />
-  </head>
+  <header class="site-header">
+    <div class="wrap header-row">
+      <div class="brand">
+        <div class="brand-mark">◈</div>
+        <div class="brand-text">
+          <div class="brand-title">LuminaNexus</div>
+          <div class="brand-subtitle">ChavrutaGPT — Torah-first study partner</div>
+        </div>
+      </div>
 
-  <body>
-    <header class="site-header">
-      <div class="wrap header-row">
-        <div class="brand">
-          <div class="brand-mark">◈</div>
-          <div class="brand-text">
-            <div class="brand-title">LuminaNexus</div>
-            <div class="brand-subtitle">ChavrutaGPT — Torah-first study partner</div>
-          </div>
+      <nav class="nav pill-nav" aria-label="Primary">
+        <a class="pill" href="/index.html">The Gate</a>
+        <a class="pill" href="/pages/torah-first.html">Torah First</a>
+        <a class="pill" href="/pages/seven-laws.html">The Seven Laws</a>
+        <a class="pill" href="/pages/study-paths.html">Study Paths</a>
+        <a class="pill" href="/pages/chavruta.html">Chavruta</a>
+        <a class="pill" href="/pages/trees.html">The Trees</a>
+        <a class="pill" href="/pages/library.html">The Library</a>
+        <a class="pill" href="/pages/ivrit-haor.html">Ivrit HaOr</a>
+        <a class="pill" href="/pages/about.html">About</a>
+        <a class="pill" href="/pages/blessing.html">Blessing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero gate-hero hero-compact">
+      <div class="hero-bg"></div>
+
+      <div class="wrap hero-content">
+        <p class="eyebrow">ChavrutaGPT · <span class="hebrew-inline">חברותא</span></p>
+        <h1>Chavruta Study Space</h1>
+
+        <div class="hero-text">
+          <p>You’ve entered through the Gate with intention. Text first, questions next.</p>
+          <p class="hebrew">נכנסת דרך השער מתוך כוונה. טקסט תחילה, שאלות אחר כך.</p>
         </div>
 
-        <nav class="nav" aria-label="Primary">
-          <a href="../index.html">The Gate</a>
-          <a href="./torah-first.html">Torah First</a>
-          <a href="./seven-laws.html">The Seven Laws</a>
-          <a href="./study-paths.html">Study Paths</a>
-          <a href="./chavruta.html" aria-current="page">Chavruta</a>
-          <a href="./trees.html">The Trees</a>
-          <a href="./library.html">The Library</a>
-          <a href="./ivrit-haor.html">Ivrit HaOr</a>
-          <a href="./about.html">About</a>
-          <a href="./blessing.html">Blessing</a>
-        </nav>
+        <div class="hero-actions">
+          <a class="btn primary" href="#live-chavruta">Jump to live Chavruta session →</a>
+          <a class="btn ghost" href="/pages/torah-first.html">Review covenant →</a>
+        </div>
       </div>
-    </header>
+    </section>
 
-    <main class="wrap chavruta-layout">
-      <!-- Intro / explainer -->
-      <section class="panel panel--hero hero-glow">
-        <h1>ChavrutaGPT</h1>
-        <p class="lead">
-          A simple Torah-first chat. Choose a mode, then talk. Peshat before speculation,
-          ethics before excitement.
-        </p>
-        <p class="small">
-          Quick start: ask a question, paste a passage, or describe a situation. Chavruta will
-          answer according to the mode you choose — Torah first, then one steady note,
-          questions, and a practical next step.
-        </p>
-      </section>
+    <section class="wrap chat-section" id="live-chavruta">
+      <div class="card chat-card">
+        <h2>Live Chavruta Session</h2>
+        <p class="chat-note">Torah-first, source-first. No coercion. No prophecy claims.</p>
 
-      <!-- Mode + session controls -->
-      <section class="panel panel--controls">
-        <div class="controls-grid">
-          <div class="field">
-            <label for="mode">Mode</label>
-            <select id="mode">
-              <option value="peshat">Torah (peshat first)</option>
-              <option value="laws">Seven Laws (practice)</option>
-              <option value="ivrit">Ivrit (Hebrew)</option>
-              <option value="kabbalah">Ethical Kabbalah</option>
-              <option value="physics">Physics &amp; Order</option>
-            </select>
-            <p class="hint">
-              Choose one mode per session. Keep one line of thought per mode; clean work wins.
-            </p>
-          </div>
-
-          <div class="field">
-            <label for="session">Session</label>
-            <select id="session">
-              <option value="new">New session</option>
-              <option value="continue">Continue this session</option>
-            </select>
-            <p class="hint">
-              “New session” clears the context so each conversation stays clean.
-            </p>
-            <div class="session-tools">
-              <button id="newchat" type="button" class="btn btn--ghost">New chat</button>
-              <button id="export" type="button" class="btn btn--ghost">Export</button>
+        <div id="chat-log" class="chat-log">
+          <div class="chat-message assistant">
+            <div class="chat-bubble">
+              Shalom. Bring a passage or a question, and we’ll learn slowly and honestly.
             </div>
           </div>
         </div>
-      </section>
 
-      <!-- Message input -->
-      <section class="panel panel--message">
-        <div class="field">
-          <label for="message">Message</label>
-          <textarea
-            id="message"
-            rows="4"
-            placeholder="Example: “Peshat first on Gen 1:1 with one classical note, then 3 questions and 1 next step for today.”"
-          ></textarea>
-          <p class="hint">
-            Press <kbd>Shift</kbd>+<kbd>Enter</kbd> for a new line. Press <strong>Send</strong> to ask Chavruta.
-          </p>
-        </div>
-
-        <div class="toolbar">
-          <div class="boundaries">
-            Torah-first boundaries:
-            <span>
-              no <em>psak</em>, no conversion guidance, no theurgy or power-claims, no urgency or coercion.
-              Wonder is welcome; hype is not.
-            </span>
+        <form id="chat-form" class="chat-form">
+          <label for="chat-input" class="field-note">
+            Ask your first question / <span class="hebrew-inline">שאל את שאלתך הראשונה</span>
+          </label>
+          <textarea id="chat-input" name="input" placeholder="Type your question…"></textarea>
+          <div style="display:flex; justify-content:flex-end; margin-top:0.4rem;">
+            <button type="submit" class="btn primary" id="chat-send">Send to Chavruta →</button>
           </div>
-          <button id="send" type="button" class="btn btn--primary">
-            Send
-          </button>
-        </div>
-      </section>
+        </form>
 
-      <!-- Conversation log -->
-      <section class="panel panel--conversation">
-        <header class="panel__header">
-          <h2>Conversation</h2>
-          <p class="panel__sub">
-            Your messages and Chavruta’s responses appear here.
-          </p>
-        </header>
-
-        <div id="log" aria-live="polite" aria-label="Chavruta conversation log">
-          <div class="chat-line chat-line--system">
-            <div class="chat-line__who">System</div>
-            <div class="chat-line__body">
-              New chat started. Your messages and Chavruta’s responses will appear here.
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <div class="wrap">
-        <p class="small">© LuminaNexus — offered freely for learning.</p>
-        <p class="small">
-          Torah First: peshat before abstraction, tradition before novelty, learning as service —
-          with clear boundaries and gentle dignity.
+        <p class="chat-note">
+          For halachic or life-changing decisions, consult a qualified human rabbinic authority.
         </p>
       </div>
-    </footer>
+    </section>
 
-    <!-- Scripts -->
-    <script src="../scripts/chavruta.js" type="module"></script>
-  </body>
+    <section class="wrap card-row">
+      <article class="card">
+        <h2>How to Use This Space</h2>
+        <p>Bring one question at a time. If needed, we’ll narrow, cite, and clarify.</p>
+      </article>
+
+      <article class="card">
+        <h2>Within the Covenant</h2>
+        <p>Speculation is labeled. Peshat comes first. Dignity is guarded.</p>
+        <a class="card-link" href="/pages/torah-first.html">Read the covenant →</a>
+      </article>
+
+      <article class="card">
+        <h2>Return to the Gate</h2>
+        <p>You may step back at any time — leaving is also wisdom.</p>
+        <a class="card-link" href="/index.html">Return →</a>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© LuminaNexus — offered freely for learning.</p>
+    </div>
+  </footer>
+
+  <script>
+    const apiUrl = "/.netlify/functions/chavruta";
+    const chatLog = document.getElementById("chat-log");
+    const chatForm = document.getElementById("chat-form");
+    const chatInput = document.getElementById("chat-input");
+    const chatSend = document.getElementById("chat-send");
+
+    let messages = [{ role: "system", content: "User has come through the LuminaNexus Gate and Orientation." }];
+
+    function addMessage(role, text) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "chat-message " + role;
+
+      const bubble = document.createElement("div");
+      bubble.className = "chat-bubble";
+      bubble.textContent = text;
+
+      wrapper.appendChild(bubble);
+      chatLog.appendChild(wrapper);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    chatForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      addMessage("user", text);
+      messages.push({ role: "user", content: text });
+      chatInput.value = "";
+
+      chatSend.disabled = true;
+      chatSend.textContent = "Thinking…";
+
+      try {
+        const res = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages }),
+        });
+
+        if (!res.ok) throw new Error("HTTP " + res.status);
+
+        const data = await res.json();
+        const reply = data.reply || "(No reply received.)";
+
+        addMessage("assistant", reply);
+        messages.push({ role: "assistant", content: reply });
+      } catch (err) {
+        console.error(err);
+        addMessage("assistant", "Error reaching Chavruta. Please try again.");
+      } finally {
+        chatSend.disabled = false;
+        chatSend.textContent = "Send to Chavruta →";
+        chatInput.focus();
+      }
+    });
+  </script>
+
+  <script src="/scripts/nav-active.js" defer></script>
+</body>
 </html>
