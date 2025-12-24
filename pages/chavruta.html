@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chavruta — LuminaNexus</title>
-  <meta name="description" content="Chavruta study space: Torah-first, source-first, one classical note, then questions." />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chavruta — Study Space | LuminaNexus</title>
+  <meta name="description" content="ChavrutaGPT — Torah-first study partner. Text first, then questions. Peshat before abstraction." />
   <link rel="stylesheet" href="/styles/main.css" />
 </head>
 
@@ -26,7 +26,7 @@
         <a class="pill" href="/pages/torah-first.html">Torah First</a>
         <a class="pill" href="/pages/seven-laws.html">The Seven Laws</a>
         <a class="pill" href="/pages/study-paths.html">Study Paths</a>
-        <a class="pill" href="/pages/chavruta.html">Chavruta</a>
+        <a class="pill active" href="/pages/chavruta.html">Chavruta</a>
         <a class="pill" href="/pages/trees.html">The Trees</a>
         <a class="pill" href="/pages/library.html">The Library</a>
         <a class="pill" href="/pages/ivrit-haor.html">Ivrit HaOr</a>
@@ -40,37 +40,49 @@
     <section class="hero gate-hero hero-compact">
       <div class="hero-bg"></div>
       <div class="wrap hero-content">
-        <p class="eyebrow">ChavrutaGPT · <span class="hebrew-inline">חברותא</span></p>
+        <p class="eyebrow">CHAVRUTAGPT · <span class="hebrew-inline">חברותא</span></p>
         <h1>Chavruta Study Space</h1>
-
         <div class="hero-text">
-          <p>
-            You’ve entered through the Gate with intention. This space is for slow, honest learning:
-            text first, then questions — speculation clearly labeled.
-          </p>
-          <p class="hebrew">
-            נכנסת דרך השער מתוך כוונה. כאן המקום ללימוד איטי וישר:
-            טקסט תחילה, ואז שאלות — ספקולציה מסומנת בבירור.
-          </p>
+          <p>Text first. Then questions. Speculation clearly labeled.</p>
+          <p class="hebrew">טקסט תחילה. ואז שאלות. ספקולציה תסומן בבירור.</p>
         </div>
 
         <div class="hero-actions">
-          <a class="btn primary" href="/pages/library.html">Pick a text from the Library →</a>
+          <a class="btn ghost" href="/pages/library.html">Pick a text from the Library →</a>
           <a class="btn ghost" href="/pages/torah-first.html">Review covenant →</a>
         </div>
+      </div>
+    </section>
 
-        <p class="hero-note">
-          Note: the chat UI wiring lives in your existing scripts.
-          <span class="hebrew-inline">הערה: חיבור ה־chat נמצא בסקריפטים הקיימים שלך.</span>
+    <!-- CHAT: ABOVE THE FOLD -->
+    <section class="wrap" style="padding-top: 16px; padding-bottom: 22px;">
+      <div class="card" style="padding: 14px;">
+        <div class="card-tag">LIVE · <span class="hebrew-inline">חי</span></div>
+        <h2 style="margin-top: 8px;">Talk to Chavruta</h2>
+
+        <div id="chatLog" class="chat-log" aria-live="polite"></div>
+
+        <div class="chat-row">
+          <textarea id="chatInput" class="chat-input" rows="2"
+            placeholder="Bring one passage or one question… / הביאו קטע אחד או שאלה אחת…"></textarea>
+          <button id="chatSend" class="btn primary chat-send" type="button">Send →</button>
+        </div>
+
+        <div id="chatStatus" class="muted" style="margin-top: 8px;"></div>
+
+        <p class="muted" style="margin-top: 10px;">
+          Endpoint: <code>/.netlify/functions/chavruta</code>
+          <span class="hebrew-inline"> · נקודת קצה: </span>
+          <code>/.netlify/functions/chavruta</code>
         </p>
       </div>
     </section>
 
-    <section class="wrap">
+    <section class="wrap" style="padding-bottom: 28px;">
       <div class="card-row">
         <article class="card">
           <div class="card-tag">HOW · <span class="hebrew-inline">איך</span></div>
-          <h2>How to use this space</h2>
+          <h3>How to use this space</h3>
           <p>Bring a question, a passage, or a problem. One thing at a time.</p>
           <p class="hebrew">הבא שאלה, קטע, או בעיה. דבר אחד בכל פעם.</p>
           <a class="card-link" href="/pages/library.html">Open the Library →</a>
@@ -78,17 +90,17 @@
 
         <article class="card">
           <div class="card-tag">BOUNDARIES · <span class="hebrew-inline">גבולות</span></div>
-          <h2>Within the covenant</h2>
+          <h3>Within the covenant</h3>
           <p>No prophecy claims, no magical techniques, no coercion.</p>
-          <p class="hebrew">בלי נבואה, בלי טכניקות “קסם”, בלי כפייה.</p>
+          <p class="hebrew">בלי נבואה, בלי “טכניקות”, בלי כפייה.</p>
           <a class="card-link" href="/pages/torah-first.html">Read the covenant →</a>
         </article>
 
         <article class="card">
           <div class="card-tag">RETURN · <span class="hebrew-inline">חזרה</span></div>
-          <h2>Return to the Gate</h2>
+          <h3>Return to the Gate</h3>
           <p>You may step back at any time — leaving is also wisdom.</p>
-          <p class="hebrew">אפשר לחזור אחורה בכל עת — גם יציאה היא חכמה.</p>
+          <p class="hebrew">אפשר לחזור בכל עת — גם לצאת זו חכמה.</p>
           <a class="card-link" href="/index.html">Return to the Gate →</a>
         </article>
       </div>
@@ -98,9 +110,66 @@
   <footer class="site-footer">
     <div class="wrap">
       <p>© LuminaNexus — offered freely for learning.</p>
+      <p>Torah First: peshat before abstraction, tradition before novelty, learning as service.</p>
     </div>
   </footer>
 
   <script src="/scripts/nav-active.js" defer></script>
+  <script src="/scripts/chavruta-ui.js" defer></script>
+
+  <style>
+    .chat-log{
+      margin-top: 12px;
+      height: 340px;
+      overflow: auto;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(10,12,18,.55);
+      padding: 12px;
+    }
+    .msg{ display:flex; gap:10px; margin: 10px 0; align-items:flex-start; }
+    .badge{
+      min-width: 74px;
+      font-size: 12px;
+      opacity: .85;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      text-align:center;
+    }
+    .bubble{
+      flex:1;
+      white-space: pre-wrap;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      line-height: 1.35;
+    }
+    .msg.user .bubble{ background: rgba(255,232,180,.06); }
+    .msg.assistant .bubble{ background: rgba(140,190,255,.06); }
+
+    .chat-row{
+      display:flex;
+      gap: 10px;
+      align-items: stretch;
+      margin-top: 10px;
+    }
+    .chat-input{
+      flex: 1;
+      resize: vertical;
+      border-radius: 14px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(10,12,18,.55);
+      color: inherit;
+    }
+    .chat-send{ white-space: nowrap; }
+    @media (max-width: 720px){
+      .chat-row{ flex-direction: column; }
+      .badge{ min-width: 64px; }
+    }
+  </style>
 </body>
 </html>
