@@ -1,4 +1,79 @@
+im// netlify/functions/chavruta.mjs
 import OpenAI from "openai";
+
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+export async function handler(event) {
+  // CORS + preflight
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Content-Type": "application/json; charset=utf-8",
+  };
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
+  }
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, headers, body: JSON.stringify({ error: "Method not allowed" }) };
+  }
+
+  try {
+    if (!process.env.OPENAI_API_KEY) {
+      return { statusCode: 500, headers, body: JSON.stringify({ error: "Missing OPENAI_API_KEY" }) };
+    }
+
+    const payload = event.body ? JSON.parse(event.body) : {};
+    const userText =
+      (typeof payload.message === "string" && payload.message.trim()) ||
+      (Array.isArray(payload.messages) ? payload.messages[payload.messages.length - 1]?.content : "") ||
+      "";
+
+    if (!userText) {
+      return { statusCode: 400, headers, body: JSON.stringify({ error: "Missing 'message' in request body" }) };
+    }
+
+    // Optional: kavanah bundle from localStorage (safe, small)
+    const kavanah = payload.kavanah ? JSON.stringify(payload.kavanah).slice(0, 2000) : null;
+
+    const system = [
+      "You are ChavrutaGPT for LuminaNexus: Torah-first study partner.",
+      "Tone: calm, precise, source-first. Peshat before abstraction. No coercion, no guru voice.",
+      "When quoting Torah: prefer Hebrew + your own short translation/paraphrase; avoid long copyrighted translations.",
+      "Answer in BOTH English and Hebrew. Keep it practical.",
+      kavanah ? `User kavanah (intention) context: ${kavanah}` : ""
+    ].filter(Boolean).join("\n");
+
+    const messages = [
+      { role: "system", content: system },
+      { role: "user", content: userText }
+    ];
+
+    const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
+
+    const completion = await client.chat.completions.create({
+      model,
+      messages,
+      temperature: 0.4,
+    });
+
+    const reply = completion.choices?.[0]?.message?.content?.trim() || "(no reply)";
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ reply }),
+    };
+  } catch (err) {
+    const message = err?.message || String(err);
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error: message }),
+    };
+  }
+}
+port OpenAI from "openai";
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // Netlify env var
