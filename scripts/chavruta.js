@@ -17,19 +17,15 @@ function appendMessage(role, text) {
   if (!logEl) return;
 
   const wrap = document.createElement("div");
-  wrap.className = "chat-line";
-  wrap.style.marginBottom = "12px";
+  // role === "user" gets the "user" class, everything else is "assistant"
+  wrap.className = "chat-line " + (role === "user" ? "user" : "assistant");
 
   const who = document.createElement("div");
   who.className = "chat-line__who";
-  who.style.fontSize = "0.8rem";
-  who.style.opacity = "0.7";
   who.textContent = role === "user" ? "You" : "ChavrutaGPT";
 
   const body = document.createElement("div");
   body.className = "chat-line__body";
-  body.style.whiteSpace = "pre-wrap";
-  body.style.marginTop = "2px";
   body.textContent = text;
 
   wrap.appendChild(who);
