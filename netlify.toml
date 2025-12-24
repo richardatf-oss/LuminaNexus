@@ -1,13 +1,19 @@
 [build]
   publish = "."
 
-# Optional: ensure Netlify functions are where you expect
+[build.environment]
+  NODE_VERSION = "18"
+
 [functions]
   directory = "netlify/functions"
+  node_bundler = "esbuild"
+  external_node_modules = ["openai"]
 
-# -------------------------
+# ----------------------------
 # Pretty routes -> /pages/*
-# -------------------------
+# (KEEP ALL YOUR EXISTING [[redirects]] BELOW THIS LINE)
+# ----------------------------
+
 
 [[redirects]]
   from = "/seven-laws"
