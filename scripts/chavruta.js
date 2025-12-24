@@ -1,92 +1,161 @@
 // scripts/chavruta.js
 
-document.addEventListener("DOMContentLoaded", () => {
-  const modeSelect = document.getElementById("mode");
-  const messageInput = document.getElementById("message");
-  const form = document.getElementById("chavruta-form");
-  const log = document.getElementById("chat-log");
-  const sendBtn = document.getElementById("sendBtn");
-  const statusEl = document.getElementById("chat-status");
+// Grab DOM elements
+const modeSelect = document.getElementById("mode");
+const sessionSelect = document.getElementById("session");
+const newChatBtn = document.getElementById("newChat");
+const exportBtn = document.getElementById("export");
+const messageInput = document.getElementById("message");
+const sendBtn = document.getElementById("send");
+const logEl = document.getElementById("log");
 
-  if (!form || !modeSelect || !messageInput || !log) {
-    console.error("Chavruta DOM elements not found. Check IDs in chavruta.html.");
+// Simple in-memory history for this tab
+let history = [];
+
+// Utility: append a message to the log
+function appendMessage(role, text) {
+  if (!logEl) return;
+
+  const wrap = document.createElement("div");
+  wrap.className = "chat-line";
+  wrap.style.marginBottom = "12px";
+
+  const who = document.createElement("div");
+  who.className = "chat-line__who";
+  who.style.fontSize = "0.8rem";
+  who.style.opacity = "0.7";
+  who.textContent = role === "user" ? "You" : "ChavrutaGPT";
+
+  const body = document.createElement("div");
+  body.className = "chat-line__body";
+  body.style.whiteSpace = "pre-wrap";
+  body.style.marginTop = "2px";
+  body.textContent = text;
+
+  wrap.appendChild(who);
+  wrap.appendChild(body);
+
+  logEl.appendChild(wrap);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+// Utility: append a small status line (for errors/info)
+function appendStatus(text) {
+  if (!logEl) return;
+  const p = document.createElement("p");
+  p.style.fontSize = "0.8rem";
+  p.style.opacity = "0.7";
+  p.style.margin = "4px 0 10px";
+  p.textContent = text;
+  logEl.appendChild(p);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+// Reset conversation
+function newChat() {
+  history = [];
+  if (logEl) {
+    logEl.innerHTML = "";
+    appendStatus(
+      "New chat started. Your messages and Chavruta’s responses will appear here."
+    );
+  }
+}
+
+// Export conversation as plain text
+function exportChat() {
+  if (!history.length) {
+    alert("No conversation to export yet.");
     return;
   }
+  const lines = history.map(
+    (m) => `${m.role === "user" ? "You" : "Chavruta"}: ${m.content}`
+  );
+  const blob = new Blob([lines.join("\n\n")], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
 
-  let history = [];
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "chavruta-session.txt";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 
-  function appendMessage(role, text) {
-    const row = document.createElement("div");
-    row.className = `chat-row chat-row--${role}`;
+// Send message to Netlify function
+async function sendMessage() {
+  const message = (messageInput?.value || "").trim();
+  if (!message) return;
 
-    const bubble = document.createElement("div");
-    bubble.className = "chat-bubble";
-    bubble.textContent = text;
+  const mode = modeSelect?.value || "peshat";
+  const sessionMode = sessionSelect?.value || "new";
 
-    row.appendChild(bubble);
-    log.appendChild(row);
-    log.scrollTop = log.scrollHeight;
+  // If user explicitly chose "New session", wipe the history first
+  if (sessionMode === "new") {
+    history = [];
+    if (logEl) logEl.innerHTML = "";
+    appendStatus(
+      "New session: starting fresh with this message. Mode: " + mode
+    );
   }
 
-  function setBusy(isBusy) {
-    if (isBusy) {
-      sendBtn.disabled = true;
-      statusEl.textContent = "Chavruta is thinking…";
+  // Add the user's message to the UI + local history
+  appendMessage("user", message);
+  history.push({ role: "user", content: message });
+
+  // UX: disable while sending
+  if (sendBtn) {
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Sending…";
+  }
+
+  try {
+    const res = await fetch("/.netlify/functions/chavruta", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mode, message, history }),
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      appendStatus("Error: " + text.slice(0, 200));
+      console.error("Chavruta function error:", text);
     } else {
+      const data = await res.json();
+      const reply = data.reply || "(No reply received.)";
+      appendMessage("assistant", reply);
+      history.push({ role: "assistant", content: reply });
+    }
+  } catch (err) {
+    console.error("Network error:", err);
+    appendStatus("Network error talking to Chavruta. Check console/logs.");
+  } finally {
+    if (sendBtn) {
       sendBtn.disabled = false;
-      statusEl.textContent = "";
+      sendBtn.textContent = "Send";
+    }
+    if (messageInput) {
+      messageInput.value = "";
+      messageInput.focus();
     }
   }
+}
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const text = messageInput.value.trim();
-    if (!text) return;
+// Wire up events
+if (sendBtn) sendBtn.addEventListener("click", sendMessage);
 
-    const mode = modeSelect.value || "torah";
-
-    // Show user message
-    appendMessage("user", text);
-
-    // Add to local history we send to the function
-    history.push({ role: "user", content: text });
-
-    messageInput.value = "";
-    messageInput.focus();
-
-    setBusy(true);
-
-    try {
-      const res = await fetch("/.netlify/functions/chavruta", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mode, message: text, history }),
-      });
-
-      if (!res.ok) {
-        const errText = await res.text();
-        console.error("Server error:", res.status, errText);
-        appendMessage(
-          "system",
-          "Sorry, something went wrong talking to Chavruta. Please try again."
-        );
-        return;
-      }
-
-      const data = await res.json();
-      const reply = data.reply || data.error || "(no reply)";
-      appendMessage("assistant", reply);
-
-      // Update history with assistant turn
-      history.push({ role: "assistant", content: reply });
-    } catch (err) {
-      console.error("Fetch error:", err);
-      appendMessage(
-        "system",
-        "Network error while talking to Chavruta. Check your connection and try again."
-      );
-    } finally {
-      setBusy(false);
+if (messageInput) {
+  messageInput.addEventListener("keydown", (ev) => {
+    if (ev.key === "Enter" && !ev.shiftKey) {
+      ev.preventDefault();
+      sendMessage();
     }
   });
-});
+}
+
+if (newChatBtn) newChatBtn.addEventListener("click", () => newChat());
+if (exportBtn) exportBtn.addEventListener("click", () => exportChat());
+
+// Start with an empty chat but a small hint
+newChat();
