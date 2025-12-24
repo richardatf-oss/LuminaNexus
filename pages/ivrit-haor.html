@@ -2,47 +2,115 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LuminaNexus — Ivrit HaOr</title>
-  <link rel="stylesheet" href="../styles/main.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ivrit HaOr — LuminaNexus</title>
+  <meta name="description" content="Ivrit HaOr: a gentle Hebrew learning path—letters, sounds, and meaning—with sacred restraint." />
+  <link rel="stylesheet" href="/styles/main.css" />
 </head>
-<body>
+<body class="with-glow">
+  <a class="skip-link" href="#main">Skip to content</a>
+
   <header class="site-header">
-    <div class="brand">
-      <a class="brand__title" href="../index.html">LuminaNexus</a>
-      <div class="brand__tag">Ivrit as light</div>
+    <div class="wrap header-row">
+      <div class="brand">
+        <div class="brand-mark">◈</div>
+        <div class="brand-text">
+          <div class="brand-title">LuminaNexus</div>
+          <div class="brand-subtitle">ChavrutaGPT — Torah-first study partner</div>
+        </div>
+      </div>
+
+      <nav class="nav pill-nav" aria-label="Primary">
+        <a class="pill" href="/index.html">The Gate</a>
+        <a class="pill" href="/pages/torah-first.html">Torah First</a>
+        <a class="pill" href="/pages/seven-laws.html">The Seven Laws</a>
+        <a class="pill" href="/pages/study-paths.html">Study Paths</a>
+        <a class="pill" href="/pages/chavruta.html">Chavruta</a>
+        <a class="pill" href="/pages/trees.html">The Trees</a>
+        <a class="pill" href="/pages/library.html">The Library</a>
+        <a class="pill" href="/pages/ivrit-haor.html">Ivrit HaOr</a>
+        <a class="pill" href="/pages/about.html">About</a>
+        <a class="pill" href="/pages/blessing.html">Blessing</a>
+      </nav>
     </div>
-    <nav class="nav">
-      <a href="../index.html">The Gate</a>
-      <a href="./torah-first.html">Torah First</a>
-      <a href="./seven-laws.html">The Seven Laws</a>
-      <a href="./study-paths.html">Study Paths</a>
-      <a href="./chavruta.html">Chavruta</a>
-      <a href="./trees.html">The Trees</a>
-      <a href="./library.html">The Library</a>
-      <a href="./ivrit-haor.html" aria-current="page">Ivrit HaOr</a>
-      <a href="./about.html">About</a>
-      <a href="./blessing.html">Blessing</a>
-    </nav>
   </header>
 
-  <main class="container">
-    <section class="hero hero--tight">
-      <h1>Ivrit HaOr</h1>
-      <p class="lead">Hebrew learning for seekers: letters, sound, roots, meaning — offered with reverence.</p>
+  <main id="main">
+    <section class="hero gate-hero hero-compact">
+      <div class="hero-bg"></div>
+      <div class="wrap hero-content">
+        <p class="eyebrow">Ivrit HaOr · <span class="hebrew-inline">עברית האור</span></p>
+        <h1>Ivrit HaOr</h1>
+        <div class="hero-text">
+          <p>
+            Hebrew as light: letters, sound, meaning. Gentle learning with restraint,
+            without superstition or coercion.
+          </p>
+          <p class="hebrew">
+            עברית כאור: אות, צליל, משמעות. לימוד עדין במידה — בלי אמונות טפלות ובלי לחץ.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="btn primary" href="/pages/chavruta.html">Ask for a Hebrew reading →</a>
+          <a class="btn ghost" href="/pages/library.html">Bring a Psalm →</a>
+        </div>
+      </div>
     </section>
 
-    <section class="card">
-      <p>This page will link outward to the full app/project. For now it’s a clean gateway.</p>
+    <section class="wrap card-row">
+      <article class="card">
+        <div class="card-tag">Start</div>
+        <h2>Letters</h2>
+        <p>Learn the Aleph-Bet slowly: shape, name, sound, and a few core words.</p>
+        <p class="hebrew">ללמוד אל״ף־בי״ת לאט: צורה, שם, צליל, ומילים בסיסיות.</p>
+      </article>
+
+      <article class="card">
+        <div class="card-tag">Sound</div>
+        <h2>Pronunciation</h2>
+        <p>Build clear mouth-shapes. Clarity beats speed.</p>
+        <p class="hebrew">לייצב הגייה. בהירות חשובה ממהירות.</p>
+      </article>
+
+      <article class="card">
+        <div class="card-tag">Words</div>
+        <h2>Core Vocabulary</h2>
+        <p>Start with 30 words found in Psalms and Torah narratives.</p>
+        <p class="hebrew">להתחיל ב־30 מילים מרכזיות מתהילים ומסיפורי התורה.</p>
+      </article>
+
+      <article class="card">
+        <div class="card-tag">Read</div>
+        <h2>Micro-Reading</h2>
+        <p>One verse, one line, one breath — with translation and peshat notes.</p>
+        <p class="hebrew">פסוק אחד, שורה אחת, נשימה אחת — עם תרגום והערות פשט.</p>
+      </article>
+
+      <article class="card">
+        <div class="card-tag">Ask</div>
+        <h2>Request a 14-Day Plan</h2>
+        <p>Chavruta can generate a 14-day Hebrew plan that matches your comfort level.</p>
+        <p class="hebrew">חברותא יכולה לבנות תכנית עברית ל־14 יום לפי הרמה שלך.</p>
+        <a class="card-link" href="/pages/chavruta.html">Ask for a plan →</a>
+      </article>
+
+      <article class="card">
+        <div class="card-tag">Boundaries</div>
+        <h2>Sacred Restraint</h2>
+        <p>We honor holy language without turning it into “magic.”</p>
+        <p class="hebrew">מכבדים לשון קודש בלי להפוך אותה ל“קסם”.</p>
+        <a class="card-link" href="/pages/torah-first.html">Covenant →</a>
+      </article>
     </section>
   </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© LuminaNexus — offered freely for learning.</p>
+      <p>Torah First: peshat before abstraction, tradition before novelty, learning as service.</p>
+    </div>
+  </footer>
+
+  <script src="/scripts/nav-active.js" defer></script>
 </body>
- <footer class="site-footer">
-  <div class="container">
-    <p class="muted">
-      Torah First: peshat before abstraction, tradition before novelty, learning as service — with clear boundaries and gentle dignity.
-    </p>
-  </div>
-</footer>
- 
 </html>
