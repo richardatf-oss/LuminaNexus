@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Library — LuminaNexus</title>
-  <meta name="description" content="The Library: curated Torah-first entry points, texts, and structured reading for Noahide seekers." />
+  <meta name="description" content="A real Torah-first library: curated entry points with Sefaria tie-ins, search, filters, and a personal shelf." />
   <link rel="stylesheet" href="/styles/main.css" />
 </head>
 <body class="with-glow">
@@ -43,78 +43,78 @@
         <h1>The Library</h1>
         <div class="hero-text">
           <p>
-            Curated entry points: not everything, just enough to begin well.
-            The goal is steady, dignified reading.
+            A real, living catalog: curated entry points, not everything — just enough to begin well.
+            Every text can open directly on Sefaria.
           </p>
           <p class="hebrew">
-            שערי קריאה מסודרים: לא הכול — רק מספיק כדי להתחיל נכון. המטרה: קריאה יציבה ובכבוד.
+            קטלוג חי: שערי כניסה מסודרים — לא הכול, רק מספיק כדי להתחיל נכון.
+            כל טקסט נפתח ישירות בספריא.
           </p>
         </div>
+
         <div class="hero-actions">
           <a class="btn primary" href="/pages/chavruta.html">Bring a passage to Chavruta →</a>
-          <a class="btn ghost" href="/pages/study-paths.html">Study paths →</a>
+          <button class="btn ghost" id="read-today" type="button">Read Today →</button>
+        </div>
+
+        <p class="hero-note">
+          Torah-first: peshat before abstraction; sources before speculation.
+          <span class="hebrew-inline">תורה תחילה: פשט לפני הפשטה; מקורות לפני ספקולציה.</span>
+        </p>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <div class="card">
+        <h2>Search & Filters / <span class="hebrew-inline">חיפוש וסינון</span></h2>
+
+        <div class="library-controls">
+          <label class="field-note" for="library-search">
+            Search titles, refs, Hebrew / <span class="hebrew-inline">חיפוש לפי כותרת/מקור/עברית</span>
+          </label>
+          <input id="library-search" class="library-search" type="search" placeholder="Search… / חפש…" />
+
+          <div id="library-filters" class="library-filters" aria-label="Library filters"></div>
+
+          <p class="muted">
+            Results: <span id="library-count">0</span>
+            <span class="hebrew-inline"> · תוצאות</span>
+          </p>
         </div>
       </div>
     </section>
 
-    <section class="wrap card-row">
-      <article class="card">
-        <div class="card-tag">Torah</div>
-        <h2>Weekly Parashah (Entry)</h2>
-        <p>Start with the weekly portion: themes, peshat framing, and key questions.</p>
-        <p class="hebrew">להתחיל בפרשה: נושאים, פשט, ושאלות יסוד.</p>
-      </article>
-
-      <article class="card">
-        <div class="card-tag">Psalms</div>
-        <h2>Tehillim (Psalms)</h2>
-        <p>Short, repeatable prayers. Learn a psalm slowly — word by word.</p>
-        <p class="hebrew">תהילים: תפילה קצרה וחוזרת. ללמוד לאט, מילה במילה.</p>
-      </article>
-
-      <article class="card">
-        <div class="card-tag">Wisdom</div>
-        <h2>Proverbs (Mishlei)</h2>
-        <p>Character, speech, honesty, humility — the daily craft of a righteous life.</p>
-        <p class="hebrew">משלי: מידות, לשון, יושר, ענווה — מלאכת היום־יום.</p>
-      </article>
-
-      <article class="card">
-        <div class="card-tag">Ethics</div>
-        <h2>Pirkei Avot (Bounded)</h2>
-        <p>A classic ethical text. We keep it practical and avoid “mystical inflation.”</p>
-        <p class="hebrew">פרקי אבות: לימוד מוסרי־מעשי, בלי ניפוח מיסטי.</p>
-      </article>
-
-      <article class="card">
-        <div class="card-tag">Noahide</div>
-        <h2>Seven Laws Reading</h2>
-        <p>Read the Seven Laws page first, then bring questions to Chavruta.</p>
-        <p class="hebrew">לקרוא את שבע המצוות תחילה, ואז להביא שאלות לחברותא.</p>
-        <a class="card-link" href="/pages/seven-laws.html">Open Seven Laws →</a>
-      </article>
-
-      <article class="card">
-        <div class="card-tag">Process</div>
-        <h2>How to Study Here</h2>
-        <p>Pick one text. Ask one question. Then proceed slowly.</p>
-        <p class="hebrew">טקסט אחד. שאלה אחת. ואז ממשיכים לאט.</p>
-        <a class="card-link" href="/pages/chavruta.html">Enter Chavruta →</a>
-      </article>
+    <section class="wrap">
+      <div class="card">
+        <h2>My Shelf / <span class="hebrew-inline">המדף שלי</span></h2>
+        <p class="muted">
+          Saved locally in your browser (no account). / <span class="hebrew-inline">נשמר מקומית בדפדפן (ללא חשבון)</span>
+        </p>
+        <p id="my-shelf-empty" class="muted">
+          Your shelf is empty — add a text below. / <span class="hebrew-inline">המדף ריק — הוסף טקסט מלמטה</span>
+        </p>
+        <div id="my-shelf" class="card-row"></div>
+      </div>
     </section>
 
     <section class="wrap">
-      <article class="card">
-        <h2>Request a Reading List</h2>
+      <h2 style="margin: 0.5rem 0 1rem;">Catalog / <span class="hebrew-inline">קטלוג</span></h2>
+      <div id="library-list" class="card-row"></div>
+    </section>
+
+    <section class="wrap">
+      <div class="card">
+        <h2>How to use this Library / <span class="hebrew-inline">איך להשתמש בספרייה</span></h2>
         <p>
-          If you tell Chavruta what your level is (new / intermediate) and what you want (Seven Laws / Psalms / Parashah),
-          it can generate a 30-day reading plan inside the covenant.
+          Pick one text. Ask one question. Then proceed slowly. If your question touches halacha,
+          communal policy, or life-changing decisions, consult qualified human rabbinic authority.
         </p>
         <p class="hebrew">
-          אם תספר לחברותא מה הרמה שלך ומה המטרה (שבע מצוות / תהילים / פרשה),
-          אפשר לבנות תכנית קריאה ל־30 יום בתוך הברית.
+          בחר טקסט אחד. שאל שאלה אחת. ואז המשך לאט. אם השאלה נוגעת להלכה,
+          מדיניות קהילה או החלטות גורליות — פנו לסמכות אנושית מוסמכת.
         </p>
-      </article>
+        <a class="card-link" href="/pages/chavruta.html">Enter Chavruta →</a>
+      </div>
     </section>
   </main>
 
@@ -125,6 +125,11 @@
     </div>
   </footer>
 
+  <!-- Library system -->
+  <script src="/scripts/library-data.js" defer></script>
+  <script src="/scripts/library-ui.js" defer></script>
+
+  <!-- Nav active highlighter -->
   <script src="/scripts/nav-active.js" defer></script>
 </body>
 </html>
