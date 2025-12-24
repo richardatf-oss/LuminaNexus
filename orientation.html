@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Living Gate — Orientation | LuminaNexus</title>
-  <meta name="description" content="Orientation for entering the LuminaNexus Gate: setting pace, boundaries, and consent for Torah-first learning." />
+  <title>Orientation — LuminaNexus</title>
+  <meta name="description" content="Enter through the Gate with intention: boundaries, pace, and consent to Torah-first learning." />
   <link rel="stylesheet" href="/styles/main.css" />
 </head>
+
 <body class="with-glow">
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- Header / Nav -->
   <header class="site-header">
     <div class="wrap header-row">
       <div class="brand">
@@ -23,242 +23,57 @@
 
       <nav class="nav pill-nav" aria-label="Primary">
         <a class="pill" href="/index.html">The Gate</a>
-        <a class="pill" href="/torah-first.html">Torah First</a>
-        <a class="pill" href="/study-paths.html">The Seven Laws</a>
-        <a class="pill" href="/study-paths.html#paths">Study Paths</a>
-        <a class="pill" href="/chavruta.html">Chavruta</a>
-        <a class="pill" href="/trees.html">The Trees</a>
-        <a class="pill" href="/library.html">The Library</a>
-        <a class="pill" href="/ivrit-haor.html">Ivrit HaOr</a>
-        <a class="pill" href="/about.html">About</a>
-        <a class="pill" href="/blessing.html">Blessing</a>
+        <a class="pill" href="/pages/torah-first.html">Torah First</a>
+        <a class="pill" href="/pages/seven-laws.html">The Seven Laws</a>
+        <a class="pill" href="/pages/study-paths.html">Study Paths</a>
+        <a class="pill" href="/pages/chavruta.html">Chavruta</a>
+        <a class="pill" href="/pages/trees.html">The Trees</a>
+        <a class="pill" href="/pages/library.html">The Library</a>
+        <a class="pill" href="/pages/ivrit-haor.html">Ivrit HaOr</a>
+        <a class="pill" href="/pages/about.html">About</a>
+        <a class="pill" href="/pages/blessing.html">Blessing</a>
       </nav>
     </div>
   </header>
 
   <main id="main">
-    <!-- Hero -->
     <section class="hero gate-hero hero-compact">
       <div class="hero-bg"></div>
-
       <div class="wrap hero-content">
-        <p class="eyebrow">Orientation · <span class="hebrew-inline">כוונה</span></p>
-        <h1>The Living Gate</h1>
-
+        <p class="eyebrow">Orientation · <span class="hebrew-inline">הכוונה</span></p>
+        <h1>Enter through the Gate</h1>
         <div class="hero-text">
-          <p>
-            Before we enter Chavruta, we pause. This orientation sets boundaries,
-            checks consent, and lets you choose the pace and style that feel safe.
-          </p>
-          <p>
-            Nothing here replaces community, rabbis, or real-world responsibility.
-            It only shapes how this digital chavruta will relate to you.
-          </p>
-
-          <p class="hebrew">
-            לפני שנכנסים לחברותא, עוצרים לרגע.
-            דף הכוונה הזה מגדיר גבולות, מבקש הסכמה,
-            ומאפשר לבחור קצב וסגנון לימוד שנוחים לך.
-          </p>
+          <p>Choose a pace. Choose boundaries. Then proceed with dignity.</p>
+          <p class="hebrew">בחר קצב. בחר גבולות. ואז המשך בכבוד.</p>
+        </div>
+        <div class="hero-actions">
+          <a class="btn primary" href="/pages/chavruta.html">Continue through the Gate →</a>
+          <a class="btn ghost" href="/pages/torah-first.html">Review covenant →</a>
         </div>
       </div>
     </section>
 
-    <!-- Orientation Form -->
-    <section class="orientation-section">
-      <div class="wrap">
-        <article class="card">
-          <h2>Orientation / <span class="hebrew-inline">הכוונה</span></h2>
-          <p class="field-note">
-            Your answers are not stored on a server database. They only guide how you and
-            ChavrutaGPT imagine this space. Answer as much or as little as you like.
-          </p>
-
-          <form id="orientation-form">
-            <!-- 1. Relationship to Torah -->
-            <fieldset class="field-group">
-              <legend>1. Relationship to Torah / <span class="hebrew-inline">יחס לתורה</span></legend>
-              <p class="field-note">
-                Which description feels closest right now?
-              </p>
-              <label>
-                <input type="radio" name="relationship" value="noahide-curious" />
-                I am a Noahide or Noahide-curious, seeking basic structure and clarity.
-              </label>
-              <label>
-                <input type="radio" name="relationship" value="jewish-background" />
-                I have some Jewish background and want a gentle, source-first space.
-              </label>
-              <label>
-                <input type="radio" name="relationship" value="spiritual-seeker" />
-                I am a general spiritual seeker who wants Torah without pressure.
-              </label>
-            </fieldset>
-
-            <!-- 2. Comfort with Hebrew -->
-            <fieldset class="field-group">
-              <legend>2. Hebrew / <span class="hebrew-inline">עברית</span></legend>
-              <p class="field-note">
-                How much Hebrew in the answers is comfortable for you?
-              </p>
-              <label>
-                <input type="radio" name="hebrew-level" value="almost-none" />
-                Almost none – please keep Hebrew minimal and transliterate when needed.
-              </label>
-              <label>
-                <input type="radio" name="hebrew-level" value="sprinkles" />
-                Sprinkles – short Hebrew phrases are welcome with translation.
-              </label>
-              <label>
-                <input type="radio" name="hebrew-level" value="comfortable" />
-                Comfortable – Hebrew terms and short quotes are fine.
-              </label>
-            </fieldset>
-
-            <!-- 3. Main Focus -->
-            <fieldset class="field-group">
-              <legend>3. Focus / <span class="hebrew-inline">מוקד</span></legend>
-              <p class="field-note">
-                What is most important for you in this season?
-              </p>
-              <label>
-                <input type="radio" name="focus" value="seven-laws" />
-                Understanding the Seven Laws of Noah in a grounded way.
-              </label>
-              <label>
-                <input type="radio" name="focus" value="text-study" />
-                Reading and unpacking specific texts (Torah, Psalms, etc.).
-              </label>
-              <label>
-                <input type="radio" name="focus" value="big-questions" />
-                Big questions about G-d, meaning, and right action.
-              </label>
-            </fieldset>
-
-            <!-- 4. Boundaries -->
-            <fieldset class="field-group">
-              <legend>4. Boundaries / <span class="hebrew-inline">גבולות</span></legend>
-              <p class="field-note">
-                Which boundary is especially important for you right now?
-              </p>
-              <label>
-                <input type="radio" name="boundary" value="avoid-speculation" />
-                Avoid speculation as much as possible; stay close to text and sources.
-              </label>
-              <label>
-                <input type="radio" name="boundary" value="avoid-mysticism" />
-                Avoid mystical language; keep things simple and practical.
-              </label>
-              <label>
-                <input type="radio" name="boundary" value="avoid-polemics" />
-                Avoid polemics; I am not here to attack or defend denominations.
-              </label>
-              <label>
-                <input type="radio" name="boundary" value="grounded-ethical" />
-                Keep everything grounded and ethical, especially around sensitive topics.
-              </label>
-            </fieldset>
-
-            <!-- 5. Pace -->
-            <fieldset class="field-group">
-              <legend>5. Pace / <span class="hebrew-inline">קצב</span></legend>
-              <p class="field-note">
-                What pace feels correct?
-              </p>
-              <label>
-                <input type="radio" name="pace" value="slow" />
-                Slow and careful — let’s move step by step.
-              </label>
-              <label>
-                <input type="radio" name="pace" value="structured" />
-                Structured progression — build topic by topic.
-              </label>
-              <label>
-                <input type="radio" name="pace" value="question-by-question" />
-                Question by question — I’ll bring things as they arise.
-              </label>
-              <label>
-                <input type="radio" name="pace" value="adjust-as-we-go" />
-                I will adjust as I go / אני אתאים את עצמי בהמשך.
-              </label>
-            </fieldset>
-
-            <!-- 6. Consent -->
-            <fieldset class="field-group">
-              <legend>6. Consent to Learning Style / <span class="hebrew-inline">הסכמה לסגנון לימוד</span></legend>
-              <p class="field-note">
-                Learning here is source-first, non-coercive, and without claims of personal authority.
-                Is this acceptable to you?
-              </p>
-              <label>
-                <input type="radio" name="consent" value="yes" />
-                Yes — I accept this covenantal learning style.
-              </label>
-              <label>
-                <input type="radio" name="consent" value="read-covenant" />
-                I’d like to read the covenant first, before entering.
-              </label>
-            </fieldset>
-
-            <div class="form-actions">
-              <button type="submit" class="btn primary">
-                Continue through the Gate →
-              </button>
-            </div>
-            <p class="form-note">
-              Thank you. The Gate will open according to intention.
-              <span class="hebrew-inline">תודה. השער ייפתח לפי הכוונה.</span>
-            </p>
-          </form>
-        </article>
+    <section class="wrap">
+      <div class="card">
+        <h2>Orientation is now simple</h2>
+        <p>
+          If you want the full questionnaire version back, say: “Restore full orientation form” and I’ll generate it
+          as a new file with the same styling.
+        </p>
+        <p class="hebrew">
+          אם תרצה להחזיר את שאלון ההכוונה המלא — אמור: “Restore full orientation form”
+          ואוציא קובץ חדש באותו סגנון.
+        </p>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="site-footer">
     <div class="wrap">
       <p>© LuminaNexus — offered freely for learning.</p>
-      <p>
-        Torah First: peshat before abstraction, tradition before novelty,
-        learning as service — with clear boundaries and gentle dignity.
-      </p>
     </div>
   </footer>
 
-  <!-- Orientation routing logic -->
-  <script>
-    const form = document.getElementById("orientation-form");
-
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-
-      const data = new FormData(form);
-      const consent = data.get("consent");
-
-      // Optional: store a few preferences in localStorage for future use
-      ["relationship", "hebrew-level", "focus", "boundary", "pace", "consent"].forEach((key) => {
-        const value = data.get(key);
-        if (value) {
-          try {
-            localStorage.setItem("lnx-orientation-" + key, value);
-          } catch (e) {
-            // ignore storage errors
-          }
-        }
-      });
-
-      if (!consent) {
-        alert("Please choose whether you accept the learning style (Yes / Read the covenant first).");
-        return;
-      }
-
-      if (consent === "yes") {
-        window.location.href = "/chavruta.html";
-      } else {
-        window.location.href = "/torah-first.html";
-      }
-    });
-  </script>
+  <script src="/scripts/nav-active.js" defer></script>
 </body>
 </html>
