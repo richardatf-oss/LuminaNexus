@@ -45,6 +45,10 @@ body {
   height: 100%;
 }
 
+html {
+  scroll-behavior: smooth; /* smooth scroll for hero button */
+}
+
 body {
   margin: 0;
   color: var(--ink);
@@ -468,7 +472,7 @@ main {
 /* ------------------------ Chat UI ---------------------------------- */
 
 .chat-section {
-  padding: 0 0 3.6rem;
+  padding: 1.4rem 0 3.6rem; /* closer to hero */
 }
 
 .chat-card {
