@@ -1,0 +1,15 @@
+# Pretty URLs for /pages/*
+/pages/chavruta        /pages/chavruta.html       200
+/pages/library         /pages/library.html        200
+/pages/torah-first     /pages/torah-first.html    200
+/pages/seven-laws      /pages/seven-laws.html     200
+/pages/study-paths     /pages/study-paths.html    200
+/pages/trees           /pages/trees.html          200
+/pages/ivrit-haor      /pages/ivrit-haor.html     200
+/pages/about           /pages/about.html          200
+/pages/blessing        /pages/blessing.html       200
+/pages/orientation     /pages/orientation.html    200
+
+# (Optional) If someone hits /chavruta, send them to the real one
+/chavruta              /pages/chavruta.html       301
+/library               /pages/library.html        301
