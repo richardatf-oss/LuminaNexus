@@ -1,0 +1,164 @@
+/* ================= ChavrutaGPT layout ================= */
+
+.chavruta-layout {
+  margin-top: 32px;
+  margin-bottom: 48px;
+  max-width: 980px;
+}
+
+/* Let panels stack nicely on mobile */
+.chavruta-layout .panel {
+  margin-bottom: 24px;
+}
+
+/* Controls layout */
+.controls-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field label {
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.field select,
+.field textarea {
+  margin-top: 4px;
+}
+
+/* Small helper text */
+.hint {
+  font-size: 0.8rem;
+  opacity: 0.78;
+  margin-top: 4px;
+}
+
+/* Session tools */
+.session-tools {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Toolbar under the message box */
+.panel--message .toolbar {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.boundaries {
+  font-size: 0.8rem;
+  opacity: 0.78;
+  max-width: 560px;
+}
+
+/* Conversation log container
+   (base styles from main.css are already in place; these just tweak) */
+
+.panel--conversation {
+  padding-bottom: 12px;
+}
+
+#log {
+  margin-top: 8px;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+/* Chat lines */
+
+.chat-line {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+}
+
+.chat-line__who {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.78;
+}
+
+/* Bubble */
+.chat-line__body {
+  padding: 10px 12px;
+  border-radius: 10px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+/* User vs assistant colors.
+   These assume a dark theme from main.css. */
+
+.chat-line.user .chat-line__body {
+  background: rgba(120, 180, 255, 0.14);
+  border: 1px solid rgba(120, 180, 255, 0.4);
+}
+
+.chat-line.assistant .chat-line__body {
+  background: rgba(40, 255, 200, 0.06);
+  border: 1px solid rgba(40, 255, 200, 0.28);
+}
+
+/* System messages (like "New chat started") */
+
+.chat-line--system .chat-line__body {
+  background: transparent;
+  border: 0;
+  opacity: 0.8;
+  font-size: 0.85rem;
+  padding-left: 0;
+}
+
+/* Make sure new messages are readable even at the bottom */
+#log::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+}
+
+/* ================= Mobile adjustments ================= */
+
+@media (max-width: 768px) {
+  .chavruta-layout {
+    margin-top: 20px;
+    padding-inline: 12px;
+  }
+
+  .controls-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #log {
+    max-height: 55vh;
+  }
+
+  .panel--message textarea#message {
+    min-height: 120px;
+  }
+
+  .panel--message .toolbar {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .boundaries {
+    max-width: none;
+  }
+}
