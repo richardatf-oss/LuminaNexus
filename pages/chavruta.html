@@ -57,7 +57,8 @@
           <div class="field">
             <label for="mode">Mode</label>
             <select id="mode">
-              <option value="torah" selected>Torah (peshat first)</option>
+              <!-- IMPORTANT: these values match what the JS expects -->
+              <option value="peshat" selected>Torah (peshat first)</option>
               <option value="laws">Seven Laws (practice)</option>
               <option value="ivrit">Hebrew (concrete)</option>
               <option value="kabbalah">Ethical Kabbalah (bounded)</option>
@@ -99,15 +100,15 @@
           <textarea
             id="message"
             rows="4"
-            placeholder="Example: &quot;Peshat first on Gen 1:1 with one classical note, then 3 questions and 1 next step.&quot;"
+            placeholder="Example: &quot;Peshat first on Gen 1:1 with one classical note, then 3 questions and 1 next step for today.&quot;"
           ></textarea>
         </div>
 
         <div class="field field--actions">
           <button id="send" type="button" class="btn btn--primary">Send</button>
           <p class="field__hint small">
-            Press <kbd>Shift</kbd>+<kbd>Enter</kbd> for a new line. Press
-            <strong>Send</strong> to ask Chavruta.
+            Press <kbd>Shift</kbd>+<kbd>Enter</kbd> for a new line.
+            Press <strong>Send</strong> to ask Chavruta.
           </p>
         </div>
 
@@ -211,7 +212,7 @@
       </div>
     </footer>
 
-    <!-- Chat logic -->
-    <script src="../scripts/chavruta.js" type="module" defer></script>
+    <!-- Chat logic (classic script, like before) -->
+    <script src="../scripts/chavruta.js"></script>
   </body>
 </html>
