@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Living Gate — Orientation | LuminaNexus</title>
   <meta name="description" content="Orientation gate for LuminaNexus — Torah-first, source-first learning with clear boundaries." />
-  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/styles/main.css" />
 </head>
-<body class="lnx-body">
+<body class="with-glow">
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
@@ -19,52 +19,50 @@
           <div class="brand-subtitle">ChavrutaGPT — Torah-first study partner</div>
         </div>
       </div>
-      <nav class="nav" aria-label="Primary">
-        <a href="/index.html">The Gate</a>
-        <a href="/torah-first.html">Torah First</a>
-        <a href="/study-paths.html">The Seven Laws</a>
-        <a href="/study-paths.html#paths">Study Paths</a>
-        <a class="active" href="/orientation.html">Orientation</a>
-        <a href="/chavruta.html">Chavruta</a>
-        <a href="/trees.html">The Trees</a>
-        <a href="/library.html">The Library</a>
-        <a href="/ivrit-haor.html">Ivrit HaOr</a>
-        <a href="/about.html">About</a>
-        <a href="/blessing.html">Blessing</a>
+
+      <nav class="nav pill-nav" aria-label="Primary">
+        <a class="pill" href="/index.html">The Gate</a>
+        <a class="pill" href="/torah-first.html">Torah First</a>
+        <a class="pill" href="/study-paths.html">The Seven Laws</a>
+        <a class="pill" href="/study-paths.html#paths">Study Paths</a>
+        <a class="pill active" href="/orientation.html">Orientation</a>
+        <a class="pill" href="/chavruta.html">Chavruta</a>
+        <a class="pill" href="/trees.html">The Trees</a>
+        <a class="pill" href="/library.html">The Library</a>
+        <a class="pill" href="/ivrit-haor.html">Ivrit HaOr</a>
+        <a class="pill" href="/about.html">About</a>
+        <a class="pill" href="/blessing.html">Blessing</a>
       </nav>
     </div>
   </header>
 
   <main id="main">
-    <section class="hero hero-gate hero-compact">
-      <div class="hero-layer hero-stars"></div>
-      <div class="hero-layer hero-glow"></div>
+    <section class="hero gate-hero hero-compact">
+      <div class="hero-bg"></div>
 
-      <div class="wrap hero-inner">
+      <div class="wrap hero-content">
         <p class="eyebrow">
           The Living Gate · <span class="hebrew-inline">שער חי</span>
         </p>
         <h1>The Gate of Orientation<br><span class="hebrew">שער הכוונה</span></h1>
 
-        <div class="hero-body">
+        <div class="hero-text">
           <p>
-            Before entering, we pause.<br />
-            Learning here is not consumption, not performance, not escape.<br />
-            It is relationship — with text, with order, with truth.
+            Before entering, we pause. Learning here is not consumption,
+            not performance, not escape. It is relationship — with text,
+            with order, with truth.
           </p>
           <p>
-            Answer simply. There are no wrong responses.<br />
-            These questions exist to align intention, not to judge it.
+            Answer simply. There are no wrong responses. These questions
+            exist to align intention, not to judge it.
           </p>
 
           <p class="hebrew">
-            בטרם הכניסה — עוצרים.<br />
-            הלימוד כאן איננו צריכה, איננו הופעה, ואיננו בריחה.<br />
-            זהו קשר — עם טקסט, עם סדר, עם אמת.
+            בטרם הכניסה — עוצרים. הלימוד כאן איננו צריכה,
+            איננו הופעה, ואיננו בריחה. זהו קשר — עם טקסט, עם סדר, עם אמת.
           </p>
           <p class="hebrew">
-            ענה בפשטות. אין כאן תשובות שגויות.<br />
-            השאלות נועדו לכוונה, לא לשיפוט.
+            ענה בפשטות. אין כאן תשובות שגויות. השאלות נועדו לכוונה, לא לשיפוט.
           </p>
         </div>
       </div>
@@ -72,7 +70,7 @@
 
     <section class="wrap orientation-section">
       <form id="orientation-form" class="card">
-        <!-- Question 1 -->
+        <!-- Q1 -->
         <fieldset class="field-group">
           <legend><strong>1. Purpose of Arrival</strong> / <span class="hebrew">מטרת הביאה</span></legend>
           <p class="field-note">
@@ -86,7 +84,7 @@
           <label><input type="radio" name="purpose" value="unsure"> I am not sure yet / <span class="hebrew">אינני בטוח עדיין</span></label>
         </fieldset>
 
-        <!-- Question 2 -->
+        <!-- Q2 -->
         <fieldset class="field-group">
           <legend><strong>2. Relationship to Sources</strong> / <span class="hebrew">יחס למקורות</span></legend>
           <p class="field-note">
@@ -99,7 +97,7 @@
           <label><input type="radio" name="sources" value="learning"> I am still learning how to read sources / <span class="hebrew">אני עדיין לומד כיצד לקרוא מקורות</span></label>
         </fieldset>
 
-        <!-- Question 3 -->
+        <!-- Q3 -->
         <fieldset class="field-group">
           <legend><strong>3. Preferred Tone</strong> / <span class="hebrew">סגנון מועדף</span></legend>
           <p class="field-note">
@@ -112,7 +110,7 @@
           <label><input type="radio" name="tone" value="minimal"> Minimal commentary / <span class="hebrew">פרשנות מינימלית</span></label>
         </fieldset>
 
-        <!-- Question 4 -->
+        <!-- Q4 -->
         <fieldset class="field-group">
           <legend><strong>4. Boundaries</strong> / <span class="hebrew">גבולות</span></legend>
           <p class="field-note">
@@ -125,7 +123,7 @@
           <label><input type="radio" name="boundary" value="ethical"> Keep everything grounded and ethical / <span class="hebrew">שמירה על קרקע אתית ויציבה</span></label>
         </fieldset>
 
-        <!-- Question 5 -->
+        <!-- Q5 -->
         <fieldset class="field-group">
           <legend><strong>5. Pace</strong> / <span class="hebrew">קצב</span></legend>
           <p class="field-note">
@@ -138,14 +136,14 @@
           <label><input type="radio" name="pace" value="flex"> I will adjust as I go / <span class="hebrew">אתאים את עצמי בהמשך</span></label>
         </fieldset>
 
-        <!-- Question 6: Consent / Covenant -->
+        <!-- Q6 -->
         <fieldset class="field-group">
           <legend><strong>6. Consent to Learning Style</strong> / <span class="hebrew">הסכמה לסגנון הלימוד</span></legend>
           <p class="field-note">
             Learning here is source-first, non-coercive, and without claims of personal authority.<br />
             Is this acceptable?<br />
             <span class="hebrew">
-              הלימוד כאן מבוסס מקורות, ללא כפייה וללא טענות סמכות אישית.<br />
+              הלימוד כאן מבוסס מקורות, ללא כפייה וללא טענות סמכות אישית.
               האם זה מקובל עליך?
             </span>
           </p>
@@ -154,7 +152,7 @@
         </fieldset>
 
         <div class="form-actions">
-          <button type="submit" class="btn-primary">
+          <button type="submit" class="btn primary">
             Continue through the Gate →
           </button>
           <p class="form-note">
@@ -179,11 +177,8 @@
   <script>
     document.getElementById("orientation-form").addEventListener("submit", function (event) {
       event.preventDefault();
+      const consent = event.target.elements["consent"].value;
 
-      const form = event.target;
-      const consent = form.elements["consent"].value;
-
-      // Adjust these paths to your real pages
       const chavrutaUrl = "/chavruta.html";
       const covenantUrl = "/torah-first.html";
 
