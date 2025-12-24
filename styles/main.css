@@ -675,3 +675,16 @@ input:focus, select:focus, textarea:focus{
   opacity: 0.8;
   margin: 4px 0 10px;
 }
+/* ================================
+   ChavrutaGPT – Conversation Polish
+   ================================ */
+@media (max-width: 480px) {
+  #send {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .panel--message textarea {
+    font-size: 16px; /* prevents iOS zoom */
+  }
+}
