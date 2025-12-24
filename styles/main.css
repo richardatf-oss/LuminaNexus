@@ -1,621 +1,478 @@
-/* =======================================================================
-   LuminaNexus — styles/main.css
-   Gate glow theme · bilingual (English + Hebrew) · responsive layout
-   ======================================================================= */
+/* LuminaNexus — main site styles (Gate glow theme)
+   - Clean, soft, Torah-first aesthetic
+   - Works for /index.html and all /pages/*.html
+   - Includes Library UI (search/filters/shelf)
+*/
 
-/* ------------------------ Root & Base Reset ------------------------- */
+/* =========================
+   Tokens
+========================= */
+:root{
+  --bg0:#06070c;
+  --bg1:#0b1020;
+  --surface:rgba(255,255,255,.06);
+  --surface2:rgba(255,255,255,.08);
+  --line:rgba(255,255,255,.10);
+  --line2:rgba(255,255,255,.16);
 
-:root {
-  /* Core colors */
-  --bg-main: #05040b;
-  --bg-alt: #0b0a16;
-  --bg-card: #10101f;
-  --ink: #f7f7ff;
-  --ink-muted: #d5d5e8;
+  --ink:#eaf0ff;
+  --muted:rgba(234,240,255,.76);
+  --muted2:rgba(234,240,255,.62);
 
-  --gold-soft: #f4cc83;
-  --gold-deep: #e6914f;
+  --gold:rgba(255,232,180,.96);
+  --gold2:rgba(255,232,180,.25);
+  --blue:rgba(120,170,255,.22);
 
-  --border-soft: rgba(255, 255, 255, 0.14);
-  --border-strong: rgba(255, 255, 255, 0.3);
+  --radius:18px;
+  --radius2:24px;
 
-  --shadow-hero: 0 40px 120px rgba(0, 0, 0, 0.85);
-  --shadow-card: 0 22px 60px rgba(0, 0, 0, 0.85);
+  --shadow:0 18px 60px rgba(0,0,0,.55);
+  --shadow2:0 10px 30px rgba(0,0,0,.35);
 
-  --radius-pill: 999px;
-  --radius-card: 18px;
-  --radius-soft: 12px;
-
-  --transition-fast: 150ms ease-out;
-  --transition-med: 220ms ease-out;
-
-  --font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Roboto", "Helvetica Neue", Arial, sans-serif;
-  --font-hebrew: "Noto Sans Hebrew", "Segoe UI", system-ui, sans-serif;
+  --wrap: min(1120px, calc(100% - 48px));
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  height: 100%;
-}
-
-html {
-  scroll-behavior: smooth; /* smooth scroll for hero button */
-}
-
-body {
-  margin: 0;
-  color: var(--ink);
+/* =========================
+   Base / Reset
+========================= */
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  color:var(--ink);
   background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.12), transparent 58%),
-    radial-gradient(circle at bottom right, rgba(120, 160, 255, 0.14), transparent 60%),
-    radial-gradient(circle at center, #03030a 0%, #020109 50%, #000007 100%);
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.5;
-  display: flex;
-  flex-direction: column;
+    radial-gradient(1200px 720px at 50% 10%, rgba(120,170,255,.12), transparent 60%),
+    radial-gradient(900px 560px at 30% 0%, rgba(255,232,180,.08), transparent 55%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+  font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
 }
 
-/* Soft gate glow overlay across whole site */
-.with-glow::before {
-  content: "";
-  position: fixed;
-  inset: -120px;
-  pointer-events: none;
-  z-index: -1;
+a{ color:inherit; text-decoration:none; }
+a:hover{ text-decoration:none; }
+img{ max-width:100%; height:auto; display:block; }
+
+.wrap{ width:var(--wrap); margin-inline:auto; }
+
+.skip-link{
+  position:absolute;
+  left:-999px;
+  top:auto;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+}
+.skip-link:focus{
+  left:16px;
+  top:16px;
+  width:auto;
+  height:auto;
+  padding:.6rem .8rem;
+  background:rgba(0,0,0,.7);
+  border:1px solid var(--line2);
+  border-radius:12px;
+  z-index:9999;
+}
+
+/* =========================
+   Ambient site glow overlay
+========================= */
+.with-glow::before{
+  content:"";
+  position:fixed;
+  inset:-140px;
+  pointer-events:none;
   background:
-    radial-gradient(900px 420px at 50% 15%, rgba(255, 232, 190, 0.14), transparent 60%),
-    radial-gradient(1200px 520px at 50% 85%, rgba(140, 190, 255, 0.16), transparent 70%);
-  mix-blend-mode: screen;
+    radial-gradient(900px 420px at 50% 12%, rgba(255,232,180,.14), transparent 62%),
+    radial-gradient(900px 520px at 20% 22%, rgba(120,170,255,.10), transparent 65%),
+    radial-gradient(900px 520px at 80% 28%, rgba(120,170,255,.08), transparent 66%);
+  filter: blur(1px);
+  opacity:.9;
+  z-index:-1;
 }
 
-/* ------------------------ Accessibility ----------------------------- */
-
-.skip-link {
-  position: absolute;
-  left: -999px;
-  top: 0;
-  z-index: 2000;
-  background: #ffffff;
-  color: #000000;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+/* =========================
+   Header / Nav
+========================= */
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background: rgba(6,7,12,.62);
+  backdrop-filter: blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
 
-.skip-link:focus {
-  left: 0.75rem;
-  top: 0.75rem;
+.header-row{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:14px 0;
 }
 
-/* ------------------------ Layout Helpers --------------------------- */
-
-.wrap {
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width: 240px;
+}
+.brand-mark{
+  width:30px;
+  height:30px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+.brand-title{
+  font-weight:700;
+  letter-spacing:.2px;
+}
+.brand-subtitle{
+  font-size:12px;
+  opacity:.72;
+  margin-top:1px;
 }
 
-main {
-  flex: 1 0 auto;
+/* pill nav */
+.pill-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-left:auto;
+  align-items:center;
+  justify-content:flex-end;
 }
 
-.site-footer {
-  flex-shrink: 0;
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:.4rem;
+  padding:.46rem .72rem;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  color: rgba(234,240,255,.86);
+  font-size:13px;
+  line-height:1;
+  white-space:nowrap;
+  transition: transform .08s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
 }
-
-/* ------------------------ Header & Nav ----------------------------- */
-
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  backdrop-filter: blur(14px);
-  background: linear-gradient(
-    to bottom,
-    rgba(3, 3, 10, 0.96),
-    rgba(3, 3, 10, 0.9),
-    rgba(3, 3, 10, 0.75),
-    transparent
-  );
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.85rem 0 0.8rem;
-  gap: 0.75rem;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.brand-mark {
-  width: 30px;
-  height: 30px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-}
-
-.brand-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.brand-title {
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-
-.brand-subtitle {
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-
-/* Pill navigation */
-
-.nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.35rem;
-  font-size: 0.83rem;
-}
-
-.pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.25rem 0.8rem;
-  border-radius: var(--radius-pill);
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--ink-muted);
-  text-decoration: none;
-  transition: background var(--transition-med), border-color var(--transition-med),
-    color var(--transition-med), transform var(--transition-fast);
-  opacity: 0.9;
-}
-
-.pill:hover {
-  border-color: rgba(255, 255, 255, 0.16);
-  background: rgba(15, 15, 30, 0.9);
-  color: var(--ink);
+.pill:hover{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.20);
   transform: translateY(-1px);
 }
-
-.pill.active {
-  border-color: rgba(255, 255, 255, 0.35);
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.12), rgba(17, 18, 32, 0.95));
-  color: #ffffff;
+.pill.active{
+  background: rgba(255,232,180,.12);
+  border-color: rgba(255,232,180,.32);
+  color: var(--ink);
+  box-shadow: 0 8px 24px rgba(255,232,180,.08);
 }
 
-/* ------------------------ Hero Sections ---------------------------- */
-
-.hero {
-  position: relative;
-  padding: 4.2rem 0 3.5rem;
-  overflow: hidden;
-  box-shadow: var(--shadow-hero);
+/* =========================
+   Hero
+========================= */
+.hero{
+  position:relative;
+  overflow:hidden;
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
 
-.hero-compact {
-  padding-top: 3.2rem;
-  padding-bottom: 2.8rem;
+/* Gate hero look */
+.gate-hero{
+  min-height: clamp(340px, 48vh, 560px); /* prevents “hiding under fold” */
+  display:grid;
+  align-items:center;
+  padding: clamp(28px, 5vh, 56px) 0;
 }
 
-.hero-bg {
-  position: absolute;
-  inset: -140px;
-  z-index: -1;
+.hero-compact{
+  min-height: clamp(300px, 40vh, 460px);
+  padding: clamp(24px, 4.5vh, 48px) 0;
+}
+
+.hero-bg{
+  position:absolute;
+  inset:0;
   background:
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.18), transparent 55%),
-    radial-gradient(circle at bottom, rgba(144, 188, 255, 0.22), transparent 60%),
-    radial-gradient(circle at center, rgba(4, 6, 28, 0.9), #03040f);
-  opacity: 0.96;
+    radial-gradient(900px 420px at 50% 18%, rgba(255,232,180,.16), transparent 60%),
+    radial-gradient(900px 520px at 15% 32%, rgba(120,170,255,.10), transparent 66%),
+    radial-gradient(900px 520px at 82% 38%, rgba(120,170,255,.08), transparent 70%),
+    linear-gradient(180deg, rgba(255,255,255,.06), transparent 60%);
+  opacity:.9;
 }
 
-.hero-content {
-  position: relative;
+.hero-content{
+  position:relative;
+  padding: 0;
 }
 
-.eyebrow {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 0.4rem;
+.eyebrow{
+  margin:0 0 .6rem;
+  font-size:12px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color: rgba(234,240,255,.70);
 }
 
-.hero-title {
-  font-size: clamp(2.4rem, 4vw, 3.2rem);
-  margin: 0 0 0.5rem;
+.hero h1{
+  margin:0 0 .7rem;
+  font-size: clamp(34px, 4.6vw, 58px);
+  line-height:1.05;
+  letter-spacing:-.02em;
 }
 
-.hero-lead {
-  font-size: 1.02rem;
-  max-width: 38rem;
-  opacity: 0.9;
-  margin: 0.3rem 0;
+.hero-text{
+  max-width: 78ch;
+  color: rgba(234,240,255,.82);
+}
+.hero-text p{ margin:.25rem 0 .45rem; }
+
+.hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top: 16px;
 }
 
-.hero-text {
-  max-width: 48rem;
+.hero-note{
+  margin-top: 14px;
+  font-size: 13px;
+  color: rgba(234,240,255,.70);
 }
 
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin: 1.2rem 0 0.5rem;
+/* =========================
+   Buttons
+========================= */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
+  padding:.66rem 1.0rem;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.04);
+  color: rgba(234,240,255,.92);
+  font-size:14px;
+  line-height:1;
+  cursor:pointer;
+  transition: transform .08s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease, opacity .18s ease;
 }
-
-.hero-note {
-  font-size: 0.92rem;
-  opacity: 0.9;
-  margin-top: 0.8rem;
-}
-
-/* ------------------------ Buttons ---------------------------------- */
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.6rem 1.4rem;
-  border-radius: var(--radius-pill);
-  font-size: 0.95rem;
-  border: 1px solid transparent;
-  cursor: pointer;
-  text-decoration: none;
-  transition: box-shadow var(--transition-med), transform var(--transition-fast),
-    background var(--transition-med), border-color var(--transition-med), color var(--transition-med);
-  white-space: nowrap;
-}
-
-.btn.primary {
-  background: linear-gradient(135deg, var(--gold-soft), var(--gold-deep));
-  color: #211000;
-  font-weight: 600;
-  box-shadow: 0 0 28px rgba(244, 204, 131, 0.55);
-}
-
-.btn.primary:hover {
-  box-shadow: 0 0 38px rgba(244, 204, 131, 0.85);
+.btn:hover{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.22);
   transform: translateY(-1px);
 }
+.btn:active{ transform: translateY(0); }
 
-.btn.ghost {
-  border-color: rgba(255, 255, 255, 0.3);
-  background: rgba(10, 10, 25, 0.92);
+.btn.primary{
+  background: rgba(255,232,180,.14);
+  border-color: rgba(255,232,180,.34);
   color: var(--ink);
+  box-shadow: 0 14px 34px rgba(255,232,180,.10);
+}
+.btn.primary:hover{
+  background: rgba(255,232,180,.18);
+  border-color: rgba(255,232,180,.45);
 }
 
-.btn.ghost:hover {
-  background: rgba(18, 18, 40, 0.96);
-  box-shadow: 0 0 18px rgba(130, 150, 255, 0.4);
+.btn.ghost{
+  background: rgba(0,0,0,.18);
+  border-color: rgba(255,255,255,.14);
+}
+.btn.ghost:hover{
+  background: rgba(0,0,0,.24);
+  border-color: rgba(255,255,255,.22);
 }
 
-/* ------------------------ Cards & Rows ------------------------------ */
+button.btn{ font-family:inherit; }
 
-.card-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.4rem;
-  padding: 2.4rem 0 3.4rem;
+/* =========================
+   Cards / Sections
+========================= */
+.card-row{
+  display:grid;
+  gap:16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 18px auto 34px;
 }
 
-.card {
+.card{
+  position:relative;
+  padding: 18px 18px 16px;
+  border-radius: var(--radius2);
+  background: rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow: var(--shadow2);
+  overflow:hidden;
+}
+.card::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
   background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), rgba(10, 10, 24, 0.98));
-  border-radius: var(--radius-card);
-  padding: 1.6rem 1.5rem 1.4rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: var(--shadow-card);
+    radial-gradient(520px 260px at 50% 0%, rgba(255,232,180,.10), transparent 60%),
+    radial-gradient(520px 280px at 90% 30%, rgba(120,170,255,.08), transparent 64%);
+  opacity:.75;
+  pointer-events:none;
+}
+.card > *{ position:relative; }
+
+.card h2{
+  margin: .1rem 0 .4rem;
+  font-size: 18px;
+  letter-spacing:-.01em;
+}
+.card p{
+  margin: .35rem 0;
+  color: rgba(234,240,255,.78);
+  font-size: 14px;
 }
 
-.card h2 {
-  margin: 0 0 0.25rem;
+.card-tag{
+  display:inline-flex;
+  align-items:center;
+  padding:.28rem .62rem;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+  color: rgba(234,240,255,.74);
+  font-size: 11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin-bottom: 8px;
 }
 
-.card-tag {
-  font-size: 0.83rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  opacity: 0.74;
-  margin-bottom: 0.75rem;
+.card-link{
+  display:inline-block;
+  margin-top: .6rem;
+  font-size: 13px;
+  color: rgba(255,232,180,.92);
+  text-decoration:none;
+}
+.card-link:hover{ text-decoration:underline; }
+
+/* =========================
+   Typography helpers
+========================= */
+.muted{ color: var(--muted); }
+.field-note{
+  font-size: 13px;
+  color: rgba(234,240,255,.72);
 }
 
-.card p {
-  font-size: 0.95rem;
-  margin: 0.1rem 0;
-}
-
-.card-link {
-  display: inline-flex;
-  margin-top: 0.7rem;
-  font-size: 0.9rem;
-  opacity: 0.9;
-  text-decoration: none;
-}
-
-.card-link:hover {
-  text-decoration: underline;
-}
-
-/* ------------------------ Hebrew Styles ---------------------------- */
-
-.hebrew,
-.hebrew-inline {
-  font-family: var(--font-hebrew);
-}
-
-.hebrew {
+/* Hebrew blocks: RTL, nicer spacing */
+.hebrew{
   direction: rtl;
-  text-align: right;
-  font-size: 0.95rem;
+  unicode-bidi: plaintext;
+  font-family: "Noto Sans Hebrew", "Arial Hebrew", "Frank Ruehl CLM", system-ui, sans-serif;
+  letter-spacing: .01em;
+  color: rgba(234,240,255,.78);
 }
 
-.hebrew-inline {
+.hebrew-inline{
   direction: rtl;
+  unicode-bidi: plaintext;
+  font-family: "Noto Sans Hebrew", "Arial Hebrew", "Frank Ruehl CLM", system-ui, sans-serif;
 }
 
-/* ------------------------ Orientation Form ------------------------- */
-
-.orientation-section .card {
-  max-width: 900px;
-  margin: 2rem auto 4rem;
+/* =========================
+   Library UI
+========================= */
+.library-controls{
+  display:grid;
+  gap:.75rem;
+  margin-top: .4rem;
 }
 
-.field-group {
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-soft);
-  padding: 1.1rem 1.2rem;
-  margin-bottom: 1.1rem;
-  background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), rgba(8, 8, 16, 0.98));
-}
-
-.field-group legend {
-  font-weight: 600;
-  margin-bottom: 0.35rem;
-  font-size: 0.95rem;
-}
-
-.field-note {
-  font-size: 0.85rem;
-  opacity: 0.88;
-  margin-bottom: 0.45rem;
-}
-
-.field-group label {
-  display: block;
-  font-size: 0.9rem;
-  margin: 0.25rem 0;
-  cursor: pointer;
-}
-
-.field-group input[type="radio"] {
-  margin-right: 0.4rem;
-}
-
-.form-actions {
-  margin-top: 1.6rem;
-  text-align: right;
-}
-
-.form-note {
-  margin-top: 0.55rem;
-  font-size: 0.85rem;
-  opacity: 0.82;
-}
-
-/* ------------------------ Covenant Page ---------------------------- */
-
-.covenant {
-  padding: 3.2rem 0 3.8rem;
-}
-
-.covenant-header .lead {
-  max-width: 40rem;
-  font-size: 1rem;
-  opacity: 0.9;
-}
-
-.covenant-body {
-  margin-top: 1.7rem;
-}
-
-.covenant-body h2 {
-  margin-top: 1.3rem;
-  margin-bottom: 0.45rem;
-  font-size: 1.08rem;
-}
-
-.covenant-body p {
-  margin: 0.35rem 0;
-}
-
-.covenant-body ul {
-  margin: 0.3rem 0 0.7rem;
-  padding-left: 1.15rem;
-}
-
-.covenant-body li {
-  margin-bottom: 0.25rem;
-  font-size: 0.95rem;
-}
-
-.covenant-actions {
-  margin-top: 1.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.7rem;
-}
-
-/* ------------------------ Chat UI ---------------------------------- */
-
-.chat-section {
-  padding: 1.4rem 0 3.6rem; /* closer to hero */
-}
-
-.chat-card {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.chat-log {
-  max-height: 420px;
-  overflow-y: auto;
-  padding: 0.7rem 0.3rem 0.8rem 0;
-  margin-bottom: 0.9rem;
-}
-
-.chat-message {
-  display: flex;
-  margin-bottom: 0.5rem;
-}
-
-.chat-message.assistant {
-  justify-content: flex-start;
-}
-
-.chat-message.user {
-  justify-content: flex-end;
-}
-
-.chat-bubble {
-  max-width: 80%;
-  padding: 0.6rem 0.85rem;
+.library-search{
+  width:100%;
+  padding:.75rem .9rem;
   border-radius: 14px;
-  font-size: 0.95rem;
-  white-space: pre-wrap;
-}
-
-.chat-message.assistant .chat-bubble {
-  background: rgba(18, 22, 40, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-.chat-message.user .chat-bubble {
-  background: linear-gradient(135deg, var(--gold-soft), var(--gold-deep));
-  color: #211108;
-}
-
-.chat-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-}
-
-#chat-input {
-  min-height: 90px;
-  resize: vertical;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  padding: 0.6rem 0.8rem;
-  font-family: inherit;
-  font-size: 0.95rem;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.22);
   color: var(--ink);
-  background: rgba(4, 4, 12, 0.95);
+  outline:none;
+}
+.library-search::placeholder{
+  color: rgba(234,240,255,.45);
+}
+.library-search:focus{
+  border-color: rgba(255,232,180,.35);
+  box-shadow: 0 0 0 4px rgba(255,232,180,.10);
 }
 
-#chat-input:focus {
-  outline: 1px solid rgba(255, 255, 255, 0.45);
+.library-filters{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem;
 }
 
-.chat-note {
-  font-size: 0.82rem;
-  opacity: 0.78;
+.filter-pill{
+  cursor:pointer;
+  user-select:none;
+}
+.filter-pill.active{
+  background: rgba(255,232,180,.14);
+  border-color: rgba(255,232,180,.34);
+  color: var(--ink);
+  box-shadow: 0 10px 24px rgba(255,232,180,.08);
 }
 
-/* ------------------------ Footer ----------------------------------- */
-
-.site-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background: radial-gradient(
-    circle at top,
-    rgba(255, 255, 255, 0.05),
-    rgba(4, 4, 10, 1) 58%
-  );
-  padding: 1.7rem 0 2rem;
-  font-size: 0.88rem;
-  color: rgba(235, 235, 255, 0.85);
+.library-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem;
+  margin-top:.8rem;
+}
+.library-card .btn{
+  padding:.58rem .82rem;
+  font-size:13px;
 }
 
-.site-footer p {
-  margin: 0.15rem 0;
+/* =========================
+   Footer
+========================= */
+.site-footer{
+  border-top:1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.18);
+  margin-top: 34px;
+}
+.site-footer .wrap{
+  padding: 18px 0 26px;
+}
+.site-footer p{
+  margin: 6px 0;
+  color: rgba(234,240,255,.70);
+  font-size: 13px;
 }
 
-/* ------------------------ Responsive Tweaks ------------------------ */
-
-@media (max-width: 900px) {
-  .header-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .nav {
-    justify-content: flex-start;
-  }
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 980px){
+  .card-row{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .brand{ min-width: 200px; }
 }
 
-@media (max-width: 720px) {
-  .hero {
-    padding-top: 3.4rem;
-    padding-bottom: 3rem;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .card-row {
-    padding-top: 2rem;
-  }
-
-  .card {
-    padding: 1.5rem 1.3rem;
-  }
-
-  .orientation-section .card,
-  .chat-card {
-    padding: 1.5rem 1.3rem;
-  }
+@media (max-width: 720px){
+  .header-row{ gap:12px; }
+  .brand{ min-width: 0; }
+  .brand-subtitle{ display:none; }
+  .pill-nav{ justify-content:flex-start; margin-left:0; }
+  .card-row{ grid-template-columns: 1fr; }
+  .hero-actions{ flex-direction:column; align-items:flex-start; }
+  .btn{ width: fit-content; }
 }
 
-@media (max-width: 480px) {
-  .wrap {
-    padding: 0 1.1rem;
-  }
-
-  .hero-title {
-    font-size: 2.2rem;
-  }
-
-  .nav {
-    gap: 0.25rem;
-    font-size: 0.8rem;
-  }
-
-  .pill {
-    padding-inline: 0.65rem;
-  }
+/* =========================
+   Small niceties
+========================= */
+::selection{
+  background: rgba(255,232,180,.22);
 }
