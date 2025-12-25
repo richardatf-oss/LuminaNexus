@@ -115,3 +115,43 @@
   position:absolute; width:1px; height:1px; padding:0; margin:-1px;
   overflow:hidden; clip:rect(0,0,0,0); border:0;
 }
+/* ---- Chavruta semantic polish ---- */
+
+.bubble h3,
+.bubble .section-title {
+  margin: 14px 0 6px;
+  font-size: 13px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  opacity: .7;
+}
+
+.bubble .text-block {
+  margin: 6px 0 10px;
+}
+
+.bubble .questions {
+  margin-top: 10px;
+  padding-left: 14px;
+}
+
+.bubble .questions li {
+  margin: 6px 0;
+}
+
+.hebrew-toggle {
+  font-size: 12px;
+  opacity: .75;
+  cursor: pointer;
+  margin-top: 8px;
+  display: inline-block;
+}
+
+.hebrew {
+  display: none;
+  margin-top: 8px;
+  direction: rtl;
+  font-family: "Times New Roman", "Frank Ruehl", serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
