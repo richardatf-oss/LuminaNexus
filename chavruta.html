@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ChavrutaGPT — Study Space | LuminaNexus</title>
-  <meta name="description" content="ChavrutaGPT — a Torah-first study partner: peshat first, one classical note, then questions, within clear boundaries." />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chavruta — LuminaNexus</title>
+  <meta name="description" content="A clean, modest, Torah-first chavruta study chat." />
   <link rel="stylesheet" href="/styles/main.css" />
+  <link rel="stylesheet" href="/styles/chavruta.css" />
 </head>
+
 <body class="with-glow">
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- Header / Nav -->
   <header class="site-header">
     <div class="wrap header-row">
       <div class="brand">
@@ -21,233 +22,47 @@
         </div>
       </div>
 
-      <nav class="nav pill-nav" aria-label="Primary">
-        <a class="pill" href="/index.html">The Gate</a>
-        <a class="pill" href="/torah-first.html">Torah First</a>
-        <a class="pill" href="/study-paths.html">The Seven Laws</a>
-        <a class="pill" href="/study-paths.html#paths">Study Paths</a>
-        <a class="pill active" href="/chavruta.html">Chavruta</a>
-        <a class="pill" href="/trees.html">The Trees</a>
-        <a class="pill" href="/library.html">The Library</a>
-        <a class="pill" href="/ivrit-haor.html">Ivrit HaOr</a>
-        <a class="pill" href="/about.html">About</a>
-        <a class="pill" href="/blessing.html">Blessing</a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/index.html">Home</a>
+        <a href="/library.html">The Library</a>
+        <a href="/chavruta.html" aria-current="page">Chavruta</a>
       </nav>
     </div>
   </header>
 
-  <main id="main">
-    <!-- Hero -->
-    <section class="hero gate-hero hero-compact">
-      <div class="hero-bg"></div>
+  <main id="main" class="wrap">
+    <header class="hero">
+      <div class="kicker">CHAVRUTA • חברותא</div>
+      <h1>Chavruta Study Space</h1>
+      <p class="sub">Text first. Then questions. Speculation clearly labeled.</p>
+    </header>
 
-      <div class="wrap hero-content">
-        <p class="eyebrow">
-          ChavrutaGPT · <span class="hebrew-inline">חברותא</span>
-        </p>
-        <h1>Chavruta Study Space</h1>
-
-        <div class="hero-text">
-          <p>
-            You’ve entered through the Gate with intention.
-            This space is for slow, honest learning: text first, questions next,
-            speculation clearly marked when it appears.
-          </p>
-          <p>
-            ChavrutaGPT is not a rabbi, not a prophet, and not an oracle.
-            It is a study partner that tries to keep faith with the covenant:
-            Torah-first, source-first, without coercion or spiritual sales language.
-          </p>
-
-          <p class="hebrew">
-            נכנסת דרך השער מתוך כוונה.
-            כאן המקום ללימוד איטי וישר: טקסט תחילה, שאלות אחר כך,
-            וספקולציה מסומנת כספקולציה.
-          </p>
-          <p class="hebrew">
-            ChavrutaGPT איננו רב, איננו נביא, ואיננו "אורקל".
-            זהו בן־לימוד המבקש לשמור אמונים לברית:
-            תורה תחילה, מקורות תחילה, ללא כפייה וללא שפת מכירות רוחנית.
-          </p>
-        </div>
-
-        <div class="hero-actions">
-          <a class="btn primary" href="#live-chavruta">
-            Jump to live Chavruta session →
-          </a>
-        </div>
+    <section class="panel" aria-label="Chat">
+      <div class="panel-head">
+        <div class="title">Talk to Chavruta</div>
+        <div class="status" id="statusPill" aria-live="polite">Ready</div>
       </div>
-    </section>
 
-    <!-- Live Chat Section (now near top) -->
-    <section class="wrap chat-section" id="live-chavruta">
-      <div class="card chat-card">
-        <h2>Live Chavruta Session</h2>
-        <p class="chat-note">
-          Your questions here are handled within the Torah-first, source-first covenant.
-        </p>
+      <div class="stream" id="chatStream" aria-live="polite"></div>
 
-        <div id="chat-log" class="chat-log">
-          <div class="chat-message assistant">
-            <div class="chat-bubble">
-              Shalom, and welcome through the Gate.
-              Share a passage, a question, or a problem you’d like to explore together.
-            </div>
-          </div>
-        </div>
+      <form class="composer" id="chatForm" autocomplete="off">
+        <label class="sr-only" for="chatInput">Your message</label>
+        <input id="chatInput" type="text" placeholder="Bring one passage or one question…" maxlength="2000" />
+        <button id="sendBtn" type="submit">Send →</button>
+      </form>
 
-        <form id="chat-form" class="chat-form">
-          <label for="chat-input" class="field-note">
-            Ask your first question /
-            <span class="hebrew">שאל את שאלתך הראשונה</span>
-          </label>
-          <textarea
-            id="chat-input"
-            name="input"
-            placeholder="For example: “I came through the LuminaNexus Gate. Please help me understand the idea of peshat in Torah study.”"
-          ></textarea>
-          <div style="display:flex; justify-content:flex-end; margin-top:0.4rem;">
-            <button type="submit" class="btn primary" id="chat-send">
-              Send to Chavruta →
-            </button>
-          </div>
-        </form>
-
-        <p class="chat-note">
-          Please avoid sharing highly sensitive personal data.
-          For halachic or life-changing decisions, always consult a qualified human rabbinic authority.
-        </p>
+      <div class="footnote">
+        Endpoint: <code>/.netlify/functions/chavruta</code>
       </div>
-    </section>
-
-    <!-- Three Cards (supporting info below chat) -->
-    <section class="wrap card-row">
-      <article class="card">
-        <h2>How to Use This Space</h2>
-        <p>
-          Bring a question, a passage, or a problem. Be as clear as you can.
-          If something touches halacha, communal policy, or life-changing decisions,
-          you will always be directed back to human rabbinic authority.
-        </p>
-        <p class="hebrew">
-          הבא שאלה, קטע טקסט, או קושי. נסה לנסח בבהירות.
-          בכל נושא הנוגע להלכה, למדיניות קהילה, או להחלטות חיים,
-          ההפניה תהיה תמיד לפוסק אנושי מוסמך.
-        </p>
-      </article>
-
-      <article class="card">
-        <h2>Within the Covenant</h2>
-        <p>
-          Every conversation here stays inside the Torah-first covenant you read:
-          no prophecy claims, no secret techniques, no promises of salvation.
-          Peshat comes first, speculation is labeled, and dignity is guarded.
-        </p>
-        <p class="hebrew">
-          כל דיבור כאן מתקיים בתוך ברית "תורה תחילה" שקראת:
-          אין טענות נבואה, אין "שיטות סודיות", אין הבטחות ישועה.
-          הפשט קודם, הספקולציה מסומנת, והכבוד נשמר.
-        </p>
-        <a class="card-link" href="/torah-first.html">Review the covenant →</a>
-      </article>
-
-      <article class="card">
-        <h2>Return to the Gate</h2>
-        <p>
-          You may step back at any time — to the Gate, to the Covenant,
-          or to the Study Paths. Leaving is also a form of wisdom.
-        </p>
-        <p class="hebrew">
-          בכל רגע מותר לשוב — לשער, לברית, או לנתיבי הלימוד.
-          גם לעזוב הוא לפעמים מעשה של חכמה.
-        </p>
-        <a class="card-link" href="/index.html">Return to The Gate →</a>
-      </article>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="site-footer">
-    <div class="wrap">
-      <p>© LuminaNexus — offered freely for learning.</p>
-      <p>
-        Torah First: peshat before abstraction, tradition before novelty,
-        learning as service — with clear boundaries and gentle dignity.
-      </p>
-    </div>
+    <div class="wrap">© LuminaNexus</div>
   </footer>
 
-  <!-- Chat client code -->
-  <script>
-    const apiUrl = "/.netlify/functions/chavruta"; // Netlify function endpoint
-
-    const chatLog = document.getElementById("chat-log");
-    const chatForm = document.getElementById("chat-form");
-    const chatInput = document.getElementById("chat-input");
-    const chatSend = document.getElementById("chat-send");
-
-    // Conversation history sent to the API
-    let messages = [
-      {
-        role: "system",
-        content: "User has come through the LuminaNexus Gate and Orientation.",
-      },
-    ];
-
-    function addMessage(role, text) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "chat-message " + role;
-
-      const bubble = document.createElement("div");
-      bubble.className = "chat-bubble";
-      bubble.textContent = text;
-
-      wrapper.appendChild(bubble);
-      chatLog.appendChild(wrapper);
-      chatLog.scrollTop = chatLog.scrollHeight;
-    }
-
-    chatForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const text = chatInput.value.trim();
-      if (!text) return;
-
-      // show user message
-      addMessage("user", text);
-      messages.push({ role: "user", content: text });
-      chatInput.value = "";
-
-      chatSend.disabled = true;
-      chatSend.textContent = "Thinking…";
-
-      try {
-        const res = await fetch(apiUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages }),
-        });
-
-        if (!res.ok) {
-          throw new Error("HTTP " + res.status);
-        }
-
-        const data = await res.json();
-        const reply = data.reply || "(No reply received.)";
-
-        addMessage("assistant", reply);
-        messages.push({ role: "assistant", content: reply });
-      } catch (err) {
-        console.error(err);
-        addMessage(
-          "assistant",
-          "An error occurred trying to reach Chavruta. Please try again in a moment."
-        );
-      } finally {
-        chatSend.disabled = false;
-        chatSend.textContent = "Send to Chavruta →";
-        chatInput.focus();
-      }
-    });
-  </script>
+  <!-- These are STANDARD scripts (not modules) and WILL run with defer -->
+  <script src="/scripts/chavruta-ui.js" defer></script>
+  <script src="/scripts/chavruta-chat.js" defer></script>
 </body>
 </html>
