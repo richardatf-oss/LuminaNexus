@@ -21,11 +21,32 @@
       <p class="sub">Text first. Then questions. Speculation clearly labeled.</p>
     </header>
 
-    <section class="panel" aria-label="Chat">
-      <div class="panel-head">
-        <div class="title">Talk to Chavruta</div>
-        <div class="status" id="statusPill" aria-live="polite">Ready</div>
-      </div>
+   <section class="panel" aria-label="Chat">
+  <div class="panel-head">
+    <div class="title">Talk to Chavruta</div>
+    <div class="status" id="statusPill" aria-live="polite">Ready</div>
+  </div>
+
+  <!-- Quick actions -->
+  <div class="quick-actions" aria-label="Quick actions">
+    <button type="button" class="qa-btn" id="btnContinue">Continue this sugya</button>
+    <button type="button" class="qa-btn" id="btnClarify">Ask for clarity</button>
+    <button type="button" class="qa-btn" id="btnSummarize">Summarize so far</button>
+  </div>
+
+  <div class="stream" id="chatStream" aria-live="polite"></div>
+
+  <form class="composer" id="chatForm" autocomplete="off">
+    <label class="sr-only" for="chatInput">Your message</label>
+    <input id="chatInput" type="text" placeholder="Bring one passage or one question…" maxlength="2000" />
+    <button id="sendBtn" type="submit">Send →</button>
+  </form>
+
+  <div class="footnote">
+    Endpoint: <code>/.netlify/functions/chavruta</code>
+  </div>
+</section>
+
 
       <div class="stream" id="chatStream" aria-live="polite"></div>
 
