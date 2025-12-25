@@ -42,12 +42,5 @@
 
   window.ChavrutaUI = UI;
 
-  document.addEventListener("DOMContentLoaded", () => {
-    // Basic sanity: if stream missing, surface it loudly
-    if (!UI.streamEl()) {
-      console.error("[Chavruta] Missing #chatStream on page.");
-      return;
-    }
-    UI.boot();
-  });
+  document.addEventListener("DOMContentLoaded", () => UI.boot());
 })();
