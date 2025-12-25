@@ -1,164 +1,107 @@
-/* ================= ChavrutaGPT layout ================= */
+/* styles/chavruta.css */
 
-.chavruta-layout {
-  margin-top: 32px;
-  margin-bottom: 48px;
-  max-width: 980px;
+.hero { padding: 18px 4px 22px; }
+.kicker { letter-spacing: .12em; font-size: 12px; opacity: .75; }
+.hero h1 { margin: 10px 0 8px; font-weight: 650; font-size: clamp(28px, 4vw, 44px); }
+.sub { margin:0; opacity: .8; }
+
+.panel{
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(14,18,28,.55);
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.45);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
 }
 
-/* Let panels stack nicely on mobile */
-.chavruta-layout .panel {
-  margin-bottom: 24px;
+.panel-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
 }
 
-/* Controls layout */
-.controls-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 24px;
+.title{ font-weight: 600; }
+
+.status{
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  opacity: .85;
 }
 
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.stream{
+  padding: 14px 16px;
+  display:flex;
+  flex-direction:column;
+  gap: 10px;
+  min-height: 320px;
 }
 
-.field label {
-  font-size: 0.9rem;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  opacity: 0.85;
+.msg{
+  display:grid;
+  grid-template-columns: 84px 1fr;
+  gap: 10px;
+  align-items:start;
 }
 
-.field select,
-.field textarea {
-  margin-top: 4px;
+.who{
+  font-size: 12px;
+  opacity: .75;
+  padding-top: 10px;
 }
 
-/* Small helper text */
-.hint {
-  font-size: 0.8rem;
-  opacity: 0.78;
-  margin-top: 4px;
-}
-
-/* Session tools */
-.session-tools {
-  margin-top: 12px;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-/* Toolbar under the message box */
-.panel--message .toolbar {
-  margin-top: 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.boundaries {
-  font-size: 0.8rem;
-  opacity: 0.78;
-  max-width: 560px;
-}
-
-/* Conversation log container
-   (base styles from main.css are already in place; these just tweak) */
-
-.panel--conversation {
-  padding-bottom: 12px;
-}
-
-#log {
-  margin-top: 8px;
-  max-height: 420px;
-  overflow-y: auto;
-}
-
-/* Chat lines */
-
-.chat-line {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 14px;
-  font-size: 0.95rem;
-}
-
-.chat-line__who {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  opacity: 0.78;
-}
-
-/* Bubble */
-.chat-line__body {
-  padding: 10px 12px;
-  border-radius: 10px;
-  line-height: 1.4;
+.bubble{
+  border: 1px solid rgba(255,255,255,.06);
+  background: rgba(0,0,0,.18);
+  border-radius: 14px;
+  padding: 12px 14px;
+  line-height: 1.55;
   white-space: pre-wrap;
+  word-break: break-word;
 }
 
-/* User vs assistant colors.
-   These assume a dark theme from main.css. */
+.bubble.assistant{ background: rgba(0,0,0,.24); }
+.bubble.user{ background: rgba(0,0,0,.12); }
 
-.chat-line.user .chat-line__body {
-  background: rgba(120, 180, 255, 0.14);
-  border: 1px solid rgba(120, 180, 255, 0.4);
+.composer{
+  display:grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding: 14px 16px 16px;
+  border-top: 1px solid rgba(255,255,255,.06);
 }
 
-.chat-line.assistant .chat-line__body {
-  background: rgba(40, 255, 200, 0.06);
-  border: 1px solid rgba(40, 255, 200, 0.28);
+.composer input{
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px;
+  background: rgba(0,0,0,.20);
+  color: inherit;
+  padding: 12px 14px;
+  outline: none;
 }
 
-/* System messages (like "New chat started") */
-
-.chat-line--system .chat-line__body {
-  background: transparent;
-  border: 0;
-  opacity: 0.8;
-  font-size: 0.85rem;
-  padding-left: 0;
+.composer button{
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  background: rgba(255,255,255,.06);
+  color: inherit;
+  padding: 10px 14px;
+  cursor:pointer;
 }
 
-/* Make sure new messages are readable even at the bottom */
-#log::-webkit-scrollbar-thumb {
-  border-radius: 4px;
+.composer button:hover{ background: rgba(255,255,255,.10); }
+
+.footnote{
+  padding: 10px 16px 14px;
+  font-size: 12px;
+  opacity: .75;
 }
 
-/* ================= Mobile adjustments ================= */
-
-@media (max-width: 768px) {
-  .chavruta-layout {
-    margin-top: 20px;
-    padding-inline: 12px;
-  }
-
-  .controls-grid {
-    grid-template-columns: 1fr;
-  }
-
-  #log {
-    max-height: 55vh;
-  }
-
-  .panel--message textarea#message {
-    min-height: 120px;
-  }
-
-  .panel--message .toolbar {
-    flex-direction: column-reverse;
-    align-items: stretch;
-  }
-
-  .boundaries {
-    max-width: none;
-  }
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); border:0;
 }
