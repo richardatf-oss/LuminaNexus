@@ -1,11 +1,10 @@
 // netlify/functions/chavruta.js
 export async function handler(event) {
-  // Allow POST only
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ error: "Method not allowed" }),
+      body: JSON.stringify({ ok: false, error: "Method not allowed" }),
     };
   }
 
@@ -15,7 +14,7 @@ export async function handler(event) {
       return {
         statusCode: 500,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ error: "Missing OPENAI_API_KEY (Netlify env var)" }),
+        body: JSON.stringify({ ok: false, error: "Missing OPENAI_API_KEY in Netlify env vars" }),
       };
     }
 
@@ -27,36 +26,26 @@ export async function handler(event) {
       return {
         statusCode: 400,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ error: "messages[] required: provide { input: string }" }),
+        body: JSON.stringify({ ok: false, error: "Missing input" }),
       };
     }
 
-    // Keep a small, safe history window
-    const clippedHistory = history
+    const clipped = history
       .filter(m => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
-      .slice(-12);
+      .slice(-10);
 
     const instructions = `
-You are "Chavruta": a clean, modest, respectful Torah-first study partner.
-
-Behavior:
-- Be warm and humble. Never snarky.
-- Text first, then questions. Speculation clearly labeled.
-- Never invent quotes or sources. If unsure, say so.
-- If asked about attributed teachings (e.g., Baal Shem Tov), label as "attributed/tradition" if you cannot cite a precise text.
-- Keep responses concise unless the user explicitly asks to expand.
-
-Output format:
-1) Hebrew section (brief, clear)
-2) English section (brief, clear)
-3) If you cite sources, include a short "Sources:" list (no fabricated citations).
+You are Chavruta: a clean, modest, respectful Torah-first study partner.
+- Text first, then questions.
+- Speculation must be clearly labeled.
+- Do not invent quotes or citations.
+- If asked for Baal Shem Tov teachings without a precise source, label as "attributed/tradition."
+Keep answers concise unless asked to expand.
+Respond in English only.
 `;
 
-    // Convert history into a plain text “conversation” to avoid schema mismatch.
-    // (This is robust across API changes and avoids the earlier messages[] required bug.)
     const convo = [
-      "Conversation so far:",
-      ...clippedHistory.map(m => `${m.role.toUpperCase()}: ${m.content}`),
+      ...clipped.map(m => `${m.role.toUpperCase()}: ${m.content}`),
       `USER: ${input}`,
       "ASSISTANT:"
     ].join("\n");
@@ -82,38 +71,29 @@ Output format:
         statusCode: upstream.status,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          ok: false,
           error: data?.error?.message || "Upstream error",
-          details: data,
         }),
       };
     }
 
-    // Extract text safely
     const text =
       data.output_text ||
       (Array.isArray(data.output)
-        ? data.output
-            .flatMap(o => o.content || [])
-            .map(c => c.text)
-            .filter(Boolean)
-            .join("\n")
+        ? data.output.flatMap(o => o.content || []).map(c => c.text).filter(Boolean).join("\n")
         : "") ||
       "";
 
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ok: true,
-        role: "assistant",
-        content: text || "Hebrew:\n(לא התקבלה תשובה)\n\nEnglish:\n(No response text returned.)",
-      }),
+      body: JSON.stringify({ ok: true, content: text || "(No response text returned.)" }),
     };
   } catch (err) {
     return {
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ error: err.message }),
+      body: JSON.stringify({ ok: false, error: err.message }),
     };
   }
 }
