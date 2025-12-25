@@ -16,9 +16,10 @@ function loadSession() {
   }
 }
 
-function saveSession(session) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-}
+body: JSON.stringify({
+  input: userMessage
+})
+
 
 function el(tag, className, text) {
   const node = document.createElement(tag);
