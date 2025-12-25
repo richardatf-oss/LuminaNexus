@@ -1,13 +1,19 @@
 // scripts/chavruta-ui.js
-export const UI = (() => {
-  const stream = document.getElementById("chatStream");
-  const statusPill = document.getElementById("statusPill");
+(() => {
+  const UI = {};
 
-  function setStatus(text) {
-    if (statusPill) statusPill.textContent = text;
-  }
+  UI.stream = () => document.getElementById("chatStream");
+  UI.status = () => document.getElementById("statusPill");
 
-  function addMessage(who, text, role = "assistant") {
+  UI.setStatus = (text) => {
+    const el = UI.status();
+    if (el) el.textContent = text;
+  };
+
+  UI.addMessage = (who, text, role) => {
+    const stream = UI.stream();
+    if (!stream) return;
+
     const row = document.createElement("div");
     row.className = "msg";
 
@@ -16,23 +22,25 @@ export const UI = (() => {
     left.textContent = who;
 
     const bubble = document.createElement("div");
-    bubble.className = `bubble ${role === "user" ? "user" : "assistant"}`;
+    bubble.className = "bubble " + (role === "user" ? "user" : "assistant");
     bubble.textContent = text;
 
     row.appendChild(left);
     row.appendChild(bubble);
-
     stream.appendChild(row);
     stream.scrollTop = stream.scrollHeight;
-  }
+  };
 
-  function bootGreeting() {
-    addMessage(
+  UI.boot = () => {
+    UI.setStatus("Ready");
+    UI.addMessage(
       "Chavruta",
-      "Hebrew:\nשלום. הביאו פסוק אחד או שאלה אחת. נלך לאט, תורה-תחילה.\n\nEnglish:\nShalom. Bring one passage or one question. We will go slowly, Torah-first.",
+      "Shalom. Bring one passage or one question. We will go slowly, Torah-first.",
       "assistant"
     );
-  }
+  };
 
-  return { addMessage, setStatus, bootGreeting };
+  window.ChavrutaUI = UI;
+
+  document.addEventListener("DOMContentLoaded", () => UI.boot());
 })();
