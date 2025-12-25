@@ -1,34 +1,65 @@
 // netlify/functions/chavruta.js
 export async function handler(event) {
+  // Allow POST only
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: "Method not allowed" }),
+    };
+  }
+
   try {
-    const body = JSON.parse(event.body || "{}");
-    const userText = (body.input || body.message || "").trim();
-
-    if (!userText) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: "No input provided" }),
-      };
-    }
-
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       return {
         statusCode: 500,
-        body: JSON.stringify({ error: "Missing OPENAI_API_KEY on server" }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ error: "Missing OPENAI_API_KEY (Netlify env var)" }),
       };
     }
 
-    // Torah-first, label speculation, bilingual by default
+    const body = JSON.parse(event.body || "{}");
+    const input = (body.input || "").trim();
+    const history = Array.isArray(body.history) ? body.history : [];
+
+    if (!input) {
+      return {
+        statusCode: 400,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ error: "messages[] required: provide { input: string }" }),
+      };
+    }
+
+    // Keep a small, safe history window
+    const clippedHistory = history
+      .filter(m => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
+      .slice(-12);
+
     const instructions = `
-You are ChavrutaGPT: a Torah-first study partner.
-Rules:
-- Quote or reference primary sources where possible (Tanakh, Chazal, Rishonim, etc.).
-- Clearly label: (1) peshat/close reading, (2) midrash/derash, (3) kabbalah, (4) personal/speculative.
-- Be warm, incisive, not verbose.
-- Output MUST be bilingual: Hebrew first, then English.
-- If asked about Baal Shem Tov, be honest if you cannot cite an exact text; summarize common teachings and label them as “attributed/tradition” when needed.
+You are "Chavruta": a clean, modest, respectful Torah-first study partner.
+
+Behavior:
+- Be warm and humble. Never snarky.
+- Text first, then questions. Speculation clearly labeled.
+- Never invent quotes or sources. If unsure, say so.
+- If asked about attributed teachings (e.g., Baal Shem Tov), label as "attributed/tradition" if you cannot cite a precise text.
+- Keep responses concise unless the user explicitly asks to expand.
+
+Output format:
+1) Hebrew section (brief, clear)
+2) English section (brief, clear)
+3) If you cite sources, include a short "Sources:" list (no fabricated citations).
 `;
+
+    // Convert history into a plain text “conversation” to avoid schema mismatch.
+    // (This is robust across API changes and avoids the earlier messages[] required bug.)
+    const convo = [
+      "Conversation so far:",
+      ...clippedHistory.map(m => `${m.role.toUpperCase()}: ${m.content}`),
+      `USER: ${input}`,
+      "ASSISTANT:"
+    ].join("\n");
 
     const upstream = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
@@ -40,7 +71,7 @@ Rules:
         model: "gpt-5",
         reasoning: { effort: "low" },
         instructions,
-        input: userText,
+        input: convo,
       }),
     });
 
@@ -49,6 +80,7 @@ Rules:
     if (!upstream.ok) {
       return {
         statusCode: upstream.status,
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           error: data?.error?.message || "Upstream error",
           details: data,
@@ -56,8 +88,7 @@ Rules:
       };
     }
 
-    // Responses API convenient text accessor is "output_text" in many SDKs,
-    // but in raw HTTP JSON it may appear as output_text or require parsing.
+    // Extract text safely
     const text =
       data.output_text ||
       (Array.isArray(data.output)
@@ -67,18 +98,21 @@ Rules:
             .filter(Boolean)
             .join("\n")
         : "") ||
-      "⚠️ No text returned.";
+      "";
 
     return {
       statusCode: 200,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        role: "chavruta",
-        content: text,
+        ok: true,
+        role: "assistant",
+        content: text || "Hebrew:\n(לא התקבלה תשובה)\n\nEnglish:\n(No response text returned.)",
       }),
     };
   } catch (err) {
     return {
       statusCode: 500,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ error: err.message }),
     };
   }
