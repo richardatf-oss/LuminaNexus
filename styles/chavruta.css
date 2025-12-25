@@ -1,9 +1,9 @@
 /* styles/chavruta.css */
 
-.hero { padding: 18px 4px 22px; }
-.kicker { letter-spacing: .12em; font-size: 12px; opacity: .75; }
+.hero { padding: 18px 4px 18px; }
+.kicker { letter-spacing: .12em; font-size: 12px; opacity: .78; }
 .hero h1 { margin: 10px 0 8px; font-weight: 650; font-size: clamp(28px, 4vw, 44px); }
-.sub { margin:0; opacity: .8; }
+.sub { margin: 0; opacity: .8; }
 
 .panel{
   border: 1px solid rgba(255,255,255,.10);
@@ -30,7 +30,7 @@
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.18);
-  opacity: .85;
+  opacity: .9;
 }
 
 .stream{
@@ -39,6 +39,8 @@
   flex-direction:column;
   gap: 10px;
   min-height: 320px;
+  max-height: 52vh;
+  overflow: auto;
 }
 
 .msg{
@@ -59,13 +61,17 @@
   background: rgba(0,0,0,.18);
   border-radius: 14px;
   padding: 12px 14px;
-  line-height: 1.55;
+  line-height: 1.6;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
 .bubble.assistant{ background: rgba(0,0,0,.24); }
 .bubble.user{ background: rgba(0,0,0,.12); }
+
+.bubble .mono{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
 
 .composer{
   display:grid;
@@ -82,6 +88,10 @@
   color: inherit;
   padding: 12px 14px;
   outline: none;
+}
+
+.composer input:focus{
+  border-color: rgba(255,255,255,.20);
 }
 
 .composer button{
