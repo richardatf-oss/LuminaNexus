@@ -8,13 +8,7 @@
 
   <link rel="stylesheet" href="/styles/main.css" />
   <link rel="stylesheet" href="/styles/chavruta.css" />
-
-  <style>
-    .radio { display:flex; align-items:flex-start; gap:10px; margin: 8px 0; }
-    .radio input { margin-top: 3px; }
-    .btnrow { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top: 12px; }
-    .btnrow .muted { margin-left:auto; }
-  </style>
+  <link rel="stylesheet" href="/styles/orientation.css" />
 </head>
 
 <body class="with-glow">
@@ -118,8 +112,14 @@
         </div>
 
         <div class="btnrow">
-          <button type="button" class="btn primary" id="continueGate">Continue through the Gate →</button>
-          <a class="btn" id="skipChavruta" href="/pages/chavruta.html">Skip to Chavruta →</a>
+          <button type="button" class="btn primary gate-button" id="continueGate">
+            Continue through the Gate →
+          </button>
+
+          <a class="btn gate-button" id="skipChavruta" href="/pages/chavruta.html">
+            Skip to Chavruta →
+          </a>
+
           <span id="saveStatus" class="muted"></span>
         </div>
       </form>
@@ -136,38 +136,40 @@
   </footer>
 
   <script src="/scripts/nav-active.js" defer></script>
-  <script src="/scripts/gate-kavanah.js" defer></script>
 
-  <!-- Inline fallback: if external JS fails to load, button still works -->
+  <!-- The simplest possible click handler: no dependency on other scripts -->
   <script>
-    (function(){
+    (function () {
       function qs(s){ return document.querySelector(s); }
-      const btn = qs("#continueGate");
-      if(!btn) return;
+      function checked(name){
+        var el = document.querySelector('input[name="' + name + '"]:checked');
+        return el ? el.value : null;
+      }
 
-      btn.addEventListener("click", function(){
-        // if the external script loaded, it will stop propagation in capture-phase.
-        // if not, this fallback will run and route correctly.
-        try{
-          const consent = (document.querySelector('input[name="consent"]:checked')||{}).value || "yes";
-          const note = (qs("#kavanahNote")||{}).value || "";
-          const payload = {
-            boundary: (document.querySelector('input[name="boundary"]:checked')||{}).value || null,
-            pace: (document.querySelector('input[name="pace"]:checked')||{}).value || null,
-            style: (document.querySelector('input[name="style"]:checked')||{}).value || null,
-            consent,
-            note: String(note).trim(),
+      var btn = qs("#continueGate");
+      if (!btn) return;
+
+      btn.addEventListener("click", function () {
+        try {
+          var payload = {
+            boundary: checked("boundary"),
+            pace: checked("pace"),
+            style: checked("style"),
+            consent: checked("consent"),
+            note: (qs("#kavanahNote")?.value || "").trim(),
             savedAt: new Date().toISOString()
           };
           sessionStorage.setItem("kavanah", JSON.stringify(payload));
-        } catch(e){}
+          var st = qs("#saveStatus");
+          if (st) st.textContent = "Saved.";
+        } catch (e) {}
 
-        if ((document.querySelector('input[name="consent"]:checked')||{}).value === "read_covenant_first") {
-          window.location.assign("/pages/torah-first.html");
+        if (checked("consent") === "read_covenant_first") {
+          window.location.href = "/pages/torah-first.html";
         } else {
-          window.location.assign("/pages/231-gates.html");
+          window.location.href = "/pages/231-gates.html";
         }
-      }, false);
+      });
     })();
   </script>
 </body>
