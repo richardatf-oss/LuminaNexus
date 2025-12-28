@@ -3,84 +3,76 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>231 Gates · רל״א שערים | LuminaNexus</title>
-  <meta name="description" content="The 231 Gates: Hebrew letter pairings for Torah-first study." />
+  <title>231 Gates — LuminaNexus</title>
+  <meta name="description" content="The 231 Gates of Light — Hebrew letter pairings (22 choose 2) with Torah-first study intent." />
   <link rel="stylesheet" href="/styles/main.css" />
 </head>
 
 <body class="with-glow">
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <div class="wrap header-row">
-      <div class="brand">
-        <div class="brand-mark">◈</div>
-        <div class="brand-text">
-          <div class="brand-title">LuminaNexus</div>
-          <div class="brand-subtitle">231 Gates of Light — Torah-first</div>
-        </div>
-      </div>
-
-      <nav class="nav pill-nav" aria-label="Primary">
-        <a class="pill" href="/index.html">The Gate</a>
-        <a class="pill" href="/pages/torah-first.html">Torah First</a>
-        <a class="pill" href="/pages/seven-laws.html">The Seven Laws</a>
-        <a class="pill" href="/pages/study-paths.html">Study Paths</a>
-        <a class="pill" href="/pages/chavruta.html">Chavruta</a>
-        <a class="pill" href="/pages/trees.html">The Trees</a>
-        <a class="pill" href="/pages/library.html">The Library</a>
-      </nav>
-    </div>
-  </header>
+  <header class="site-header"></header>
 
   <main id="main" class="wrap" style="padding-top:18px;">
-    <section class="hero" style="padding-bottom:0;">
-      <div class="hero-kicker">231 GATES · <span class="hebrew-inline">רל״א שערים</span></div>
+    <section class="card" style="margin-top: 18px;">
+      <div class="card-tag">231 GATES · <span class="hebrew-inline">רל״א שערים</span></div>
       <h1>The 231 Gates of Light</h1>
-      <p class="hero-sub">
-        Hebrew letter pairings (א״ב combinations) mapped to Torah-first themes and passages.
-        <span style="display:block; opacity:.85; margin-top:6px;">
-          צירופי אותיות — מחובר לנושאים ולפסוקים ללימוד.
-        </span>
-      </p>
+      <p class="muted">All 231 unique Hebrew letter pairings (22 choose 2). Torah-first, source-first.</p>
 
-      <div class="card" style="margin-top:16px;">
-        <div class="card-tag">KAVANAH · <span class="hebrew-inline">כוונה</span></div>
-        <h2>Your saved Gate settings</h2>
-        <pre id="kavanah-out" style="white-space:pre-wrap; opacity:.9; margin:0;"></pre>
+      <div id="gateRequire" class="card" style="margin-top:14px; display:none;">
+        <div class="card-tag">KAVANAH REQUIRED · <span class="hebrew-inline">כוונה</span></div>
+        <p>
+          Please set kavanah first before entering the Gates.
+          <span class="hebrew-inline">אנא קבע כוונה תחילה לפני הכניסה לשערים.</span>
+        </p>
+        <a class="btn primary" href="/pages/orientation.html?dest=231">Set Kavanah →</a>
+      </div>
 
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
-          <a class="btn primary" href="/pages/orientation.html?dest=231">Change Kavanah →</a>
-          <a class="btn ghost" href="/pages/chavruta.html">Go to Chavruta →</a>
+      <div id="gateApp" style="display:none; margin-top:14px;">
+        <div class="card" style="margin-top:0;">
+          <div class="card-tag">KAVANAH · <span class="hebrew-inline">כוונה</span></div>
+          <h3 style="margin-top:6px;">Your saved Gate settings</h3>
+
+          <pre id="gateSettings" style="white-space:pre-wrap; margin-top:10px; opacity:.95;"></pre>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px;">
+            <a class="btn ghost" href="/pages/orientation.html?dest=231">Change Kavanah →</a>
+            <a class="btn ghost" href="/pages/chavruta.html">Go to Chavruta →</a>
+          </div>
         </div>
 
-        <p style="margin-top:14px; opacity:.75;">
-          Next: we build the 10 themes + the full gate list, English-first with Hebrew support.
-          <span style="display:block; opacity:.85; margin-top:6px;">
-            השלב הבא: 10 נושאים + כל השערים, אנגלית קודם עם עברית כתמיכה.
-          </span>
-        </p>
+        <div class="card" style="margin-top:14px;">
+          <div class="card-tag">GATES LIST · <span class="hebrew-inline">שערים</span></div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px;">
+            <input id="gateSearch" type="text" placeholder="Search letters or pair (e.g., אב, aleph, bet)..." style="flex:1; min-width:220px;" />
+            <span class="muted" id="gateCount"></span>
+          </div>
+
+          <div id="gateGrid" style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px;"></div>
+        </div>
+
+        <div class="card" style="margin-top:14px;">
+          <div class="card-tag">SELECTED GATE · <span class="hebrew-inline">שער נבחר</span></div>
+
+          <h3 id="selectedTitle" style="margin-top:6px;">Select a gate to open it.</h3>
+
+          <div id="selectedBody" class="muted" style="margin-top:10px;">
+            Click any pair above to view details here.
+          </div>
+
+          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+            <a id="selectedToChavruta" class="btn primary" href="/pages/chavruta.html">Bring this gate to Chavruta →</a>
+            <a class="btn ghost" href="/pages/library.html">Open Library →</a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <p>© LuminaNexus — offered freely for learning.</p>
-    </div>
-  </footer>
+  <footer class="site-footer"></footer>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const out = document.getElementById("kavanah-out");
-      if (!out) return;
-      try {
-        const raw = localStorage.getItem("ln_kavanah");
-        out.textContent = raw ? JSON.stringify(JSON.parse(raw), null, 2) : "(No saved kavanah found.)";
-      } catch (e) {
-        out.textContent = "(Could not read saved kavanah.)";
-      }
-    });
-  </script>
+  <script src="/scripts/nav-active.js" defer></script>
+  <script src="/scripts/231-gates.js" defer></script>
 </body>
 </html>
