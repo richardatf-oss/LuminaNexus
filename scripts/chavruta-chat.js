@@ -20,6 +20,27 @@
 
   function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+  function getQS() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      // ✅ New standard (from Library)
+      q: (params.get("q") || "").trim(),
+      // ✅ Back-compat
+      ref: (params.get("ref") || "").trim(),
+      text: (params.get("text") || "").trim(),
+      // ✅ Optional behavior
+      autosend: (params.get("autosend") || "").trim(), // "1"
+      mode: (params.get("mode") || "").trim(),
+    };
+  }
+
+  function cleanQS(keys = ["q", "ref", "text", "autosend", "mode"]) {
+    const url = new URL(window.location.href);
+    keys.forEach(k => url.searchParams.delete(k));
+    const qs = url.searchParams.toString();
+    window.history.replaceState({}, "", url.pathname + (qs ? `?${qs}` : ""));
+  }
+
   async function postWithRetry(payload) {
     const delays = [0, 800, 1600]; // 3 attempts
     let last = null;
@@ -27,11 +48,16 @@
     for (let i = 0; i < delays.length; i++) {
       if (delays[i]) await sleep(delays[i]);
 
+      // ✅ Mobile-safe timeout
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 15000);
+
       try {
         const res = await fetch(ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
+          signal: controller.signal,
         });
 
         const data = await res.json().catch(() => ({}));
@@ -42,7 +68,10 @@
         last = { ok: false, status: res.status, msg };
         if (!retryable) break;
       } catch (err) {
-        last = { ok: false, status: 0, msg: err.message };
+        const isAbort = err?.name === "AbortError";
+        last = { ok: false, status: 0, msg: isAbort ? "Timeout (15s)" : (err.message || "Network error") };
+      } finally {
+        clearTimeout(timer);
       }
     }
 
@@ -55,6 +84,7 @@
     if (input()) input().disabled = true;
 
     try {
+      // ✅ Payload accepts input; server also accepts message, but we standardize on input
       const result = await postWithRetry({ input: userText, history });
 
       if (!result.ok) {
@@ -62,7 +92,12 @@
         return;
       }
 
-      const text = (result.data.content || "").trim() || "(No response text returned.)";
+      // ✅ Support both server fields
+      const text =
+        (String(result.data.content || "").trim()) ||
+        (String(result.data.reply || "").trim()) ||
+        "(No response text returned.)";
+
       UI()?.addMessage("Chavruta", text, "assistant");
       push("assistant", text);
       lastAssistant = text;
@@ -84,22 +119,40 @@
   }
 
   function prefillFromLibraryLink() {
-    // Library handoff via querystring:
-    // /pages/chavruta?ref=Berakhot%204a
-    // or /pages/chavruta?text=Genesis%201:1
-    const params = new URLSearchParams(window.location.search);
-    const ref = params.get("ref") || params.get("text") || "";
+    // ✅ Supports:
+    // /chavruta.html?q=Genesis%201:1
+    // /chavruta.html?ref=Berakhot%204a
+    // /chavruta.html?text=Genesis%201:1
+    // Optional: &autosend=1
+    const { q, ref, text, autosend, mode } = getQS();
+    const seed = q || ref || text;
 
-    if (!ref) return;
+    if (!seed) return;
 
-    // Put it into input and clean the URL (so reloads don’t keep injecting)
-    if (input()) input().value = ref;
+    if (input()) input().value = seed;
 
-    const cleanUrl = window.location.pathname;
-    window.history.replaceState({}, "", cleanUrl);
+    // Optional: apply a mode prompt wrapper (future-proof)
+    // e.g. /chavruta.html?q=Genesis%201:1&mode=clarify
+    if (mode && input()) {
+      // Don’t overwrite user’s seed; just leave it in input.
+      // Mode can be used later if you want.
+    }
+
+    // ✅ Remove params so reload doesn't re-inject
+    cleanQS();
+
+    // ✅ Optional autosend
+    if (autosend === "1") {
+      // Wait for DOM + event handlers to be wired, then submit
+      setTimeout(() => {
+        const current = (input()?.value || "").trim();
+        if (current) submit(current);
+      }, 120);
+    }
   }
 
   function wireQuickActions() {
+    // If these buttons don't exist on the page, no problem.
     if (btnContinue()) {
       btnContinue().addEventListener("click", () => {
         const prompt =
