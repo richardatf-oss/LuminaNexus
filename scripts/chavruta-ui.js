@@ -1,7 +1,8 @@
 // /scripts/chavruta-ui.js
-// Combines:
-// 1) UI renderer that chavruta-chat.js expects via window.ChavrutaUI
-// 2) Existing Library -> Chavruta handoff behavior (?q=... and LN_CHAVRUTA_BUNDLE)
+// Provides:
+// 1) UI renderer required by scripts/chavruta-chat.js via window.ChavrutaUI
+// 2) Library -> Chavruta handoff via querystring (?q=...) + optional autosend=1
+// 3) Library bundle handoff via sessionStorage key LN_CHAVRUTA_BUNDLE
 
 (function () {
   const $ = (s) => document.querySelector(s);
@@ -36,7 +37,7 @@
     if (stream) stream.innerHTML = "";
   }
 
-  // Expose the API chavruta-chat.js uses
+  // Expose API expected by scripts/chavruta-chat.js
   window.ChavrutaUI = {
     setStatus,
     addUser: (t) => add("user", t),
@@ -45,7 +46,7 @@
     clear,
   };
 
-  // ---------- EXISTING HANDOFF / AUTOSEND HELPERS ----------
+  // ---------- HANDOFF / AUTOSEND HELPERS ----------
   function removeParams(...names) {
     const url = new URL(window.location.href);
     names.forEach((n) => url.searchParams.delete(n));
@@ -62,8 +63,9 @@
 
   function safeSubmit() {
     if (!form) return;
-    // Submit the form in a way that triggers chavruta-chat.js listeners
-    form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event("submit", { cancelable: true }));
+    form.requestSubmit
+      ? form.requestSubmit()
+      : form.dispatchEvent(new Event("submit", { cancelable: true }));
   }
 
   window.addEventListener("DOMContentLoaded", () => {
@@ -72,38 +74,36 @@
     const autosend = (params.get("autosend") || "").trim();
     const mode = (params.get("mode") || "").trim();
 
-    // 1) If Library bundled a full text payload into sessionStorage, prefer it
+    // 1) Prefer sessionStorage bundle if present
     try {
       const bundleRaw = sessionStorage.getItem("LN_CHAVRUTA_BUNDLE");
       if (bundleRaw) {
         sessionStorage.removeItem("LN_CHAVRUTA_BUNDLE");
         const bundle = JSON.parse(bundleRaw);
 
-        if (bundle && typeof bundle === "object") {
-          const text = (bundle.text || "").trim();
-          if (text) {
-            input.value = text;
-            setStatus("Loaded from Library");
-            focusInputEnd();
+        const text = (bundle?.text || "").trim();
+        if (text) {
+          input.value = text;
+          setStatus("Loaded from Library");
+          focusInputEnd();
 
-            removeParams("q", "text", "ref", "mode");
+          removeParams("q", "text", "ref", "mode");
 
-            if (autosend === "1") {
-              setStatus("Sending…");
-              setTimeout(() => {
-                safeSubmit();
-                removeParams("autosend");
-              }, 150);
-            }
-            return;
+          if (autosend === "1") {
+            setStatus("Sending…");
+            setTimeout(() => {
+              safeSubmit();
+              removeParams("autosend");
+            }, 150);
           }
+          return;
         }
       }
     } catch {
-      // ignore malformed storage
+      // ignore
     }
 
-    // 2) Otherwise fall back to ?q=... handoff
+    // 2) Fallback: ?q=...
     if (q) {
       input.value = q;
       setStatus("Loaded from Library");
@@ -121,7 +121,7 @@
       return;
     }
 
-    // 3) Nothing to inject
+    // 3) Clean stray mode param
     if (mode) removeParams("mode");
   });
 })();
