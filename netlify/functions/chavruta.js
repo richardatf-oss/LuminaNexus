@@ -1,15 +1,39 @@
 // netlify/functions/chavruta.js
+
 export async function handler(event) {
-  if (event.httpMethod !== "POST") return json(405, { ok: false, error: "Method not allowed" });
+  // ✅ Mobile-safe CORS headers
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Content-Type": "application/json; charset=utf-8",
+    "Cache-Control": "no-store",
+  };
+
+  // ✅ CORS preflight (Android browsers often require this)
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 200, headers: corsHeaders, body: "" };
+  }
+
+  if (event.httpMethod !== "POST") {
+    return json(405, { ok: false, error: "Method not allowed" }, corsHeaders);
+  }
 
   try {
     const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) return json(500, { ok: false, error: "Missing OPENAI_API_KEY in Netlify env vars" });
+    if (!apiKey) {
+      return json(500, { ok: false, error: "Missing OPENAI_API_KEY in Netlify env vars" }, corsHeaders);
+    }
 
     const body = safeJson(event.body);
-    const inputRaw = String(body.input || "").trim();
+
+    // ✅ Accept both your current field ("input") and other clients ("message")
+    const inputRaw = String(body.input || body.message || "").trim();
     const history = Array.isArray(body.history) ? body.history : [];
-    if (!inputRaw) return json(400, { ok: false, error: "Missing input" });
+
+    if (!inputRaw) {
+      return json(400, { ok: false, error: "Missing input" }, corsHeaders);
+    }
 
     // Keep request small
     const clipped = history
@@ -77,6 +101,7 @@ export async function handler(event) {
         });
 
         const data = await resp.json().catch(() => ({}));
+
         if (!resp.ok) {
           console.error("[chavruta] upstream not ok", { model, status: resp.status, data });
           lastErr = data?.error?.message || `HTTP ${resp.status}`;
@@ -89,30 +114,44 @@ export async function handler(event) {
           extractFromAnyTextFields(data) ||
           "";
 
+        const finalText = text || "(No response text returned.)";
+
+        // ✅ Return both "content" and "reply" so any UI can consume it
         return json(200, {
           ok: true,
-          content: text || "(No response text returned.)",
+          content: finalText,
+          reply: finalText,
           modelUsed: model,
           sefariaRef: ref || null
-        });
+        }, corsHeaders);
       }
     } finally {
       clearTimeout(timer);
     }
 
-    return json(502, { ok: false, error: lastErr });
+    return json(502, { ok: false, error: lastErr }, corsHeaders);
   } catch (err) {
     const isAbort = err?.name === "AbortError";
-    return json(isAbort ? 504 : 500, { ok: false, error: isAbort ? "Upstream timeout" : err.message });
+    return json(
+      isAbort ? 504 : 500,
+      { ok: false, error: isAbort ? "Upstream timeout" : (err?.message || String(err)) },
+      {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "no-store",
+      }
+    );
   }
 }
 
 /* ---------------- helpers ---------------- */
 
-function json(statusCode, obj) {
+function json(statusCode, obj, extraHeaders = {}) {
   return {
     statusCode,
-    headers: { "Content-Type": "application/json" },
+    headers: { ...extraHeaders, "Content-Type": "application/json; charset=utf-8" },
     body: JSON.stringify(obj),
   };
 }
@@ -122,15 +161,8 @@ function safeJson(body) {
 }
 
 // Convert common human inputs into a Sefaria ref string.
-// Examples it handles:
-// - "Berakhot 4" -> "Berakhot 4a"
-// - "Berakhot 4a" -> "Berakhot 4a"
-// - "Genesis 1:1" / "Gen 1:1" -> "Genesis 1:1"
-// - "Psalm 12" / "Psalms 12" -> "Psalms 12"
 function toSefariaRef(s) {
   const raw = s.trim();
-
-  // Normalize spaces
   const x = raw.replace(/\s+/g, " ").trim();
 
   // Talmud tractate pattern: "<Name> <num><a|b>?"
@@ -163,7 +195,6 @@ function toSefariaRef(s) {
 }
 
 function normalizeTractateName(name) {
-  // minimal normalization for common spellings
   const n = name.toLowerCase();
   const map = {
     berachot: "Berakhot",
@@ -175,9 +206,9 @@ function normalizeTractateName(name) {
     yoma: "Yoma",
     sukkah: "Sukkah",
     beitzah: "Beitzah",
-    rosh: "Rosh", // leave partial alone
+    rosh: "Rosh",
     megillah: "Megillah",
-    moed: "Moed", // leave partial alone
+    moed: "Moed",
   };
   if (map[n]) return map[n];
   return titleCase(name);
@@ -207,7 +238,6 @@ async function fetchSefariaText(ref) {
   const data = await resp.json().catch(() => null);
   if (!data) return null;
 
-  // Sefaria can return strings or arrays depending on range
   const en = flattenToText(data.text);
   const he = flattenToText(data.he);
 
@@ -218,7 +248,6 @@ function flattenToText(x) {
   if (!x) return "";
   if (typeof x === "string") return x.trim();
   if (Array.isArray(x)) {
-    // nested arrays sometimes
     return x.flat(Infinity).filter(v => typeof v === "string" && v.trim()).join("\n").trim();
   }
   return "";
