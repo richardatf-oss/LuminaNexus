@@ -1,4 +1,6 @@
-/* styles/chavruta.css */
+/* /styles/chavruta.css
+   Chavruta page styles + semantic blocks used by /scripts/chavruta-ui.js
+*/
 
 .hero { padding: 18px 4px 18px; }
 .kicker { letter-spacing: .12em; font-size: 12px; opacity: .78; }
@@ -43,6 +45,12 @@
   overflow: auto;
 }
 
+/* nice scrolling on mobile */
+.stream {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
 .msg{
   display:grid;
   grid-template-columns: 84px 1fr;
@@ -62,16 +70,11 @@
   border-radius: 14px;
   padding: 12px 14px;
   line-height: 1.6;
-  white-space: pre-wrap;
   word-break: break-word;
 }
 
 .bubble.assistant{ background: rgba(0,0,0,.24); }
 .bubble.user{ background: rgba(0,0,0,.12); }
-
-.bubble .mono{
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-}
 
 .composer{
   display:grid;
@@ -105,6 +108,12 @@
 
 .composer button:hover{ background: rgba(255,255,255,.10); }
 
+.composer button:disabled,
+.composer input:disabled{
+  opacity: .6;
+  cursor: not-allowed;
+}
+
 .footnote{
   padding: 10px 16px 14px;
   font-size: 12px;
@@ -115,46 +124,87 @@
   position:absolute; width:1px; height:1px; padding:0; margin:-1px;
   overflow:hidden; clip:rect(0,0,0,0); border:0;
 }
-/* ---- Chavruta semantic polish ---- */
 
-.bubble h3,
-.bubble .section-title {
-  margin: 14px 0 6px;
-  font-size: 13px;
-  letter-spacing: .06em;
+/* ---------- Semantic blocks (used by new UI) ---------- */
+
+.section-title{
+  margin: 12px 0 6px;
+  font-size: 12px;
+  letter-spacing: .08em;
   text-transform: uppercase;
-  opacity: .7;
+  opacity: .72;
 }
 
-.bubble .text-block {
+.text-block{
   margin: 6px 0 10px;
 }
 
-.bubble .questions {
-  margin-top: 10px;
-  padding-left: 14px;
+/* "pre" blocks: we still want it to wrap nicely, not overflow */
+.pre{
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
-.bubble .questions li {
+.questions{
+  margin: 8px 0 10px;
+  padding-left: 18px;
+}
+
+.questions li{
   margin: 6px 0;
 }
 
-.hebrew-toggle {
-  font-size: 12px;
-  opacity: .75;
-  cursor: pointer;
-  margin-top: 8px;
-  display: inline-block;
+/* Speculation gets a slightly different feel */
+.spec-block{
+  margin: 6px 0 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.03);
+  opacity: .95;
 }
 
-.hebrew {
-  display: none;
+/* Hebrew toggle + block */
+.hebrew-toggle{
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  background: rgba(255,255,255,.05);
+  color: inherit;
+  padding: 8px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  opacity: .9;
   margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hebrew-toggle:hover{
+  background: rgba(255,255,255,.10);
+}
+
+.hebrew-toggle:active{
+  transform: translateY(1px);
+}
+
+.hebrew-block{
+  margin-top: 10px;
   direction: rtl;
+  text-align: right;
   font-family: "Times New Roman", "Frank Ruehl", serif;
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.7;
+  opacity: .95;
+
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  background: rgba(0,0,0,.16);
+  padding: 10px 12px;
 }
+
+/* ---------- Optional quick-actions bar (if you add the buttons back) ---------- */
 .quick-actions{
   display:flex;
   gap:10px;
@@ -171,6 +221,32 @@
   font-size: 12px;
   cursor: pointer;
   opacity: .9;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .qa-btn:hover{ background: rgba(255,255,255,.10); }
+
+/* ---------- Mobile polish ---------- */
+@media (max-width: 720px){
+  .msg{
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .who{
+    padding-top: 0;
+    opacity: .7;
+  }
+
+  .stream{
+    max-height: 56vh;
+  }
+
+  .composer{
+    grid-template-columns: 1fr;
+  }
+
+  .composer button{
+    width: 100%;
+  }
+}
