@@ -1,5 +1,77 @@
 // /scripts/chavruta-ui.js
-(() => {
+(// scripts/chavruta-ui.js
+// Purpose: Library -> Chavruta handoff (q=...) + optional autosend
+// Safe: does not assume internals of chavruta-chat.js; triggers form submit.
+
+(function () {
+  const $ = (s) => document.querySelector(s);
+
+  const form = $("#chatForm");
+  const input = $("#chatInput");
+  const status = $("#statusPill");
+
+  function setStatus(text) {
+    if (!status) return;
+    status.textContent = text;
+  }
+
+  function getParam(name) {
+    const url = new URL(window.location.href);
+    return url.searchParams.get(name);
+  }
+
+  function removeParams(...names) {
+    const url = new URL(window.location.href);
+    names.forEach((n) => url.searchParams.delete(n));
+    window.history.replaceState({}, document.title, url.pathname + (url.searchParams.toString() ? `?${url.searchParams}` : ""));
+  }
+
+  function focusInputEnd() {
+    if (!input) return;
+    input.focus({ preventScroll: false });
+    const v = input.value;
+    input.setSelectionRange(v.length, v.length);
+  }
+
+  function safeSubmit() {
+    if (!form) return;
+    // Trigger the existing submit handler in chavruta-chat.js
+    const ev = new Event("submit", { bubbles: true, cancelable: true });
+    form.dispatchEvent(ev);
+  }
+
+  // --- MAIN HANDOFF ---
+  window.addEventListener("DOMContentLoaded", () => {
+    if (!input) return;
+
+    // Library sends: /chavruta.html?q=Genesis%201:1
+    const q = getParam("q");
+    const autosend = getParam("autosend"); // "1" to send immediately
+    const mode = getParam("mode"); // optional future use
+
+    if (q && q.trim()) {
+      input.value = q.trim();
+
+      // Helpful UX
+      setStatus("Loaded from Library");
+      focusInputEnd();
+
+      // Optional: if autosend=1, submit after a short tick
+      if (autosend === "1") {
+        setStatus("Sending…");
+        setTimeout(() => {
+          safeSubmit();
+          // Remove autosend so refresh doesn't re-fire
+          removeParams("autosend");
+        }, 150);
+      }
+
+      // Clean q from URL so refresh doesn't keep reloading the same prompt
+      removeParams("q", "mode");
+    }
+  });
+})();
+() => {
   const UI = {};
 
   UI.streamEl = () => document.getElementById("chatStream");
