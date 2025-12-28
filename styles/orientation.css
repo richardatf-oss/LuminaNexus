@@ -1,0 +1,42 @@
+/* /styles/orientation.css
+   Fix: glow/overlay layers stealing clicks on Orientation.
+   Makes buttons reliably clickable across devices.
+*/
+
+.gate-button,
+#continueGate,
+#skipChavruta {
+  position: relative;
+  z-index: 50;
+  pointer-events: auto;
+}
+
+/* Defensive: disable click-capture on glow/overlay pseudo layers */
+.with-glow::before,
+.with-glow::after,
+.card::before,
+.card::after,
+.hero::before,
+.hero::after {
+  pointer-events: none !important;
+}
+
+/* Layout helpers */
+.radio {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.radio input {
+  margin-top: 3px;
+}
+
+.btnrow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 12px;
+}
