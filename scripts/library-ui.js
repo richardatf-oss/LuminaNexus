@@ -1,6 +1,6 @@
-// scripts/library-ui.js
+// /scripts/library-ui.js
 // Library = independent reader + optional "Send to Chavruta" with full EN/HE text.
-// Adds robust Sefaria HTML sanitization so the reader is clean and dignified.
+// Sanitizes Sefaria inline HTML to clean plain text (no HTML injection).
 
 (function () {
   const $ = (s) => document.querySelector(s);
@@ -47,54 +47,80 @@
       .replaceAll(">", "&gt;");
   }
 
-  // ---- Sanitization helpers (Sefaria sometimes returns inline HTML in strings) ----
+  // ---- Sanitization helpers ----
+  // Goal: turn Sefaria inline HTML-ish strings into clean, dignified plain text.
 
+  const _decoder = document.createElement("textarea");
   function decodeHtmlEntities(str) {
-    // Browser-safe decode (handles &nbsp;, &amp;, etc)
-    const textarea = document.createElement("textarea");
-    textarea.innerHTML = str;
-    return textarea.value;
+    _decoder.innerHTML = String(str || "");
+    return _decoder.value;
   }
 
-  function stripTagsKeepingLineBreaks(html) {
-    // Normalize common block-ish tags to newlines first
+  function normalizeNewlines(s) {
+    s = s.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    s = s.replace(/[ \t]+\n/g, "\n");
+    s = s.replace(/\n{3,}/g, "\n\n");
+    return s.trim();
+  }
+
+  function stripTagsKeepingStructure(html) {
     let s = String(html || "");
+    if (!s) return "";
+
+    // Defensive: drop script/style blocks completely
+    s = s.replace(/<script[\s\S]*?<\/script>/gi, "");
+    s = s.replace(/<style[\s\S]*?<\/style>/gi, "");
+
+    // Insert spacing at tag boundaries to prevent word glue: ...</i><i>...
+    // We do this early, before removing tags.
+    s = s.replace(/>\s*</g, ">\n<");
 
     // Poetry / indentation hints (best-effort)
-    // Turn certain spans into newlines + indentation before stripping tags
     s = s.replace(/<span[^>]*class="[^"]*\bpoetry\b[^"]*"[^>]*>/gi, "\n");
     s = s.replace(/<span[^>]*class="[^"]*\bindentAllDouble\b[^"]*"[^>]*>/gi, "\n    ");
     s = s.replace(/<span[^>]*class="[^"]*\bindentAll\b[^"]*"[^>]*>/gi, "\n  ");
 
-    // Convert line breaks
+    // Line breaks
     s = s.replace(/<br\s*\/?>/gi, "\n");
 
-    // Paragraphs / divs -> newline
+    // List items: keep as bullet-ish lines
+    s = s.replace(/<li[^>]*>/gi, "• ");
+    s = s.replace(/<\/li\s*>/gi, "\n");
+
+    // Block-ish tags -> newlines
     s = s.replace(/<\/p\s*>/gi, "\n");
     s = s.replace(/<p[^>]*>/gi, "");
     s = s.replace(/<\/div\s*>/gi, "\n");
     s = s.replace(/<div[^>]*>/gi, "");
+    s = s.replace(/<\/tr\s*>/gi, "\n");
+    s = s.replace(/<tr[^>]*>/gi, "");
+    s = s.replace(/<\/td\s*>/gi, "\t");
+    s = s.replace(/<td[^>]*>/gi, "");
+    s = s.replace(/<\/table\s*>/gi, "\n");
+    s = s.replace(/<table[^>]*>/gi, "");
+
+    // Small/italic/bold should not remove spacing; keep content, remove tags later
+    // (No action needed here; just ensuring we don't accidentally delete content.)
 
     // Remove remaining tags
     s = s.replace(/<\/?[^>]+>/g, "");
 
-    // Decode entities (nbsp, etc)
+    // Decode entities (&nbsp; etc)
     s = decodeHtmlEntities(s);
 
-    // Replace non-breaking spaces with normal spaces
+    // Normalize NBSP to regular space
     s = s.replace(/\u00A0/g, " ");
 
-    // Clean excessive whitespace/newlines
-    s = s.replace(/[ \t]+\n/g, "\n");
-    s = s.replace(/\n{3,}/g, "\n\n");
+    // Clean up stray whitespace
     s = s.replace(/[ \t]{3,}/g, "  ");
+    s = normalizeNewlines(s);
 
-    return s.trim();
+    return s;
   }
 
   function sanitizeSefariaText(raw) {
-    // raw might already be plain; this is safe to run regardless
-    return stripTagsKeepingLineBreaks(raw);
+    // raw might already be plain; safe to run regardless
+    return stripTagsKeepingStructure(raw);
   }
 
   function flattenToText(x) {
@@ -107,24 +133,23 @@
   }
 
   async function fetchSefaria(ref) {
-    const url = `https://www.sefaria.org/api/texts/${encodeURIComponent(ref)}?context=0&commentary=0&pad=0&wrapLinks=0&lang=bi`;
+    const url =
+      `https://www.sefaria.org/api/texts/${encodeURIComponent(ref)}` +
+      `?context=0&commentary=0&pad=0&wrapLinks=0&lang=bi`;
+
     const resp = await fetch(url, { headers: { "Accept": "application/json" } });
     if (!resp.ok) throw new Error(`Sefaria HTTP ${resp.status}`);
+
     const data = await resp.json().catch(() => null);
     if (!data) throw new Error("Bad Sefaria response");
 
     const enRaw = flattenToText(data.text);
     const heRaw = flattenToText(data.he);
 
-    // ✅ Sanitize here
     const en = sanitizeSefariaText(enRaw);
     const he = sanitizeSefariaText(heRaw);
 
-    return {
-      en,
-      he,
-      ref: data.ref || ref
-    };
+    return { en, he, ref: data.ref || ref };
   }
 
   function renderList(items) {
@@ -149,14 +174,13 @@
       `;
 
       card.addEventListener("click", () => selectRef(item.ref));
-
       elList.appendChild(card);
     }
   }
 
   async function selectRef(ref) {
     selectedRef = ref;
-    selectedText = { en: "", he: "", ref: ref };
+    selectedText = { en: "", he: "", ref };
 
     if (elRef) elRef.textContent = ref;
     if (elHint) elHint.textContent = "Loading from Sefaria…";
@@ -204,7 +228,7 @@
     renderList(filtered);
   }
 
-  // ✅ Send full sanitized text to Chavruta via sessionStorage
+  // ✅ Send full sanitized text to Chavruta via sessionStorage (bundle)
   btnSend?.addEventListener("click", () => {
     if (!selectedRef) return;
 
@@ -227,6 +251,7 @@
 
   btnOpen?.addEventListener("click", () => {
     if (!selectedRef) return;
+    // Sefaria accepts encoded refs in the path
     const url = `https://www.sefaria.org/${encodeURIComponent(selectedRef)}`;
     window.open(url, "_blank", "noopener,noreferrer");
   });
