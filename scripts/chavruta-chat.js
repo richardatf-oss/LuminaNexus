@@ -23,13 +23,10 @@
   function getQS() {
     const params = new URLSearchParams(window.location.search);
     return {
-      // ✅ New standard (from Library)
       q: (params.get("q") || "").trim(),
-      // ✅ Back-compat
       ref: (params.get("ref") || "").trim(),
       text: (params.get("text") || "").trim(),
-      // ✅ Optional behavior
-      autosend: (params.get("autosend") || "").trim(), // "1"
+      autosend: (params.get("autosend") || "").trim(),
       mode: (params.get("mode") || "").trim(),
     };
   }
@@ -41,14 +38,56 @@
     window.history.replaceState({}, "", url.pathname + (qs ? `?${qs}` : ""));
   }
 
+  function readBundle() {
+    try {
+      const raw = sessionStorage.getItem("LN_CHAVRUTA_BUNDLE");
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (!data || typeof data !== "object") return null;
+
+      const ref = String(data.ref || "").trim();
+      const en = String(data.en || "").trim();
+      const he = String(data.he || "").trim();
+
+      if (!ref && !en && !he) return null;
+      return { ref, en, he };
+    } catch {
+      return null;
+    }
+  }
+
+  function clearBundle() {
+    try { sessionStorage.removeItem("LN_CHAVRUTA_BUNDLE"); } catch {}
+  }
+
+  function formatTextFirstBlock(bundle) {
+    // This becomes the USER input sent to the function.
+    // Your function will parse ref, BUT we also paste the actual text so it can’t fail.
+    const lines = [];
+    lines.push(bundle.ref ? `Reference: ${bundle.ref}` : "Reference: (none)");
+    if (bundle.en) {
+      lines.push("\nENGLISH:");
+      lines.push(bundle.en);
+    }
+    if (bundle.he) {
+      lines.push("\nHEBREW:");
+      lines.push(bundle.he);
+    }
+
+    // Add a short directive that matches your model instructions
+    lines.push("\nSTUDY REQUEST:");
+    lines.push("Start with the text above. Then give 3–7 study questions. Speculation must be labeled.");
+
+    return lines.join("\n");
+  }
+
   async function postWithRetry(payload) {
-    const delays = [0, 800, 1600]; // 3 attempts
+    const delays = [0, 800, 1600];
     let last = null;
 
     for (let i = 0; i < delays.length; i++) {
       if (delays[i]) await sleep(delays[i]);
 
-      // ✅ Mobile-safe timeout
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 15000);
 
@@ -84,7 +123,6 @@
     if (input()) input().disabled = true;
 
     try {
-      // ✅ Payload accepts input; server also accepts message, but we standardize on input
       const result = await postWithRetry({ input: userText, history });
 
       if (!result.ok) {
@@ -92,7 +130,6 @@
         return;
       }
 
-      // ✅ Support both server fields
       const text =
         (String(result.data.content || "").trim()) ||
         (String(result.data.reply || "").trim()) ||
@@ -119,31 +156,16 @@
   }
 
   function prefillFromLibraryLink() {
-    // ✅ Supports:
-    // /chavruta.html?q=Genesis%201:1
-    // /chavruta.html?ref=Berakhot%204a
-    // /chavruta.html?text=Genesis%201:1
-    // Optional: &autosend=1
-    const { q, ref, text, autosend, mode } = getQS();
+    const { q, ref, text, autosend } = getQS();
     const seed = q || ref || text;
 
-    if (!seed) return;
+    if (seed && input()) input().value = seed;
 
-    if (input()) input().value = seed;
+    // Clean QS so reload doesn't re-inject
+    if (seed || autosend) cleanQS();
 
-    // Optional: apply a mode prompt wrapper (future-proof)
-    // e.g. /chavruta.html?q=Genesis%201:1&mode=clarify
-    if (mode && input()) {
-      // Don’t overwrite user’s seed; just leave it in input.
-      // Mode can be used later if you want.
-    }
-
-    // ✅ Remove params so reload doesn't re-inject
-    cleanQS();
-
-    // ✅ Optional autosend
+    // If autosend, we will submit after handlers wired
     if (autosend === "1") {
-      // Wait for DOM + event handlers to be wired, then submit
       setTimeout(() => {
         const current = (input()?.value || "").trim();
         if (current) submit(current);
@@ -152,7 +174,6 @@
   }
 
   function wireQuickActions() {
-    // If these buttons don't exist on the page, no problem.
     if (btnContinue()) {
       btnContinue().addEventListener("click", () => {
         const prompt =
@@ -179,7 +200,26 @@
   document.addEventListener("DOMContentLoaded", () => {
     if (!form() || !input() || !sendBtn() || !UI()) return;
 
-    prefillFromLibraryLink();
+    // ✅ If we arrived from Library with a full-text bundle, inject it as the first message
+    const bundle = readBundle();
+    if (bundle) {
+      const block = formatTextFirstBlock(bundle);
+      clearBundle();
+
+      // Show a friendly note in the UI, then send the text block upstream once.
+      UI()?.addMessage("System", "Loaded full text from Library.", "assistant");
+
+      // Put a short visible ref in the input (nice UX)
+      if (bundle.ref && input()) input().value = bundle.ref;
+
+      // Send the full block immediately (text-first)
+      // (No need for autosend here; Library already intended it.)
+      submit(block);
+    } else {
+      // Normal flow: allow querystring fill/autosend
+      prefillFromLibraryLink();
+    }
+
     wireQuickActions();
 
     form().addEventListener("submit", async (e) => {
