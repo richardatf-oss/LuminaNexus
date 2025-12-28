@@ -1,130 +1,190 @@
-// scripts/231-gates.js
-// Access control: only if sessionStorage.enteredGate === "1"
+(() => {
+  "use strict";
 
-(function () {
-  const $ = (s) => document.querySelector(s);
+  const STORAGE_KEY = "luminanexus_gate_settings_v2";
 
-  const elNotice = $("#gateNotice");
-  const elList = $("#gatesList");
-  const elSearch = $("#gateSearch");
+  const LETTERS = [
+    { he: "א", en: "aleph" },
+    { he: "ב", en: "bet" },
+    { he: "ג", en: "gimel" },
+    { he: "ד", en: "dalet" },
+    { he: "ה", en: "he" },
+    { he: "ו", en: "vav" },
+    { he: "ז", en: "zayin" },
+    { he: "ח", en: "chet" },
+    { he: "ט", en: "tet" },
+    { he: "י", en: "yod" },
+    { he: "כ", en: "kaf" },
+    { he: "ל", en: "lamed" },
+    { he: "מ", en: "mem" },
+    { he: "נ", en: "nun" },
+    { he: "ס", en: "samekh" },
+    { he: "ע", en: "ayin" },
+    { he: "פ", en: "pe" },
+    { he: "צ", en: "tsadi" },
+    { he: "ק", en: "kuf" },
+    { he: "ר", en: "resh" },
+    { he: "ש", en: "shin" },
+    { he: "ת", en: "tav" }
+  ];
 
-  const elLabel = $("#selectedLabel");
-  const elMeta = $("#selectedMeta");
-  const elHe = $("#selectedHe");
-  const elTr = $("#selectedTr");
-  const elGem = $("#selectedGem");
+  function $(sel) { return document.querySelector(sel); }
 
-  const btnRandom = $("#btnRandom");
-  const btnSend = $("#btnSend");
-
-  // ✅ Gate-only access
-  const allowed = sessionStorage.getItem("enteredGate") === "1";
-  if (!allowed) {
-    elNotice.hidden = false;
-    // keep page readable, but disable functionality and gently bounce after a moment
-    btnSend.disabled = true;
-    btnRandom.disabled = true;
-    elSearch.disabled = true;
-    setTimeout(() => {
-      window.location.href = "/pages/orientation.html";
-    }, 1400);
-    return;
-  }
-
-  // Hebrew letters (22)
-  const lettersHe = ["א","ב","ג","ד","ה","ו","ז","ח","ט","י","כ","ל","מ","נ","ס","ע","פ","צ","ק","ר","ש","ת"];
-
-  // Basic transliteration map (lightweight, practical)
-  const trMap = {
-    "א":"Aleph","ב":"Bet","ג":"Gimel","ד":"Dalet","ה":"He","ו":"Vav","ז":"Zayin","ח":"Chet","ט":"Tet",
-    "י":"Yod","כ":"Kaf","ל":"Lamed","מ":"Mem","נ":"Nun","ס":"Samekh","ע":"Ayin","פ":"Pe","צ":"Tsadi",
-    "ק":"Qof","ר":"Resh","ש":"Shin","ת":"Tav"
-  };
-
-  // Standard gematria values (simple form)
-  const gemMap = {
-    "א":1,"ב":2,"ג":3,"ד":4,"ה":5,"ו":6,"ז":7,"ח":8,"ט":9,"י":10,"כ":20,"ל":30,"מ":40,"נ":50,"ס":60,
-    "ע":70,"פ":80,"צ":90,"ק":100,"ר":200,"ש":300,"ת":400
-  };
-
-  // Generate 231 unordered pairs (i < j)
-  const gates = [];
-  for (let i = 0; i < lettersHe.length; i++) {
-    for (let j = i + 1; j < lettersHe.length; j++) {
-      const a = lettersHe[i];
-      const b = lettersHe[j];
-      gates.push({
-        he: `${a}${b}`,
-        a, b,
-        tr: `${trMap[a]}-${trMap[b]}`,
-        gem: (gemMap[a] || 0) + (gemMap[b] || 0)
-      });
+  function loadSettings() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
     }
   }
 
-  let selected = null;
+  function requireKavanahOrRedirect(settings) {
+    // If missing settings, or settings are not for dest=231, require kavanah.
+    const ok = settings && (settings.dest === "231" || settings.gateIntent === "231-gates");
+    if (!ok) {
+      const req = $("#gateRequire");
+      const app = $("#gateApp");
+      if (req) req.style.display = "block";
+      if (app) app.style.display = "none";
+      return false;
+    }
+    return true;
+  }
 
-  function renderList(list) {
-    elList.innerHTML = "";
-    list.forEach((g) => {
+  function buildPairs() {
+    // 22 choose 2 = 231
+    const pairs = [];
+    for (let i = 0; i < LETTERS.length; i++) {
+      for (let j = i + 1; j < LETTERS.length; j++) {
+        const a = LETTERS[i];
+        const b = LETTERS[j];
+        pairs.push({
+          a, b,
+          he: `${a.he}${b.he}`,
+          // search helpers
+          search: `${a.he}${b.he} ${a.en} ${b.en} ${a.en}-${b.en}`.toLowerCase()
+        });
+      }
+    }
+    return pairs;
+  }
+
+  function renderSettings(settings) {
+    const pre = $("#gateSettings");
+    if (!pre) return;
+    pre.textContent = JSON.stringify(settings, null, 2);
+  }
+
+  function renderGrid(pairs) {
+    const grid = $("#gateGrid");
+    if (!grid) return;
+
+    grid.innerHTML = "";
+
+    pairs.forEach((p) => {
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "gate-pill";
-      btn.textContent = g.he;
-      btn.dataset.key = g.he;
-      btn.addEventListener("click", () => selectGate(g.he));
-      elList.appendChild(btn);
+      btn.className = "pill";
+      btn.style.cursor = "pointer";
+      btn.style.border = "1px solid rgba(255,255,255,.14)";
+      btn.style.background = "rgba(255,255,255,.06)";
+      btn.style.padding = "8px 12px";
+      btn.style.borderRadius = "999px";
+      btn.style.fontWeight = "600";
+      btn.textContent = p.he;
+
+      btn.addEventListener("click", () => openGate(p));
+      grid.appendChild(btn);
     });
   }
 
-  function markActive(key) {
-    elList.querySelectorAll(".gate-pill").forEach(b => {
-      b.dataset.active = (b.dataset.key === key) ? "1" : "0";
+  function setCount(shown, total) {
+    const el = $("#gateCount");
+    if (!el) return;
+    el.textContent = `${shown} / ${total} gates`;
+  }
+
+  function openGate(pair) {
+    const title = $("#selectedTitle");
+    const body = $("#selectedBody");
+    const toChavruta = $("#selectedToChavruta");
+
+    const label = `${pair.he} — ${pair.a.en} + ${pair.b.en}`;
+    if (title) title.textContent = label;
+
+    if (body) {
+      body.innerHTML = `
+        <div style="display:grid; gap:10px;">
+          <div>
+            <div class="muted">Letters</div>
+            <div style="font-size:22px; font-weight:700; margin-top:4px;">${pair.a.he} + ${pair.b.he}</div>
+            <div class="muted" style="margin-top:4px;">${pair.a.en} + ${pair.b.en}</div>
+          </div>
+          <div>
+            <div class="muted">Torah-first use</div>
+            <div style="margin-top:4px;">
+              Choose a passage, read peshat slowly, then ask: “What boundary does this gate protect?”
+              (We’ll map themes + passages next.)
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Pass gate pair into Chavruta via query param (safe even if you ignore it there)
+    if (toChavruta) {
+      const q = encodeURIComponent(pair.he);
+      toChavruta.setAttribute("href", `/pages/chavruta.html?gate=${q}`);
+    }
+  }
+
+  function wireSearch(allPairs) {
+    const input = $("#gateSearch");
+    if (!input) return;
+
+    const total = allPairs.length;
+    setCount(total, total);
+
+    input.addEventListener("input", () => {
+      const q = (input.value || "").toLowerCase().trim();
+      if (!q) {
+        renderGrid(allPairs);
+        setCount(total, total);
+        return;
+      }
+      const filtered = allPairs.filter(p => p.search.includes(q) || p.he.includes(q));
+      renderGrid(filtered);
+      setCount(filtered.length, total);
     });
   }
 
-  function selectGate(key) {
-    const g = gates.find(x => x.he === key);
-    if (!g) return;
+  function init() {
+    const settings = loadSettings();
 
-    selected = g;
-    markActive(key);
+    const ok = requireKavanahOrRedirect(settings);
+    if (!ok) return;
 
-    elLabel.textContent = `Gate ${g.he}`;
-    elMeta.textContent = `${g.tr}`;
-    elHe.textContent = g.he;
-    elTr.textContent = g.tr;
-    elGem.textContent = String(g.gem);
+    // show app
+    const app = $("#gateApp");
+    const req = $("#gateRequire");
+    if (app) app.style.display = "block";
+    if (req) req.style.display = "none";
 
-    btnSend.disabled = false;
+    renderSettings(settings);
+
+    const pairs = buildPairs();
+    renderGrid(pairs);
+    wireSearch(pairs);
+    setCount(pairs.length, pairs.length);
+
+    // auto-select the first gate so the page feels “alive”
+    if (pairs[0]) openGate(pairs[0]);
   }
 
-  function filter() {
-    const q = (elSearch.value || "").trim().toLowerCase();
-    if (!q) return gates;
-
-    // match Hebrew pair or transliteration pieces
-    return gates.filter(g => {
-      return g.he.includes(q) || g.tr.toLowerCase().includes(q.replace(/\s+/g, ""));
-    });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
   }
-
-  elSearch.addEventListener("input", () => renderList(filter()));
-
-  btnRandom.addEventListener("click", () => {
-    const list = filter();
-    if (!list.length) return;
-    const g = list[Math.floor(Math.random() * list.length)];
-    selectGate(g.he);
-  });
-
-  btnSend.addEventListener("click", () => {
-    if (!selected) return;
-    // Send the gate pairing into Chavruta (prefill)
-    const q = `Gate ${selected.he} (${selected.tr}). Torah-first: please bring primary sources for any claims.`;
-    window.location.href = `/chavruta.html?q=${encodeURIComponent(q)}`;
-  });
-
-  // Initial render
-  renderList(gates);
 })();
