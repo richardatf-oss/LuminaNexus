@@ -4,7 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>The Library — LuminaNexus</title>
-  <meta name="description" content="A modest study library of Torah-first texts." />
+  <meta name="description" content="Choose a text. Read it here. Optionally send it to Chavruta." />
+
   <link rel="stylesheet" href="/styles/main.css" />
   <link rel="stylesheet" href="/styles/library.css" />
 </head>
@@ -12,42 +13,83 @@
 <body class="with-glow">
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header"></header>
-
-  <main id="main" class="wrap">
-    <header class="hero">
-      <div class="kicker">THE LIBRARY • הַסִּפְרִיָּה</div>
-      <h1>The Library</h1>
-      <p class="sub">Choose a text. Send it to Chavruta.</p>
-    </header>
-
-    <section class="panel" aria-label="Library">
-      <div class="panel-head">
-        <div class="title">Texts</div>
-
-        <div class="controls">
-          <label class="sr-only" for="libSearch">Search</label>
-          <input id="libSearch" class="control" type="search" placeholder="Search… (e.g., Genesis, Berakhot, Psalms)" />
-
-          <label class="sr-only" for="libCategory">Category</label>
-          <select id="libCategory" class="control">
-            <option value="all">All categories</option>
-          </select>
+  <header class="site-header">
+    <div class="wrap header-row">
+      <div class="brand">
+        <div class="brand-mark">✦</div>
+        <div class="brand-text">
+          <div class="brand-title">LuminaNexus</div>
+          <div class="brand-subtitle">Torah-first study partner</div>
         </div>
       </div>
 
-      <div class="list" id="libList" aria-live="polite"></div>
+      <nav class="nav" aria-label="Primary">
+        <a href="/index.html">Home</a>
+        <a href="/pages/library.html" aria-current="page">The Library</a>
+        <a href="/chavruta.html">Chavruta</a>
+      </nav>
+    </div>
+  </header>
 
-      <div class="footnote">
-        Clicking a text opens Chavruta with a pre-filled reference.
+  <main id="main" class="wrap library-page">
+    <div class="library-hero">
+      <div>
+        <div class="kicker">THE LIBRARY · הַסְּפָרִיָּה</div>
+        <h1>The Library</h1>
+        <p class="sub">Choose a text. Read it here. Optionally send it to Chavruta.</p>
+      </div>
+
+      <div class="library-controls">
+        <input id="libSearch" type="search" placeholder="Search… (e.g., Genesis, Berakhot)" />
+        <select id="libCategory">
+          <option value="">All categories</option>
+          <option value="Torah">Torah</option>
+          <option value="Prophets">Prophets</option>
+          <option value="Writings">Writings</option>
+          <option value="Mishnah">Mishnah</option>
+          <option value="Talmud">Talmud</option>
+        </select>
+      </div>
+    </div>
+
+    <section class="library-split">
+      <!-- LEFT: LIST -->
+      <div class="library-list" aria-label="Texts list">
+        <div class="panel-title">Texts</div>
+        <div id="libList" class="lib-items"></div>
+      </div>
+
+      <!-- RIGHT: READER -->
+      <div class="library-reader" aria-label="Reader">
+        <div class="reader-top">
+          <div>
+            <div id="readerRef" class="reader-ref">Select a text</div>
+            <div id="readerHint" class="reader-hint">Click a verse on the left to read it here.</div>
+          </div>
+
+          <div class="reader-actions">
+            <button id="btnSendChavruta" type="button" disabled>Send to Chavruta</button>
+            <button id="btnOpenSefaria" type="button" disabled>Open on Sefaria</button>
+            <button id="btnCopyRef" type="button" disabled>Copy ref</button>
+          </div>
+        </div>
+
+        <div id="readerStatus" class="reader-status" data-kind="ready">Ready</div>
+
+        <div class="reader-body">
+          <div class="reader-col">
+            <div class="reader-label">English</div>
+            <pre id="readerEn" class="reader-text">(nothing loaded)</pre>
+          </div>
+          <div class="reader-col">
+            <div class="reader-label">Hebrew</div>
+            <pre id="readerHe" class="reader-text">(nothing loaded)</pre>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"></footer>
-
-  <script src="/scripts/nav-active.js" defer></script>
-  <script src="/scripts/library-data.js" defer></script>
-  <script src="/scripts/library-ui.js" defer></script>
+  <script defer src="/scripts/library-ui.js"></script>
 </body>
 </html>
