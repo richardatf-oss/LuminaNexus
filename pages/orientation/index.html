@@ -3,13 +3,202 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Enter the Gate — LuminaNexus</title>
+  <title>Orientation — LuminaNexus</title>
+  <meta name="description" content="Choose kavanah (intention) before entering the 231 Gates of Light." />
 
-  <!-- Redirect to the new Gate module -->
-  <meta http-equiv="refresh" content="0; url=/pages/gate.html" />
-  <link rel="canonical" href="/pages/gate.html" />
+  <link rel="stylesheet" href="/styles/main.css" />
+  <link rel="stylesheet" href="/styles/chavruta.css" />
+
+  <style>
+    /* Keep local so you don't have to touch main.css */
+    .radio { display:flex; align-items:flex-start; gap:10px; margin: 8px 0; }
+    .radio input { margin-top: 3px; }
+    .btnrow { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top: 12px; }
+    .btnrow .muted { margin-left:auto; }
+  </style>
 </head>
-<body>
-  <p>Redirecting… If you are not redirected, <a href="/pages/gate.html">open Enter the Gate</a>.</p>
+
+<body class="with-glow">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-row">
+      <div class="brand">
+        <div class="brand-mark">◈</div>
+        <div class="brand-text">
+          <div class="brand-title">LuminaNexus</div>
+          <div class="brand-subtitle">The Gate · השער — Torah-first study</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="/index.html">Home</a>
+        <a href="/pages/orientation/" aria-current="page">The Gate</a>
+        <a href="/pages/torah-first.html">Torah First</a>
+        <a href="/pages/library.html">The Library</a>
+        <a href="/pages/chavruta.html">Chavruta</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap" style="max-width: 980px;">
+    <header class="hero" style="padding-top: 18px;">
+      <div class="kicker">THE GATE · השער</div>
+      <h1>Enter through the Gate</h1>
+      <p class="subhead">
+        Choose your kavanah (intention). English first. Hebrew always. Sources before speculation.
+        <br />
+        <span style="opacity:.8;">בחר כוונה — אנגלית תחילה, עברית תמיד, מקורות לפני ספקולציה.</span>
+      </p>
+
+      <div class="row" style="display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px;">
+        <a class="btn" href="/pages/torah-first.html">Read the covenant →</a>
+        <a class="btn" href="/pages/library.html">Browse the Library →</a>
+      </div>
+    </header>
+
+    <section class="card" style="margin-top: 14px;">
+      <h2>Kavanah · כוונה</h2>
+      <p class="muted">
+        We keep it Torah-first — peshat before abstraction; sources before speculation.
+        <br />
+        <span class="muted">פשט לפני דרש; מקורות לפני סברות.</span>
+      </p>
+
+      <form id="kavanahForm">
+        <!-- 1. Boundaries -->
+        <div class="card" style="margin-top: 12px;">
+          <div class="kicker">1. BOUNDARIES · גבולות</div>
+          <p><strong>Which boundary matters most right now?</strong></p>
+
+          <label class="radio">
+            <input type="radio" name="boundary" value="avoid_speculation" checked />
+            <span>Avoid speculation / להימנע מספקולציה</span>
+          </label>
+
+          <label class="radio">
+            <input type="radio" name="boundary" value="avoid_mysticism" />
+            <span>Avoid mysticism / להימנע ממיסטיקה</span>
+          </label>
+
+          <label class="radio">
+            <input type="radio" name="boundary" value="avoid_polemics" />
+            <span>Avoid polemics / להימנע מפולמוס</span>
+          </label>
+
+          <label class="radio">
+            <input type="radio" name="boundary" value="grounded_ethics" />
+            <span>Keep it grounded and ethical / לקרקע זאת ביציב</span>
+          </label>
+        </div>
+
+        <!-- 2. Pace -->
+        <div class="card" style="margin-top: 12px;">
+          <div class="kicker">2. PACE · קצב</div>
+          <p><strong>What pace feels correct?</strong></p>
+
+          <label class="radio">
+            <input type="radio" name="pace" value="slow" checked />
+            <span>Slow and careful / איטי וזהיר</span>
+          </label>
+
+          <label class="radio">
+            <input type="radio" name="pace" value="structured" />
+            <span>Structured progression / התקדמות מובנית</span>
+          </label>
+
+          <label class="radio">
+            <input type="radio" name="pace" value="quick_overview" />
+            <span>Quick overview first / סקירה מהירה תחילה</span>
+          </label>
+        </div>
+
+        <!-- 3. Style -->
+        <div class="card" style="margin-top: 12px;">
+          <div class="kicker">3. STYLE · סגנון</div>
+          <p><strong>What learning style do you want?</strong></p>
+
+          <label class="radio">
+            <input type="radio" name="style" value="sources_first" checked />
+            <span>Sources first / מקורות תחילה</span>
+          </label>
+
+          <label class="radio">
+            <input type="radio" name="style" value="summary_questions" />
+            <span>Summary then questions / סיכום ואז שאלות</span>
+          </label>
+
+          <label class="radio">
+            <input type="radio" name="style" value="close_reading" />
+            <span>Close reading / קריאה צמודה</span>
+          </label>
+
+          <label class="radio">
+            <input type="radio" name="style" value="practical" />
+            <span>Practical application / יישום מעשי</span>
+          </label>
+        </div>
+
+        <!-- 4. Consent -->
+        <div class="card" style="margin-top: 12px;">
+          <div class="kicker">4. CONSENT · הסכמה</div>
+          <p>
+            <strong>Learning here is Torah-first, source-first, non-coercive, and without claims of personal authority. Is this acceptable?</strong>
+            <br />
+            <span class="muted">לימוד כאן: תורה תחילה, מקורות תחילה, בלי כפיה ובלי סמכות אישית — מקובל?</span>
+          </p>
+
+          <label class="radio">
+            <input type="radio" name="consent" value="yes" checked />
+            <span>Yes / כן</span>
+          </label>
+
+          <label class="radio">
+            <input type="radio" name="consent" value="read_covenant_first" />
+            <span>I’d like to read the covenant first / אקרא את הברית קודם</span>
+          </label>
+
+          <p class="muted" style="margin-top: 8px;">
+            If you choose “read first,” we’ll open Torah First, then you can return and continue.
+            <br />
+            <span class="muted">אם בחרת לקרוא קודם, נפתח “Torah First” ואז אפשר לחזור ולהמשיך.</span>
+          </p>
+        </div>
+
+        <!-- Optional note -->
+        <div class="card" style="margin-top: 12px;">
+          <div class="kicker">OPTIONAL · רשות</div>
+          <p><strong>One sentence intention (optional)</strong> / משפט כוונה (רשות)</p>
+          <textarea
+            id="kavanahNote"
+            name="note"
+            rows="3"
+            class="input"
+            placeholder="Example: I want peshat-first clarity on one passage, no speculation. / דוגמה: פשט ברור על פסוק אחד, בלי ספקולציה."
+          ></textarea>
+        </div>
+
+        <!-- Buttons -->
+        <div class="btnrow">
+          <button type="button" class="btn primary" id="continueGate">Continue through the Gate →</button>
+          <a class="btn" id="skipChavruta" href="/pages/chavruta.html">Skip to Chavruta →</a>
+          <span id="saveStatus" class="muted"></span>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div style="opacity:.85; font-size: 13px;">
+        © LuminaNexus — offered freely for learning.
+        <br />
+        Torah First: peshat before abstraction, tradition before novelty, learning as service.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/scripts/nav-active.js" defer></script>
+  <script src="/scripts/gate-kavanah.js" defer></script>
 </body>
 </html>
