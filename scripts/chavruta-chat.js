@@ -38,6 +38,42 @@
     window.history.replaceState({}, "", url.pathname + (qs ? `?${qs}` : ""));
   }
 
+  // ---- Sanitization helpers (same idea as Library) ----
+
+  function decodeHtmlEntities(str) {
+    const textarea = document.createElement("textarea");
+    textarea.innerHTML = str;
+    return textarea.value;
+  }
+
+  function stripTagsKeepingLineBreaks(html) {
+    let s = String(html || "");
+
+    s = s.replace(/<span[^>]*class="[^"]*\bpoetry\b[^"]*"[^>]*>/gi, "\n");
+    s = s.replace(/<span[^>]*class="[^"]*\bindentAllDouble\b[^"]*"[^>]*>/gi, "\n    ");
+    s = s.replace(/<span[^>]*class="[^"]*\bindentAll\b[^"]*"[^>]*>/gi, "\n  ");
+
+    s = s.replace(/<br\s*\/?>/gi, "\n");
+    s = s.replace(/<\/p\s*>/gi, "\n");
+    s = s.replace(/<p[^>]*>/gi, "");
+    s = s.replace(/<\/div\s*>/gi, "\n");
+    s = s.replace(/<div[^>]*>/gi, "");
+
+    s = s.replace(/<\/?[^>]+>/g, "");
+    s = decodeHtmlEntities(s);
+    s = s.replace(/\u00A0/g, " ");
+
+    s = s.replace(/[ \t]+\n/g, "\n");
+    s = s.replace(/\n{3,}/g, "\n\n");
+    s = s.replace(/[ \t]{3,}/g, "  ");
+
+    return s.trim();
+  }
+
+  function sanitizeSefariaText(raw) {
+    return stripTagsKeepingLineBreaks(raw);
+  }
+
   function readBundle() {
     try {
       const raw = sessionStorage.getItem("LN_CHAVRUTA_BUNDLE");
@@ -46,8 +82,8 @@
       if (!data || typeof data !== "object") return null;
 
       const ref = String(data.ref || "").trim();
-      const en = String(data.en || "").trim();
-      const he = String(data.he || "").trim();
+      const en = sanitizeSefariaText(String(data.en || ""));
+      const he = sanitizeSefariaText(String(data.he || ""));
 
       if (!ref && !en && !he) return null;
       return { ref, en, he };
@@ -61,10 +97,9 @@
   }
 
   function formatTextFirstBlock(bundle) {
-    // This becomes the USER input sent to the function.
-    // Your function will parse ref, BUT we also paste the actual text so it can’t fail.
     const lines = [];
     lines.push(bundle.ref ? `Reference: ${bundle.ref}` : "Reference: (none)");
+
     if (bundle.en) {
       lines.push("\nENGLISH:");
       lines.push(bundle.en);
@@ -74,7 +109,6 @@
       lines.push(bundle.he);
     }
 
-    // Add a short directive that matches your model instructions
     lines.push("\nSTUDY REQUEST:");
     lines.push("Start with the text above. Then give 3–7 study questions. Speculation must be labeled.");
 
@@ -161,10 +195,8 @@
 
     if (seed && input()) input().value = seed;
 
-    // Clean QS so reload doesn't re-inject
     if (seed || autosend) cleanQS();
 
-    // If autosend, we will submit after handlers wired
     if (autosend === "1") {
       setTimeout(() => {
         const current = (input()?.value || "").trim();
@@ -200,23 +232,18 @@
   document.addEventListener("DOMContentLoaded", () => {
     if (!form() || !input() || !sendBtn() || !UI()) return;
 
-    // ✅ If we arrived from Library with a full-text bundle, inject it as the first message
     const bundle = readBundle();
     if (bundle) {
       const block = formatTextFirstBlock(bundle);
       clearBundle();
 
-      // Show a friendly note in the UI, then send the text block upstream once.
       UI()?.addMessage("System", "Loaded full text from Library.", "assistant");
 
-      // Put a short visible ref in the input (nice UX)
       if (bundle.ref && input()) input().value = bundle.ref;
 
-      // Send the full block immediately (text-first)
-      // (No need for autosend here; Library already intended it.)
+      // Send sanitized full text upstream
       submit(block);
     } else {
-      // Normal flow: allow querystring fill/autosend
       prefillFromLibraryLink();
     }
 
