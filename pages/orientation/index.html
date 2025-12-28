@@ -34,32 +34,44 @@
     </div>
   </header>
 
-  <main id="main" class="wrap" style="max-width: 980px;">
-    <header class="hero" style="padding-top: 18px;">
+  <main id="main" class="wrap orientation-wrap">
+    <header class="hero orientation-hero">
       <div class="kicker">THE GATE · השער</div>
       <h1>Enter through the Gate</h1>
       <p class="subhead">
-        Choose your kavanah (intention). English first. Hebrew always. Sources before speculation.
+        The 231 Gates of Light are the pairings of the Aleph-Bet — a path of language, meaning, and reverent learning.
         <br />
-        <span style="opacity:.8;">בחר כוונה — אנגלית תחילה, עברית תמיד, מקורות לפני ספקולציה.</span>
+        <span class="he-sub">
+          רל״א שערים — צירופי האותיות של האל״ף-בי״ת, דרך של לשון, משמעות, ולימוד ביראה.
+        </span>
       </p>
 
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px;">
+      <div class="hero-ctas">
+        <!-- This one ALWAYS requires kavanah first -->
+        <button type="button" class="btn primary hero-gates" id="heroGatesBtn">
+          Enter the 231 Gates →
+        </button>
+
         <a class="btn" href="/pages/torah-first.html">Read the covenant →</a>
         <a class="btn" href="/pages/library.html">Browse the Library →</a>
       </div>
+
+      <p class="muted hero-note">
+        You’ll be asked to set kavanah (intention) before entering.
+        <span class="he-sub">תתבקש לקבוע כוונה לפני הכניסה.</span>
+      </p>
     </header>
 
-    <section class="card" style="margin-top: 14px;">
+    <section class="card orientation-card" id="kavanahCard">
       <h2>Kavanah · כוונה</h2>
       <p class="muted">
-        We keep it Torah-first — peshat before abstraction; sources before speculation.
+        Torah-first: peshat before abstraction; sources before speculation.
         <br />
-        <span class="muted">פשט לפני דרש; מקורות לפני סברות.</span>
+        <span class="he-sub">תורה תחילה: פשט לפני דרש; מקורות לפני ספקולציה.</span>
       </p>
 
-      <form id="kavanahForm">
-        <div class="card" style="margin-top: 12px;">
+      <form id="kavanahForm" novalidate>
+        <div class="card inner-card">
           <div class="kicker">1. BOUNDARIES · גבולות</div>
           <p><strong>Which boundary matters most right now?</strong></p>
 
@@ -69,7 +81,7 @@
           <label class="radio"><input type="radio" name="boundary" value="grounded_ethics" /><span>Keep it grounded and ethical / לקרקע זאת ביציב</span></label>
         </div>
 
-        <div class="card" style="margin-top: 12px;">
+        <div class="card inner-card">
           <div class="kicker">2. PACE · קצב</div>
           <p><strong>What pace feels correct?</strong></p>
 
@@ -78,7 +90,7 @@
           <label class="radio"><input type="radio" name="pace" value="quick_overview" /><span>Quick overview first / סקירה מהירה תחילה</span></label>
         </div>
 
-        <div class="card" style="margin-top: 12px;">
+        <div class="card inner-card">
           <div class="kicker">3. STYLE · סגנון</div>
           <p><strong>What learning style do you want?</strong></p>
 
@@ -88,40 +100,44 @@
           <label class="radio"><input type="radio" name="style" value="practical" /><span>Practical application / יישום מעשי</span></label>
         </div>
 
-        <div class="card" style="margin-top: 12px;">
+        <div class="card inner-card" id="consentBlock">
           <div class="kicker">4. CONSENT · הסכמה</div>
           <p>
             <strong>Learning here is Torah-first, source-first, non-coercive, and without claims of personal authority. Is this acceptable?</strong><br />
-            <span class="muted">לימוד כאן: תורה תחילה, מקורות תחילה, בלי כפיה ובלי סמכות אישית — מקובל?</span>
+            <span class="muted he-sub">לימוד כאן: תורה תחילה, מקורות תחילה, בלי כפיה ובלי סמכות אישית — מקובל?</span>
           </p>
 
-          <label class="radio"><input type="radio" name="consent" value="yes" checked /><span>Yes / כן</span></label>
+          <label class="radio"><input type="radio" name="consent" value="yes" /><span>Yes / כן</span></label>
           <label class="radio"><input type="radio" name="consent" value="read_covenant_first" /><span>I’d like to read the covenant first / אקרא את הברית קודם</span></label>
+          <label class="radio"><input type="radio" name="consent" value="not_yet" checked /><span>Not yet / עדיין לא</span></label>
 
           <p class="muted" style="margin-top: 8px;">
             If you choose “read first,” we’ll open Torah First, then you can return and continue.
-            <br /><span class="muted">אם בחרת לקרוא קודם, נפתח “Torah First” ואז אפשר לחזור ולהמשיך.</span>
+            <br /><span class="he-sub">אם בחרת לקרוא קודם, נפתח “Torah First” ואז אפשר לחזור ולהמשיך.</span>
           </p>
         </div>
 
-        <div class="card" style="margin-top: 12px;">
+        <div class="card inner-card">
           <div class="kicker">OPTIONAL · רשות</div>
           <p><strong>One sentence intention (optional)</strong> / משפט כוונה (רשות)</p>
           <textarea id="kavanahNote" name="note" rows="3" class="input"
             placeholder="Example: I want peshat-first clarity on one passage, no speculation. / דוגמה: פשט ברור על פסוק אחד, בלי ספקולציה."></textarea>
         </div>
 
-        <div class="btnrow">
-          <button type="button" class="btn primary gate-button" id="continueGate">
+        <!-- IMPORTANT: This CTA row is isolated to defeat overlays -->
+        <div class="cta-bar" id="ctaBar">
+          <button type="button" class="btn primary cta-btn" id="continueGate">
             Continue through the Gate →
           </button>
 
-          <a class="btn gate-button" id="skipChavruta" href="/pages/chavruta.html">
+          <a class="btn cta-btn" id="skipChavruta" href="/pages/chavruta.html">
             Skip to Chavruta →
           </a>
 
           <span id="saveStatus" class="muted"></span>
         </div>
+
+        <div id="gateToast" class="gate-toast" aria-live="polite"></div>
       </form>
     </section>
   </main>
@@ -136,41 +152,6 @@
   </footer>
 
   <script src="/scripts/nav-active.js" defer></script>
-
-  <!-- The simplest possible click handler: no dependency on other scripts -->
-  <script>
-    (function () {
-      function qs(s){ return document.querySelector(s); }
-      function checked(name){
-        var el = document.querySelector('input[name="' + name + '"]:checked');
-        return el ? el.value : null;
-      }
-
-      var btn = qs("#continueGate");
-      if (!btn) return;
-
-      btn.addEventListener("click", function () {
-        try {
-          var payload = {
-            boundary: checked("boundary"),
-            pace: checked("pace"),
-            style: checked("style"),
-            consent: checked("consent"),
-            note: (qs("#kavanahNote")?.value || "").trim(),
-            savedAt: new Date().toISOString()
-          };
-          sessionStorage.setItem("kavanah", JSON.stringify(payload));
-          var st = qs("#saveStatus");
-          if (st) st.textContent = "Saved.";
-        } catch (e) {}
-
-        if (checked("consent") === "read_covenant_first") {
-          window.location.href = "/pages/torah-first.html";
-        } else {
-          window.location.href = "/pages/231-gates.html";
-        }
-      });
-    })();
-  </script>
+  <script src="/scripts/orientation.js" defer></script>
 </body>
 </html>
