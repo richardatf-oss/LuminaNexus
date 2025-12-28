@@ -3,9 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>The Gate — Orientation | LuminaNexus</title>
-  <meta name="description" content="Enter the Gate: a Torah-first kavanah intake before Chavruta." />
+  <title>Orientation — LuminaNexus</title>
+  <meta name="description" content="Kavanah first. Choose boundaries, pace, and learning style before entering." />
   <link rel="stylesheet" href="/styles/main.css" />
+  <style>
+    .k-card { padding: 18px; border-radius: 18px; background: rgba(10,14,20,.55); border: 1px solid rgba(255,255,255,.08); box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+    .k-grid { display: grid; gap: 14px; }
+    .k-row { display: grid; gap: 10px; }
+    .k-h { display:flex; gap:10px; align-items: baseline; justify-content: space-between; }
+    .k-sub { opacity:.85; font-size: .95rem; line-height: 1.35; }
+    .k-label { display:flex; gap:10px; align-items:center; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); }
+    .k-label:hover { background: rgba(255,255,255,.06); }
+    .k-actions { display:flex; gap:10px; flex-wrap: wrap; margin-top: 12px; }
+    .k-actions .btn { cursor: pointer; }
+    .k-note { margin-top: 8px; opacity: .75; font-size: .9rem; }
+    .k-error { display:none; margin-top: 10px; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,120,120,.25); background: rgba(120,20,20,.15); }
+    .k-error strong { display:block; margin-bottom: 4px; }
+    textarea.k-text { width:100%; min-height: 54px; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,.10); background: rgba(0,0,0,.25); color: inherit; }
+  </style>
 </head>
 
 <body class="with-glow">
@@ -36,150 +51,151 @@
     </div>
   </header>
 
-  <main id="main">
-    <section class="hero gate-hero hero-compact">
-      <div class="hero-bg"></div>
-      <div class="wrap hero-content">
-        <p class="eyebrow">The Gate · <span class="hebrew-inline">השער</span></p>
-        <h1>Enter through the Gate</h1>
+  <main id="main" class="wrap" style="padding-top: 18px;">
+    <section class="hero" style="padding-bottom: 0;">
+      <div class="hero-kicker">THE GATE · <span class="hebrew-inline">השער</span></div>
+      <h1>Enter through the Gate</h1>
+      <p class="hero-sub">
+        Kavanah first — then the destination opens.
+        <span style="display:block; opacity:.85; margin-top:6px;">
+          כוונה תחילה — ואז נפתח היעד.
+        </span>
+      </p>
 
-        <div class="hero-text">
-          <p>
-            A Torah-first sanctuary for seekers — dignity, clarity, and honest boundaries.
-            This Gate opens by intention, not pressure.
-          </p>
-          <p class="hebrew">
-            מקדש תורה־תחילה למחפשים — בכבוד, בהירות, וגבולות ישרים.
-            השער נפתח לפי הכוונה, לא לפי לחץ.
-          </p>
-        </div>
+      <div class="k-card" style="margin-top: 16px;">
+        <!-- IMPORTANT: real action (works even if JS fails) -->
+        <form id="kavanah-form" class="k-grid" method="GET" action="/pages/231-gates.html">
+          <input type="hidden" name="dest" id="dest" value="231" />
 
-        <div class="hero-actions">
-          <a class="btn ghost" href="/pages/torah-first.html">Read the covenant →</a>
-          <a class="btn ghost" href="/pages/library.html">Browse the Library →</a>
-        </div>
+          <div class="k-row">
+            <div class="k-h">
+              <div>
+                <div class="hero-kicker" style="margin:0;">1. Boundaries · <span class="hebrew-inline">גבולות</span></div>
+                <div class="k-sub">Which boundary matters most right now?</div>
+              </div>
+            </div>
+
+            <label class="k-label"><input type="radio" name="boundary" value="avoid-speculation" required />
+              <span><strong>Avoid speculation</strong> · <span class="hebrew-inline">להימנע מספקולציה</span></span>
+            </label>
+            <label class="k-label"><input type="radio" name="boundary" value="avoid-mysticism" />
+              <span><strong>Avoid mysticism</strong> · <span class="hebrew-inline">להימנע ממיסטיקה</span></span>
+            </label>
+            <label class="k-label"><input type="radio" name="boundary" value="avoid-polemics" />
+              <span><strong>Avoid polemics</strong> · <span class="hebrew-inline">להימנע מפולמוס</span></span>
+            </label>
+            <label class="k-label"><input type="radio" name="boundary" value="grounded-ethical" />
+              <span><strong>Keep it grounded & ethical</strong> · <span class="hebrew-inline">לקרקע ולהיצמד לדרך ארץ</span></span>
+            </label>
+          </div>
+
+          <div class="k-row">
+            <div class="k-h">
+              <div>
+                <div class="hero-kicker" style="margin:0;">2. Pace · <span class="hebrew-inline">קצב</span></div>
+                <div class="k-sub">What pace feels correct?</div>
+              </div>
+            </div>
+
+            <label class="k-label"><input type="radio" name="pace" value="slow" required />
+              <span><strong>Slow and careful</strong> · <span class="hebrew-inline">איטי וזהיר</span></span>
+            </label>
+            <label class="k-label"><input type="radio" name="pace" value="structured" />
+              <span><strong>Structured progression</strong> · <span class="hebrew-inline">התקדמות מובנית</span></span>
+            </label>
+            <label class="k-label"><input type="radio" name="pace" value="question-by-question" />
+              <span><strong>Question-by-question</strong> · <span class="hebrew-inline">שאלה אחר שאלה</span></span>
+            </label>
+            <label class="k-label"><input type="radio" name="pace" value="adjust" />
+              <span><strong>Adjust as we go</strong> · <span class="hebrew-inline">נתאים תוך כדי</span></span>
+            </label>
+          </div>
+
+          <div class="k-row">
+            <div class="k-h">
+              <div>
+                <div class="hero-kicker" style="margin:0;">3. Style · <span class="hebrew-inline">סגנון</span></div>
+                <div class="k-sub">What learning style do you want?</div>
+              </div>
+            </div>
+
+            <label class="k-label"><input type="radio" name="style" value="sources-first" required />
+              <span><strong>Sources first</strong> · <span class="hebrew-inline">מקורות תחילה</span></span>
+            </label>
+            <label class="k-label"><input type="radio" name="style" value="summary-questions" />
+              <span><strong>Summary then questions</strong> · <span class="hebrew-inline">סיכום ואז שאלות</span></span>
+            </label>
+            <label class="k-label"><input type="radio" name="style" value="close-reading" />
+              <span><strong>Close reading</strong> · <span class="hebrew-inline">קריאה צמודה</span></span>
+            </label>
+            <label class="k-label"><input type="radio" name="style" value="practical" />
+              <span><strong>Practical application</strong> · <span class="hebrew-inline">יישום מעשי</span></span>
+            </label>
+          </div>
+
+          <div class="k-row">
+            <div class="k-h">
+              <div>
+                <div class="hero-kicker" style="margin:0;">4. Consent · <span class="hebrew-inline">הסכמה</span></div>
+                <div class="k-sub">Torah-first, source-first, non-coercive. Acceptable?</div>
+              </div>
+            </div>
+
+            <label class="k-label"><input type="radio" name="consent" value="yes" required />
+              <span><strong>Yes</strong> · <span class="hebrew-inline">כן</span></span>
+            </label>
+
+            <label class="k-label"><input type="radio" name="consent" value="read-covenant" />
+              <span><strong>I’d like to read the covenant first</strong> · <span class="hebrew-inline">אקרא את הברית קודם</span></span>
+            </label>
+
+            <p class="k-note">
+              If you choose “read first”, open Torah First, then return and select “Yes”.
+              <span style="display:block; opacity:.85; margin-top:6px;">
+                אם בחרת לקרוא קודם, פתח תורה תחילה ואז חזור ובחר “כן”.
+              </span>
+            </p>
+          </div>
+
+          <div class="k-row">
+            <div class="k-h">
+              <div>
+                <div class="hero-kicker" style="margin:0;">Optional · <span class="hebrew-inline">רשות</span></div>
+                <div class="k-sub">One sentence intention (optional)</div>
+              </div>
+            </div>
+
+            <textarea class="k-text" name="intention" placeholder="Example: I want peshat-first clarity on one passage, no speculation. / דוגמה: אני רוצה בהירות בפשט בפסוק אחד, בלי ספקולציה."></textarea>
+          </div>
+
+          <div class="k-actions">
+            <button id="btn-continue" class="btn primary" type="submit">
+              Continue through the Gate →
+            </button>
+
+            <a class="btn ghost" href="/pages/chavruta.html" id="btn-skip">
+              Skip to Chavruta →
+            </a>
+
+            <a class="btn ghost" href="/pages/torah-first.html" id="btn-covenant">
+              Read Torah First →
+            </a>
+          </div>
+
+          <div id="k-error" class="k-error" role="alert" aria-live="polite">
+            <strong>Please complete the Kavanah first.</strong>
+            Select one option in each section and choose “Yes” for consent.
+            <span style="display:block; opacity:.9; margin-top:6px;">
+              נא למלא את הכוונה תחילה — לבחור אפשרות בכל סעיף ולאשר “כן”.
+            </span>
+          </div>
+
+          <p class="k-note" id="k-saved" style="display:none;">
+            Saved. Entering…
+            <span style="display:block; opacity:.85;">נשמר. נכנסים…</span>
+          </p>
+        </form>
       </div>
-    </section>
-
-    <section class="wrap" style="padding-top: 18px; padding-bottom: 28px;">
-      <form id="gate-form" class="card" style="padding: 18px;">
-        <h2>Kavanah · <span class="hebrew-inline">כוונה</span></h2>
-        <p class="muted">
-          Choose the intention for this session. We keep it Torah-first: peshat before abstraction; sources before speculation.
-          <span class="hebrew-inline"> · פשט לפני הפשטה; מקורות לפני ספקולציה</span>
-        </p>
-
-        <!-- 1. Boundaries -->
-        <div class="card" style="margin-top: 14px;">
-          <div class="card-tag">1. BOUNDARIES · <span class="hebrew-inline">גבולות</span></div>
-          <p style="margin-top:10px;"><strong>Which boundary matters most right now?</strong></p>
-
-          <label class="radio">
-            <input type="radio" name="boundary" value="avoid_speculation" />
-            Avoid speculation / <span class="hebrew-inline">להימנע מספקולציה</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="boundary" value="avoid_mysticism" />
-            Avoid mysticism / <span class="hebrew-inline">להימנע ממיסטיקה</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="boundary" value="avoid_polemics" />
-            Avoid polemics / <span class="hebrew-inline">להימנע מפולמוס</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="boundary" value="grounded_ethical" />
-            Keep it grounded and ethical / <span class="hebrew-inline">קרקע אתי ויציב</span>
-          </label>
-        </div>
-
-        <!-- 2. Pace -->
-        <div class="card" style="margin-top: 14px;">
-          <div class="card-tag">2. PACE · <span class="hebrew-inline">קצב</span></div>
-          <p style="margin-top:10px;"><strong>What pace feels correct?</strong></p>
-
-          <label class="radio">
-            <input type="radio" name="pace" value="slow_careful" />
-            Slow and careful / <span class="hebrew-inline">איטי וזהיר</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="pace" value="structured" />
-            Structured progression / <span class="hebrew-inline">התקדמות מובנית</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="pace" value="q_by_q" />
-            Question-by-question / <span class="hebrew-inline">שאלה אחר שאלה</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="pace" value="adaptive" />
-            Adjust as we go / <span class="hebrew-inline">נתאים תוך כדי</span>
-          </label>
-        </div>
-
-        <!-- 3. Learning style -->
-        <div class="card" style="margin-top: 14px;">
-          <div class="card-tag">3. STYLE · <span class="hebrew-inline">סגנון</span></div>
-          <p style="margin-top:10px;"><strong>What learning style do you want?</strong></p>
-
-          <label class="radio">
-            <input type="radio" name="style" value="sources_first" />
-            Sources first / <span class="hebrew-inline">מקורות תחילה</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="style" value="summary_then_questions" />
-            Summary then questions / <span class="hebrew-inline">סיכום ואז שאלות</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="style" value="close_reading" />
-            Close reading / <span class="hebrew-inline">קריאה צמודה</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="style" value="practical" />
-            Practical application / <span class="hebrew-inline">יישום מעשי</span>
-          </label>
-        </div>
-
-        <!-- 4. Consent -->
-        <div class="card" style="margin-top: 14px;">
-          <div class="card-tag">4. CONSENT · <span class="hebrew-inline">הסכמה</span></div>
-          <p style="margin-top:10px;">
-            <strong>
-              Learning here is Torah-first, source-first, non-coercive, and without claims of personal authority.
-              Is this acceptable?
-            </strong>
-          </p>
-
-          <label class="radio">
-            <input type="radio" name="consent" value="yes" />
-            Yes / <span class="hebrew-inline">כן</span>
-          </label>
-          <label class="radio">
-            <input type="radio" name="consent" value="read_first" />
-            I’d like to read the covenant first / <span class="hebrew-inline">אקרא את הברית קודם</span>
-          </label>
-
-          <p class="muted" style="margin-top: 10px;">
-            If you choose “read first,” open Torah First, then return and select “Yes.”
-            <span class="hebrew-inline"> · אם בחרת לקרוא קודם, פתח תורה תחילה וחזור לכאן</span>
-          </p>
-        </div>
-
-        <!-- Optional note -->
-        <div class="card" style="margin-top: 14px;">
-          <div class="card-tag">OPTIONAL · <span class="hebrew-inline">רשות</span></div>
-          <label class="field-note" for="kavanah-note">
-            One sentence intention (optional) / <span class="hebrew-inline">משפט כוונה (רשות)</span>
-          </label>
-          <textarea id="kavanah-note" rows="3" style="width:100%; margin-top:8px;"
-            placeholder="Example: I want peshat-first clarity on one passage, no speculation. / דוגמה: אני רוצה בהירות פשט בטקסט אחד, בלי ספקולציה."></textarea>
-        </div>
-
-        <div class="hero-actions" style="margin-top: 14px;">
-          <button id="continue-btn" class="btn primary" type="submit" disabled>Continue through the Gate →</button>
-          <a class="btn ghost" href="/pages/chavruta.html">Skip to Chavruta →</a>
-        </div>
-
-        <p id="gate-msg" class="muted" style="margin-top: 10px;"></p>
-      </form>
     </section>
   </main>
 
@@ -190,22 +206,7 @@
     </div>
   </footer>
 
-  <!-- page scripts -->
-  <script src="/scripts/gate-kavanah.js" defer></script>
   <script src="/scripts/nav-active.js" defer></script>
-
-  <!-- Tiny CSS for radio labels (kept local so you don't have to touch main.css) -->
-  <style>
-    .radio{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-      margin: 10px 0;
-      cursor:pointer;
-      user-select:none;
-    }
-    .radio input{ margin-top: 3px; }
-    .field-note{ display:block; margin-top:6px; }
-  </style>
+  <script src="/scripts/gate-kavanah.js" defer></script>
 </body>
 </html>
