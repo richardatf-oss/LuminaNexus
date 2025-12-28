@@ -1,67 +1,49 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Chavruta — LuminaNexus</title>
-  <meta name="description" content="A clean, modest, Torah-first chavruta study space." />
-  <link rel="stylesheet" href="/styles/main.css" />
-  <link rel="stylesheet" href="/styles/chavruta.css" />
+  <meta charset="UTF-8" />
+  <title>Chavruta Study Space</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/styles/site.css" />
 </head>
 
-<body class="with-glow">
-  <a class="skip-link" href="#main">Skip to content</a>
+<body class="dark">
 
-  <header class="site-header"></header>
+  <header class="page-header">
+    <div class="kicker">CHAVRUTAGPT · חברותא</div>
+    <h1>Chavruta Study Space</h1>
+    <p class="subtitle">
+      Text first. Then questions. Speculation clearly labeled.
+    </p>
+  </header>
 
-  <main id="main" class="wrap">
-    <header class="hero">
-      <div class="kicker">CHAVRUTAGPT • חברותא</div>
-      <h1>Chavruta Study Space</h1>
-      <p class="sub">Text first. Then questions. Speculation clearly labeled.</p>
-    </header>
+  <main class="chavruta-container">
 
-   <section class="panel" aria-label="Chat">
-  <div class="panel-head">
-    <div class="title">Talk to Chavruta</div>
-    <div class="status" id="statusPill" aria-live="polite">Ready</div>
-  </div>
+    <section id="chat-stream" class="chat-stream">
+      <!-- Messages render here -->
+    </section>
 
-  <!-- Quick actions -->
-  <div class="quick-actions" aria-label="Quick actions">
-    <button type="button" class="qa-btn" id="btnContinue">Continue this sugya</button>
-    <button type="button" class="qa-btn" id="btnClarify">Ask for clarity</button>
-    <button type="button" class="qa-btn" id="btnSummarize">Summarize so far</button>
-  </div>
+    <section class="chat-controls">
+      <div class="quick-actions">
+        <button data-action="continue">Continue this sugya</button>
+        <button data-action="clarify">Ask for clarity</button>
+        <button data-action="summarize">Summarize so far</button>
+      </div>
 
-  <div class="stream" id="chatStream" aria-live="polite"></div>
-
-  <form class="composer" id="chatForm" autocomplete="off">
-    <label class="sr-only" for="chatInput">Your message</label>
-    <input id="chatInput" type="text" placeholder="Bring one passage or one question…" maxlength="2000" />
-    <button id="sendBtn" type="submit">Send →</button>
-  </form>
-
-
-
-      <div class="stream" id="chatStream" aria-live="polite"></div>
-
-      <form class="composer" id="chatForm" autocomplete="off">
-        <label class="sr-only" for="chatInput">Your message</label>
-        <input id="chatInput" type="text" placeholder="Bring one passage or one question…" maxlength="2000" />
-        <button id="sendBtn" type="submit">Send →</button>
-      </form>
-
-      <div class="footnote">
-        Endpoint: <code>/.netlify/functions/chavruta</code>
+      <div class="input-row">
+        <input
+          id="chavruta-input"
+          type="text"
+          placeholder="Bring one passage or one question..."
+        />
+        <button id="send-btn">Send →</button>
       </div>
     </section>
+
   </main>
 
-  <footer class="site-footer"></footer>
+  <script src="/scripts/chavruta-ui.js"></script>
+  <script src="/scripts/chavruta.js"></script>
 
-  <script src="/scripts/nav-active.js" defer></script>
-  <script src="/scripts/chavruta-ui.js" defer></script>
-  <script src="/scripts/chavruta-chat.js" defer></script>
 </body>
 </html>
