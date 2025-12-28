@@ -1,7 +1,6 @@
 // scripts/library-ui.js
-// Library now works as its own reader experience.
-// Click item -> loads Sefaria text in-place.
-// Button keeps "Send to Chavruta" option.
+// Library = independent reader + optional "Send to Chavruta" with full EN/HE text.
+// Uses sessionStorage to pass a payload safely (no giant URLs).
 
 (function () {
   const $ = (s) => document.querySelector(s);
@@ -20,7 +19,7 @@
   const btnOpen = $("#btnOpenSefaria");
   const btnCopy = $("#btnCopyRef");
 
-  // ✅ Your curated list (edit freely)
+  // ✅ Curated list (edit freely)
   const TEXTS = [
     { ref: "Genesis 1:1", title: "Genesis 1:1", desc: "The opening—creation, scope, and first questions.", cat: "Torah" },
     { ref: "Exodus 20:1-17", title: "Exodus 20:1–17", desc: "Aseret HaDibrot (Ten Commandments).", cat: "Torah" },
@@ -31,7 +30,9 @@
     { ref: "Berakhot 4a", title: "Berakhot 4a", desc: "Talmud study entry point (daf).", cat: "Talmud" },
   ];
 
-  let selected = null;
+  // Holds last loaded text so we can send it to Chavruta
+  let selectedRef = null;
+  let selectedText = { en: "", he: "", ref: "" };
 
   function setStatus(text, kind = "ready") {
     elStatus.textContent = text;
@@ -92,7 +93,9 @@
   }
 
   async function selectRef(ref) {
-    selected = ref;
+    selectedRef = ref;
+    selectedText = { en: "", he: "", ref: ref };
+
     elRef.textContent = ref;
     elHint.textContent = "Loading from Sefaria…";
     setStatus("Loading…", "busy");
@@ -106,8 +109,11 @@
 
     try {
       const t = await fetchSefaria(ref);
+      selectedText = t;
+
       elEn.textContent = t.en || "(No English returned.)";
       elHe.textContent = t.he || "(No Hebrew returned.)";
+
       elHint.textContent = "Read here. When ready, send to Chavruta for questions.";
       setStatus("Ready", "ready");
 
@@ -115,6 +121,7 @@
       btnOpen.disabled = false;
       btnCopy.disabled = false;
     } catch (e) {
+      selectedText = { en: "", he: "", ref };
       elEn.textContent = "";
       elHe.textContent = "";
       elHint.textContent = "Could not load this text. Try another ref.";
@@ -135,30 +142,43 @@
     renderList(filtered);
   }
 
-  // ✅ Keep “Send to Chavruta” as an option
+  // ✅ Send full text to Chavruta via sessionStorage
   btnSend.addEventListener("click", () => {
-    if (!selected) return;
-    // send the ref to Chavruta page as a query param
-    // (Your Chavruta page can read ?q=... and auto-fill if you want)
-    const url = `/chavruta.html?q=${encodeURIComponent(selected)}`;
+    if (!selectedRef) return;
+
+    // Put bundle in sessionStorage (safe; avoids URL length issues)
+    const payload = {
+      ref: selectedRef,
+      en: selectedText.en || "",
+      he: selectedText.he || "",
+      at: Date.now()
+    };
+
+    try {
+      sessionStorage.setItem("LN_CHAVRUTA_BUNDLE", JSON.stringify(payload));
+    } catch {
+      // If storage fails, we still can fall back to sending just ref
+    }
+
+    // Navigate with a short q for visibility + optional autosend
+    const url = `/chavruta.html?q=${encodeURIComponent(selectedRef)}&autosend=1`;
     window.location.href = url;
   });
 
   btnOpen.addEventListener("click", () => {
-    if (!selected) return;
-    const url = `https://www.sefaria.org/${encodeURIComponent(selected)}`;
+    if (!selectedRef) return;
+    const url = `https://www.sefaria.org/${encodeURIComponent(selectedRef)}`;
     window.open(url, "_blank", "noopener,noreferrer");
   });
 
   btnCopy.addEventListener("click", async () => {
-    if (!selected) return;
+    if (!selectedRef) return;
     try {
-      await navigator.clipboard.writeText(selected);
+      await navigator.clipboard.writeText(selectedRef);
       setStatus("Copied ref", "ready");
       setTimeout(() => setStatus("Ready", "ready"), 900);
     } catch {
-      // fallback
-      prompt("Copy ref:", selected);
+      prompt("Copy ref:", selectedRef);
     }
   });
 
