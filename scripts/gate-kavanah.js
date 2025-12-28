@@ -1,115 +1,100 @@
-/* /scripts/gate-kavanah.js */
+(() => {
+  "use strict";
 
-(function () {
-  const $ = (sel, root = document) => root.querySelector(sel);
+  const STORAGE_KEY = "luminanexus_gate_settings_v2";
 
-  function getDestFromQuery() {
-    const p = new URLSearchParams(window.location.search);
-    const d = (p.get("dest") || "").trim().toLowerCase();
-    if (d === "chavruta") return "chavruta";
-    return "231";
+  function $(sel) { return document.querySelector(sel); }
+  function getRadio(name, fallback) {
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    return checked ? checked.value : fallback;
   }
 
-  function formToObject(form) {
-    const fd = new FormData(form);
-    const obj = {};
-    for (const [k, v] of fd.entries()) obj[k] = String(v || "").trim();
-    return obj;
+  function getDestFromURL() {
+    const url = new URL(window.location.href);
+    const dest = (url.searchParams.get("dest") || "").toLowerCase().trim();
+    if (dest === "231" || dest === "231-gates" || dest === "gates") return "231";
+    return "chavruta";
   }
 
-  function showError(on) {
-    const el = $("#k-error");
-    if (!el) return;
-    el.style.display = on ? "block" : "none";
+  function destToPath(dest) {
+    if (dest === "231") return "/pages/231-gates.html";
+    return "/pages/chavruta.html";
   }
 
-  function setSavedVisible(on) {
-    const el = $("#k-saved");
-    if (!el) return;
-    el.style.display = on ? "block" : "none";
+  function showError(msg) {
+    const el = $("#gateError");
+    if (el) el.textContent = msg || "";
   }
 
-  function isFilled(form) {
-    const requiredNames = ["boundary", "pace", "style", "consent"];
-    for (const name of requiredNames) {
-      const chosen = form.querySelector(`input[name="${name}"]:checked`);
-      if (!chosen) return false;
+  function hydrateDestUI(dest) {
+    const destField = $("#gateDest");
+    if (destField) destField.value = dest;
+
+    const continueA = $("#btnContinueGate");
+    if (continueA) continueA.setAttribute("href", destToPath(dest));
+  }
+
+  function saveSettings(dest) {
+    const consent = getRadio("consent", "yes");
+    const settings = {
+      dest,
+      boundary: getRadio("boundary", "avoid-speculation"),
+      pace: getRadio("pace", "slow"),
+      style: getRadio("style", "sources-first"),
+      consent,
+      intention: ($("#intention") && $("#intention").value || "").trim(),
+      destination: destToPath(dest),
+      gateIntent: dest === "231" ? "231-gates" : "chavruta",
+      version: 2,
+      savedAt: new Date().toISOString()
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    return settings;
+  }
+
+  function go(dest) {
+    // Basic consent behavior: if user chose read-first, push them to Torah First instead.
+    const consent = getRadio("consent", "yes");
+    if (consent === "read-first") {
+      showError("Please read Torah First, then return and select “Yes”. / אנא קרא תורה־תחילה ואז חזור ובחר “כן”.");
+      window.location.href = "/pages/torah-first.html";
+      return;
     }
-    return true;
+
+    saveSettings(dest);
+    window.location.href = destToPath(dest);
   }
 
-  function safeSave(payload) {
-    try {
-      localStorage.setItem("ln_kavanah", JSON.stringify(payload));
-      localStorage.setItem("ln_kavanah_at", String(Date.now()));
-    } catch (e) {
-      console.warn("[gate-kavanah] localStorage failed:", e);
-    }
-  }
+  function wire() {
+    const dest = getDestFromURL();
+    hydrateDestUI(dest);
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const form = $("#kavanah-form");
-    if (!form) return;
+    const btnContinue = $("#btnContinueGate");
+    const btnSkip = $("#btnSkipChavruta");
 
-    // Put dest into hidden input (so non-JS submit still carries it)
-    const dest = getDestFromQuery();
-    const destInput = $("#dest");
-    if (destInput) destInput.value = dest;
-
-    // Restore previous values if any
-    try {
-      const raw = localStorage.getItem("ln_kavanah");
-      if (raw) {
-        const data = JSON.parse(raw);
-        if (data && typeof data === "object") {
-          ["boundary", "pace", "style", "consent"].forEach((name) => {
-            const val = data[name];
-            if (!val) return;
-            const el = form.querySelector(`input[name="${name}"][value="${CSS.escape(val)}"]`);
-            if (el) el.checked = true;
-          });
-          const ta = form.querySelector('textarea[name="intention"]');
-          if (ta && typeof data.intention === "string") ta.value = data.intention;
-        }
-      }
-    } catch (_) {}
-
-    form.addEventListener("submit", (ev) => {
-      ev.preventDefault();
-      showError(false);
-
-      if (!isFilled(form)) {
-        showError(true);
-        return;
-      }
-
-      const data = formToObject(form);
-
-      // Covenant-first detour
-      if (data.consent === "read-covenant") {
-        safeSave({ ...data, dest, gateIntent: "read-covenant-first" });
-        window.location.href = "/pages/torah-first.html";
-        return;
-      }
-
-      // Must explicitly consent=yes
-      if (data.consent !== "yes") {
-        showError(true);
-        return;
-      }
-
-      const destination = dest === "chavruta" ? "/pages/chavruta.html" : "/pages/231-gates.html";
-
-      safeSave({
-        ...data,
-        dest,
-        destination,
-        gateIntent: dest === "chavruta" ? "chavruta" : "231-gates",
-        version: 2
+    if (btnContinue) {
+      btnContinue.addEventListener("click", (e) => {
+        e.preventDefault();
+        showError("");
+        go(dest);
       });
+    }
 
-      setSavedVisible(true);
-      window.location.href = destination;
-    });
-  });
+    if (btnSkip) {
+      btnSkip.addEventListener("click", (e) => {
+        // Skip always means Chavruta, but still save the chosen kavanah.
+        e.preventDefault();
+        showError("");
+        saveSettings("chavruta");
+        window.location.href = "/pages/chavruta.html";
+      });
+    }
+  }
+
+  // Make sure DOM exists even with defer weirdness / header injection.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", wire);
+  } else {
+    wire();
+  }
 })();
