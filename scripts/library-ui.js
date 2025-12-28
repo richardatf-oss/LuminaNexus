@@ -1,6 +1,6 @@
 // scripts/library-ui.js
 // Library = independent reader + optional "Send to Chavruta" with full EN/HE text.
-// Uses sessionStorage to pass a payload safely (no giant URLs).
+// Adds robust Sefaria HTML sanitization so the reader is clean and dignified.
 
 (function () {
   const $ = (s) => document.querySelector(s);
@@ -35,6 +35,7 @@
   let selectedText = { en: "", he: "", ref: "" };
 
   function setStatus(text, kind = "ready") {
+    if (!elStatus) return;
     elStatus.textContent = text;
     elStatus.dataset.kind = kind;
   }
@@ -46,10 +47,62 @@
       .replaceAll(">", "&gt;");
   }
 
+  // ---- Sanitization helpers (Sefaria sometimes returns inline HTML in strings) ----
+
+  function decodeHtmlEntities(str) {
+    // Browser-safe decode (handles &nbsp;, &amp;, etc)
+    const textarea = document.createElement("textarea");
+    textarea.innerHTML = str;
+    return textarea.value;
+  }
+
+  function stripTagsKeepingLineBreaks(html) {
+    // Normalize common block-ish tags to newlines first
+    let s = String(html || "");
+
+    // Poetry / indentation hints (best-effort)
+    // Turn certain spans into newlines + indentation before stripping tags
+    s = s.replace(/<span[^>]*class="[^"]*\bpoetry\b[^"]*"[^>]*>/gi, "\n");
+    s = s.replace(/<span[^>]*class="[^"]*\bindentAllDouble\b[^"]*"[^>]*>/gi, "\n    ");
+    s = s.replace(/<span[^>]*class="[^"]*\bindentAll\b[^"]*"[^>]*>/gi, "\n  ");
+
+    // Convert line breaks
+    s = s.replace(/<br\s*\/?>/gi, "\n");
+
+    // Paragraphs / divs -> newline
+    s = s.replace(/<\/p\s*>/gi, "\n");
+    s = s.replace(/<p[^>]*>/gi, "");
+    s = s.replace(/<\/div\s*>/gi, "\n");
+    s = s.replace(/<div[^>]*>/gi, "");
+
+    // Remove remaining tags
+    s = s.replace(/<\/?[^>]+>/g, "");
+
+    // Decode entities (nbsp, etc)
+    s = decodeHtmlEntities(s);
+
+    // Replace non-breaking spaces with normal spaces
+    s = s.replace(/\u00A0/g, " ");
+
+    // Clean excessive whitespace/newlines
+    s = s.replace(/[ \t]+\n/g, "\n");
+    s = s.replace(/\n{3,}/g, "\n\n");
+    s = s.replace(/[ \t]{3,}/g, "  ");
+
+    return s.trim();
+  }
+
+  function sanitizeSefariaText(raw) {
+    // raw might already be plain; this is safe to run regardless
+    return stripTagsKeepingLineBreaks(raw);
+  }
+
   function flattenToText(x) {
     if (!x) return "";
     if (typeof x === "string") return x.trim();
-    if (Array.isArray(x)) return x.flat(Infinity).filter(v => typeof v === "string" && v.trim()).join("\n").trim();
+    if (Array.isArray(x)) {
+      return x.flat(Infinity).filter(v => typeof v === "string" && v.trim()).join("\n").trim();
+    }
     return "";
   }
 
@@ -59,14 +112,23 @@
     if (!resp.ok) throw new Error(`Sefaria HTTP ${resp.status}`);
     const data = await resp.json().catch(() => null);
     if (!data) throw new Error("Bad Sefaria response");
+
+    const enRaw = flattenToText(data.text);
+    const heRaw = flattenToText(data.he);
+
+    // ✅ Sanitize here
+    const en = sanitizeSefariaText(enRaw);
+    const he = sanitizeSefariaText(heRaw);
+
     return {
-      en: flattenToText(data.text),
-      he: flattenToText(data.he),
+      en,
+      he,
       ref: data.ref || ref
     };
   }
 
   function renderList(items) {
+    if (!elList) return;
     elList.innerHTML = "";
 
     for (const item of items) {
@@ -96,42 +158,42 @@
     selectedRef = ref;
     selectedText = { en: "", he: "", ref: ref };
 
-    elRef.textContent = ref;
-    elHint.textContent = "Loading from Sefaria…";
+    if (elRef) elRef.textContent = ref;
+    if (elHint) elHint.textContent = "Loading from Sefaria…";
     setStatus("Loading…", "busy");
 
-    btnSend.disabled = true;
-    btnOpen.disabled = true;
-    btnCopy.disabled = true;
+    if (btnSend) btnSend.disabled = true;
+    if (btnOpen) btnOpen.disabled = true;
+    if (btnCopy) btnCopy.disabled = true;
 
-    elEn.textContent = "(loading…)";
-    elHe.textContent = "(loading…)";
+    if (elEn) elEn.textContent = "(loading…)";
+    if (elHe) elHe.textContent = "(loading…)";
 
     try {
       const t = await fetchSefaria(ref);
       selectedText = t;
 
-      elEn.textContent = t.en || "(No English returned.)";
-      elHe.textContent = t.he || "(No Hebrew returned.)";
+      if (elEn) elEn.textContent = t.en || "(No English returned.)";
+      if (elHe) elHe.textContent = t.he || "(No Hebrew returned.)";
 
-      elHint.textContent = "Read here. When ready, send to Chavruta for questions.";
+      if (elHint) elHint.textContent = "Read here. When ready, send to Chavruta for questions.";
       setStatus("Ready", "ready");
 
-      btnSend.disabled = false;
-      btnOpen.disabled = false;
-      btnCopy.disabled = false;
+      if (btnSend) btnSend.disabled = false;
+      if (btnOpen) btnOpen.disabled = false;
+      if (btnCopy) btnCopy.disabled = false;
     } catch (e) {
       selectedText = { en: "", he: "", ref };
-      elEn.textContent = "";
-      elHe.textContent = "";
-      elHint.textContent = "Could not load this text. Try another ref.";
+      if (elEn) elEn.textContent = "";
+      if (elHe) elHe.textContent = "";
+      if (elHint) elHint.textContent = "Could not load this text. Try another ref.";
       setStatus(`Error: ${String(e.message || e)}`, "error");
     }
   }
 
   function applyFilters() {
-    const q = (elSearch.value || "").trim().toLowerCase();
-    const cat = (elCategory.value || "").trim();
+    const q = (elSearch?.value || "").trim().toLowerCase();
+    const cat = (elCategory?.value || "").trim();
 
     const filtered = TEXTS.filter(t => {
       const matchQ = !q || (t.title + " " + t.ref + " " + (t.desc || "")).toLowerCase().includes(q);
@@ -142,11 +204,10 @@
     renderList(filtered);
   }
 
-  // ✅ Send full text to Chavruta via sessionStorage
-  btnSend.addEventListener("click", () => {
+  // ✅ Send full sanitized text to Chavruta via sessionStorage
+  btnSend?.addEventListener("click", () => {
     if (!selectedRef) return;
 
-    // Put bundle in sessionStorage (safe; avoids URL length issues)
     const payload = {
       ref: selectedRef,
       en: selectedText.en || "",
@@ -157,21 +218,20 @@
     try {
       sessionStorage.setItem("LN_CHAVRUTA_BUNDLE", JSON.stringify(payload));
     } catch {
-      // If storage fails, we still can fall back to sending just ref
+      // If storage fails, fall back to ref-only navigation
     }
 
-    // Navigate with a short q for visibility + optional autosend
     const url = `/chavruta.html?q=${encodeURIComponent(selectedRef)}&autosend=1`;
     window.location.href = url;
   });
 
-  btnOpen.addEventListener("click", () => {
+  btnOpen?.addEventListener("click", () => {
     if (!selectedRef) return;
     const url = `https://www.sefaria.org/${encodeURIComponent(selectedRef)}`;
     window.open(url, "_blank", "noopener,noreferrer");
   });
 
-  btnCopy.addEventListener("click", async () => {
+  btnCopy?.addEventListener("click", async () => {
     if (!selectedRef) return;
     try {
       await navigator.clipboard.writeText(selectedRef);
@@ -182,8 +242,8 @@
     }
   });
 
-  elSearch.addEventListener("input", applyFilters);
-  elCategory.addEventListener("change", applyFilters);
+  elSearch?.addEventListener("input", applyFilters);
+  elCategory?.addEventListener("change", applyFilters);
 
   // initial render
   applyFilters();
