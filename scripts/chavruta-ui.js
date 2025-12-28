@@ -1,16 +1,22 @@
 // /scripts/chavruta-ui.js
 // Purpose:
-// 1) Provide a safe UI layer (setStatus, addMessage, boot) for chavruta-chat.js
-// 2) Handle Library -> Chavruta handoff via query params: ?q=...&autosend=1
-//
-// SECURITY:
-// - No innerHTML from assistant/user text. We render via textContent only.
-// - Any formatting is done by constructing DOM elements, not injecting HTML.
+// - Library -> Chavruta handoff via querystring (?q=...) + optional autosend=1
+// - ALSO supports Library bundle handoff via sessionStorage key LN_CHAVRUTA_BUNDLE
+//   so Chavruta receives the full sanitized EN/HE text.
+// Safe: plain text only. No HTML injection. Does not assume internals of chavruta-chat.js.
 
 (function () {
   const $ = (s) => document.querySelector(s);
 
-  // ---------- Query helpers ----------
+  const form = $("#chatForm");
+  const input = $("#chatInput");
+  const status = $("#statusPill");
+
+  function setStatus(text) {
+    if (!status) return;
+    status.textContent = text;
+  }
+
   function getParam(name) {
     const url = new URL(window.location.href);
     return url.searchParams.get(name);
@@ -23,264 +29,118 @@
     window.history.replaceState({}, document.title, url.pathname + (qs ? `?${qs}` : ""));
   }
 
-  function focusInputEnd(inputEl) {
-    if (!inputEl) return;
-    inputEl.focus({ preventScroll: false });
-    const v = inputEl.value || "";
-    try {
-      inputEl.setSelectionRange(v.length, v.length);
-    } catch (_) {
-      // some mobile browsers can throw; ignore
-    }
+  function focusInputEnd() {
+    if (!input) return;
+    input.focus({ preventScroll: false });
+    const v = input.value || "";
+    try { input.setSelectionRange(v.length, v.length); } catch {}
   }
 
-  function safeSubmitForm(formEl) {
-    if (!formEl) return;
+  function safeSubmit() {
+    if (!form) return;
+    // Trigger the existing submit handler in chavruta-chat.js
     const ev = new Event("submit", { bubbles: true, cancelable: true });
-    formEl.dispatchEvent(ev);
+    form.dispatchEvent(ev);
   }
 
-  // ---------- Text parsing (safe) ----------
-  // We accept assistant output in a few patterns:
-  // - "Text:" then content
-  // - "Questions for study:" then bullets/numbered lines
-  // - "Speculation:" then content
-  // - optional "HEBREW:" section at end
-  function splitHebrew(raw) {
-    const text = String(raw || "");
-    const m = text.match(/(^|\n)HEBREW:\s*([\s\S]*)$/i);
-    if (!m) return { body: text.trim(), hebrew: "" };
-    const hebrew = (m[2] || "").trim();
-    const body = text.slice(0, m.index).trim();
-    return { body, hebrew };
-  }
+  function formatBundlePrompt(bundle) {
+    const ref = String(bundle?.ref || "").trim();
+    const en = String(bundle?.en || "").trim();
+    const he = String(bundle?.he || "").trim();
 
-  function normalizeNewlines(s) {
-    return String(s || "").replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-  }
+    const parts = [];
+    parts.push("TEXT (from Library / Sefaria):");
+    if (ref) parts.push(`Reference: ${ref}`);
+    parts.push("");
 
-  function parseSections(rawBody) {
-    const body = normalizeNewlines(rawBody).trim();
-    if (!body) return [{ kind: "plain", title: "", content: "" }];
-
-    // Basic heading detection by lines beginning with:
-    // Text:
-    // Questions for study:
-    // Speculation:
-    const lines = body.split("\n");
-    const sections = [];
-    let current = { kind: "plain", title: "", lines: [] };
-
-    function pushCurrent() {
-      if (current && (current.lines.length || current.title)) {
-        sections.push({
-          kind: current.kind,
-          title: current.title,
-          content: current.lines.join("\n").trim(),
-        });
-      }
+    if (en) {
+      parts.push("ENGLISH:");
+      parts.push(en);
+      parts.push("");
     }
 
-    function start(kind, title) {
-      pushCurrent();
-      current = { kind, title, lines: [] };
+    if (he) {
+      parts.push("HEBREW:");
+      parts.push(he);
+      parts.push("");
     }
 
-    for (const line of lines) {
-      const t = line.trim();
+    parts.push("QUESTIONS FOR STUDY:");
+    parts.push("- (Please give 3–7 questions. Speculation must be labeled 'Speculation'.)");
+    parts.push("- (Keep it Torah-first and do not invent citations.)");
 
-      if (/^text\s*:/i.test(t)) {
-        start("text", "Text");
-        const rest = line.replace(/^text\s*:/i, "").trim();
-        if (rest) current.lines.push(rest);
-        continue;
-      }
-
-      if (/^questions?\s+for\s+study\s*:/i.test(t) || /^study\s+questions\s*:/i.test(t)) {
-        start("questions", "Questions for study");
-        const rest = line.replace(/^((questions?\s+for\s+study)|(study\s+questions))\s*:/i, "").trim();
-        if (rest) current.lines.push(rest);
-        continue;
-      }
-
-      if (/^speculation\s*:/i.test(t)) {
-        start("speculation", "Speculation (clearly labeled)");
-        const rest = line.replace(/^speculation\s*:/i, "").trim();
-        if (rest) current.lines.push(rest);
-        continue;
-      }
-
-      // Default: collect
-      current.lines.push(line);
-    }
-
-    pushCurrent();
-    return sections.length ? sections : [{ kind: "plain", title: "", content: body }];
+    return parts.join("\n");
   }
 
-  function extractQuestions(sectionContent) {
-    const text = normalizeNewlines(sectionContent).trim();
-    if (!text) return [];
+  function tryLoadBundleFromSession() {
+    try {
+      const raw = sessionStorage.getItem("LN_CHAVRUTA_BUNDLE");
+      if (!raw) return null;
 
-    const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
-    const items = [];
+      const parsed = JSON.parse(raw);
+      // Clear immediately to avoid repeat injection on refresh
+      sessionStorage.removeItem("LN_CHAVRUTA_BUNDLE");
 
-    for (const l of lines) {
-      // Accept:
-      // - bullets: "- foo", "• foo"
-      // - numbered: "1. foo", "1) foo"
-      const bullet = l.match(/^[-•]\s+(.*)$/);
-      if (bullet) { items.push(bullet[1].trim()); continue; }
+      // Basic validity: must have ref or some text
+      const hasAnything =
+        (parsed && (String(parsed.ref || "").trim() || String(parsed.en || "").trim() || String(parsed.he || "").trim()));
 
-      const num = l.match(/^\d+\s*[\.\)]\s+(.*)$/);
-      if (num) { items.push(num[1].trim()); continue; }
-
-      // Otherwise treat as a continuation line; append to last item if present
-      if (items.length) items[items.length - 1] += " " + l;
-      else items.push(l);
-    }
-
-    // keep it sane
-    return items.slice(0, 12);
-  }
-
-  // ---------- DOM builders ----------
-  function el(tag, className, text) {
-    const node = document.createElement(tag);
-    if (className) node.className = className;
-    if (typeof text === "string") node.textContent = text;
-    return node;
-  }
-
-  function renderAssistantBubble(bubble, rawText) {
-    const { body, hebrew } = splitHebrew(rawText);
-    const sections = parseSections(body);
-
-    // Render sections
-    for (const sec of sections) {
-      const title = (sec.title || "").trim();
-      const content = (sec.content || "").trim();
-
-      if (title) bubble.appendChild(el("div", "section-title", title));
-
-      if (sec.kind === "questions") {
-        const qs = extractQuestions(content);
-        if (qs.length) {
-          const ol = el("ol", "questions");
-          for (const q of qs) {
-            const li = el("li", "", q);
-            ol.appendChild(li);
-          }
-          bubble.appendChild(ol);
-        } else {
-          // fallback plain
-          const pre = el("div", "text-block pre", content);
-          bubble.appendChild(pre);
-        }
-      } else {
-        const blockClass =
-          sec.kind === "text" ? "text-block pre" :
-          sec.kind === "speculation" ? "spec-block pre" :
-          "text-block pre";
-
-        bubble.appendChild(el("div", blockClass, content));
-      }
-    }
-
-    // Hebrew toggle (safe textContent)
-    if (hebrew) {
-      const toggle = el("button", "hebrew-toggle", "Show Hebrew");
-      toggle.type = "button";
-
-      const heb = el("div", "hebrew-block pre", hebrew);
-      heb.style.display = "none";
-
-      toggle.addEventListener("click", () => {
-        const open = heb.style.display === "block";
-        heb.style.display = open ? "none" : "block";
-        toggle.textContent = open ? "Show Hebrew" : "Hide Hebrew";
-      });
-
-      bubble.appendChild(toggle);
-      bubble.appendChild(heb);
+      if (!hasAnything) return null;
+      return parsed;
+    } catch {
+      // If parsing fails, clear it so it doesn't loop
+      try { sessionStorage.removeItem("LN_CHAVRUTA_BUNDLE"); } catch {}
+      return null;
     }
   }
 
-  // ---------- UI object ----------
-  const UI = {};
-
-  UI.streamEl = () => document.getElementById("chatStream");
-  UI.statusEl = () => document.getElementById("statusPill");
-
-  UI.setStatus = (text) => {
-    const status = UI.statusEl();
-    if (status) status.textContent = String(text || "");
-  };
-
-  UI.addMessage = (who, text, role) => {
-    const stream = UI.streamEl();
-    if (!stream) return;
-
-    const row = el("div", "msg");
-    const left = el("div", "who", who || "");
-    const bubble = el("div", "bubble " + (role === "user" ? "user" : "assistant"));
-
-    if (role === "assistant") {
-      renderAssistantBubble(bubble, String(text || ""));
-    } else {
-      // user: plain safe text
-      bubble.appendChild(el("div", "text-block pre", String(text || "").trim()));
-    }
-
-    row.appendChild(left);
-    row.appendChild(bubble);
-    stream.appendChild(row);
-
-    // scroll to bottom
-    try { stream.scrollTop = stream.scrollHeight; } catch (_) {}
-  };
-
-  UI.boot = () => {
-    UI.setStatus("Ready");
-    UI.addMessage(
-      "Chavruta",
-      "Shalom. Bring one passage or one question. We will go slowly, Torah-first.\n\nText first. Then questions. Speculation clearly labeled.",
-      "assistant"
-    );
-  };
-
-  // Make it available for chavruta-chat.js
-  window.ChavrutaUI = UI;
-
-  // ---------- Library -> Chavruta handoff ----------
   window.addEventListener("DOMContentLoaded", () => {
-    UI.boot();
-
-    const form = document.getElementById("chatForm");
-    const input = document.getElementById("chatInput");
-
     if (!input) return;
 
-    // Library sends: /chavruta.html?q=Genesis%201:1
-    const q = getParam("q");
     const autosend = getParam("autosend"); // "1" to send immediately
+    const q = getParam("q");               // ref-only fallback
+    const mode = getParam("mode");         // future use
 
-    if (q && q.trim()) {
-      input.value = q.trim();
-      UI.setStatus("Loaded from Library");
-      focusInputEnd(input);
+    // 1) Prefer full bundle from sessionStorage (best experience)
+    const bundle = tryLoadBundleFromSession();
+    if (bundle) {
+      input.value = formatBundlePrompt(bundle);
+      setStatus("Loaded full text from Library");
+      focusInputEnd();
 
-      // Optional autosend=1
+      // Clean q/mode params too (if present)
+      removeParams("q", "mode");
+
       if (autosend === "1") {
-        UI.setStatus("Sending…");
+        setStatus("Sending…");
         setTimeout(() => {
-          safeSubmitForm(form);
+          safeSubmit();
           removeParams("autosend");
         }, 150);
       }
-
-      // Clean URL so refresh doesn't re-inject
-      removeParams("q");
+      return;
     }
+
+    // 2) Otherwise fall back to query param handoff (?q=Genesis 1:1)
+    if (q && q.trim()) {
+      input.value = q.trim();
+      setStatus("Loaded from Library");
+      focusInputEnd();
+
+      // Clean q from URL so refresh doesn't keep reloading the same prompt
+      removeParams("q", "mode");
+
+      if (autosend === "1") {
+        setStatus("Sending…");
+        setTimeout(() => {
+          safeSubmit();
+          removeParams("autosend");
+        }, 150);
+      }
+      return;
+    }
+
+    // 3) Nothing to inject
+    if (mode) removeParams("mode");
   });
 })();
