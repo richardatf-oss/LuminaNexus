@@ -3,11 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>231 Gates — LuminaNexus</title>
-  <meta name="description" content="The 231 Gates: the Aleph-Bet pairings, entered only through the Gate." />
-
+  <title>231 Gates · רל״א שערים | LuminaNexus</title>
+  <meta name="description" content="The 231 Gates: Hebrew letter pairings for Torah-first study." />
   <link rel="stylesheet" href="/styles/main.css" />
-  <link rel="stylesheet" href="/styles/231-gates.css" />
 </head>
 
 <body class="with-glow">
@@ -16,79 +14,73 @@
   <header class="site-header">
     <div class="wrap header-row">
       <div class="brand">
-        <div class="brand-mark">✦</div>
+        <div class="brand-mark">◈</div>
         <div class="brand-text">
           <div class="brand-title">LuminaNexus</div>
-          <div class="brand-subtitle">231 Gates of Light</div>
+          <div class="brand-subtitle">231 Gates of Light — Torah-first</div>
         </div>
       </div>
 
-      <!-- Intentionally NO nav link to 231 Gates -->
-      <nav class="nav" aria-label="Primary">
-        <a href="/index.html">Home</a>
-        <a href="/pages/orientation.html">Enter the Gate</a>
-        <a href="/pages/library.html">The Library</a>
-        <a href="/chavruta.html">Chavruta</a>
+      <nav class="nav pill-nav" aria-label="Primary">
+        <a class="pill" href="/index.html">The Gate</a>
+        <a class="pill" href="/pages/torah-first.html">Torah First</a>
+        <a class="pill" href="/pages/seven-laws.html">The Seven Laws</a>
+        <a class="pill" href="/pages/study-paths.html">Study Paths</a>
+        <a class="pill" href="/pages/chavruta.html">Chavruta</a>
+        <a class="pill" href="/pages/trees.html">The Trees</a>
+        <a class="pill" href="/pages/library.html">The Library</a>
       </nav>
     </div>
   </header>
 
-  <main id="main" class="wrap gates-page">
-    <section class="gates-hero">
-      <div class="kicker">231 GATES · שַׁעֲרֵי אוֹר</div>
-      <h1>The 231 Gates</h1>
-      <p class="sub">
-        Aleph-Bet pairings — two-letter paths. Choose a gate; send it to Chavruta for Torah-first study.
+  <main id="main" class="wrap" style="padding-top:18px;">
+    <section class="hero" style="padding-bottom:0;">
+      <div class="hero-kicker">231 GATES · <span class="hebrew-inline">רל״א שערים</span></div>
+      <h1>The 231 Gates of Light</h1>
+      <p class="hero-sub">
+        Hebrew letter pairings (א״ב combinations) mapped to Torah-first themes and passages.
+        <span style="display:block; opacity:.85; margin-top:6px;">
+          צירופי אותיות — מחובר לנושאים ולפסוקים ללימוד.
+        </span>
       </p>
 
-      <div class="hero-actions">
-        <input id="gateSearch" type="search" placeholder="Search… (e.g., אב or Aleph-Bet)" />
-        <button id="btnRandom" type="button">Random gate</button>
-        <button id="btnSend" type="button" disabled>Send to Chavruta</button>
-      </div>
+      <div class="card" style="margin-top:16px;">
+        <div class="card-tag">KAVANAH · <span class="hebrew-inline">כוונה</span></div>
+        <h2>Your saved Gate settings</h2>
+        <pre id="kavanah-out" style="white-space:pre-wrap; opacity:.9; margin:0;"></pre>
 
-      <div id="gateNotice" class="gate-notice" hidden>
-        This page is entered through the Gate.
-        <a href="/pages/orientation.html">Return to “Enter the Gate”</a>
-      </div>
-    </section>
-
-    <section class="gates-split">
-      <aside class="gates-list" aria-label="Gates list">
-        <div class="panel-title">Gates</div>
-        <div id="gatesList" class="gates-items"></div>
-      </aside>
-
-      <section class="gates-detail" aria-label="Selected gate">
-        <div class="panel-title">Selected</div>
-
-        <div class="detail-inner">
-          <div id="selectedLabel" class="selected-label">Select a gate</div>
-          <div id="selectedMeta" class="selected-meta">—</div>
-
-          <div class="detail-block">
-            <div class="detail-label">Hebrew</div>
-            <div id="selectedHe" class="detail-value">—</div>
-          </div>
-
-          <div class="detail-block">
-            <div class="detail-label">Transliteration</div>
-            <div id="selectedTr" class="detail-value">—</div>
-          </div>
-
-          <div class="detail-block">
-            <div class="detail-label">Gematria (optional)</div>
-            <div id="selectedGem" class="detail-value">—</div>
-          </div>
-
-          <p class="hint">
-            Note: “231 Gates” are the unique unordered pairings of the 22 letters (22 choose 2).
-          </p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+          <a class="btn primary" href="/pages/orientation.html?dest=231">Change Kavanah →</a>
+          <a class="btn ghost" href="/pages/chavruta.html">Go to Chavruta →</a>
         </div>
-      </section>
+
+        <p style="margin-top:14px; opacity:.75;">
+          Next: we build the 10 themes + the full gate list, English-first with Hebrew support.
+          <span style="display:block; opacity:.85; margin-top:6px;">
+            השלב הבא: 10 נושאים + כל השערים, אנגלית קודם עם עברית כתמיכה.
+          </span>
+        </p>
+      </div>
     </section>
   </main>
 
-  <script defer src="/scripts/231-gates.js"></script>
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© LuminaNexus — offered freely for learning.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const out = document.getElementById("kavanah-out");
+      if (!out) return;
+      try {
+        const raw = localStorage.getItem("ln_kavanah");
+        out.textContent = raw ? JSON.stringify(JSON.parse(raw), null, 2) : "(No saved kavanah found.)";
+      } catch (e) {
+        out.textContent = "(Could not read saved kavanah.)";
+      }
+    });
+  </script>
 </body>
 </html>
