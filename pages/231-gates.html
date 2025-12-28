@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>231 Gates — LuminaNexus</title>
+  <meta name="description" content="The 231 Gates: the Aleph-Bet pairings, entered only through the Gate." />
+
+  <link rel="stylesheet" href="/styles/main.css" />
+  <link rel="stylesheet" href="/styles/231-gates.css" />
+</head>
+
+<body class="with-glow">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-row">
+      <div class="brand">
+        <div class="brand-mark">✦</div>
+        <div class="brand-text">
+          <div class="brand-title">LuminaNexus</div>
+          <div class="brand-subtitle">231 Gates of Light</div>
+        </div>
+      </div>
+
+      <!-- Intentionally NO nav link to 231 Gates -->
+      <nav class="nav" aria-label="Primary">
+        <a href="/index.html">Home</a>
+        <a href="/pages/orientation.html">Enter the Gate</a>
+        <a href="/pages/library.html">The Library</a>
+        <a href="/chavruta.html">Chavruta</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap gates-page">
+    <section class="gates-hero">
+      <div class="kicker">231 GATES · שַׁעֲרֵי אוֹר</div>
+      <h1>The 231 Gates</h1>
+      <p class="sub">
+        Aleph-Bet pairings — two-letter paths. Choose a gate; send it to Chavruta for Torah-first study.
+      </p>
+
+      <div class="hero-actions">
+        <input id="gateSearch" type="search" placeholder="Search… (e.g., אב or Aleph-Bet)" />
+        <button id="btnRandom" type="button">Random gate</button>
+        <button id="btnSend" type="button" disabled>Send to Chavruta</button>
+      </div>
+
+      <div id="gateNotice" class="gate-notice" hidden>
+        This page is entered through the Gate.
+        <a href="/pages/orientation.html">Return to “Enter the Gate”</a>
+      </div>
+    </section>
+
+    <section class="gates-split">
+      <aside class="gates-list" aria-label="Gates list">
+        <div class="panel-title">Gates</div>
+        <div id="gatesList" class="gates-items"></div>
+      </aside>
+
+      <section class="gates-detail" aria-label="Selected gate">
+        <div class="panel-title">Selected</div>
+
+        <div class="detail-inner">
+          <div id="selectedLabel" class="selected-label">Select a gate</div>
+          <div id="selectedMeta" class="selected-meta">—</div>
+
+          <div class="detail-block">
+            <div class="detail-label">Hebrew</div>
+            <div id="selectedHe" class="detail-value">—</div>
+          </div>
+
+          <div class="detail-block">
+            <div class="detail-label">Transliteration</div>
+            <div id="selectedTr" class="detail-value">—</div>
+          </div>
+
+          <div class="detail-block">
+            <div class="detail-label">Gematria (optional)</div>
+            <div id="selectedGem" class="detail-value">—</div>
+          </div>
+
+          <p class="hint">
+            Note: “231 Gates” are the unique unordered pairings of the 22 letters (22 choose 2).
+          </p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script defer src="/scripts/231-gates.js"></script>
+</body>
+</html>
