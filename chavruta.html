@@ -1,68 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Chavruta — LuminaNexus</title>
-  <meta name="description" content="A clean, modest, Torah-first chavruta study chat." />
-  <link rel="stylesheet" href="/styles/main.css" />
-  <link rel="stylesheet" href="/styles/chavruta.css" />
+  <meta charset="UTF-8" />
+  <title>Chavruta — Study Space</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Your existing CSS file -->
+  <link rel="stylesheet" href="/css/chavruta.css" />
+
+  <!-- Minimal fallback styles so it still looks OK even if chavruta.css is missing some classes -->
+  <style>
+    .chavruta-container { max-width: 900px; margin: 0 auto; padding: 24px; }
+    .chavruta-header { margin-bottom: 16px; }
+    .chat-window { min-height: 55vh; padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12); overflow-y: auto; }
+    .message { margin: 0 0 12px; line-height: 1.45; white-space: pre-wrap; }
+    .message.user { text-align: right; }
+    .message.bot { text-align: left; }
+    .chat-form { display: flex; gap: 10px; margin-top: 14px; }
+    .chat-form input { flex: 1; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.18); background: rgba(0,0,0,0.25); color: inherit; }
+    .chat-form button { padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.08); color: inherit; cursor: pointer; }
+  </style>
 </head>
 
-<body class="with-glow">
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <header class="site-header">
-    <div class="wrap header-row">
-      <div class="brand">
-        <div class="brand-mark">◈</div>
-        <div class="brand-text">
-          <div class="brand-title">LuminaNexus</div>
-          <div class="brand-subtitle">ChavrutaGPT — Torah-first study partner</div>
-        </div>
-      </div>
-
-      <nav class="nav" aria-label="Primary">
-        <a href="/index.html">Home</a>
-        <a href="/library.html">The Library</a>
-        <a href="/chavruta.html" aria-current="page">Chavruta</a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="main" class="wrap">
-    <header class="hero">
-      <div class="kicker">CHAVRUTA • חברותא</div>
-      <h1>Chavruta Study Space</h1>
-      <p class="sub">Text first. Then questions. Speculation clearly labeled.</p>
+<body>
+  <main class="chavruta-container">
+    <header class="chavruta-header">
+      <h1>Chavruta</h1>
+      <p>Study. Ask. Return.</p>
     </header>
 
-    <section class="panel" aria-label="Chat">
-      <div class="panel-head">
-        <div class="title">Talk to Chavruta</div>
-        <div class="status" id="statusPill" aria-live="polite">Ready</div>
-      </div>
+    <!-- REQUIRED ID -->
+    <section id="chat" class="chat-window" aria-live="polite"></section>
 
-      <div class="stream" id="chatStream" aria-live="polite"></div>
-
-      <form class="composer" id="chatForm" autocomplete="off">
-        <label class="sr-only" for="chatInput">Your message</label>
-        <input id="chatInput" type="text" placeholder="Bring one passage or one question…" maxlength="2000" />
-        <button id="sendBtn" type="submit">Send →</button>
-      </form>
-
-      <div class="footnote">
-        Endpoint: <code>/.netlify/functions/chavruta</code>
-      </div>
-    </section>
+    <!-- REQUIRED IDs -->
+    <form id="chat-form" class="chat-form" autocomplete="off">
+      <input
+        id="user-input"
+        type="text"
+        inputmode="text"
+        placeholder="Ask, reflect, study…"
+        required
+      />
+      <button type="submit">Send</button>
+    </form>
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap">© LuminaNexus</div>
-  </footer>
-
-  <!-- These are STANDARD scripts (not modules) and WILL run with defer -->
-  <script src="/scripts/chavruta-ui.js" defer></script>
-  <script src="/scripts/chavruta-chat.js" defer></script>
+  <!-- IMPORTANT: do not load any other chavruta chat scripts on this page -->
+  <script src="/scripts/chavruta-fixed.js"></script>
 </body>
 </html>
