@@ -1,8 +1,5 @@
 // /scripts/chavruta-ui.js
-// Provides:
-// 1) UI renderer required by scripts/chavruta-chat.js via window.ChavrutaUI
-// 2) Library -> Chavruta handoff via querystring (?q=...) + optional autosend=1
-// 3) Library bundle handoff via sessionStorage key LN_CHAVRUTA_BUNDLE
+// Combines UI renderer (required by chavruta-chat.js) + Library handoff.
 
 (function () {
   const $ = (s) => document.querySelector(s);
@@ -12,7 +9,7 @@
   const input = $("#chatInput");
   const status = $("#statusPill");
 
-  // ---------- UI RENDERER (required by chavruta-chat.js) ----------
+  // ---------- UI RENDERER (required by scripts/chavruta-chat.js) ----------
   function setStatus(text) {
     if (!status) return;
     status.textContent = text || "";
@@ -46,7 +43,7 @@
     clear,
   };
 
-  // ---------- HANDOFF / AUTOSEND HELPERS ----------
+  // ---------- HANDOFF / AUTOSEND ----------
   function removeParams(...names) {
     const url = new URL(window.location.href);
     names.forEach((n) => url.searchParams.delete(n));
@@ -80,8 +77,8 @@
       if (bundleRaw) {
         sessionStorage.removeItem("LN_CHAVRUTA_BUNDLE");
         const bundle = JSON.parse(bundleRaw);
-
         const text = (bundle?.text || "").trim();
+
         if (text) {
           input.value = text;
           setStatus("Loaded from Library");
@@ -99,9 +96,7 @@
           return;
         }
       }
-    } catch {
-      // ignore
-    }
+    } catch {}
 
     // 2) Fallback: ?q=...
     if (q) {
@@ -121,7 +116,6 @@
       return;
     }
 
-    // 3) Clean stray mode param
     if (mode) removeParams("mode");
   });
 })();
