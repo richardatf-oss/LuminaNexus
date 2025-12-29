@@ -3,24 +3,29 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Chavruta — Study Space</title>
+  <title>Chavruta — LuminaNexus</title>
 
-  <link rel="stylesheet" href="/css/main.css" />
-  <link rel="stylesheet" href="/css/chavruta.css" />
+  <!-- Site-wide styling (your repo uses /styles/) -->
+  <link rel="stylesheet" href="/styles/main.css" />
+  <link rel="stylesheet" href="/styles/chavruta.css" />
 </head>
 
 <body class="with-glow">
-  <main class="wrap" id="main">
-    <header class="chav-hero">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header"></header>
+
+  <main id="main" class="wrap chav-wrap">
+    <div class="page-head">
       <div class="kicker">CHAVRUTA · חברותא</div>
-      <h1 class="page-title">Chavruta Study Space</h1>
-      <p class="page-subtitle">Text first. Then questions. Speculation clearly labeled.</p>
+      <h1>Chavruta Study Space</h1>
+      <p class="lede">Text first. Then questions. Speculation clearly labeled.</p>
 
       <div class="chav-toolbar">
         <div class="seg" role="group" aria-label="Study mode">
-          <button class="seg-btn is-on" data-mode="peshat" title="Plain meaning first">Peshat</button>
-          <button class="seg-btn" data-mode="sources" title="Source-first, quote/cite where possible">Sources</button>
-          <button class="seg-btn" data-mode="chavruta" title="Balanced chavruta: clarify + challenge + summarize">Chavruta</button>
+          <button class="seg-btn is-on" data-mode="peshat" type="button">Peshat</button>
+          <button class="seg-btn" data-mode="sources" type="button">Sources</button>
+          <button class="seg-btn" data-mode="chavruta" type="button">Chavruta</button>
         </div>
 
         <label class="chk">
@@ -33,19 +38,19 @@
           <span>Ask for citations</span>
         </label>
 
-        <button class="btn ghost" id="btnNew">New thread</button>
-        <button class="btn ghost" id="btnClear">Clear</button>
-        <button class="btn ghost" id="btnExport">Export</button>
+        <button class="btn ghost" id="btnNew" type="button">New thread</button>
+        <button class="btn ghost" id="btnClear" type="button">Clear</button>
+        <button class="btn ghost" id="btnExport" type="button">Export</button>
       </div>
 
       <div class="chav-context" id="contextBar" hidden>
         <div class="ctx-pill" id="ctxGate"></div>
         <div class="ctx-text" id="ctxText"></div>
-        <button class="ctx-x" id="ctxDismiss" title="Dismiss context">×</button>
+        <button class="ctx-x" id="ctxDismiss" type="button" title="Dismiss context">×</button>
       </div>
-    </header>
+    </div>
 
-    <section class="chav-panel">
+    <section class="panel chav-panel">
       <header class="chav-head">
         <div class="chav-title">Talk to Chavruta</div>
         <div class="right">
@@ -67,13 +72,17 @@
       </form>
 
       <footer class="chav-foot">
-        <div class="foot-hint">
-          Tip: Paste the text first, then ask: “What does this mean in peshat?” or “What’s unclear here?”
-        </div>
+        <div class="foot-hint">Tip: Paste the text first, then ask one focused question.</div>
       </footer>
     </section>
   </main>
 
+  <footer class="site-footer"></footer>
+
+  <!-- Your site shell injection -->
+  <script src="/scripts/nav-active.js" defer></script>
+
+  <!-- Chavruta app (single file, no dependencies) -->
   <script src="/scripts/chavruta.app.js" defer></script>
 </body>
 </html>
