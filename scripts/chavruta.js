@@ -237,12 +237,20 @@
   els.btnNew.addEventListener("click", newThread);
   els.btnExport.addEventListener("click", exportThread);
 
-  els.form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const v = els.input.value;
-    els.input.value = "";
-    sendText(v);
-  });
+els.form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  // Trim BEFORE clearing so we never "clear + do nothing"
+  const v = String(els.input.value || "").trim();
+  if (!v) {
+    setStatus("Type a question first", false);
+    return;
+  }
+
+  els.input.value = "";
+  sendText(v);
+});
+
 
   // boot
   setMode("peshat");
