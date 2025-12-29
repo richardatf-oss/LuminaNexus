@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Chavruta — LuminaNexus</title>
+  <title>Chavruta — Study Space | LuminaNexus</title>
+  <meta name="description" content="Torah-first chavruta study partner — text first, then questions, speculation clearly labeled." />
 
-  <!-- Site-wide styling (your repo uses /styles/) -->
   <link rel="stylesheet" href="/styles/main.css" />
   <link rel="stylesheet" href="/styles/chavruta.css" />
 </head>
@@ -15,74 +15,72 @@
 
   <header class="site-header"></header>
 
-  <main id="main" class="wrap chav-wrap">
-    <div class="page-head">
-      <div class="kicker">CHAVRUTA · חברותא</div>
+  <main id="main" class="wrap">
+    <section class="hero">
+      <div class="hero-kicker">CHAVRUTA · חברותא</div>
       <h1>Chavruta Study Space</h1>
-      <p class="lede">Text first. Then questions. Speculation clearly labeled.</p>
+      <p class="hero-sub">
+        Text first. Then questions. Speculation clearly labeled.
+        <span class="muted-line">Torah-first · sources-first · non-coercive</span>
+      </p>
+    </section>
 
-      <div class="chav-toolbar">
-        <div class="seg" role="group" aria-label="Study mode">
-          <button class="seg-btn is-on" data-mode="peshat" type="button">Peshat</button>
-          <button class="seg-btn" data-mode="sources" type="button">Sources</button>
-          <button class="seg-btn" data-mode="chavruta" type="button">Chavruta</button>
+    <section class="ch-card" aria-label="Chavruta app">
+      <div class="ch-top">
+        <div class="ch-modes" role="tablist" aria-label="Mode">
+          <button class="chip is-active" data-mode="peshat" role="tab" aria-selected="true">Peshat</button>
+          <button class="chip" data-mode="sources" role="tab" aria-selected="false">Sources</button>
+          <button class="chip" data-mode="chavruta" role="tab" aria-selected="false">Chavruta</button>
         </div>
 
-        <label class="chk">
-          <input type="checkbox" id="chkHebrew" />
-          <span>Include Hebrew</span>
-        </label>
+        <div class="ch-toggles">
+          <label class="toggle">
+            <input type="checkbox" id="optHebrew" />
+            <span>Include Hebrew</span>
+          </label>
 
-        <label class="chk">
-          <input type="checkbox" id="chkCitations" checked />
-          <span>Ask for citations</span>
-        </label>
+          <label class="toggle">
+            <input type="checkbox" id="optCitations" checked />
+            <span>Ask for citations</span>
+          </label>
 
-        <button class="btn ghost" id="btnNew" type="button">New thread</button>
-        <button class="btn ghost" id="btnClear" type="button">Clear</button>
-        <button class="btn ghost" id="btnExport" type="button">Export</button>
-      </div>
-
-      <div class="chav-context" id="contextBar" hidden>
-        <div class="ctx-pill" id="ctxGate"></div>
-        <div class="ctx-text" id="ctxText"></div>
-        <button class="ctx-x" id="ctxDismiss" type="button" title="Dismiss context">×</button>
-      </div>
-    </div>
-
-    <section class="panel chav-panel">
-      <header class="chav-head">
-        <div class="chav-title">Talk to Chavruta</div>
-        <div class="right">
-          <div id="chavStatus" class="pill">Ready</div>
+          <button class="btn btn-ghost" id="btnNew">New thread</button>
+          <button class="btn btn-ghost" id="btnClear">Clear</button>
+          <button class="btn btn-ghost" id="btnExport">Export</button>
         </div>
-      </header>
-
-      <div id="chavStream" class="chav-stream" aria-live="polite"></div>
-
-      <div class="typing" id="typing" hidden>
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        <span class="typing-label">Chavruta is thinking…</span>
       </div>
 
-      <form id="chavForm" class="chav-form" autocomplete="off">
-        <textarea id="chavInput" class="chav-input" rows="2"
-          placeholder="Paste a passage or ask one focused question… (Shift+Enter for new line)"></textarea>
-        <button id="chavSend" class="btn primary" type="submit">Send</button>
+      <div class="ch-statusbar">
+        <div class="status-pill" id="statusPill">Ready</div>
+        <div class="status-hint" id="statusHint">Paste a passage first, then ask one focused question.</div>
+      </div>
+
+      <div class="ch-stream" id="stream" aria-live="polite"></div>
+
+      <form class="ch-compose" id="form">
+        <textarea
+          id="input"
+          rows="3"
+          maxlength="6000"
+          placeholder="Paste a passage, then ask one focused question… (Shift+Enter for new line)"
+        ></textarea>
+
+        <div class="ch-actions">
+          <button class="btn btn-primary" id="send" type="submit">Send</button>
+          <button class="btn btn-ghost" id="btnGen11" type="button">Gen 1:1</button>
+          <button class="btn btn-ghost" id="btnStop" type="button" disabled>Stop</button>
+        </div>
       </form>
 
-      <footer class="chav-foot">
-        <div class="foot-hint">Tip: Paste the text first, then ask one focused question.</div>
-      </footer>
+      <div class="ch-footnote">
+        Endpoint: <code>/.netlify/functions/chavruta</code>
+      </div>
     </section>
   </main>
 
   <footer class="site-footer"></footer>
 
-  <!-- Your site shell injection -->
   <script src="/scripts/nav-active.js" defer></script>
-
-  <!-- Chavruta app (single file, no dependencies) -->
-  <script src="/scripts/chavruta.app.js" defer></script>
+  <script src="/scripts/chavruta_app.js" defer></script>
 </body>
 </html>
