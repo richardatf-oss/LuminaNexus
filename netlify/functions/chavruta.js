@@ -61,7 +61,7 @@ Ask for citations: ${askForCitations ? "yes" : "no"}
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      temperature: 0.4,
+      temperature: 0.2,
     });
 
     const content =
