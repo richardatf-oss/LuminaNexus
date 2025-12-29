@@ -1,45 +1,79 @@
 // netlify/functions/chavruta.js
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function handler(event) {
   try {
     if (event.httpMethod !== "POST") {
       return {
         statusCode: 405,
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ok: false, error: "Method not allowed" }),
       };
     }
 
     const body = JSON.parse(event.body || "{}");
 
-    // Accept BOTH formats:
-    // - new UI: { input, history, options }
-    // - older UI: { message }
     const input =
       (typeof body.input === "string" && body.input) ||
       (typeof body.message === "string" && body.message) ||
       "";
 
+    if (!input) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          ok: true,
+          content: "Please bring a passage or ask a question.",
+        }),
+      };
+    }
+
     const mode = body?.options?.mode || "peshat";
-    const includeHebrew = !!body?.options?.includeHebrew;
     const askForCitations = body?.options?.askForCitations !== false;
 
-    // TEMP: deterministic reply so we can verify end-to-end works
-    // (Swap this later for your real OpenAI logic.)
-    const contentLines = [
-      `Mode: ${mode}`,
-      `Include Hebrew: ${includeHebrew ? "yes" : "no"}`,
-      `Ask for citations: ${askForCitations ? "yes" : "no"}`,
-      "",
-      `You sent: ${input || "(empty)"}`,
-    ];
+    const systemPrompt = `
+You are ChavrutaGPT — a Torah-first study partner.
+
+Rules:
+- Peshat (plain meaning) first
+- One classical note if appropriate
+- Then 2–4 honest questions
+- No prophecy claims
+- No mysticism unless asked
+- Cite sources when possible
+- Be calm, precise, and respectful
+`;
+
+    const userPrompt = `
+Text or question:
+${input}
+
+Mode: ${mode}
+Ask for citations: ${askForCitations ? "yes" : "no"}
+`;
+
+    const completion = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: 0.4,
+    });
+
+    const content =
+      completion.choices?.[0]?.message?.content ||
+      "No response generated.";
 
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ok: true,
-        content: contentLines.join("\n"),
+        content,
       }),
     };
   } catch (err) {
@@ -48,7 +82,7 @@ export async function handler(event) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ok: false,
-        error: err?.message || String(err),
+        error: err.message || String(err),
       }),
     };
   }
