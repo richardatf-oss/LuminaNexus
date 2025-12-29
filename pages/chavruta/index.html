@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Chavruta — Study Space</title>
 
   <link rel="stylesheet" href="/css/main.css" />
@@ -15,28 +15,23 @@
     <h1 class="page-title">Chavruta Study Space</h1>
     <p class="page-subtitle">Text first. Then questions. Speculation clearly labeled.</p>
 
-    <section class="panel">
-      <header class="panel-head">
-        <div class="panel-title">Talk to Chavruta</div>
-        <div id="statusPill" class="pill">Ready</div>
+    <section class="chav-panel">
+      <header class="chav-head">
+        <div class="chav-title">Talk to Chavruta</div>
+        <div id="chavStatus" class="pill">Ready</div>
       </header>
 
-      <div id="chatStream" class="chat-stream" aria-live="polite"></div>
+      <div id="chavStream" class="chav-stream" aria-live="polite"></div>
 
-      <form id="chatForm" class="chat-form" autocomplete="off">
-        <input
-          id="chatInput"
-          class="chat-input"
-          type="text"
-          placeholder="Bring one passage or one question..."
-        />
-        <button id="sendBtn" class="btn" type="submit">Send</button>
+      <form id="chavForm" class="chav-form" autocomplete="off">
+        <input id="chavInput" class="chav-input" type="text"
+               placeholder="Bring one passage or one question..." />
+        <button id="chavSend" class="btn" type="submit">Send</button>
       </form>
     </section>
   </main>
 
-  <!-- These MUST be absolute paths on a subfolder page -->
-  <script src="/scripts/chavruta-ui.js" defer></script>
-  <script src="/scripts/chavruta-chat.js" defer></script>
+  <!-- Canonical Chavruta scripts (no dependencies) -->
+  <script src="/scripts/chavruta.app.js" defer></script>
 </body>
 </html>
