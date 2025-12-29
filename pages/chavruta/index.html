@@ -44,15 +44,20 @@
             <span>Ask for citations</span>
           </label>
 
-          <button class="btn btn-ghost" id="btnNew">New thread</button>
-          <button class="btn btn-ghost" id="btnClear">Clear</button>
-          <button class="btn btn-ghost" id="btnExport">Export</button>
+          <button class="btn btn-ghost" id="btnNew" type="button">New thread</button>
+          <button class="btn btn-ghost" id="btnClear" type="button">Clear</button>
+          <button class="btn btn-ghost" id="btnExport" type="button">Export</button>
         </div>
       </div>
 
       <div class="ch-statusbar">
         <div class="status-pill" id="statusPill">Ready</div>
         <div class="status-hint" id="statusHint">Paste a passage first, then ask one focused question.</div>
+      </div>
+
+      <!-- If JS fails to load, this will remain visible; JS hides it on boot -->
+      <div class="ch-js-warning" id="jsWarning">
+        Chavruta UI loaded, but the app script didn’t start. (Likely missing <code>/scripts/chavruta.js</code>.)
       </div>
 
       <div class="ch-stream" id="stream" aria-live="polite"></div>
@@ -81,6 +86,7 @@
   <footer class="site-footer"></footer>
 
   <script src="/scripts/nav-active.js" defer></script>
-  <script src="/scripts/chavruta_app.js" defer></script>
+  <!-- IMPORTANT: use this exact filename -->
+  <script src="/scripts/chavruta.js" defer></script>
 </body>
 </html>
