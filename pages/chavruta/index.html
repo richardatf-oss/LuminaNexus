@@ -2,41 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Chavruta — Study Space</title>
-  <meta name="description" content="A clean, modest, Torah-first chavruta study chat." />
+
+  <link rel="stylesheet" href="/css/main.css" />
   <link rel="stylesheet" href="/css/chavruta.css" />
 </head>
 
-<body>
-  <main class="wrap">
-    <header class="hero">
-      <div class="kicker">CHAVRUTA • חברותא</div>
-      <h1>Chavruta Study Space</h1>
-      <p class="sub">
-        Text first. Then questions. Speculation clearly labeled.
-      </p>
-    </header>
+<body class="with-glow">
+  <main class="wrap" id="main">
+    <div class="kicker">CHAVRUTA · חברותא</div>
+    <h1 class="page-title">Chavruta Study Space</h1>
+    <p class="page-subtitle">Text first. Then questions. Speculation clearly labeled.</p>
 
-    <section class="panel" aria-label="Chat">
-      <div class="panel-head">
-        <div class="title">Talk to Chavruta</div>
-        <div class="status" id="statusPill" aria-live="polite">Ready</div>
-      </div>
+    <section class="panel">
+      <header class="panel-head">
+        <div class="panel-title">Talk to Chavruta</div>
+        <div id="statusPill" class="pill">Ready</div>
+      </header>
 
-      <div class="stream" id="chatStream" aria-live="polite"></div>
+      <div id="chatStream" class="chat-stream" aria-live="polite"></div>
 
-      <form class="composer" id="chatForm">
-        <label class="sr-only" for="chatInput">Your message</label>
-        <input id="chatInput" type="text" autocomplete="off"
-               placeholder="Bring one passage or one question…"
-               maxlength="2000" />
-        <button id="sendBtn" type="submit">Send</button>
+      <form id="chatForm" class="chat-form" autocomplete="off">
+        <input
+          id="chatInput"
+          class="chat-input"
+          type="text"
+          placeholder="Bring one passage or one question..."
+        />
+        <button id="sendBtn" class="btn" type="submit">Send</button>
       </form>
+    </section>
+  </main>
 
-    
-
-  <script type="module" src="/scripts/chavruta-ui.js"></script>
-  <script type="module" src="/scripts/chavruta-chat.js"></script>
+  <!-- These MUST be absolute paths on a subfolder page -->
+  <script src="/scripts/chavruta-ui.js" defer></script>
+  <script src="/scripts/chavruta-chat.js" defer></script>
 </body>
 </html>
