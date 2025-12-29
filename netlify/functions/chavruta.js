@@ -62,6 +62,8 @@ Ask for citations: ${askForCitations ? "yes" : "no"}
         { role: "user", content: userPrompt },
       ],
       temperature: 0.2,
+      max_tokens: 500,
+
     });
 
     const content =
