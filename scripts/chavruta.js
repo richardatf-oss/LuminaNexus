@@ -135,7 +135,11 @@
         signal: controller.signal,
       });
 
-      const data = await res.json().catch(() => ({}));
+      const text = await res.text();
+let data = {};
+try { data = JSON.parse(text); } catch { data = { raw: text }; }
+return { ok: res.ok, status: res.status, data };
+
       return { ok: res.ok, status: res.status, data };
     } finally {
       clearTimeout(timer);
