@@ -224,12 +224,35 @@
     addMessage("Chavruta", "Bring a passage. Then ask one question. I’ll keep speculation clearly labeled.", "assistant");
   }
 
-  // wiring
-  els.modeButtons.forEach(btn => btn.addEventListener("click", () => setMode(btn.dataset.mode)));
+ // wiring (guarded: NEVER die silently)
+try {
+  // mode buttons (optional)
+  if (els.modeButtons?.length) {
+    els.modeButtons.forEach(btn =>
+      btn.addEventListener("click", () => setMode(btn.dataset.mode))
+    );
+  } else {
+    console.warn("[chavruta] no mode buttons found (.chip[data-mode])");
+  }
 
-  els.optHebrew.addEventListener("change", () => { state.includeHebrew = !!els.optHebrew.checked; });
-  els.optCitations.addEventListener("change", () => { state.askForCitations = !!els.optCitations.checked; });
+  // options (optional)
+  if (els.optHebrew) {
+    els.optHebrew.addEventListener("change", () => {
+      state.includeHebrew = !!els.optHebrew.checked;
+    });
+  } else {
+    console.warn("[chavruta] missing optHebrew checkbox (#optHebrew)");
+  }
 
+  if (els.optCitations) {
+    els.optCitations.addEventListener("change", () => {
+      state.askForCitations = !!els.optCitations.checked;
+    });
+  } else {
+    console.warn("[chavruta] missing optCitations checkbox (#optCitations)");
+  }
+
+  // required buttons
   els.stop.addEventListener("click", stopInFlight);
   els.gen11.addEventListener("click", () => { els.input.value = "Genesis 1:1"; els.input.focus(); });
 
@@ -237,19 +260,24 @@
   els.btnNew.addEventListener("click", newThread);
   els.btnExport.addEventListener("click", exportThread);
 
-els.form.addEventListener("submit", (e) => {
-  e.preventDefault();
+  // submit: trim BEFORE clearing + always show something if it fails
+  els.form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-  // Trim BEFORE clearing so we never "clear + do nothing"
-  const v = String(els.input.value || "").trim();
-  if (!v) {
-    setStatus("Type a question first", false);
-    return;
-  }
+    const v = String(els.input.value || "").trim();
+    if (!v) {
+      setStatus("Type a question first", false);
+      return;
+    }
 
-  els.input.value = "";
-  sendText(v);
-});
+    els.input.value = "";
+    sendText(v);
+  });
+
+} catch (err) {
+  console.error("[chavruta] wiring crash:", err);
+  setStatus("Chavruta crashed (see console)", false);
+}
 
 
   // boot
