@@ -1,62 +1,57 @@
 /* /css/chavruta-page.css
-   Purpose: make the Chavruta session (chat) prominent and above-the-fold.
-   Safe: only targets elements that exist on chavruta.html (stream/ch-grid/card/gate-hero).
+   Purpose: Make Chavruta Session prominent, above-the-fold, and usable like a chat app.
+   Safety: CSS-only; does not alter IDs/JS behavior.
 */
 
-/* Reduce vertical waste on the hero so you don’t have to scroll to “find her” */
-.gate-hero {
-  padding-top: 12px !important;
-  padding-bottom: 12px !important;
-  min-height: auto !important;
-}
+/* 1) Hide the hero entirely on the Chavruta page */
+.gate-hero { display: none !important; }
 
-.gate-hero .hero-content {
+/* 2) Reduce header height on this page (gives more room to the chat) */
+.site-header .brand-subtitle { display: none !important; }
+
+.site-header .header-row {
   padding-top: 8px !important;
   padding-bottom: 8px !important;
 }
 
-.gate-hero .hero-text {
-  margin-top: 8px !important;
-  margin-bottom: 8px !important;
+/* Tighten nav pills slightly */
+.nav.pill-nav .pill {
+  padding: 6px 10px !important;
 }
 
-/* On smaller screens, hide extra hero copy so the session is immediately visible */
-@media (max-width: 900px) {
-  .gate-hero .hero-text {
-    display: none !important;
-  }
-  .gate-hero .hero-actions,
-  .gate-hero .hero-note {
-    display: none !important;
-  }
-  .gate-hero h1 {
-    margin-bottom: 6px !important;
-  }
+/* 3) Pull main content up (removes dead space above the session) */
+main#main {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
 
-/* Make the Session card feel “app-like” */
-.ch-grid {
-  gap: 10px !important;
+main#main > section.wrap {
+  padding-top: 8px !important;
+  margin-top: 0 !important;
 }
 
-/* Make the chat area big, but never push the input off-screen */
+main#main .card {
+  margin-top: 0 !important;
+}
+
+/* 4) Make the session feel “app-like” without breaking layout */
+.ch-grid { gap: 8px !important; }
+.ch-toolbar { margin-bottom: 6px !important; }
+
+/* 5) Chat stream sizing: big enough to read, never so big it hides the input */
 #stream {
-  height: 56vh !important;        /* main size */
-  min-height: 360px !important;   /* don’t collapse */
-  max-height: 560px !important;   /* don’t take over */
+  height: 56vh !important;        /* primary: visible, prominent */
+  min-height: 320px !important;   /* keeps it usable on small windows */
+  max-height: 560px !important;   /* prevents the “giant void” problem */
   overflow-y: auto !important;
 }
 
-
-/* Keep the input bar visible and comfortable */
+/* 6) Keep the input area predictable (NOT sticky; sticky caused spacing weirdness) */
 form.ch-form {
-  position: sticky;
-  bottom: 10px;
-  z-index: 5;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  background: linear-gradient(to top, rgba(0,0,0,0.55), rgba(0,0,0,0));
-  backdrop-filter: blur(2px);
+  position: static !important;
+  background: none !important;
+  padding: 0 !important;
+  margin-top: 10px !important;
 }
 
 /* Slightly larger typing area */
@@ -71,86 +66,8 @@ form.ch-form {
   font-weight: 600;
 }
 
-/* Optional: reduce footer spacing on this page */
+/* 7) Optional: reduce footer spacing on this page */
 .site-footer {
   padding-top: 18px !important;
   padding-bottom: 18px !important;
-}
-/* Hide the hero entirely on the Chavruta page */
-.gate-hero {
-  display: none !important;
-}
-/* Pull the session up a bit now that hero is gone */
-main#main > .wrap {
-  padding-top: 8px !important;
-}
-/* “App mode”: keep the session card visible at the top */
-main#main > section.wrap {
-  position: relative;
-  top: 0;
-}
-/* --- Chavruta: remove top dead-space so session is above-the-fold --- */
-
-/* You already hide the hero */
-.gate-hero { display: none !important; }
-
-/* Pull main content up (some themes add padding/margin here) */
-main#main {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
-/* Reduce the first wrap spacing (targets the session section since hero is gone) */
-main#main > section.wrap {
-  padding-top: 8px !important;
-  margin-top: 0 !important;
-}
-
-/* If there’s any default spacing on cards/sections, neutralize it */
-main#main .card {
-  margin-top: 0 !important;
-}
-
-/* Make the chat stream taller so you don’t scroll inside the page */
-#stream {
-  height: calc(100vh - 300px) !important;
-  min-height: 62vh !important;
-  max-height: 82vh !important;
-}
-/* “App mode”: keep the session card visible at the top */
-main#main > section.wrap {
-  position: relative;
-  top: 0;
-}
-/* --- Chavruta page: reduce header height so chat is above-the-fold --- */
-.site-header .brand-subtitle {
-  display: none !important;   /* trims header height */
-}
-
-.site-header .header-row {
-  padding-top: 8px !important;
-  padding-bottom: 8px !important;
-}
-
-/* tighten nav pills a touch */
-.nav.pill-nav .pill {
-  padding: 6px 10px !important;
-}
-
-/* pull main content up */
-main#main {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
-main#main > section.wrap {
-  padding-top: 8px !important;
-  margin-top: 0 !important;
-}
-
-/* keep the chat stream big */
-#stream {
-  height: calc(100vh - 260px) !important;
-  min-height: 65vh !important;
-  max-height: 85vh !important;
 }
