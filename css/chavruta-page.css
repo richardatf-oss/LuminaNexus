@@ -116,3 +116,35 @@ main#main > section.wrap {
   position: relative;
   top: 0;
 }
+/* --- Chavruta page: reduce header height so chat is above-the-fold --- */
+.site-header .brand-subtitle {
+  display: none !important;   /* trims header height */
+}
+
+.site-header .header-row {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+/* tighten nav pills a touch */
+.nav.pill-nav .pill {
+  padding: 6px 10px !important;
+}
+
+/* pull main content up */
+main#main {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+main#main > section.wrap {
+  padding-top: 8px !important;
+  margin-top: 0 !important;
+}
+
+/* keep the chat stream big */
+#stream {
+  height: calc(100vh - 260px) !important;
+  min-height: 65vh !important;
+  max-height: 85vh !important;
+}
