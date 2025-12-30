@@ -1,0 +1,77 @@
+/* /css/chavruta-page.css
+   Purpose: make the Chavruta session (chat) prominent and above-the-fold.
+   Safe: only targets elements that exist on chavruta.html (stream/ch-grid/card/gate-hero).
+*/
+
+/* Reduce vertical waste on the hero so you don’t have to scroll to “find her” */
+.gate-hero {
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+  min-height: auto !important;
+}
+
+.gate-hero .hero-content {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.gate-hero .hero-text {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+}
+
+/* On smaller screens, hide extra hero copy so the session is immediately visible */
+@media (max-width: 900px) {
+  .gate-hero .hero-text {
+    display: none !important;
+  }
+  .gate-hero .hero-actions,
+  .gate-hero .hero-note {
+    display: none !important;
+  }
+  .gate-hero h1 {
+    margin-bottom: 6px !important;
+  }
+}
+
+/* Make the Session card feel “app-like” */
+.ch-grid {
+  gap: 10px !important;
+}
+
+/* Make the stream fill most of the viewport */
+#stream {
+  height: calc(100vh - 360px);
+  min-height: 56vh;
+  max-height: 76vh;
+  overflow-y: auto;
+}
+
+/* Keep the input bar visible and comfortable */
+form.ch-form {
+  position: sticky;
+  bottom: 10px;
+  z-index: 5;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: linear-gradient(to top, rgba(0,0,0,0.55), rgba(0,0,0,0));
+  backdrop-filter: blur(2px);
+}
+
+/* Slightly larger typing area */
+#input {
+  min-height: 46px;
+  font-size: 1rem;
+}
+
+/* Make send button more prominent */
+#send {
+  min-height: 46px;
+  font-weight: 600;
+}
+
+/* Optional: reduce footer spacing on this page */
+.site-footer {
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
+}
