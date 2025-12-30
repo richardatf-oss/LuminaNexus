@@ -83,3 +83,36 @@ form.ch-form {
 main#main > .wrap {
   padding-top: 8px !important;
 }
+/* --- Chavruta: remove top dead-space so session is above-the-fold --- */
+
+/* You already hide the hero */
+.gate-hero { display: none !important; }
+
+/* Pull main content up (some themes add padding/margin here) */
+main#main {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Reduce the first wrap spacing (targets the session section since hero is gone) */
+main#main > section.wrap {
+  padding-top: 8px !important;
+  margin-top: 0 !important;
+}
+
+/* If there’s any default spacing on cards/sections, neutralize it */
+main#main .card {
+  margin-top: 0 !important;
+}
+
+/* Make the chat stream taller so you don’t scroll inside the page */
+#stream {
+  height: calc(100vh - 300px) !important;
+  min-height: 62vh !important;
+  max-height: 82vh !important;
+}
+/* “App mode”: keep the session card visible at the top */
+main#main > section.wrap {
+  position: relative;
+  top: 0;
+}
