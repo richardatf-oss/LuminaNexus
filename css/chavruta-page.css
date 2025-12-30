@@ -38,13 +38,12 @@
 .ch-grid {
   gap: 10px !important;
 }
-
-/* Make the stream fill most of the viewport */
+/* Make the chat area big, but never push the input off-screen */
 #stream {
-  height: calc(100vh - 360px);
-  min-height: 56vh;
-  max-height: 76vh;
-  overflow-y: auto;
+  height: 56vh !important;        /* main size */
+  min-height: 360px !important;   /* don’t collapse */
+  max-height: 560px !important;   /* don’t take over */
+  overflow-y: auto !important;
 }
 
 /* Keep the input bar visible and comfortable */
