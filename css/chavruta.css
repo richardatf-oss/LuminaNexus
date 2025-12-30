@@ -1,258 +1,77 @@
-:root{
-  --card: rgba(14, 18, 26, 0.62);
-  --card2: rgba(14, 18, 26, 0.42);
-  --stroke: rgba(255,255,255,0.10);
-  --stroke2: rgba(255,255,255,0.07);
-  --text: rgba(255,255,255,0.92);
-  --muted: rgba(255,255,255,0.72);
-  --muted2: rgba(255,255,255,0.55);
-  --accent: rgba(120,160,255,0.90);
-  --accent2: rgba(120,160,255,0.22);
-  --danger: rgba(255,90,90,0.90);
-  --danger2: rgba(255,90,90,0.18);
-  --shadow: 0 22px 70px rgba(0,0,0,0.45);
-  --radius: 20px;
-  --radius2: 14px;
+/* /css/chavruta-page.css
+   Purpose: make the Chavruta session (chat) prominent and above-the-fold.
+   Safe: only targets elements that exist on chavruta.html (stream/ch-grid/card/gate-hero).
+*/
+
+/* Reduce vertical waste on the hero so you don’t have to scroll to “find her” */
+.gate-hero {
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+  min-height: auto !important;
 }
 
-.with-glow{
-  color: var(--text);
+.gate-hero .hero-content {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
 }
 
-.chav-hero{
-  margin-top: 8px;
+.gate-hero .hero-text {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
 }
 
-.chav-toolbar{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  align-items:center;
-  margin-top: 12px;
+/* On smaller screens, hide extra hero copy so the session is immediately visible */
+@media (max-width: 900px) {
+  .gate-hero .hero-text {
+    display: none !important;
+  }
+  .gate-hero .hero-actions,
+  .gate-hero .hero-note {
+    display: none !important;
+  }
+  .gate-hero h1 {
+    margin-bottom: 6px !important;
+  }
 }
 
-.seg{
-  display:flex;
-  gap:6px;
-  padding:6px;
-  border-radius: 999px;
-  border:1px solid var(--stroke2);
-  background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(10px);
+/* Make the Session card feel “app-like” */
+.ch-grid {
+  gap: 10px !important;
 }
 
-.seg-btn{
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--muted);
-  padding: 8px 12px;
-  border-radius: 999px;
-  cursor:pointer;
+/* Make the stream fill most of the viewport */
+#stream {
+  height: calc(100vh - 360px);
+  min-height: 56vh;
+  max-height: 76vh;
+  overflow-y: auto;
+}
+
+/* Keep the input bar visible and comfortable */
+form.ch-form {
+  position: sticky;
+  bottom: 10px;
+  z-index: 5;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: linear-gradient(to top, rgba(0,0,0,0.55), rgba(0,0,0,0));
+  backdrop-filter: blur(2px);
+}
+
+/* Slightly larger typing area */
+#input {
+  min-height: 46px;
+  font-size: 1rem;
+}
+
+/* Make send button more prominent */
+#send {
+  min-height: 46px;
   font-weight: 600;
-  letter-spacing: .1px;
 }
 
-.seg-btn:hover{
-  color: var(--text);
-  background: rgba(255,255,255,0.05);
-}
-
-.seg-btn.is-on{
-  color: var(--text);
-  background: var(--accent2);
-  border-color: rgba(120,160,255,0.28);
-}
-
-.chk{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding: 8px 10px;
-  border-radius: 999px;
-  border:1px solid var(--stroke2);
-  background: rgba(255,255,255,0.03);
-  color: var(--muted);
-  user-select:none;
-}
-
-.chk input{ transform: translateY(0.5px); }
-
-.btn{
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--stroke2);
-  background: rgba(255,255,255,0.04);
-  color: var(--text);
-  cursor:pointer;
-}
-
-.btn:hover{
-  background: rgba(255,255,255,0.06);
-}
-
-.btn.primary{
-  background: var(--accent2);
-  border-color: rgba(120,160,255,0.28);
-}
-
-.btn.ghost{
-  background: rgba(255,255,255,0.03);
-}
-
-.btn:disabled{
-  opacity: .55;
-  cursor: not-allowed;
-}
-
-.chav-context{
-  margin-top: 10px;
-  display:flex;
-  gap:10px;
-  align-items:center;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border:1px solid var(--stroke2);
-  background: rgba(255,255,255,0.03);
-}
-
-.ctx-pill{
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.05);
-  border:1px solid var(--stroke2);
-  font-weight: 700;
-  letter-spacing: .2px;
-}
-
-.ctx-text{
-  color: var(--muted);
-  flex: 1;
-  min-width: 180px;
-}
-
-.ctx-x{
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  border:1px solid var(--stroke2);
-  background: rgba(255,255,255,0.04);
-  color: var(--text);
-  cursor:pointer;
-}
-
-.chav-panel{
-  margin-top: 16px;
-  border-radius: var(--radius);
-  border:1px solid var(--stroke2);
-  background: var(--card);
-  box-shadow: var(--shadow);
-  overflow:hidden;
-  backdrop-filter: blur(14px);
-}
-
-.chav-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--stroke2);
-  background: rgba(0,0,0,0.10);
-}
-
-.chav-title{ font-weight: 800; letter-spacing: .2px; }
-
-.pill{
-  padding: 7px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  border:1px solid var(--stroke2);
-  background: rgba(255,255,255,0.04);
-  color: var(--muted);
-}
-
-.chav-stream{
-  height: 440px;
-  padding: 16px;
-  overflow:auto;
-}
-
-.msg{ display:flex; margin: 10px 0; }
-.msg.user{ justify-content:flex-end; }
-.msg.assistant{ justify-content:flex-start; }
-.msg.error{ justify-content:flex-start; }
-
-.bubble{
-  max-width: 78%;
-  padding: 12px 14px;
-  border-radius: 16px;
-  line-height: 1.45;
-  white-space: pre-wrap;
-  word-break: break-word;
-  border:1px solid var(--stroke2);
-  background: rgba(255,255,255,0.04);
-}
-
-.msg.user .bubble{
-  background: rgba(120,160,255,0.12);
-  border-color: rgba(120,160,255,0.22);
-}
-
-.msg.error .bubble{
-  background: var(--danger2);
-  border-color: rgba(255,90,90,0.24);
-}
-
-.meta{
-  margin-top: 8px;
-  font-size: 12px;
-  color: var(--muted2);
-}
-
-.typing{
-  display:flex;
-  gap:8px;
-  align-items:center;
-  padding: 10px 16px;
-  border-top: 1px solid var(--stroke2);
-  border-bottom: 1px solid var(--stroke2);
-  background: rgba(0,0,0,0.10);
-}
-
-.dot{
-  width: 7px; height: 7px; border-radius: 999px;
-  background: rgba(255,255,255,0.65);
-  animation: b 1.2s infinite ease-in-out;
-}
-.dot:nth-child(2){ animation-delay: .15s; }
-.dot:nth-child(3){ animation-delay: .3s; }
-
-@keyframes b{
-  0%, 80%, 100% { transform: translateY(0); opacity: .35; }
-  40% { transform: translateY(-3px); opacity: 1; }
-}
-
-.typing-label{ color: var(--muted); font-size: 13px; }
-
-.chav-form{
-  display:flex;
-  gap: 10px;
-  padding: 12px 16px;
-  background: rgba(0,0,0,0.10);
-}
-
-.chav-input{
-  flex:1;
-  padding: 12px 12px;
-  border-radius: 14px;
-  border:1px solid var(--stroke2);
-  background: rgba(0,0,0,0.18);
-  color: var(--text);
-  resize: vertical;
-  min-height: 44px;
-}
-
-.chav-foot{
-  padding: 10px 16px 14px;
-  color: var(--muted2);
-  font-size: 13px;
+/* Optional: reduce footer spacing on this page */
+.site-footer {
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
 }
