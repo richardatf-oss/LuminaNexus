@@ -75,3 +75,11 @@ form.ch-form {
   padding-top: 18px !important;
   padding-bottom: 18px !important;
 }
+/* Hide the hero entirely on the Chavruta page */
+.gate-hero {
+  display: none !important;
+}
+/* Pull the session up a bit now that hero is gone */
+main#main > .wrap {
+  padding-top: 8px !important;
+}
