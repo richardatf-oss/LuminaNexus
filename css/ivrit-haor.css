@@ -211,3 +211,15 @@
 .ivh-footer-note { margin-top: 12px; opacity: 0.9; }
 .ivh-muted { opacity: 0.8; padding: 8px; }
 
+/* Hebrew polish (RTL + sacred vibe) */
+.ivh-big-heb,
+.ivh-tile-heb {
+  direction: rtl;
+  unicode-bidi: plaintext;
+  font-family: ui-serif, "Times New Roman", serif;
+  letter-spacing: 0.04em;
+}
+
+.ivh-big-heb {
+  line-height: 1.1;
+}
