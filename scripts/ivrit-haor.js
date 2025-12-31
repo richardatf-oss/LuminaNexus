@@ -15,70 +15,8 @@
     return;
   }
 
-  // Minimal starter dataset (safe). Extend this list freely.
-  // Add audio files later: /assets/audio/aleph.mp3 etc.
-  const DATA = [
-    {
-      type: "letter",
-      key: "alef",
-      heb: "א",
-      name: "Aleph",
-      translit: "ʾAlef",
-      sound: "silent / glottal stop (varies)",
-      gematria: 1,
-      meaning: "Oneness, origin, breath-before-speech",
-      practice: "Breathe in silence for 3 breaths; then speak one honest sentence.",
-      audio: "/assets/audio/alef.mp3",
-    },
-    {
-      type: "letter",
-      key: "bet",
-      heb: "ב",
-      name: "Bet",
-      translit: "Bet / Vet",
-      sound: "b (with dagesh) / v (without)",
-      gematria: 2,
-      meaning: "House, within-ness, blessing through container",
-      practice: "Name one boundary that protects what you love.",
-      audio: "/assets/audio/bet.mp3",
-    },
-    {
-      type: "letter",
-      key: "gimel",
-      heb: "ג",
-      name: "Gimel",
-      translit: "Gimel",
-      sound: "g",
-      gematria: 3,
-      meaning: "Movement, giving, the step toward the other",
-      practice: "Do one small act of giving today without announcing it.",
-      audio: "/assets/audio/gimel.mp3",
-    },
-    {
-      type: "hidden",
-      key: "alef-olam",
-      heb: "אלף עולם",
-      name: "Alef Olam (Hidden Gate)",
-      translit: "Alef Olam",
-      sound: "a-lef o-lam",
-      gematria: null,
-      meaning: "The hidden continuity of Oneness through worlds",
-      practice: "Hold stillness above the head for 10 seconds; return to the breath.",
-      audio: "/assets/audio/alef-olam.mp3",
-    },
-    {
-      type: "names",
-      key: "ariir",
-      heb: "אריר",
-      name: "Ari’ir",
-      translit: "Ari’ir",
-      sound: "ah-REE-eer",
-      gematria: null,
-      meaning: "Sacred name (app: meditations)",
-      practice: "Chant softly 7 times; then sit in quiet for 20 seconds.",
-      audio: "/assets/audio/ariir.mp3",
-    },
-  ];
+  const DATA = Array.isArray(window.IVRIT_HAOR_DATA) ? window.IVRIT_HAOR_DATA : [];
+  if (!DATA.length) console.warn("[ivrit-haor] No data found. Did you include /scripts/ivrit-haor-data.js ?");
 
   const state = {
     q: "",
@@ -86,6 +24,14 @@
     showHebrew: true,
     selectedKey: null,
   };
+
+  function typeLabel(t) {
+    if (t === "letters") return "Letter";
+    if (t === "finals") return "Final";
+    if (t === "hidden") return "Hidden Gate";
+    if (t === "names") return "Name";
+    return t || "Item";
+  }
 
   function matches(item) {
     const q = state.q.trim().toLowerCase();
@@ -112,7 +58,7 @@
       <button class="ivh-tile ${state.selectedKey === item.key ? "is-active" : ""}" type="button" data-key="${item.key}">
         ${h}
         <div class="ivh-tile-name">${item.name}</div>
-        <div class="ivh-tile-sub">${item.type === "letter" ? "Letter" : item.type === "hidden" ? "Hidden Gate" : "Name"}</div>
+        <div class="ivh-tile-sub">${typeLabel(item.type)}</div>
       </button>
     `;
   }
@@ -159,7 +105,7 @@
           <div class="ivh-meta">
             <div><span class="ivh-k">Sound:</span> ${item.sound || "—"}</div>
             ${gem}
-            <div><span class="ivh-k">Type:</span> ${item.type}</div>
+            <div><span class="ivh-k">Type:</span> ${typeLabel(item.type)}</div>
           </div>
           <div class="ivh-actions">
             ${audioBtn}
@@ -233,8 +179,10 @@
     renderDetail();
   });
 
+  // Ensure filter options match our types
+  // If your HTML filter options differ, this still works — it just filters by raw values.
   // boot
-  state.selectedKey = "alef";
+  state.selectedKey = DATA[0]?.key || null;
   renderGrid();
   renderDetail();
   console.log("[ivrit-haor] boot ok");
