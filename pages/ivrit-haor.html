@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Ivrit HaOr — LuminaNexus</title>
-  <meta name="description" content="Ivrit HaOr: sacred Hebrew learning — letter by letter, with pronunciation and practice." />
+  <meta name="description" content="Ivrit HaOr — Hebrew, letter by letter: pronunciation, meaning, and sacred practice." />
   <link rel="stylesheet" href="/styles/main.css" />
+  <link rel="stylesheet" href="/css/ivrit-haor.css" />
 </head>
 
 <body class="with-glow">
@@ -17,7 +18,7 @@
         <div class="brand-mark">◈</div>
         <div class="brand-text">
           <div class="brand-title">LuminaNexus</div>
-          <div class="brand-subtitle">ChavrutaGPT — Torah-first study partner</div>
+          <div class="brand-subtitle">Ivrit HaOr — letter by letter</div>
         </div>
       </div>
 
@@ -29,7 +30,7 @@
         <a class="pill" href="/pages/chavruta.html">Chavruta</a>
         <a class="pill" href="/pages/trees.html">The Trees</a>
         <a class="pill" href="/pages/library.html">The Library</a>
-        <a class="pill" href="/pages/ivrit-haor.html">Ivrit HaOr</a>
+        <a class="pill active" href="/pages/ivrit-haor.html">Ivrit HaOr</a>
         <a class="pill" href="/pages/about.html">About</a>
         <a class="pill" href="/pages/blessing.html">Blessing</a>
       </nav>
@@ -37,37 +38,78 @@
   </header>
 
   <main id="main">
-    <section class="hero gate-hero hero-compact">
+    <section class="hero gate-hero">
       <div class="hero-bg"></div>
       <div class="wrap hero-content">
-        <p class="eyebrow">Ivrit HaOr · <span class="hebrew-inline">עברית האור</span></p>
-        <h1>Ivrit HaOr</h1>
+        <p class="eyebrow">IVRIT HAOR · <span class="hebrew-inline">עברית האור</span></p>
+        <h1>Hebrew, letter by letter.</h1>
         <div class="hero-text">
-          <p>Letter by letter: pronunciation, meaning, and sacred practice.</p>
-          <p class="hebrew">אות אחר אות: הגייה, משמעות, ותרגול מקודש.</p>
+          <p>Pronunciation. Meaning. Gematria. Practice. One letter at a time — clean, respectful, Torah-first.</p>
+          <p class="hebrew">הגייה · משמעות · גימטריה · תרגול — אות אחר אות, ביושר ובכבוד.</p>
         </div>
         <div class="hero-actions">
-          <a class="btn primary" href="/pages/chavruta.html">Study with Chavruta →</a>
+          <a class="btn ghost" href="/pages/chavruta.html">Study with Chavruta →</a>
           <a class="btn ghost" href="/pages/library.html">Open the Library →</a>
         </div>
       </div>
     </section>
 
-    <section class="wrap">
-      <div class="card">
-        <h2>Ready for your Unity export roadmap</h2>
-        <p>We can now plug the letter modules here one by one.</p>
-        <p class="hebrew">כעת נוכל לחבר כאן את מודולי האותיות אחד אחד.</p>
-      </div>
+    <section class="wrap" style="padding-top: 18px;">
+      <article class="card">
+        <div class="card-tag">MODULE · <span class="hebrew-inline">מודול</span></div>
+
+        <div class="ivh-top">
+          <h2 style="margin:0;">Ivrit HaOr Explorer</h2>
+
+          <div class="ivh-controls" aria-label="Ivrit HaOr controls">
+            <input id="ivhSearch" class="ivh-search" type="search" placeholder="Search letter or name… (Aleph, Bet, א, ב)" />
+            <select id="ivhFilter" class="ivh-select" aria-label="Filter">
+              <option value="all">All</option>
+              <option value="letters">Letters (א–ת)</option>
+              <option value="hidden">Hidden Gate (אלף עולם)</option>
+              <option value="names">Sacred Names</option>
+            </select>
+            <label class="ivh-check">
+              <input id="ivhHebrewToggle" type="checkbox" checked />
+              Show Hebrew
+            </label>
+          </div>
+        </div>
+
+        <div class="ivh-layout">
+          <aside class="ivh-list" aria-label="Letter list">
+            <div id="ivhGrid" class="ivh-grid" role="list"></div>
+          </aside>
+
+          <section class="ivh-detail" aria-label="Letter details">
+            <div id="ivhDetail" class="ivh-detail-inner">
+              <div class="ivh-empty">
+                <div class="ivh-empty-mark">◈</div>
+                <h3>Select a letter</h3>
+                <p>Choose a tile on the left. You’ll get pronunciation, meaning, gematria, and a short practice.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="ivh-footer-note">
+          <p style="margin:0;">
+            Unity export roadmap lives here. We can plug in artwork + audio per letter next.
+            <span class="hebrew-inline">כאן נבנה את מפת הדרך ל־Unity ונוסיף אמנות וקול לכל אות.</span>
+          </p>
+        </div>
+      </article>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="wrap">
       <p>© LuminaNexus — offered freely for learning.</p>
+      <p>Torah First: peshat before abstraction, tradition before novelty, learning as service — with clear boundaries and gentle dignity.</p>
     </div>
   </footer>
 
   <script src="/scripts/nav-active.js" defer></script>
+  <script src="/scripts/ivrit-haor.js" defer></script>
 </body>
 </html>
