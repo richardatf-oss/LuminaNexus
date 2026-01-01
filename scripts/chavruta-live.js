@@ -35,7 +35,9 @@
 
   function addMessage(who, body, kind = "assistant") {
     const wrap = document.createElement("div");
-    wrap.className = `msg ${kind === "user" ? "user" : ""} ${kind === "error" ? "error" : ""}`;
+    wrap.className = `msg ${kind === "user" ? "user" : ""} ${
+      kind === "error" ? "error" : ""
+    }`;
 
     const meta = document.createElement("div");
     meta.className = "meta";
@@ -76,14 +78,73 @@
 
     const raw = await res.text();
     let data = {};
-    try { data = JSON.parse(raw); } catch { data = { raw }; }
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      data = { raw };
+    }
 
     return { ok: res.ok, status: res.status, data };
   }
 
+  // ---------------------------
+  // Prefill support (Ivrit → Chavruta)
+  // ---------------------------
+  function applyPrefill() {
+    let prefill = "";
+
+    // 1) URL param: ?prefill=...
+    try {
+      const params = new URLSearchParams(window.location.search || "");
+      prefill = params.get("prefill") || "";
+    } catch {
+      prefill = "";
+    }
+
+    // 2) sessionStorage fallback
+    if (!prefill) {
+      try {
+        prefill = sessionStorage.getItem("chavrutaPrefill") || "";
+      } catch {
+        prefill = "";
+      }
+    }
+
+    prefill = String(prefill || "").trim();
+
+    if (prefill) {
+      input.value = prefill;
+
+      // Clear storage so it doesn't keep reloading
+      try {
+        sessionStorage.removeItem("chavrutaPrefill");
+      } catch {}
+
+      // Optional: clean the URL (remove ?prefill=...) without reloading
+      try {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has("prefill")) {
+          url.searchParams.delete("prefill");
+          window.history.replaceState({}, "", url.toString());
+        }
+      } catch {}
+
+      setStatus("Ready (prefilled)", false);
+      // Put cursor in the input so user can edit or just hit Send
+      setTimeout(() => input.focus(), 50);
+    }
+  }
+
   // BOOT message (so we know script is alive)
-  addMessage("Chavruta", "Bring a passage. Then ask one question. I’ll keep speculation clearly labeled.", "assistant");
+  addMessage(
+    "Chavruta",
+    "Bring a passage. Then ask one question. I’ll keep speculation clearly labeled.",
+    "assistant"
+  );
   setStatus("Ready", false);
+
+  // Apply prefill AFTER boot UI exists
+  applyPrefill();
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -105,7 +166,7 @@
     try {
       const payload = {
         input: text,
-        history: [],   // keep simple for now
+        history: [], // keep simple for now
         options: { mode: "peshat", includeHebrew: false, askForCitations: true },
       };
 
@@ -117,7 +178,9 @@
         const msg = r.data?.error || r.data?.raw || `HTTP ${r.status}`;
         addMessage("Chavruta", `Chavruta error: ${msg}`, "error");
       } else {
-        const reply = String(r.data.content || r.data.reply || "").trim() || "(No response text returned.)";
+        const reply =
+          String(r.data.content || r.data.reply || "").trim() ||
+          "(No response text returned.)";
         addMessage("Chavruta", reply, "assistant");
       }
     } catch (err) {
