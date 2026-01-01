@@ -1,12 +1,15 @@
+<!-- /pages/ivrit-haor.html -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Ivrit HaOr — LuminaNexus</title>
-  <meta name="description" content="Ivrit HaOr — Hebrew, letter by letter: pronunciation, meaning, and sacred practice." />
+  <meta name="description" content="Ivrit HaOr — Hebrew, letter by letter. Pronunciation, meaning, gematria, and sacred practice." />
+
   <link rel="stylesheet" href="/styles/main.css" />
-  <link rel="stylesheet" href="/css/ivrit-haor.css" />
+  <!-- NEW: Explorer UI (A–Z / א–ת jump bar, Favorites, Send to Chavruta) -->
+  <link rel="stylesheet" href="/css/ivrit-haor-explorer.css" />
 </head>
 
 <body class="with-glow">
@@ -38,68 +41,52 @@
   </header>
 
   <main id="main">
+
+    <!-- HERO -->
     <section class="hero gate-hero">
       <div class="hero-bg"></div>
+
       <div class="wrap hero-content">
         <p class="eyebrow">IVRIT HAOR · <span class="hebrew-inline">עברית האור</span></p>
         <h1>Hebrew, letter by letter.</h1>
+
         <div class="hero-text">
-          <p>Pronunciation. Meaning. Gematria. Practice. One letter at a time — clean, respectful, Torah-first.</p>
-          <p class="hebrew">הגייה · משמעות · גימטריה · תרגול — אות אחר אות, ביושר ובכבוד.</p>
+          <p>
+            Pronunciation. Meaning. Gematria. Practice.
+            One letter at a time — clean, respectful, Torah-first.
+          </p>
+          <p class="hebrew">
+            אות אחר אות: הגייה, משמעות, גימטריה, ותרגול.
+          </p>
         </div>
+
         <div class="hero-actions">
           <a class="btn ghost" href="/pages/chavruta.html">Study with Chavruta →</a>
           <a class="btn ghost" href="/pages/library.html">Open the Library →</a>
         </div>
+
+        <p class="hero-note">
+          Learn slowly. Return to practice.
+          <span class="hebrew-inline">ללמוד לאט. לחזור למעשה.</span>
+        </p>
       </div>
     </section>
 
+    <!-- MODULE CARD (Explorer mounts here) -->
     <section class="wrap" style="padding-top: 18px;">
       <article class="card">
-        <div class="card-tag">MODULE · <span class="hebrew-inline">מודול</span></div>
+        <div class="card-tag">READY · <span class="hebrew-inline">מוכן</span></div>
+        <h2>Ready for your Unity export roadmap</h2>
+        <p style="opacity:.9; margin-top: 6px;">
+          We can now plug the letter modules here one by one.
+          <span class="hebrew-inline">כעת נוכל לחבר כאן את מודולי האותיות אחת אחת.</span>
+        </p>
 
-        <div class="ivh-top">
-          <h2 style="margin:0;">Ivrit HaOr Explorer</h2>
-
-          <div class="ivh-controls" aria-label="Ivrit HaOr controls">
-            <input id="ivhSearch" class="ivh-search" type="search" placeholder="Search letter or name… (Aleph, Bet, א, ב)" />
-            <select id="ivhFilter" class="ivh-select" aria-label="Filter">
-              <option value="all">All</option>
-              <option value="letters">Letters (א–ת)</option>
-              <option value="hidden">Hidden Gate (אלף עולם)</option>
-              <option value="names">Sacred Names</option>
-            </select>
-            <label class="ivh-check">
-              <input id="ivhHebrewToggle" type="checkbox" checked />
-              Show Hebrew
-            </label>
-          </div>
-        </div>
-
-        <div class="ivh-layout">
-          <aside class="ivh-list" aria-label="Letter list">
-            <div id="ivhGrid" class="ivh-grid" role="list"></div>
-          </aside>
-
-          <section class="ivh-detail" aria-label="Letter details">
-            <div id="ivhDetail" class="ivh-detail-inner">
-              <div class="ivh-empty">
-                <div class="ivh-empty-mark">◈</div>
-                <h3>Select a letter</h3>
-                <p>Choose a tile on the left. You’ll get pronunciation, meaning, gematria, and a short practice.</p>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <div class="ivh-footer-note">
-          <p style="margin:0;">
-            Unity export roadmap lives here. We can plug in artwork + audio per letter next.
-            <span class="hebrew-inline">כאן נבנה את מפת הדרך ל־Unity ונוסיף אמנות וקול לכל אות.</span>
-          </p>
-        </div>
+        <!-- Optional explicit mount point (Explorer will also auto-mount if this is missing) -->
+        <div id="ivhExplorerMount"></div>
       </article>
     </section>
+
   </main>
 
   <footer class="site-footer">
@@ -109,9 +96,9 @@
     </div>
   </footer>
 
-<script src="/scripts/nav-active.js" defer></script>
-<script src="/scripts/ivrit-haor-data.js" defer></script>
-<script src="/scripts/ivrit-haor.js" defer></script>
+  <script src="/scripts/nav-active.js" defer></script>
 
+  <!-- NEW: Ivrit HaOr Explorer (Jump bar, Favorites, Send to Chavruta) -->
+  <script src="/scripts/ivrit-haor-explorer.js" defer></script>
 </body>
 </html>
