@@ -18,6 +18,12 @@
 .nav.pill-nav .pill {
   padding: 6px 10px !important;
 }
+@media (max-width: 520px) {
+  .msg .body {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}
 
 /* 3) Pull main content up (removes dead space above the session) */
 main#main {
