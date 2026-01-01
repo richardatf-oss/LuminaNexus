@@ -14,6 +14,62 @@
     console.error("[ivrit-haor] missing required elements");
     return;
   }
+// --- Ivrit HaOr -> Chavruta handoff (localStorage) --------------------
+function buildChavrutaPacket(item) {
+  // item should be your selected letter/name object
+  // adjust property names to match your data model
+  const title = `${item.title || item.name || "Ivrit HaOr"} — ${item.label || ""}`.trim();
+  const heb = item.hebrew || item.letter || "";
+  const type = item.type || "";
+  const gem = item.gematria != null ? item.gematria : "";
+  const sound = item.sound || "";
+  const translit = item.transliteration || "";
+  const meaning = item.meaning || "";
+  const practice = item.practice || "";
+
+  return [
+    `Ivrit HaOr — ${title}`,
+    heb ? `Hebrew: ${heb}` : "",
+    type ? `Type: ${type}` : "",
+    gem !== "" ? `Gematria: ${gem}` : "",
+    sound ? `Sound: ${sound}` : "",
+    translit ? `Transliteration: ${translit}` : "",
+    meaning ? `Meaning: ${meaning}` : "",
+    practice ? `Practice: ${practice}` : "",
+    "",
+    `Chavruta request: Please respond in the selected mode (Peshat/Remez/Derash/Sod). If Hebrew is enabled, place Hebrew on separate lines (no side-by-side columns).`,
+  ].filter(Boolean).join("\n");
+}
+
+function sendToChavrutaFromItem(item, { autoSend = false } = {}) {
+  const packet = buildChavrutaPacket(item);
+
+  localStorage.setItem("LN_CHAVRUTA_DRAFT", packet);
+  localStorage.setItem("LN_CHAVRUTA_AUTOSEND", autoSend ? "1" : "0");
+
+  // Navigate. Query just tells Chavruta we came from Ivrit HaOr.
+  window.location.href = "/pages/chavruta.html?from=ivrit-haor";
+}
+
+// Example: wire the big "Send to Chavruta" button (top-right)
+// Make sure the button has id="btnSendToChavruta" (or change id below)
+const btnTopSend = document.getElementById("btnSendToChavruta");
+if (btnTopSend) {
+  btnTopSend.addEventListener("click", () => {
+    if (!window.__ivritSelectedItem) return;
+    sendToChavrutaFromItem(window.__ivritSelectedItem, { autoSend: false });
+  });
+}
+
+// Example: wire the per-item button in the detail panel
+// If your detail panel button already exists, give it id="btnDetailSendToChavruta"
+const btnDetailSend = document.getElementById("btnDetailSendToChavruta");
+if (btnDetailSend) {
+  btnDetailSend.addEventListener("click", () => {
+    if (!window.__ivritSelectedItem) return;
+    sendToChavrutaFromItem(window.__ivritSelectedItem, { autoSend: false });
+  });
+}
 
   const DATA = Array.isArray(window.IVRIT_HAOR_DATA) ? window.IVRIT_HAOR_DATA : [];
   if (!DATA.length) console.warn("[ivrit-haor] No data found. Did you include /scripts/ivrit-haor-data.js ?");
