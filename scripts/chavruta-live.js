@@ -3,13 +3,32 @@
   const ENDPOINT = "/.netlify/functions/chavruta";
   const $ = (id) => document.getElementById(id);
 
+  // Required
   const stream = $("stream");
   const form = $("form");
   const input = $("input");
   const send = $("send");
   const statusPill = $("statusPill");
 
-  // Hard fail with visible output if something is missing
+  // Optional UI
+  const statusHint = $("statusHint");
+  const jsWarning = $("jsWarning");
+
+  // Buttons (optional but we will wire if present)
+  const btnGen11 = $("btnGen11");
+  const btnNew = $("btnNew");
+  const btnClear = $("btnClear");
+  const btnExport = $("btnExport");
+  const btnStop = $("btnStop");
+
+  // Options
+  const optHebrew = $("optHebrew");
+  const optCitations = $("optCitations");
+
+  // Mode pills (in your HTML they are .chip)
+  const modeButtons = Array.from(document.querySelectorAll(".chip[data-mode]"));
+
+  // ---- Hard fail if core elements missing ----
   function hardFail(msg) {
     console.error("[chavruta-live]", msg);
     if (statusPill) statusPill.textContent = "Error";
@@ -26,10 +45,9 @@
     );
   }
 
-  // Hide JS warning if present
-  const jsWarning = $("jsWarning");
   if (jsWarning) jsWarning.style.display = "none";
 
+  // ---- Helpers ----
   const nowTs = () =>
     new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
@@ -69,11 +87,68 @@
     statusPill.classList.toggle("is-thinking", !!thinking);
   }
 
+  function clearStream() {
+    stream.innerHTML = "";
+  }
+
+  function downloadText(filename, text) {
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 500);
+  }
+
+  function buildTranscript() {
+    const msgs = Array.from(stream.querySelectorAll(".msg"));
+    const lines = [];
+    for (const m of msgs) {
+      const who = m.querySelector(".who")?.textContent || "Unknown";
+      const time = m.querySelector(".meta div:last-child")?.textContent || "";
+      const body = m.querySelector(".body")?.textContent || "";
+      lines.push(`[${time}] ${who}:`);
+      lines.push(body);
+      lines.push("");
+    }
+    return lines.join("\n");
+  }
+
+  // ---- State ----
+  let history = [];
+  let currentMode = "peshat";
+  let controller = null;
+
+  const modeHints = {
+    peshat: "Peshat: plain meaning first, minimal speculation.",
+    remez: "Remez: hints, patterns, connections (still grounded).",
+    derash: "Derash: teachings, midrashic framing, moral lenses.",
+    sod: "Sod: inner layer—mystical, clearly labeled and careful.",
+  };
+
+  function setMode(newMode) {
+    currentMode = newMode || "peshat";
+
+    modeButtons.forEach((btn) => {
+      const active = btn.dataset.mode === currentMode;
+      btn.classList.toggle("is-active", active);
+      btn.setAttribute("aria-selected", active ? "true" : "false");
+    });
+
+    if (statusHint) statusHint.textContent = modeHints[currentMode] || "";
+  }
+
+  // ---- Network ----
   async function callFunction(payload) {
+    controller = new AbortController();
     const res = await fetch(ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
+      signal: controller.signal,
     });
 
     const raw = await res.text();
@@ -87,87 +162,48 @@
     return { ok: res.ok, status: res.status, data };
   }
 
-  // ---------------------------
-  // Prefill support (Ivrit → Chavruta)
-  // ---------------------------
-  function applyPrefill() {
-    let prefill = "";
-
-    // 1) URL param: ?prefill=...
-    try {
-      const params = new URLSearchParams(window.location.search || "");
-      prefill = params.get("prefill") || "";
-    } catch {
-      prefill = "";
-    }
-
-    // 2) sessionStorage fallback
-    if (!prefill) {
-      try {
-        prefill = sessionStorage.getItem("chavrutaPrefill") || "";
-      } catch {
-        prefill = "";
-      }
-    }
-
-    prefill = String(prefill || "").trim();
-
-    if (prefill) {
-      input.value = prefill;
-
-      // Clear storage so it doesn't keep reloading
-      try {
-        sessionStorage.removeItem("chavrutaPrefill");
-      } catch {}
-
-      // Optional: clean the URL (remove ?prefill=...) without reloading
-      try {
-        const url = new URL(window.location.href);
-        if (url.searchParams.has("prefill")) {
-          url.searchParams.delete("prefill");
-          window.history.replaceState({}, "", url.toString());
-        }
-      } catch {}
-
-      setStatus("Ready (prefilled)", false);
-      // Put cursor in the input so user can edit or just hit Send
-      setTimeout(() => input.focus(), 50);
-    }
+  // ---- Boot ----
+  function bootMessage() {
+    addMessage(
+      "Chavruta",
+      "Bring a passage. Then ask one question. I’ll keep speculation clearly labeled.",
+      "assistant"
+    );
   }
 
-  // BOOT message (so we know script is alive)
-  addMessage(
-    "Chavruta",
-    "Bring a passage. Then ask one question. I’ll keep speculation clearly labeled.",
-    "assistant"
-  );
+  clearStream();
+  bootMessage();
+  setMode("peshat");
   setStatus("Ready", false);
 
-  // Apply prefill AFTER boot UI exists
-  applyPrefill();
+  // ---- Wiring: mode pills ----
+  modeButtons.forEach((btn) => {
+    btn.addEventListener("click", () => setMode(btn.dataset.mode));
+  });
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const text = String(input.value || "").trim();
-    if (!text) {
-      setStatus("Type a question first", false);
-      return;
-    }
+  // ---- Core send routine ----
+  async function sendText(text) {
+    const cleaned = String(text || "").trim();
+    if (!cleaned) return;
 
     input.value = "";
-    addMessage("You", text, "user");
+    addMessage("You", cleaned, "user");
 
     setStatus("Thinking…", true);
     send.disabled = true;
+    if (btnStop) btnStop.disabled = false;
 
     const thinkingEl = addMessage("Chavruta", "…", "assistant");
 
     try {
       const payload = {
-        input: text,
-        history: [], // keep simple for now
-        options: { mode: "peshat", includeHebrew: false, askForCitations: true },
+        input: cleaned,
+        history, // keep conversation
+        options: {
+          mode: currentMode,
+          includeHebrew: optHebrew ? !!optHebrew.checked : false,
+          askForCitations: optCitations ? !!optCitations.checked : true,
+        },
       };
 
       const r = await callFunction(payload);
@@ -177,21 +213,89 @@
       if (!r.ok || !r.data?.ok) {
         const msg = r.data?.error || r.data?.raw || `HTTP ${r.status}`;
         addMessage("Chavruta", `Chavruta error: ${msg}`, "error");
-      } else {
-        const reply =
-          String(r.data.content || r.data.reply || "").trim() ||
-          "(No response text returned.)";
-        addMessage("Chavruta", reply, "assistant");
+        return;
       }
+
+      const reply =
+        String(r.data.content || r.data.reply || "").trim() ||
+        "(No response text returned.)";
+
+      addMessage("Chavruta", reply, "assistant");
+
+      // Update history for next turns
+      history = [
+        ...history,
+        { role: "user", content: cleaned },
+        { role: "assistant", content: reply },
+      ];
     } catch (err) {
       thinkingEl.remove();
-      addMessage("Chavruta", `Chavruta error: ${err?.message || err}`, "error");
+
+      // Abort is not a real error to show as scary
+      if (err?.name === "AbortError") {
+        addMessage("Chavruta", "Stopped.", "assistant");
+      } else {
+        addMessage("Chavruta", `Chavruta error: ${err?.message || err}`, "error");
+      }
     } finally {
       send.disabled = false;
+      if (btnStop) btnStop.disabled = true;
       setStatus("Ready", false);
       input.focus();
+      controller = null;
     }
+  }
+
+  // Form submit
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    await sendText(input.value);
   });
+
+  // ---- Quick buttons ----
+  if (btnGen11) {
+    btnGen11.addEventListener("click", async () => {
+      // You can choose either: just fill input, or fill+send.
+      // This does fill + send:
+      await sendText("Genesis 1:1");
+    });
+  }
+
+  if (btnNew) {
+    btnNew.addEventListener("click", () => {
+      // Hard reset
+      history = [];
+      clearStream();
+      bootMessage();
+      setStatus("Ready", false);
+    });
+  }
+
+  if (btnClear) {
+    btnClear.addEventListener("click", () => {
+      // Clear only what you see, keep history so convo can continue
+      clearStream();
+      bootMessage();
+      setStatus("Ready", false);
+    });
+  }
+
+  if (btnExport) {
+    btnExport.addEventListener("click", () => {
+      const txt = buildTranscript();
+      const stamp = new Date()
+        .toISOString()
+        .replace(/[:.]/g, "-")
+        .slice(0, 19);
+      downloadText(`chavruta-${stamp}.txt`, txt);
+    });
+  }
+
+  if (btnStop) {
+    btnStop.addEventListener("click", () => {
+      if (controller) controller.abort();
+    });
+  }
 
   console.log("[chavruta-live] boot ok");
 })();
