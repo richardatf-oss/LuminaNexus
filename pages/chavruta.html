@@ -7,7 +7,6 @@
   <meta name="description" content="ChavrutaGPT — Torah-first study partner. Peshat first, one classical note, then questions." />
   <link rel="stylesheet" href="/styles/main.css" />
   <link rel="stylesheet" href="/css/chavruta-page.css" />
-
 </head>
 
 <body class="with-glow">
@@ -39,13 +38,12 @@
   </header>
 
   <main id="main">
+    <!-- Hero exists but your chavruta-page.css can hide it safely -->
     <section class="hero gate-hero">
       <div class="hero-bg"></div>
-
       <div class="wrap hero-content">
         <p class="eyebrow">CHAVRUTA · <span class="hebrew-inline">חברותא</span></p>
         <h1>Torah-first dialogue, with clear boundaries.</h1>
-
         <div class="hero-text">
           <p>
             Peshat first. One classical note. Then questions.
@@ -56,12 +54,10 @@
             בלי “גורו”, בלי כפייה.
           </p>
         </div>
-
         <div class="hero-actions">
           <a class="btn ghost" href="/pages/orientation.html?dest=chavruta">Begin with kavanah →</a>
           <a class="btn ghost" href="/pages/library.html">Open the Library →</a>
         </div>
-
         <p class="hero-note">
           The Gate opens by intention, not by pressure.
           <span class="hebrew-inline">השער נפתח לפי הכוונה, לא לפי לחץ.</span>
@@ -71,71 +67,27 @@
 
     <section class="wrap" style="padding-top: 18px;">
       <article class="card">
-        <div class="card-tag">SESSION · <span class="hebrew-inline">לימוד</span></div>
-        <h2>Chavruta Session</h2>
+        <div class="ch-top">
+          <div class="ch-left">
+            <div class="card-tag">SESSION · <span class="hebrew-inline">לימוד</span></div>
+            <h2 style="margin: 8px 0 0;">Chavruta Session</h2>
 
-        <!-- JS warning banner (hidden automatically when JS runs) -->
-        <div id="jsWarning" class="notice" style="margin-top:12px;">
-          JavaScript is required for Chavruta chat. Please enable JavaScript to continue.
-        </div>
-
-        <!-- lightweight layout helpers; should not fight your theme -->
-        <style>
-          .ch-grid { margin-top: 14px; display: grid; gap: 12px; }
-          .ch-toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; }
-          .ch-left, .ch-right { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
-          .chip { padding: 8px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.14); background: rgba(0,0,0,0.18); cursor: pointer; }
-          .chip.is-active { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.08); }
-          .pill-status { display:inline-flex; gap:10px; align-items:center; }
-          #statusPill { padding: 6px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.14); background: rgba(0,0,0,0.18); }
-          #statusPill.is-thinking { opacity: 0.95; }
-          #statusHint { opacity: 0.9; font-size: 0.95rem; }
-          #stream { min-height: 52vh; padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.22); overflow-y:auto; }
-          .msg { margin: 0 0 12px; }
-          .msg .meta { display:flex; gap:10px; justify-content:space-between; opacity:0.8; font-size: 0.9rem; }
-          .msg .body { white-space: pre-wrap; line-height: 1.5; margin-top: 4px; }
-          .msg.user .body { text-align: right; }
-          .msg.error .body { opacity: 0.95; }
-          .controls { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
-          .controls label { display:inline-flex; gap:8px; align-items:center; }
-          form.ch-form { display:flex; gap:10px; align-items:center; }
-          #input { flex:1; padding: 12px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.16); background: rgba(0,0,0,0.25); color: inherit; }
-          button.ch-btn { padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.08); color: inherit; cursor:pointer; white-space:nowrap; }
-          button.ch-btn:disabled { opacity: 0.55; cursor:not-allowed; }
-          .ch-disabled { opacity: 0.95; }
-        </style>
-
-        <div class="ch-grid">
-
-          <!-- MODE + STATUS -->
-          <div class="ch-toolbar">
-           <div class="ch-left" role="tablist" aria-label="Chavruta mode">
-  <button class="chip is-active" type="button" data-mode="peshat" aria-selected="true">Peshat</button>
-  <button class="chip" type="button" data-mode="remez" aria-selected="false">Remez</button>
-  <button class="chip" type="button" data-mode="derash" aria-selected="false">Derash</button>
-  <button class="chip" type="button" data-mode="sod" aria-selected="false">Sod</button>
-</div>
-
-            <div class="pill-status">
-              <span id="statusPill">Ready</span>
-              <span id="statusHint">Peshat: plain meaning first, minimal speculation.</span>
+            <!-- Mode pills -->
+            <div class="mode-pills" style="margin-top: 10px;">
+              <button type="button" class="pill" data-mode="peshat" aria-pressed="true">Peshat</button>
+              <button type="button" class="pill" data-mode="remez" aria-pressed="false">Remez</button>
+              <button type="button" class="pill" data-mode="derash" aria-pressed="false">Derash</button>
+              <button type="button" class="pill" data-mode="sod" aria-pressed="false">Sod</button>
             </div>
           </div>
 
-          <!-- OPTIONS + QUICK ACTIONS -->
-          <div class="ch-toolbar">
-            <div class="controls">
-              <label>
-                <input id="optHebrew" type="checkbox" />
-                Include Hebrew
-              </label>
-              <label>
-                <input id="optCitations" type="checkbox" checked />
-                Ask for citations
-              </label>
+          <div class="ch-right">
+            <div class="ch-status">
+              <span id="statusPill" class="status-pill">Ready</span>
+              <span class="status-note">Peshat: plain meaning first, minimal speculation.</span>
             </div>
 
-            <div class="ch-right">
+            <div class="ch-actions">
               <button id="btnGen11" class="ch-btn" type="button">Gen 1:1</button>
               <button id="btnNew" class="ch-btn" type="button">New</button>
               <button id="btnClear" class="ch-btn" type="button">Clear</button>
@@ -143,27 +95,45 @@
               <button id="btnStop" class="ch-btn" type="button" disabled>Stop</button>
             </div>
           </div>
-
-          <!-- REQUIRED: stream -->
-          <div id="stream" aria-live="polite"></div>
-
-          <!-- REQUIRED: form/input/send -->
-          <form id="form" class="ch-form" autocomplete="off">
-            <input
-              id="input"
-              type="text"
-              inputmode="text"
-              placeholder="Ask a question… (e.g., Bereshit 1:1 — what does ‘bereshit’ mean?)"
-              required
-            />
-            <button id="send" class="ch-btn" type="submit">Send</button>
-          </form>
-
-          <p class="hero-note" style="margin:0;">
-            Tip: Paste a short source excerpt. We’ll keep it slow and honest.
-            <span class="hebrew-inline">אפשר להדביק מקור קצר — נלמד לאט וביושר.</span>
-          </p>
         </div>
+
+        <div class="ch-controls" style="margin-top: 10px;">
+          <label style="display:inline-flex; align-items:center; gap:8px; margin-right:14px;">
+            <input id="includeHebrew" type="checkbox" />
+            Include Hebrew
+          </label>
+
+          <label style="display:inline-flex; align-items:center; gap:8px;">
+            <input id="askForCitations" type="checkbox" checked />
+            Ask for citations
+          </label>
+        </div>
+
+        <!-- REQUIRED: stream -->
+        <div id="stream" aria-live="polite"></div>
+
+        <!-- REQUIRED: form/input/send -->
+        <form id="form" class="ch-form" autocomplete="off">
+          <input
+            id="input"
+            type="text"
+            inputmode="text"
+            placeholder="Ask a question… (e.g., Bereshit 1:1 — what does ‘bereshit’ mean?)"
+            required
+          />
+          <button id="send" class="ch-btn" type="submit">Send</button>
+        </form>
+
+        <p class="hero-note" style="margin: 8px 0 0;">
+          Tip: Paste a short source excerpt. We’ll keep it slow and honest.
+          <span class="hebrew-inline">אפשר להביא מקור קצר — נלמד לאט וביושר.</span>
+        </p>
+
+        <noscript>
+          <p id="jsWarning" class="hero-note" style="margin-top:10px;">
+            JavaScript is required for Chavruta.
+          </p>
+        </noscript>
       </article>
     </section>
   </main>
@@ -175,9 +145,7 @@
     </div>
   </footer>
 
-<script src="/scripts/nav-active.js" defer></script>
-<script src="/scripts/chavruta-live.js" defer></script>
-
-
+  <script src="/scripts/nav-active.js" defer></script>
+  <script src="/scripts/chavruta-live.js" defer></script>
 </body>
 </html>
