@@ -3,45 +3,48 @@
   const ENDPOINT = "/.netlify/functions/chavruta";
   const $ = (id) => document.getElementById(id);
 
+  // Required
   const stream = $("stream");
   const form = $("form");
   const input = $("input");
   const send = $("send");
   const statusPill = $("statusPill");
 
-  // Optional controls (exist in your page)
+  // Optional UI toggles
   const cbHebrew = $("includeHebrew");
   const cbCite = $("askForCitations");
 
-  // Top-right buttons
+  // Top-right buttons (optional but supported)
   const btnGen11 = $("btnGen11");
   const btnNew = $("btnNew");
   const btnClear = $("btnClear");
   const btnExport = $("btnExport");
   const btnStop = $("btnStop");
 
-  // Mode pills container (your HTML: <div class="mode-pills">...)
+  // Mode pills container
   const modePills = document.querySelector(".mode-pills");
 
-  // Default mode
   let currentMode = "peshat";
 
   function hardFail(msg) {
     console.error("[chavruta-live]", msg);
     if (statusPill) statusPill.textContent = "Error";
     if (stream) {
-      stream.innerHTML = `<div class="msg error"><div class="meta"><div class="who">Chavruta</div><div></div></div><div class="body">${msg}</div></div>`;
+      stream.innerHTML = `
+        <div class="msg error">
+          <div class="meta"><div class="who">Chavruta</div><div></div></div>
+          <div class="body">${msg}</div>
+        </div>`;
     } else {
       alert(msg);
     }
   }
 
   if (!stream || !form || !input || !send || !statusPill) {
-    return hardFail(
-      "Chavruta UI missing required elements. Need: #stream #form #input #send #statusPill"
-    );
+    return hardFail("Chavruta UI missing required elements. Need: #stream #form #input #send #statusPill");
   }
 
+  // Hide JS warning if present
   const jsWarning = $("jsWarning");
   if (jsWarning) jsWarning.style.display = "none";
 
@@ -67,7 +70,7 @@
 
     const b = document.createElement("div");
     b.className = "body";
-    b.textContent = body; // keep safe: no HTML injection
+    b.textContent = body;
 
     wrap.appendChild(meta);
     wrap.appendChild(b);
@@ -107,28 +110,18 @@
   function setMode(nextMode) {
     currentMode = nextMode;
 
-    // Visual active state
     if (modePills) {
       modePills.querySelectorAll("button[data-mode]").forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.mode === currentMode);
-        btn.setAttribute("aria-pressed", btn.dataset.mode === currentMode ? "true" : "false");
+        const on = btn.dataset.mode === currentMode;
+        btn.classList.toggle("active", on);
+        btn.setAttribute("aria-pressed", on ? "true" : "false");
       });
     }
 
-    // Update status hint text (optional)
-    const hint = document.getElementById("modeHint");
-    if (hint) {
-      const map = {
-        peshat: "Peshat: plain meaning first, minimal speculation.",
-        remez: "Remez: hints/patterns — cautious, text-anchored.",
-        derash: "Derash: interpretive teaching — clearly labeled.",
-        sod: "Sod: deeper mystical reading — clearly labeled and optional.",
-      };
-      hint.textContent = map[currentMode] || "";
-    }
+    setStatus(`Ready (${currentMode})`, false);
   }
 
-  // Mode pills click handling
+  // Make mode pills work
   if (modePills) {
     modePills.addEventListener("click", (e) => {
       const btn = e.target.closest("button[data-mode]");
@@ -142,19 +135,22 @@
     if (!clean) return;
 
     addMessage("You", clean, "user");
+
     setStatus("Thinking…", true);
     send.disabled = true;
+    if (btnStop) btnStop.disabled = true;
 
     const thinkingEl = addMessage("Chavruta", "…", "assistant");
 
     try {
       const payload = {
         input: clean,
-        history: [],
+        history: [], // keep simple for now
         options: getOptions(),
       };
 
       const r = await callFunction(payload);
+
       thinkingEl.remove();
 
       if (!r.ok || !r.data?.ok) {
@@ -169,28 +165,31 @@
       addMessage("Chavruta", `Chavruta error: ${err?.message || err}`, "error");
     } finally {
       send.disabled = false;
-      setStatus("Ready", false);
+      if (btnStop) btnStop.disabled = true;
+      setStatus(`Ready (${currentMode})`, false);
       input.focus();
     }
   }
 
   // Boot message
   addMessage("Chavruta", "Bring a passage. Then ask one question. I’ll keep speculation clearly labeled.", "assistant");
-  setStatus("Ready", false);
   setMode("peshat");
 
-  // Form submit
+  // Submit handler
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const text = String(input.value || "").trim();
-    if (!text) return;
+    if (!text) {
+      setStatus("Type a question first", false);
+      return;
+    }
     input.value = "";
     sendText(text);
   });
 
-  // Top buttons
+  // Top-right button wiring
   if (btnGen11) btnGen11.addEventListener("click", () => {
-    input.value = "Genesis 1:1 (Bereishit 1:1) — please give peshat, one classical note, then 2–4 honest questions.";
+    input.value = "Genesis 1:1 — please respond in the current mode, then give 2–4 honest questions.";
     input.focus();
   });
 
@@ -215,40 +214,19 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `chavruta-${new Date().toISOString().slice(0,10)}.txt`;
+    a.download = `chavruta-${new Date().toISOString().slice(0, 10)}.txt`;
     document.body.appendChild(a);
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
   });
 
-  // Stop is placeholder unless you implement streaming + AbortController
-  if (btnStop) {
-    btnStop.addEventListener("click", () => {
-      // no-op for now
-    });
-  }
-
-  // Receive from Ivrit HaOr (localStorage)
+  // Ivrit HaOr -> Chavruta handoff (localStorage)
   const draft = localStorage.getItem("LN_CHAVRUTA_DRAFT");
-  const auto = localStorage.getItem("LN_CHAVRUTA_AUTOSEND") === "1";
-
   if (draft) {
     input.value = draft;
     input.focus();
-
-    // clear after use so it doesn’t keep reappearing
     localStorage.removeItem("LN_CHAVRUTA_DRAFT");
-    localStorage.removeItem("LN_CHAVRUTA_AUTOSEND");
-
-    if (auto) {
-      // slight delay so UI is ready
-      setTimeout(() => {
-        const text = input.value;
-        input.value = "";
-        sendText(text);
-      }, 150);
-    }
   }
 
   console.log("[chavruta-live] boot ok");
