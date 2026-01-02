@@ -78,7 +78,8 @@ function stripHtml(s) {
       enEl.innerHTML =
         `<div class="pane-head">ENGLISH</div>` +
         (english.length
-          ? english.map((line) => `<p>${escapeHtml(line)}</p>`).join("")
+         english.map((line) => `<p>${escapeHtml(stripHtml(line))}</p>`).join("")
+
           : `<p class="muted">(nothing loaded)</p>`) +
         (note ? `<p class="muted small">${escapeHtml(note)}</p>` : "");
     }
@@ -87,7 +88,8 @@ function stripHtml(s) {
       heEl.innerHTML =
         `<div class="pane-head">HEBREW</div>` +
         (hebrew.length
-          ? hebrew.map((line) => `<p dir="rtl">${escapeHtml(line)}</p>`).join("")
+       hebrew.map((line) => `<p dir="rtl">${escapeHtml(stripHtml(line))}</p>`).join("")
+
           : `<p class="muted" dir="rtl">(לא נטען)</p>`);
     }
 
