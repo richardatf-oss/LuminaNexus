@@ -1,0 +1,67 @@
+{
+  "texts": [
+    {
+      "id": "genesis-1-1",
+      "title": "Genesis 1:1",
+      "ref": "Genesis 1:1",
+      "category": "Torah",
+      "blurb": "The opening—creation, scope, and first questions.",
+      "english": [],
+      "hebrew": []
+    },
+    {
+      "id": "exodus-20-1-17",
+      "title": "Exodus 20:1–17",
+      "ref": "Exodus 20:1-17",
+      "category": "Torah",
+      "blurb": "Aseret HaDibrot (Ten Commandments).",
+      "english": [],
+      "hebrew": []
+    },
+    {
+      "id": "deut-6-4-9",
+      "title": "Deuteronomy 6:4–9",
+      "ref": "Deuteronomy 6:4-9",
+      "category": "Torah",
+      "blurb": "Shema and covenantal love.",
+      "english": [],
+      "hebrew": []
+    },
+    {
+      "id": "psalms-12",
+      "title": "Psalms 12",
+      "ref": "Psalms 12",
+      "category": "Writings",
+      "blurb": "Speech, integrity, and God’s pure words.",
+      "english": [],
+      "hebrew": []
+    },
+    {
+      "id": "isaiah-6-1-8",
+      "title": "Isaiah 6:1–8",
+      "ref": "Isaiah 6:1-8",
+      "category": "Prophets",
+      "blurb": "Vision, holiness, and calling.",
+      "english": [],
+      "hebrew": []
+    },
+    {
+      "id": "mishnah-berakhot-1-1",
+      "title": "Mishnah Berakhot 1:1",
+      "ref": "Mishnah Berakhot 1:1",
+      "category": "Mishnah",
+      "blurb": "When to recite Shema.",
+      "english": [],
+      "hebrew": []
+    },
+    {
+      "id": "berakhot-4a",
+      "title": "Berakhot 4a",
+      "ref": "Berakhot 4a",
+      "category": "Talmud",
+      "blurb": "Talmud study entry point (daf).",
+      "english": [],
+      "hebrew": []
+    }
+  ]
+}
