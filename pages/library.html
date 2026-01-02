@@ -1,3 +1,4 @@
+<!-- /pages/library.html -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -5,91 +6,107 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>The Library — LuminaNexus</title>
   <meta name="description" content="Choose a text. Read it here. Optionally send it to Chavruta." />
-
-  <link rel="stylesheet" href="/styles/main.css" />
-  <link rel="stylesheet" href="/styles/library.css" />
+  <link rel="stylesheet" href="../styles/main.css" />
 </head>
 
 <body class="with-glow">
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <div class="wrap header-row">
-      <div class="brand">
-        <div class="brand-mark">✦</div>
-        <div class="brand-text">
-          <div class="brand-title">LuminaNexus</div>
-          <div class="brand-subtitle">Torah-first study partner</div>
-        </div>
-      </div>
-
-      <nav class="nav" aria-label="Primary">
-        <a href="/index.html">Home</a>
-        <a href="/pages/library.html" aria-current="page">The Library</a>
-        <a href="/chavruta.html">Chavruta</a>
-      </nav>
-    </div>
-  </header>
+  <!-- Shared header injected by /scripts/site-shell.js -->
+  <header class="site-header"></header>
 
   <main id="main" class="wrap library-page">
-    <div class="library-hero">
-      <div>
-        <div class="kicker">THE LIBRARY · הַסְּפָרִיָּה</div>
-        <h1>The Library</h1>
-        <p class="sub">Choose a text. Read it here. Optionally send it to Chavruta.</p>
+    <section class="hero hero--compact">
+      <div class="hero-kicker">
+        <span class="kicker">THE LIBRARY · הַסִּפְרִיָּה</span>
       </div>
 
-      <div class="library-controls">
-        <input id="libSearch" type="search" placeholder="Search… (e.g., Genesis, Berakhot)" />
-        <select id="libCategory">
-          <option value="">All categories</option>
-          <option value="Torah">Torah</option>
-          <option value="Prophets">Prophets</option>
-          <option value="Writings">Writings</option>
-          <option value="Mishnah">Mishnah</option>
-          <option value="Talmud">Talmud</option>
-        </select>
-      </div>
-    </div>
-
-    <section class="library-split">
-      <!-- LEFT: LIST -->
-      <div class="library-list" aria-label="Texts list">
-        <div class="panel-title">Texts</div>
-        <div id="libList" class="lib-items"></div>
-      </div>
-
-      <!-- RIGHT: READER -->
-      <div class="library-reader" aria-label="Reader">
-        <div class="reader-top">
-          <div>
-            <div id="readerRef" class="reader-ref">Select a text</div>
-            <div id="readerHint" class="reader-hint">Click a verse on the left to read it here.</div>
-          </div>
-
-          <div class="reader-actions">
-            <button id="btnSendChavruta" type="button" disabled>Send to Chavruta</button>
-            <button id="btnOpenSefaria" type="button" disabled>Open on Sefaria</button>
-            <button id="btnCopyRef" type="button" disabled>Copy ref</button>
-          </div>
+      <div class="hero-grid">
+        <div class="hero-left">
+          <h1 class="hero-title">The Library</h1>
+          <p class="hero-subtitle">
+            Choose a text. Read it here. Optionally send it to Chavruta.
+          </p>
+          <p class="hero-subtitle rtl" dir="rtl">
+            בְּחַר טֶקְסְט. קְרָא כָּאן. אֶפְשָׁר לִשְׁלוֹחַ לְחַבְרוּתָא.
+          </p>
         </div>
 
-        <div id="readerStatus" class="reader-status" data-kind="ready">Ready</div>
+        <div class="hero-right">
+          <div class="controls">
+            <label class="sr-only" for="ln-search">Search</label>
+            <input id="ln-search" class="input" data-library-search placeholder="Search… (e.g., Genesis, Shema)" />
 
-        <div class="reader-body">
-          <div class="reader-col">
-            <div class="reader-label">English</div>
-            <pre id="readerEn" class="reader-text">(nothing loaded)</pre>
-          </div>
-          <div class="reader-col">
-            <div class="reader-label">Hebrew</div>
-            <pre id="readerHe" class="reader-text">(nothing loaded)</pre>
+            <label class="sr-only" for="ln-filter">Category</label>
+            <select id="ln-filter" class="select" data-library-filter>
+              <option value="All">All categories</option>
+            </select>
           </div>
         </div>
       </div>
     </section>
+
+    <section class="library-grid">
+      <!-- LEFT: Text list -->
+      <aside class="card card--tall">
+        <div class="card-head">
+          <h2 class="card-title">Texts</h2>
+        </div>
+
+        <div class="card-body">
+          <div class="texts-list" data-library-list>
+            <!-- Filled by library-ui.js -->
+            <p class="muted">Loading…</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- RIGHT: Reader -->
+      <section class="card card--tall">
+        <div class="card-head card-head--split">
+          <div>
+            <h2 class="card-title" data-library-title>Select a text</h2>
+            <p class="muted">Click a verse on the left to read it here.</p>
+          </div>
+
+          <div class="card-actions">
+            <button class="pill ghost" type="button" data-send-chavruta disabled>Send to Chavruta</button>
+            <button class="pill ghost" type="button" data-open-sefaria disabled>Open on Sefaria</button>
+            <button class="pill ghost" type="button" data-copy-ref disabled>Copy ref</button>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="reader-grid">
+            <article class="pane" data-library-english aria-label="English text">
+              <div class="pane-head">ENGLISH</div>
+              <p class="muted">(nothing loaded)</p>
+            </article>
+
+            <article class="pane" data-library-hebrew aria-label="Hebrew text">
+              <div class="pane-head">HEBREW</div>
+              <p class="muted" dir="rtl">(nothing loaded)</p>
+            </article>
+          </div>
+
+          <div class="reader-note">
+            <p class="muted">
+              Tip: Use “Copy ref” to grab the citation (e.g., <span class="mono">Genesis 1:1</span>) for study notes.
+            </p>
+            <p class="muted rtl" dir="rtl">
+              טיפ: “העתק מקור” יעתיק את ההפניה (למשל <span class="mono">Genesis 1:1</span>) למחברות הלימוד.
+            </p>
+          </div>
+        </div>
+      </section>
+    </section>
   </main>
 
-  <script defer src="/scripts/library-ui.js"></script>
+  <!-- Shared footer injected by /scripts/site-shell.js -->
+  <footer class="site-footer"></footer>
+
+  <!-- Scripts -->
+  <script src="../scripts/site-shell.js" defer></script>
+  <script src="../scripts/library-ui.js" defer></script>
 </body>
 </html>
