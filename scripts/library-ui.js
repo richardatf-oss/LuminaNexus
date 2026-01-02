@@ -1,8 +1,11 @@
 // /scripts/library-ui.js
+// LuminaNexus — Library UI (loads list from /data/library-texts.json, loads live text from Sefaria with cache)
+
 (async function () {
   const isInPages = location.pathname.includes("/pages/");
   const root = isInPages ? ".." : ".";
-  const dataUrl = `${root}/data/library-texts.json`;
+  // Use absolute URL resolution so /pages/library (no .html) never breaks relative fetch
+  const dataUrl = new URL(`${root}/data/library-texts.json`, location.href).toString();
 
   const listEl = document.querySelector("[data-library-list]");
   const searchEl = document.querySelector("[data-library-search]");
@@ -20,14 +23,15 @@
   let all = [];
   let current = null;
   let currentLoadToken = 0;
-function stripHtml(s) {
-  return String(s)
-    .replace(/<sup[^>]*>.*?<\/sup>/gi, "")      // remove footnote markers
-    .replace(/<i[^>]*class="footnote"[^>]*>.*?<\/i>/gi, "") // remove footnote bodies
-    .replace(/<[^>]+>/g, "")                   // remove remaining tags
-    .replace(/\s+/g, " ")
-    .trim();
-}
+
+  function stripHtml(s) {
+    return String(s)
+      .replace(/<sup[^>]*>.*?<\/sup>/gi, "") // remove footnote markers
+      .replace(/<i[^>]*class="footnote"[^>]*>.*?<\/i>/gi, "") // remove footnote bodies
+      .replace(/<[^>]+>/g, "") // remove remaining tags
+      .replace(/\s+/g, " ")
+      .trim();
+  }
 
   function escapeHtml(s) {
     return String(s)
@@ -48,8 +52,8 @@ function stripHtml(s) {
               <div class="text-blurb">${escapeHtml(t.blurb || "")}</div>
             </div>
             <div class="text-tags">
-              <span class="chip">${escapeHtml(t.category)}</span>
-              <button class="chip-btn" data-read-id="${escapeHtml(t.id)}">Read</button>
+              <span class="chip">${escapeHtml(t.category || "Text")}</span>
+              <button class="chip-btn" type="button" data-read-id="${escapeHtml(t.id)}">Read</button>
             </div>
           </div>
         `;
@@ -72,14 +76,13 @@ function stripHtml(s) {
   function renderText(t, { english = [], hebrew = [], note = "" } = {}) {
     current = t;
 
-    if (titleEl) titleEl.textContent = t.title;
+    if (titleEl) titleEl.textContent = t.title || "Select a text";
 
     if (enEl) {
       enEl.innerHTML =
         `<div class="pane-head">ENGLISH</div>` +
-        (english.length
-         english.map((line) => `<p>${escapeHtml(stripHtml(line))}</p>`).join("")
-
+        (english && english.length
+          ? english.map((line) => `<p>${escapeHtml(stripHtml(line))}</p>`).join("")
           : `<p class="muted">(nothing loaded)</p>`) +
         (note ? `<p class="muted small">${escapeHtml(note)}</p>` : "");
     }
@@ -87,9 +90,8 @@ function stripHtml(s) {
     if (heEl) {
       heEl.innerHTML =
         `<div class="pane-head">HEBREW</div>` +
-        (hebrew.length
-       hebrew.map((line) => `<p dir="rtl">${escapeHtml(stripHtml(line))}</p>`).join("")
-
+        (hebrew && hebrew.length
+          ? hebrew.map((line) => `<p dir="rtl">${escapeHtml(stripHtml(line))}</p>`).join("")
           : `<p class="muted" dir="rtl">(לא נטען)</p>`);
     }
 
@@ -103,11 +105,11 @@ function stripHtml(s) {
     const filtered = all.filter((t) => {
       const matchesQ =
         !q ||
-        t.title.toLowerCase().includes(q) ||
+        (t.title || "").toLowerCase().includes(q) ||
         (t.ref || "").toLowerCase().includes(q) ||
         (t.blurb || "").toLowerCase().includes(q);
 
-      const matchesCat = cat === "all" || t.category.toLowerCase() === cat;
+      const matchesCat = cat === "all" || (t.category || "").toLowerCase() === cat;
       return matchesQ && matchesCat;
     });
 
@@ -116,7 +118,7 @@ function stripHtml(s) {
 
   function buildCategoryOptions() {
     if (!filterEl) return;
-    const cats = Array.from(new Set(all.map((t) => t.category))).sort();
+    const cats = Array.from(new Set(all.map((t) => t.category).filter(Boolean))).sort();
     filterEl.innerHTML =
       `<option value="All">All categories</option>` +
       cats.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
@@ -126,7 +128,10 @@ function stripHtml(s) {
     const res = await fetch(dataUrl, { cache: "no-store" });
     if (!res.ok) throw new Error(`Library JSON HTTP ${res.status}`);
     const json = await res.json();
-    return json.texts || [];
+    // Accept either {texts:[...]} or bare [...]
+    const arr = Array.isArray(json) ? json : (json.texts || json.items || json.data || []);
+    if (!Array.isArray(arr)) return [];
+    return arr;
   }
 
   async function loadLiveTextFor(t) {
@@ -141,10 +146,11 @@ function stripHtml(s) {
         const live = await window.LN_Sefaria.getText(t.ref);
         if (token !== currentLoadToken) return; // stale click
         const note = live.cached ? "Loaded from cache (Sefaria)." : "Loaded live from Sefaria.";
-        renderText(t, { english: live.english, hebrew: live.hebrew, note });
+        renderText(t, { english: live.english || [], hebrew: live.hebrew || [], note });
         return;
       } catch (e) {
         // fall through to local
+        console.warn("Sefaria load failed, falling back to local", e);
       }
     }
 
@@ -154,7 +160,9 @@ function stripHtml(s) {
     renderText(t, {
       english: t.english || [],
       hebrew: t.hebrew || [],
-      note: hasLocal ? "Loaded from local library fallback." : "Could not load from Sefaria; no local fallback available.",
+      note: hasLocal
+        ? "Loaded from local library fallback."
+        : "Could not load from Sefaria; no local fallback available.",
     });
   }
 
@@ -162,7 +170,13 @@ function stripHtml(s) {
   try {
     all = await loadData();
   } catch (e) {
-    listEl.innerHTML = `<p class="muted">Library failed to load: ${escapeHtml(e.message)}</p>`;
+    const msg = (e && e.message) ? e.message : String(e);
+    listEl.innerHTML = `
+      <p class="muted"><strong>Library failed to load.</strong></p>
+      <p class="muted">Tried: <span class="mono">${escapeHtml(dataUrl)}</span></p>
+      <p class="muted">Error: <span class="mono">${escapeHtml(msg)}</span></p>
+    `;
+    console.error("Library load failed", { dataUrl, error: e });
     return;
   }
 
@@ -207,11 +221,13 @@ function stripHtml(s) {
     // Prefer whatever is currently displayed (if we loaded live, we want that)
     const enLines = Array.from(enEl?.querySelectorAll("p") || [])
       .map((p) => p.textContent)
-      .filter(Boolean);
+      .filter(Boolean)
+      .filter((t) => t !== "Loading…" && t !== "(nothing loaded)");
 
     const heLines = Array.from(heEl?.querySelectorAll("p") || [])
       .map((p) => p.textContent)
-      .filter(Boolean);
+      .filter(Boolean)
+      .filter((t) => t !== "טוען…" && t !== "(לא נטען)" && t !== "(nothing loaded)");
 
     localStorage.setItem(
       "LN_CHAVRUTA_PAYLOAD",
