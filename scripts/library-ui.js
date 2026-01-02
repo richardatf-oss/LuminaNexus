@@ -19,6 +19,7 @@
 
   let all = [];
   let current = null;
+  let currentLoadToken = 0;
 
   function escapeHtml(s) {
     return String(s)
@@ -48,28 +49,41 @@
       .join("");
   }
 
-  function renderCurrent(t) {
+  function setButtonsEnabled(t) {
+    if (btnSefaria) btnSefaria.disabled = !t?.ref;
+    if (btnCopy) btnCopy.disabled = !t?.ref;
+    if (btnSend) btnSend.disabled = !t;
+  }
+
+  function renderLoading(title) {
+    if (titleEl) titleEl.textContent = title || "Loading…";
+    if (enEl) enEl.innerHTML = `<div class="pane-head">ENGLISH</div><p class="muted">Loading…</p>`;
+    if (heEl) heEl.innerHTML = `<div class="pane-head">HEBREW</div><p class="muted" dir="rtl">טוען…</p>`;
+  }
+
+  function renderText(t, { english = [], hebrew = [], note = "" } = {}) {
     current = t;
+
     if (titleEl) titleEl.textContent = t.title;
 
     if (enEl) {
-      enEl.innerHTML = `<div class="pane-head">ENGLISH</div>` +
-        (t.english?.length
-          ? t.english.map((line) => `<p>${escapeHtml(line)}</p>`).join("")
-          : `<p class="muted">(nothing loaded)</p>`);
+      enEl.innerHTML =
+        `<div class="pane-head">ENGLISH</div>` +
+        (english.length
+          ? english.map((line) => `<p>${escapeHtml(line)}</p>`).join("")
+          : `<p class="muted">(nothing loaded)</p>`) +
+        (note ? `<p class="muted small">${escapeHtml(note)}</p>` : "");
     }
 
     if (heEl) {
-      heEl.innerHTML = `<div class="pane-head">HEBREW</div>` +
-        (t.hebrew?.length
-          ? t.hebrew.map((line) => `<p dir="rtl">${escapeHtml(line)}</p>`).join("")
+      heEl.innerHTML =
+        `<div class="pane-head">HEBREW</div>` +
+        (hebrew.length
+          ? hebrew.map((line) => `<p dir="rtl">${escapeHtml(line)}</p>`).join("")
           : `<p class="muted" dir="rtl">(לא נטען)</p>`);
     }
 
-    // buttons
-    if (btnSefaria) btnSefaria.disabled = !t.ref;
-    if (btnCopy) btnCopy.disabled = !t.ref;
-    if (btnSend) btnSend.disabled = false;
+    setButtonsEnabled(t);
   }
 
   function applyFilters() {
@@ -98,12 +112,45 @@
       cats.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
   }
 
-  // Load data
-  try {
+  async function loadData() {
     const res = await fetch(dataUrl, { cache: "no-store" });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) throw new Error(`Library JSON HTTP ${res.status}`);
     const json = await res.json();
-    all = json.texts || [];
+    return json.texts || [];
+  }
+
+  async function loadLiveTextFor(t) {
+    const token = ++currentLoadToken;
+
+    renderLoading(t.title);
+    setButtonsEnabled(t);
+
+    // 1) Try live Sefaria if available
+    if (t.ref && window.LN_Sefaria?.getText) {
+      try {
+        const live = await window.LN_Sefaria.getText(t.ref);
+        if (token !== currentLoadToken) return; // stale click
+        const note = live.cached ? "Loaded from cache (Sefaria)." : "Loaded live from Sefaria.";
+        renderText(t, { english: live.english, hebrew: live.hebrew, note });
+        return;
+      } catch (e) {
+        // fall through to local
+      }
+    }
+
+    // 2) Fallback to local JSON content if present
+    if (token !== currentLoadToken) return;
+    const hasLocal = (t.english && t.english.length) || (t.hebrew && t.hebrew.length);
+    renderText(t, {
+      english: t.english || [],
+      hebrew: t.hebrew || [],
+      note: hasLocal ? "Loaded from local library fallback." : "Could not load from Sefaria; no local fallback available.",
+    });
+  }
+
+  // Boot
+  try {
+    all = await loadData();
   } catch (e) {
     listEl.innerHTML = `<p class="muted">Library failed to load: ${escapeHtml(e.message)}</p>`;
     return;
@@ -113,7 +160,11 @@
   renderList(all);
 
   // Default select first
-  if (all[0]) renderCurrent(all[0]);
+  if (all[0]) {
+    await loadLiveTextFor(all[0]);
+  } else {
+    renderText({ title: "No texts yet", ref: "" }, { english: [], hebrew: [] });
+  }
 
   // Events
   listEl.addEventListener("click", (ev) => {
@@ -121,7 +172,7 @@
     if (!btn) return;
     const id = btn.getAttribute("data-read-id");
     const t = all.find((x) => x.id === id);
-    if (t) renderCurrent(t);
+    if (t) loadLiveTextFor(t);
   });
 
   searchEl?.addEventListener("input", applyFilters);
@@ -142,12 +193,26 @@
 
   btnSend?.addEventListener("click", () => {
     if (!current) return;
-    localStorage.setItem("LN_CHAVRUTA_PAYLOAD", JSON.stringify({
-      ref: current.ref,
-      title: current.title,
-      english: current.english || [],
-      hebrew: current.hebrew || []
-    }));
+
+    // Prefer whatever is currently displayed (if we loaded live, we want that)
+    const enLines = Array.from(enEl?.querySelectorAll("p") || [])
+      .map((p) => p.textContent)
+      .filter(Boolean);
+
+    const heLines = Array.from(heEl?.querySelectorAll("p") || [])
+      .map((p) => p.textContent)
+      .filter(Boolean);
+
+    localStorage.setItem(
+      "LN_CHAVRUTA_PAYLOAD",
+      JSON.stringify({
+        ref: current.ref,
+        title: current.title,
+        english: enLines,
+        hebrew: heLines,
+      })
+    );
+
     location.href = `${root}/pages/chavruta.html`;
   });
 })();
