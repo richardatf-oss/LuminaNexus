@@ -20,6 +20,14 @@
   let all = [];
   let current = null;
   let currentLoadToken = 0;
+function stripHtml(s) {
+  return String(s)
+    .replace(/<sup[^>]*>.*?<\/sup>/gi, "")      // remove footnote markers
+    .replace(/<i[^>]*class="footnote"[^>]*>.*?<\/i>/gi, "") // remove footnote bodies
+    .replace(/<[^>]+>/g, "")                   // remove remaining tags
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
   function escapeHtml(s) {
     return String(s)
