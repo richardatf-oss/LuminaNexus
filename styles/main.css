@@ -64,6 +64,9 @@ img{max-width:100%;display:block}
   z-index:9999;
 }
 .skip-link:focus{transform:translateY(0)}
+.hero-boundary {
+  letter-spacing: 0.01em;
+}
 
 /* Soft site glow overlay */
 .with-glow::before{
@@ -77,6 +80,28 @@ img{max-width:100%;display:block}
     radial-gradient(900px 520px at 20% 25%, rgba(120,170,255,.10), transparent 66%),
     radial-gradient(900px 520px at 80% 35%, rgba(120,170,255,.08), transparent 70%);
   filter: blur(0px);
+}
+/* Hero boundary statement — restraint & trust */
+.hero-boundary {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.82);
+
+  text-align: center;
+  max-width: 52ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-boundary .hebrew-inline {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.9rem;
+  opacity: 0.85;
 }
 
 /* ---------- Typography helpers ---------- */
@@ -404,4 +429,14 @@ section.wrap{padding:26px 0}
 @media (prefers-reduced-motion: reduce){
   *{scroll-behavior:auto !important}
   .pill, .btn, .filter-chip{transition:none}
+}
+/* Mobile refinement for hero boundary */
+@media (max-width: 520px) {
+  .hero-boundary {
+    font-size: 0.92rem;
+  }
+
+  .hero-boundary .hebrew-inline {
+    font-size: 0.88rem;
+  }
 }
