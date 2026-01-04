@@ -19,6 +19,7 @@
       <h1>The 231 Gates of Light</h1>
       <p class="muted">All 231 unique Hebrew letter pairings (22 choose 2). Torah-first, source-first.</p>
 
+      <!-- ================= KAVANAH REQUIRED ================= -->
       <div id="gateRequire" class="card" style="margin-top:14px; display:none;">
         <div class="card-tag">KAVANAH REQUIRED · <span class="hebrew-inline">כוונה</span></div>
         <p>
@@ -28,13 +29,14 @@
         <a class="btn primary" href="/pages/orientation.html?dest=231">Set Kavanah →</a>
       </div>
 
+      <!-- ================= GATE APP (VISIBLE AFTER KAVANAH) ================= -->
       <div id="gateApp" style="display:none; margin-top:14px;">
 
         <!-- ================= FEATURED GATES (BLURBS + LINKS) ================= -->
         <div class="card" style="margin-top:0;">
           <div class="card-tag">FEATURED GATES · <span class="hebrew-inline">שערים מובחרים</span></div>
           <p class="muted" style="margin-top:8px;">
-            A quick entry to completed gates (each gate page stays minimal: orientation → sources → boundary → one question).
+            Completed gates (each gate page stays minimal: orientation → sources → boundary → one question).
           </p>
 
           <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:12px; margin-top:12px;">
@@ -58,10 +60,10 @@
                 <span class="hebrew-inline">א–ג</span> · Aleph–Gimel
               </h3>
               <p class="muted" style="margin-top:8px;">
-                From Oneness to Giving — unity expressed as restrained generosity, not spiritual status.
+                From Oneness to Giving — unity expressed as restrained generosity, not status.
               </p>
               <p class="hebrew" style="margin-top:6px;">
-                מאחדות לגמילות חסדים — אחדות כמעשה נתינה מרוסן, לא כמעמד רוחני.
+                מאחדות לגמילות חסדים — אחדות כנתינה מרוסנת, לא כמעמד.
               </p>
               <a class="btn primary" href="/pages/gates/aleph-gimel.html" style="margin-top:10px;">Open Gate Page →</a>
             </article>
@@ -119,11 +121,12 @@
   <script src="/scripts/nav-active.js" defer></script>
   <script src="/scripts/231-gates.js" defer></script>
 
-  <!-- ================= BLURB/LINK ENHANCER (OPTION A) ================= -->
+  <!-- ================= BLURB + LINK ENHANCER (OPTION A) ================= -->
   <script>
   (function () {
-    // Map of known gate pages + blurbs. Add progressively.
+    // Add progressively. Blurby index lives here; gate pages remain minimal.
     const GATE_INFO = {
+      // Completed gate pages
       "אב": {
         enTitle: "Gate א–ב · Aleph–Bet",
         enBlurb: "From Oneness to House — how unity becomes a bounded place for meaning.",
@@ -132,37 +135,83 @@
       },
       "אג": {
         enTitle: "Gate א–ג · Aleph–Gimel",
-        enBlurb: "From Oneness to Giving — unity expressed as restrained generosity, not spiritual status.",
-        heBlurb: "מאחדות לגמילות חסדים — אחדות כמעשה נתינה מרוסן, לא כמעמד רוחני.",
+        enBlurb: "From Oneness to Giving — unity expressed as restrained generosity, not status.",
+        heBlurb: "מאחדות לגמילות חסדים — אחדות כנתינה מרוסנת, לא כמעמד.",
         href: "/pages/gates/aleph-gimel.html"
+      },
+
+      // Aleph row blurbs (foundation set; pages may be added later)
+      "אד": {
+        enTitle: "Gate א–ד · Aleph–Dalet",
+        enBlurb: "From Oneness to Need — how unity encounters lack without domination.",
+        heBlurb: "מאחדות לדלות — כיצד האחד פוגש חסר בלי שליטה."
+      },
+      "אה": {
+        enTitle: "Gate א–ה · Aleph–Heh",
+        enBlurb: "From Oneness to Breath — how unity allows space for emergence.",
+        heBlurb: "מאחדות לה״א — כיצד האחד יוצר מרווח להופעה."
+      },
+      "או": {
+        enTitle: "Gate א–ו · Aleph–Vav",
+        enBlurb: "From Oneness to Connection — how unity becomes a joining line, not a chain.",
+        heBlurb: "מאחדות לו״ו — כיצד האחד נעשה חיבור, לא כביל."
+      },
+      "אז": {
+        enTitle: "Gate א–ז · Aleph–Zayin",
+        enBlurb: "From Oneness to Struggle — how unity faces conflict without becoming violence.",
+        heBlurb: "מאחדות לז״ין — כיצד האחד פוגש מאבק בלי להידרדר לאלימות."
+      },
+      "אח": {
+        enTitle: "Gate א–ח · Aleph–Chet",
+        enBlurb: "From Oneness to Boundary — how unity creates enclosure without suffocation.",
+        heBlurb: "מאחדות לחֵית — כיצד האחד יוצר גבול בלי חנק."
+      },
+      "אט": {
+        enTitle: "Gate א–ט · Aleph–Tet",
+        enBlurb: "From Oneness to Containment — how unity holds what is hidden without forcing it open.",
+        heBlurb: "מאחדות לטֵית — כיצד האחד מחזיק נסתר בלי כפייה."
+      },
+      "אי": {
+        enTitle: "Gate א–י · Aleph–Yod",
+        enBlurb: "From Oneness to Point — how unity concentrates without collapsing.",
+        heBlurb: "מאחדות ליו״ד — כיצד האחד מתכנס בלי להישבר."
+      },
+      "אכ": {
+        enTitle: "Gate א–כ · Aleph–Kaf",
+        enBlurb: "From Oneness to Measure — how unity takes form through restraint.",
+        heBlurb: "מאחדות לכ״ף — כיצד האחד נמדד באמצעות ריסון."
       }
     };
 
     function normalizePair(text) {
       if (!text) return "";
-      // Keep only Hebrew letters and common punctuation; compress.
-      return text.replace(/[^\u0590-\u05FF]/g, "").trim();
+      // Keep only Hebrew letters (so "א–ב", "אב", etc. normalize to "אב")
+      return String(text).replace(/[^\u0590-\u05FF]/g, "").trim();
     }
 
     function renderSelected(pair) {
       const selectedTitle = document.getElementById("selectedTitle");
       const selectedBody = document.getElementById("selectedBody");
       const selectedOpenGate = document.getElementById("selectedOpenGate");
-
       if (!selectedTitle || !selectedBody || !selectedOpenGate) return;
 
       const info = GATE_INFO[pair];
 
       if (info) {
-        selectedTitle.textContent = info.enTitle;
+        selectedTitle.textContent = info.enTitle || (`Gate ${pair}`);
 
         selectedBody.innerHTML = `
-          <p style="margin:0 0 8px 0;">${info.enBlurb}</p>
-          <p class="hebrew" style="margin:0;">${info.heBlurb}</p>
+          <p style="margin:0 0 8px 0;">${info.enBlurb || ""}</p>
+          <p class="hebrew" style="margin:0;">${info.heBlurb || ""}</p>
         `;
 
-        selectedOpenGate.href = info.href;
-        selectedOpenGate.style.display = "inline-flex";
+        if (info.href) {
+          selectedOpenGate.href = info.href;
+          selectedOpenGate.style.display = "inline-flex";
+        } else {
+          selectedOpenGate.href = "#";
+          selectedOpenGate.style.display = "none";
+        }
       } else {
         selectedTitle.textContent = pair ? `Gate ${pair}` : "Select a gate to open it.";
         selectedBody.innerHTML = pair
@@ -175,21 +224,20 @@
       }
     }
 
-    // Event delegation: works even if 231-gates.js renders buttons later.
+    // Enhance clicks on the gate grid even if it is rendered by external JS.
     document.addEventListener("click", function (e) {
       const target = e.target;
-      if (!target) return;
+      if (!target || !target.closest) return;
 
-      // Support clicks on buttons/links inside the grid.
-      const btn = target.closest && target.closest("#gateGrid button, #gateGrid a, #gateGrid .pill, #gateGrid .btn");
-      if (!btn) return;
+      const withinGrid = target.closest("#gateGrid");
+      if (!withinGrid) return;
 
-      const pair = normalizePair(btn.textContent || btn.innerText || "");
+      const clickable = target.closest("button, a, .pill, .btn, span, div");
+      if (!clickable) return;
+
+      const pair = normalizePair(clickable.textContent || clickable.innerText || "");
       if (pair) renderSelected(pair);
     }, true);
-
-    // If 231-gates.js pre-selects something, this doesn't interfere.
-    // We only enhance when the user clicks.
   })();
   </script>
 </body>
