@@ -29,7 +29,47 @@
       </div>
 
       <div id="gateApp" style="display:none; margin-top:14px;">
+
+        <!-- ================= FEATURED GATES (BLURBS + LINKS) ================= -->
         <div class="card" style="margin-top:0;">
+          <div class="card-tag">FEATURED GATES · <span class="hebrew-inline">שערים מובחרים</span></div>
+          <p class="muted" style="margin-top:8px;">
+            A quick entry to completed gates (each gate page stays minimal: orientation → sources → boundary → one question).
+          </p>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:12px; margin-top:12px;">
+            <article class="card" style="margin:0;">
+              <div class="card-tag">GATE · <span class="hebrew-inline">שער</span></div>
+              <h3 style="margin-top:6px;">
+                <span class="hebrew-inline">א–ב</span> · Aleph–Bet
+              </h3>
+              <p class="muted" style="margin-top:8px;">
+                From Oneness to House — how unity becomes a bounded place for meaning.
+              </p>
+              <p class="hebrew" style="margin-top:6px;">
+                מאחדות לבית — כיצד האחד נעשה מקום מוגבל למשמעות.
+              </p>
+              <a class="btn primary" href="/pages/gates/aleph-bet.html" style="margin-top:10px;">Open Gate Page →</a>
+            </article>
+
+            <article class="card" style="margin:0;">
+              <div class="card-tag">GATE · <span class="hebrew-inline">שער</span></div>
+              <h3 style="margin-top:6px;">
+                <span class="hebrew-inline">א–ג</span> · Aleph–Gimel
+              </h3>
+              <p class="muted" style="margin-top:8px;">
+                From Oneness to Giving — unity expressed as restrained generosity, not spiritual status.
+              </p>
+              <p class="hebrew" style="margin-top:6px;">
+                מאחדות לגמילות חסדים — אחדות כמעשה נתינה מרוסן, לא כמעמד רוחני.
+              </p>
+              <a class="btn primary" href="/pages/gates/aleph-gimel.html" style="margin-top:10px;">Open Gate Page →</a>
+            </article>
+          </div>
+        </div>
+
+        <!-- ================= KAVANAH SUMMARY ================= -->
+        <div class="card" style="margin-top:14px;">
           <div class="card-tag">KAVANAH · <span class="hebrew-inline">כוונה</span></div>
           <h3 style="margin-top:6px;">Your saved Gate settings</h3>
 
@@ -41,6 +81,7 @@
           </div>
         </div>
 
+        <!-- ================= GATES LIST ================= -->
         <div class="card" style="margin-top:14px;">
           <div class="card-tag">GATES LIST · <span class="hebrew-inline">שערים</span></div>
 
@@ -52,20 +93,23 @@
           <div id="gateGrid" style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px;"></div>
         </div>
 
+        <!-- ================= SELECTED GATE (BLURB + LINK) ================= -->
         <div class="card" style="margin-top:14px;">
           <div class="card-tag">SELECTED GATE · <span class="hebrew-inline">שער נבחר</span></div>
 
           <h3 id="selectedTitle" style="margin-top:6px;">Select a gate to open it.</h3>
 
           <div id="selectedBody" class="muted" style="margin-top:10px;">
-            Click any pair above to view details here.
+            Click any pair above. If a blurb exists, it will appear here. If the gate page exists, you can open it directly.
           </div>
 
           <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-            <a id="selectedToChavruta" class="btn primary" href="/pages/chavruta.html">Bring this gate to Chavruta →</a>
+            <a id="selectedOpenGate" class="btn primary" href="#" style="display:none;">Open Gate Page →</a>
+            <a id="selectedToChavruta" class="btn ghost" href="/pages/chavruta.html">Bring this gate to Chavruta →</a>
             <a class="btn ghost" href="/pages/library.html">Open Library →</a>
           </div>
         </div>
+
       </div>
     </section>
   </main>
@@ -74,5 +118,79 @@
 
   <script src="/scripts/nav-active.js" defer></script>
   <script src="/scripts/231-gates.js" defer></script>
+
+  <!-- ================= BLURB/LINK ENHANCER (OPTION A) ================= -->
+  <script>
+  (function () {
+    // Map of known gate pages + blurbs. Add progressively.
+    const GATE_INFO = {
+      "אב": {
+        enTitle: "Gate א–ב · Aleph–Bet",
+        enBlurb: "From Oneness to House — how unity becomes a bounded place for meaning.",
+        heBlurb: "מאחדות לבית — כיצד האחד נעשה מקום מוגבל למשמעות.",
+        href: "/pages/gates/aleph-bet.html"
+      },
+      "אג": {
+        enTitle: "Gate א–ג · Aleph–Gimel",
+        enBlurb: "From Oneness to Giving — unity expressed as restrained generosity, not spiritual status.",
+        heBlurb: "מאחדות לגמילות חסדים — אחדות כמעשה נתינה מרוסן, לא כמעמד רוחני.",
+        href: "/pages/gates/aleph-gimel.html"
+      }
+    };
+
+    function normalizePair(text) {
+      if (!text) return "";
+      // Keep only Hebrew letters and common punctuation; compress.
+      return text.replace(/[^\u0590-\u05FF]/g, "").trim();
+    }
+
+    function renderSelected(pair) {
+      const selectedTitle = document.getElementById("selectedTitle");
+      const selectedBody = document.getElementById("selectedBody");
+      const selectedOpenGate = document.getElementById("selectedOpenGate");
+
+      if (!selectedTitle || !selectedBody || !selectedOpenGate) return;
+
+      const info = GATE_INFO[pair];
+
+      if (info) {
+        selectedTitle.textContent = info.enTitle;
+
+        selectedBody.innerHTML = `
+          <p style="margin:0 0 8px 0;">${info.enBlurb}</p>
+          <p class="hebrew" style="margin:0;">${info.heBlurb}</p>
+        `;
+
+        selectedOpenGate.href = info.href;
+        selectedOpenGate.style.display = "inline-flex";
+      } else {
+        selectedTitle.textContent = pair ? `Gate ${pair}` : "Select a gate to open it.";
+        selectedBody.innerHTML = pair
+          ? `<p style="margin:0;">Blurb not yet written for <span class="hebrew-inline">${pair}</span>. Gate page coming soon.</p>
+             <p class="hebrew" style="margin:6px 0 0 0;">טרם נכתב תקציר לשער <span class="hebrew-inline">${pair}</span>. דף השער יתווסף בהמשך.</p>`
+          : `Click any pair above. If a blurb exists, it will appear here. If the gate page exists, you can open it directly.`;
+
+        selectedOpenGate.href = "#";
+        selectedOpenGate.style.display = "none";
+      }
+    }
+
+    // Event delegation: works even if 231-gates.js renders buttons later.
+    document.addEventListener("click", function (e) {
+      const target = e.target;
+      if (!target) return;
+
+      // Support clicks on buttons/links inside the grid.
+      const btn = target.closest && target.closest("#gateGrid button, #gateGrid a, #gateGrid .pill, #gateGrid .btn");
+      if (!btn) return;
+
+      const pair = normalizePair(btn.textContent || btn.innerText || "");
+      if (pair) renderSelected(pair);
+    }, true);
+
+    // If 231-gates.js pre-selects something, this doesn't interfere.
+    // We only enhance when the user clicks.
+  })();
+  </script>
 </body>
 </html>
