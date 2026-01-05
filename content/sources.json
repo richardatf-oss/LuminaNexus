@@ -1,9 +1,0 @@
-{
-  "policy": {
-    "note": "We cite sources where appropriate and keep quotes short."
-  },
-  "starter_sources": [
-    { "type": "tanakh", "ref": "Genesis 1" },
-    { "type": "commentary", "ref": "Rashi (as appropriate)" }
-  ]
-}
