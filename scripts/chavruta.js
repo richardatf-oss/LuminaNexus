@@ -136,9 +136,13 @@
       });
 
       const text = await res.text();
-let data = {};
-try { data = JSON.parse(text); } catch { data = { raw: text }; }
-return { ok: res.ok, status: res.status, data };
+
+      let data;
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        data = { ok: false, error: "Non-JSON response from function", raw: text };
+      }
 
       return { ok: res.ok, status: res.status, data };
     } finally {
@@ -170,18 +174,32 @@ return { ok: res.ok, status: res.status, data };
 
       const r = await postJSON(payload);
 
-      if (!r.ok || !r.data?.ok) {
-        const msg = r.data?.error || (r.status ? `HTTP ${r.status}` : "Request failed");
+      // Prefer function-style ok flag if you use it
+      const funcOk = (r.data && typeof r.data.ok === "boolean") ? r.data.ok : r.ok;
+
+      if (!r.ok || !funcOk) {
+        const msg =
+          r.data?.error ||
+          r.data?.message ||
+          (r.status ? `HTTP ${r.status}` : "Request failed");
         addMessage("Chavruta", `Chavruta error: ${msg}`, "error");
         return;
       }
 
-      const reply = String(r.data.content || r.data.reply || "").trim() || "(No response text returned.)";
+      const reply = String(r.data.content || r.data.reply || r.data.answer || "").trim()
+        || "(No response text returned.)";
+
       addMessage("Chavruta", reply, "assistant");
       pushHistory("assistant", reply);
     } catch (err) {
       const isAbort = err?.name === "AbortError";
-      addMessage("Chavruta", isAbort ? "Chavruta error: Request aborted / timed out." : `Chavruta error: ${err?.message || err}`, "error");
+      addMessage(
+        "Chavruta",
+        isAbort
+          ? "Chavruta error: Request aborted / timed out."
+          : `Chavruta error: ${err?.message || err}`,
+        "error"
+      );
     } finally {
       setDisabled(false);
       setStatus("Ready", false);
@@ -228,66 +246,65 @@ return { ok: res.ok, status: res.status, data };
     addMessage("Chavruta", "Bring a passage. Then ask one question. I’ll keep speculation clearly labeled.", "assistant");
   }
 
- // wiring (guarded: NEVER die silently)
-try {
-  // mode buttons (optional)
-  if (els.modeButtons?.length) {
-    els.modeButtons.forEach(btn =>
-      btn.addEventListener("click", () => setMode(btn.dataset.mode))
-    );
-  } else {
-    console.warn("[chavruta] no mode buttons found (.chip[data-mode])");
-  }
-
-  // options (optional)
-  if (els.optHebrew) {
-    els.optHebrew.addEventListener("change", () => {
-      state.includeHebrew = !!els.optHebrew.checked;
-    });
-  } else {
-    console.warn("[chavruta] missing optHebrew checkbox (#optHebrew)");
-  }
-
-  if (els.optCitations) {
-    els.optCitations.addEventListener("change", () => {
-      state.askForCitations = !!els.optCitations.checked;
-    });
-  } else {
-    console.warn("[chavruta] missing optCitations checkbox (#optCitations)");
-  }
-
-  // required buttons
-  els.stop.addEventListener("click", stopInFlight);
-  els.gen11.addEventListener("click", () => { els.input.value = "Genesis 1:1"; els.input.focus(); });
-
-  els.btnClear.addEventListener("click", () => { stopInFlight(); clearUI(); });
-  els.btnNew.addEventListener("click", newThread);
-  els.btnExport.addEventListener("click", exportThread);
-
-  // submit: trim BEFORE clearing + always show something if it fails
-  els.form.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const v = String(els.input.value || "").trim();
-    if (!v) {
-      setStatus("Type a question first", false);
-      return;
+  // wiring (guarded: NEVER die silently)
+  try {
+    // mode buttons (optional)
+    if (els.modeButtons?.length) {
+      els.modeButtons.forEach(btn =>
+        btn.addEventListener("click", () => setMode(btn.dataset.mode))
+      );
+    } else {
+      console.warn("[chavruta] no mode buttons found (.chip[data-mode])");
     }
 
-    els.input.value = "";
-    sendText(v);
-  });
+    // options (optional)
+    if (els.optHebrew) {
+      els.optHebrew.addEventListener("change", () => {
+        state.includeHebrew = !!els.optHebrew.checked;
+      });
+    } else {
+      console.warn("[chavruta] missing optHebrew checkbox (#optHebrew)");
+    }
 
-} catch (err) {
-  console.error("[chavruta] wiring crash:", err);
-  setStatus("Chavruta crashed (see console)", false);
-}
+    if (els.optCitations) {
+      els.optCitations.addEventListener("change", () => {
+        state.askForCitations = !!els.optCitations.checked;
+      });
+    } else {
+      console.warn("[chavruta] missing optCitations checkbox (#optCitations)");
+    }
 
+    // required buttons
+    els.stop.addEventListener("click", stopInFlight);
+    els.gen11.addEventListener("click", () => { els.input.value = "Genesis 1:1"; els.input.focus(); });
+
+    els.btnClear.addEventListener("click", () => { stopInFlight(); clearUI(); });
+    els.btnNew.addEventListener("click", newThread);
+    els.btnExport.addEventListener("click", exportThread);
+
+    // submit: trim BEFORE clearing + always show something if it fails
+    els.form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const v = String(els.input.value || "").trim();
+      if (!v) {
+        setStatus("Type a question first", false);
+        return;
+      }
+
+      els.input.value = "";
+      sendText(v);
+    });
+
+  } catch (err) {
+    console.error("[chavruta] wiring crash:", err);
+    setStatus("Chavruta crashed (see console)", false);
+  }
 
   // boot
   setMode("peshat");
-  state.includeHebrew = !!els.optHebrew.checked;
-  state.askForCitations = !!els.optCitations.checked;
+  state.includeHebrew = !!els.optHebrew?.checked;
+  state.askForCitations = !!els.optCitations?.checked;
 
   addMessage("Chavruta", "Bring a passage. Then ask one question. I’ll keep speculation clearly labeled.", "assistant");
   setStatus("Ready", false);
