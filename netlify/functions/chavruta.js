@@ -1,9 +1,8 @@
-// netlify/functions/chavruta.js  (CommonJS - safest on Netlify)
+// netlify/functions/chavruta.js  (CommonJS for Netlify compatibility)
 const OpenAI = require("openai");
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// One canonical system prompt (no duplicates)
 function buildSystemPrompt({ mode, includeHebrew, askForCitations }) {
   return `
 You are ChavrutaGPT — a Torah-first study partner.
@@ -29,7 +28,6 @@ MODE:
 
 CITATIONS:
 - If askForCitations is true, include a short "Sources:" section at the end when possible.
-- Sources can be: Tanakh references, Mishnah/Talmud, Rashi, Ramban, Ibn Ezra, Shulchan Aruch, etc.
 - If you cannot cite precisely, say "Sources: (approx.)" and be honest.
 
 Current mode: ${mode}
@@ -42,7 +40,7 @@ function normalizeHistory(history) {
   if (!Array.isArray(history)) return [];
   const cleaned = history
     .filter(m => m && typeof m.content === "string" && typeof m.role === "string")
-    .filter(m => ["user", "assistant"].includes(m.role)) // ignore user-supplied "system"
+    .filter(m => ["user", "assistant"].includes(m.role))
     .map(m => ({ role: m.role, content: m.content.slice(0, 4000) }));
   return cleaned.slice(-16);
 }
@@ -69,7 +67,7 @@ exports.handler = async (event) => {
     const includeHebrew = !!options.includeHebrew;
     const askForCitations = options.askForCitations !== false;
 
-    if (!input.trim()) {
+    if (!String(input).trim()) {
       return {
         statusCode: 200,
         headers: { "Content-Type": "application/json" },
@@ -82,7 +80,7 @@ exports.handler = async (event) => {
 
     const userPrompt = `
 User question or text:
-${input.trim()}
+${String(input).trim()}
 
 Respond according to the mode and rules.
 `.trim();
@@ -92,7 +90,7 @@ Respond according to the mode and rules.
       messages: [
         { role: "system", content: system },
         ...history,
-        { role: "user", content: userPrompt },
+        { role: "user", content: userPrompt }
       ],
       temperature: 0.2,
       max_tokens: 600,
