@@ -1,6 +1,7 @@
+# _redirects
 # LuminaNexus — clean redirects (Chavruta-first)
 
-# Chavruta pretty URL -> chavruta.html
+# /chavruta should load the Chavruta app (NOT index.html)
 /chavruta              /chavruta.html            200
 
 # Legacy routes (retired) -> home
