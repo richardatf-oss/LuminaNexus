@@ -3,7 +3,86 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chav<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Chavruta — LuminaNexus</title>
+  <meta name="description" content="Chavruta — Torah-first study partner." />
+  <meta name="theme-color" content="#070A10" />
+  <link rel="icon" href="/assets/img/gate-hero.png" />
+  <link rel="stylesheet" href="/css/site.css" />
+</head>
+
+<body>
+  <header class="topbar" role="banner">
+    <div class="wrap topbar-row">
+      <div class="brand">
+        <div class="brand-mark">↯</div>
+        <div class="brand-text">
+          <div class="brand-title">Chavruta</div>
+          <div class="brand-subtitle">Torah-first • Peshat first • One classical note • Then questions</div>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <a class="topbar-cta" href="/">Sanctuary</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap app-wrap">
+    <div class="panel">
+
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Ask a question</div>
+          <div class="panel-sub" id="statusHint">
+            Peshat: plain meaning first, minimal speculation.
+          </div>
+        </div>
+        <div class="panel-sub" id="statusPill">Ready</div>
+      </div>
+
+      <!-- MODE -->
+      <div class="toolbar">
+        <button class="chip is-active" data-mode="peshat">Peshat</button>
+        <button class="chip" data-mode="chavruta">Chavruta</button>
+        <button class="chip" data-mode="sources">Sources</button>
+
+        <label class="opt">
+          <input type="checkbox" id="optHebrew" />
+          Include Hebrew
+        </label>
+
+        <label class="opt">
+          <input type="checkbox" id="optCitations" checked />
+          Citations
+        </label>
+
+        <button id="btnGen11">Genesis 1:1</button>
+        <button id="btnStop">Stop</button>
+        <button id="btnNew">New</button>
+        <button id="btnClear">Clear</button>
+        <button id="btnExport">Export</button>
+      </div>
+
+      <!-- CHAT -->
+      <div class="chat" id="stream"></div>
+
+      <!-- COMPOSER -->
+      <form class="composer" id="form">
+        <input id="input" type="text" autocomplete="off" placeholder="Type your question…" />
+        <button id="send" type="submit">Send</button>
+      </form>
+
+    </div>
+  </main>
+
+  <script src="/scripts/chavruta.js"></script>
+</body>
+</html>
+ruta — LuminaNexus</title>
   <meta name="description" content="Chavruta — Torah-first study partner." />
   <meta name="theme-color" content="#070A10" />
 
