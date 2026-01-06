@@ -6,7 +6,6 @@
   <title>Chavruta — LuminaNexus</title>
   <meta name="description" content="Chavruta — Torah-first study partner." />
   <meta name="theme-color" content="#070A10" />
-
   <link rel="icon" href="/assets/img/gate-hero.png" />
   <link rel="stylesheet" href="/css/site.css" />
 
@@ -25,127 +24,117 @@
       padding: 16px 18px;
       border-bottom: 1px solid rgba(235,242,255,.10);
       display:flex;
-      align-items:flex-start;
+      align-items:center;
       justify-content: space-between;
       gap: 12px;
       background: rgba(0,0,0,.18);
     }
-
     .panel-title{ font-weight: 700; letter-spacing: .2px; }
-    .panel-sub{ color: rgba(184,195,230,.88); font-size: 13px; margin-top: 2px; }
+    .panel-sub{ color: rgba(184,195,230,.88); font-size: 13px; }
 
-    .status-wrap{
-      display:flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 6px;
-      min-width: 180px;
+    /* Warning banner shown if JS doesn't load */
+    .warn{
+      margin: 14px 18px 0;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(245,210,138,.24);
+      background: rgba(245,210,138,.10);
+      color: rgba(234,240,255,.92);
+      font-size: 13px;
     }
-    .status-pill{
+
+    .toolbar{
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(235,242,255,.10);
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+      justify-content: space-between;
+      background: rgba(0,0,0,.12);
+    }
+
+    .left, .right{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+    }
+
+    .chip{
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(235,242,255,.14);
+      background: rgba(235,242,255,.06);
+      cursor:pointer;
+      font-size: 13px;
+      color: rgba(234,240,255,.92);
+      user-select:none;
+    }
+    .chip:hover{ background: rgba(235,242,255,.09); }
+    .chip.is-active{
+      border-color: rgba(245,210,138,.28);
+      background: rgba(245,210,138,.12);
+    }
+
+    .opt{
       display:inline-flex;
       align-items:center;
       gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(235,242,255,.12);
+      background: rgba(0,0,0,.12);
+      color: rgba(184,195,230,.92);
+      font-size: 13px;
+    }
+    .opt input{ transform: translateY(1px); }
+
+    .btn{
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(235,242,255,.14);
+      background: rgba(235,242,255,.06);
+      color: rgba(234,240,255,.92);
+      cursor:pointer;
+      font-size: 13px;
+    }
+    .btn:hover{ background: rgba(235,242,255,.09); }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; }
+
+    .btn.gold{
+      border-color: rgba(245,210,138,.28);
+      background: rgba(245,210,138,.12);
+    }
+    .btn.gold:hover{ background: rgba(245,210,138,.16); }
+
+    .status-pill{
       padding: 6px 10px;
       border-radius: 999px;
       border: 1px solid rgba(235,242,255,.12);
       background: rgba(0,0,0,.18);
       color: rgba(184,195,230,.92);
       font-size: 12px;
+      white-space: nowrap;
     }
     .status-pill.is-thinking{
-      border-color: rgba(245,210,138,.30);
-      background: rgba(245,210,138,.12);
-      color: rgba(234,240,255,.92);
+      border-color: rgba(245,210,138,.26);
+      background: rgba(245,210,138,.10);
+      color: rgba(234,240,255,.94);
     }
-    .status-hint{
-      color: rgba(184,195,230,.78);
+    .hint{
+      color: rgba(184,195,230,.82);
       font-size: 12px;
-      text-align: right;
+      margin-left: 10px;
     }
-
-    .toolbar{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(235,242,255,.10);
-      background: rgba(0,0,0,.16);
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .left-tools, .right-tools{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items:center;
-    }
-
-    .chips{
-      display:flex;
-      gap: 8px;
-      align-items:center;
-      flex-wrap: wrap;
-    }
-    .chip{
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(235,242,255,.14);
-      background: rgba(235,242,255,.06);
-      color: rgba(184,195,230,.95);
-      cursor:pointer;
-      font-size: 12px;
-      letter-spacing: .2px;
-    }
-    .chip.is-active{
-      border-color: rgba(245,210,138,.30);
-      background: rgba(245,210,138,.14);
-      color: rgba(234,240,255,.95);
-    }
-
-    .toggle{
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      padding: 7px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(235,242,255,.14);
-      background: rgba(235,242,255,.06);
-      color: rgba(184,195,230,.95);
-      font-size: 12px;
-      user-select:none;
-    }
-    .toggle input{ accent-color: var(--gold); }
-
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(235,242,255,.14);
-      background: rgba(235,242,255,.06);
-      color: rgba(184,195,230,.95);
-      cursor:pointer;
-      font-size: 12px;
-    }
-    .btn:hover{ text-decoration:none; background: rgba(235,242,255,.09); }
-    .btn:disabled{ opacity:.55; cursor:not-allowed; }
-
-    .btn-warm{
-      border-color: rgba(245,210,138,.28);
-      background: rgba(245,210,138,.14);
-      color: rgba(234,240,255,.95);
-    }
-    .btn-warm:hover{ background: rgba(245,210,138,.18); }
 
     .stream{
       padding: 18px;
       display:flex;
       flex-direction: column;
       gap: 12px;
-      min-height: 360px;
-      max-height: 56vh;
+      min-height: 320px;
+      max-height: 52vh;
       overflow:auto;
     }
 
@@ -156,7 +145,6 @@
       border: 1px solid rgba(235,242,255,.12);
       background: rgba(235,242,255,.05);
       color: rgba(234,240,255,.92);
-      white-space: pre-wrap;
     }
     .msg.user{
       align-self: flex-end;
@@ -167,17 +155,17 @@
       align-self: flex-start;
       border-color: rgba(255,120,120,.28);
       background: rgba(255,120,120,.10);
-      color: rgba(255,220,220,.95);
     }
     .meta{
       display:flex;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 6px;
-      color: rgba(184,195,230,.78);
       font-size: 12px;
+      color: rgba(184,195,230,.80);
+      margin-bottom: 6px;
     }
-    .who{ font-weight: 600; color: rgba(234,240,255,.86); }
+    .who{ font-weight: 700; color: rgba(234,240,255,.90); }
+    .body{ white-space: pre-wrap; }
 
     .composer{
       padding: 14px;
@@ -185,7 +173,6 @@
       display:flex;
       gap: 10px;
       background: rgba(0,0,0,.16);
-      align-items: center;
     }
     .composer input{
       flex:1;
@@ -206,28 +193,7 @@
     }
     .composer button:disabled{ opacity:.6; cursor:not-allowed; }
 
-    .smallnote{
-      padding: 0 18px 18px;
-      color: rgba(184,195,230,.8);
-      font-size: 12px;
-    }
-
-    .warn{
-      margin: 14px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,180,60,.28);
-      background: rgba(255,180,60,.10);
-      color: rgba(255,235,205,.95);
-      font-size: 12px;
-    }
-
-    .ch-disabled{ opacity: .9; }
-
-    @media (max-width: 860px){
-      .status-wrap{ min-width: 0; }
-      .stream{ max-height: 52vh; }
-    }
+    .smallnote{ padding: 0 18px 18px; color: rgba(184,195,230,.8); font-size: 12px; }
   </style>
 </head>
 
@@ -241,7 +207,6 @@
           <div class="brand-subtitle">Torah-first • Peshat first • One classical note • Then questions</div>
         </div>
       </div>
-
       <div class="topbar-actions">
         <a class="topbar-cta" href="/">Sanctuary</a>
       </div>
@@ -250,16 +215,14 @@
 
   <main class="wrap app-wrap">
     <div class="panel" role="application" aria-label="Chavruta chat">
-
       <div class="panel-head">
         <div>
           <div class="panel-title">Ask a question</div>
           <div class="panel-sub">Bring a passage + a single question. We’ll go step by step.</div>
         </div>
-
-        <div class="status-wrap">
+        <div style="display:flex; align-items:center; gap:10px;">
           <div class="status-pill" id="statusPill">Ready</div>
-          <div class="status-hint" id="statusHint">Peshat: plain meaning first, minimal speculation.</div>
+          <div class="hint" id="statusHint">Peshat: plain meaning first, minimal speculation.</div>
         </div>
       </div>
 
@@ -268,46 +231,44 @@
       </div>
 
       <div class="toolbar" aria-label="Chavruta controls">
-        <div class="left-tools">
-          <div class="chips" role="tablist" aria-label="Modes">
-            <button class="chip is-active" type="button" data-mode="peshat" aria-selected="true">Peshat</button>
-            <button class="chip" type="button" data-mode="chavruta" aria-selected="false">Chavruta</button>
-            <button class="chip" type="button" data-mode="sources" aria-selected="false">Sources</button>
-          </div>
+        <div class="left">
+          <button class="chip is-active" type="button" data-mode="peshat" aria-selected="true">Peshat</button>
+          <button class="chip" type="button" data-mode="chavruta" aria-selected="false">Chavruta</button>
+          <button class="chip" type="button" data-mode="sources" aria-selected="false">Sources</button>
         </div>
 
-        <div class="right-tools">
-          <label class="toggle" title="Include Hebrew block (English first, then Hebrew)">
+        <div class="right">
+          <label class="opt" title="Include Hebrew lines">
             <input id="optHebrew" type="checkbox" />
-            Include Hebrew
+            <span>Include Hebrew</span>
           </label>
 
-          <label class="toggle" title="Ask for citations when possible">
+          <label class="opt" title="Ask for citations when possible">
             <input id="optCitations" type="checkbox" checked />
-            Citations
+            <span>Citations</span>
           </label>
 
-          <button class="btn" type="button" id="btnGen11" title="Quick prompt">Genesis 1:1</button>
-          <button class="btn" type="button" id="btnStop" title="Stop current request" disabled>Stop</button>
-          <button class="btn" type="button" id="btnNew" title="New thread">New</button>
-          <button class="btn" type="button" id="btnClear" title="Clear UI only">Clear</button>
-          <button class="btn btn-warm" type="button" id="btnExport" title="Export to markdown">Export</button>
+          <button class="btn" id="btnGen11" type="button">Genesis 1:1</button>
+          <button class="btn" id="btnStop" type="button" disabled>Stop</button>
+          <button class="btn" id="btnNew" type="button">New</button>
+          <button class="btn" id="btnClear" type="button">Clear</button>
+          <button class="btn gold" id="btnExport" type="button">Export</button>
         </div>
       </div>
 
-      <div class="stream" id="stream" aria-live="polite" aria-label="Conversation"></div>
+      <div class="stream" id="stream" aria-live="polite"></div>
 
-      <form class="composer" id="form" autocomplete="off">
-        <input id="input" type="text" placeholder="Type your question…" />
+      <form class="composer" id="form">
+        <input id="input" type="text" autocomplete="off" placeholder="Type your question…" />
         <button id="send" type="submit">Send</button>
       </form>
 
       <div class="smallnote">
-        Tip: ask for “peshat only”, “one Rashi”, or “sources only” any time.
+        Tip: ask for “peshat only”, “one Rashi”, or “sources only” anytime.
       </div>
     </div>
   </main>
 
-  <script src="/scripts/chavruta.js"></script>
+  <script src="/scripts/chavruta.js" defer></script>
 </body>
 </html>
