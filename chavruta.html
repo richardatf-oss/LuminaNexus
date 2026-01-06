@@ -8,8 +8,20 @@
   <meta name="theme-color" content="#070A10" />
   <link rel="icon" href="/assets/img/gate-hero.png" />
   <link rel="stylesheet" href="/css/site.css" />
+
   <style>
-    .app-wrap{ padding: 44px 0 70px; }
+    .app-wrap{ padding: 28px 0 70px; }
+
+    /* JS warning banner (hidden by JS when running) */
+    .js-warning{
+      margin: 14px 0 16px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(245,210,138,.28);
+      background: rgba(245,210,138,.12);
+      color: rgba(234,240,255,.95);
+    }
+
     .panel{
       border: 1px solid rgba(235,242,255,.12);
       background: rgba(235,242,255,.04);
@@ -17,26 +29,124 @@
       box-shadow: 0 14px 40px rgba(0,0,0,.45);
       overflow:hidden;
     }
+
     .panel-head{
       padding: 16px 18px;
       border-bottom: 1px solid rgba(235,242,255,.10);
       display:flex;
+      flex-wrap: wrap;
       align-items:center;
       justify-content: space-between;
       gap: 12px;
       background: rgba(0,0,0,.18);
     }
-    .panel-title{ font-weight: 700; letter-spacing: .2px; }
+
+    .panel-left{
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 260px;
+    }
+
+    .panel-title{ font-weight: 800; letter-spacing: .2px; }
     .panel-sub{ color: rgba(184,195,230,.88); font-size: 13px; }
-    .chat{
+
+    .status{
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items:flex-end;
+    }
+
+    #statusPill{
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(235,242,255,.14);
+      background: rgba(0,0,0,.18);
+      color: rgba(234,240,255,.92);
+      font-size: 12px;
+      letter-spacing: .2px;
+    }
+    #statusPill.is-thinking{
+      border-color: rgba(245,210,138,.35);
+      background: rgba(245,210,138,.12);
+    }
+
+    #statusHint{
+      color: rgba(184,195,230,.85);
+      font-size: 12px;
+      text-align: right;
+      max-width: 360px;
+    }
+
+    .toolbar{
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(235,242,255,.10);
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+      justify-content: space-between;
+      background: rgba(0,0,0,.14);
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items:center;
+    }
+
+    .chip{
+      appearance: none;
+      border: 1px solid rgba(235,242,255,.14);
+      background: rgba(235,242,255,.06);
+      color: rgba(234,240,255,.92);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      letter-spacing: .2px;
+    }
+    .chip:hover{ background: rgba(235,242,255,.09); }
+    .chip.is-active{
+      border-color: rgba(245,210,138,.35);
+      background: rgba(245,210,138,.14);
+    }
+
+    .opts{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+      color: rgba(184,195,230,.92);
+      font-size: 12px;
+    }
+    .opt{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(235,242,255,.12);
+      background: rgba(0,0,0,.12);
+    }
+    .opt input{ accent-color: rgba(245,210,138,.85); }
+
+    /* Stream + messages (matches your JS classnames: msg user error) */
+    #stream{
       padding: 18px;
       display:flex;
       flex-direction: column;
       gap: 12px;
-      min-height: 320px;
+      min-height: 340px;
+      max-height: 58vh;
+      overflow: auto;
+      scroll-behavior: smooth;
     }
+
     .msg{
-      max-width: 820px;
+      max-width: 920px;
       padding: 12px 14px;
       border-radius: 16px;
       border: 1px solid rgba(235,242,255,.12);
@@ -49,17 +159,34 @@
       background: rgba(245,210,138,.12);
       border-color: rgba(245,210,138,.22);
     }
-    .msg.ai{
+    .msg.error{
       align-self: flex-start;
+      border-color: rgba(255,120,120,.28);
+      background: rgba(255,120,120,.10);
+      color: rgba(255,220,220,.95);
     }
+
+    .meta{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+      color: rgba(184,195,230,.80);
+      font-size: 11px;
+    }
+    .who{ font-weight: 700; letter-spacing: .2px; }
+
+    /* Composer */
     .composer{
-      padding: 14px;
+      padding: 14px 18px;
       border-top: 1px solid rgba(235,242,255,.10);
       display:flex;
       gap: 10px;
       background: rgba(0,0,0,.16);
+      align-items:center;
     }
-    .composer input{
+    #input{
       flex:1;
       padding: 12px 12px;
       border-radius: 14px;
@@ -68,16 +195,33 @@
       color: var(--ink);
       outline: none;
     }
-    .composer button{
+    #send, .btn{
       padding: 12px 14px;
       border-radius: 14px;
       border: 1px solid rgba(245,210,138,.28);
       background: rgba(245,210,138,.18);
       color: var(--ink);
       cursor:pointer;
+      white-space: nowrap;
     }
-    .composer button:disabled{ opacity:.6; cursor:not-allowed; }
-    .smallnote{ padding: 0 18px 18px; color: rgba(184,195,230,.8); font-size: 12px; }
+    #send:disabled, .btn:disabled{ opacity:.6; cursor:not-allowed; }
+
+    .btn-ghost{
+      border: 1px solid rgba(235,242,255,.14);
+      background: rgba(235,242,255,.06);
+    }
+
+    .smallnote{
+      padding: 10px 18px 18px;
+      color: rgba(184,195,230,.8);
+      font-size: 12px;
+    }
+
+    @media (max-width: 860px){
+      .status{ align-items:flex-start; }
+      #statusHint{ text-align:left; }
+      #stream{ max-height: 52vh; }
+    }
   </style>
 </head>
 
@@ -98,25 +242,61 @@
   </header>
 
   <main class="wrap app-wrap">
+    <div id="jsWarning" class="js-warning">
+      JavaScript is required for Chavruta to run. If you see this, enable JS or refresh.
+    </div>
+
     <div class="panel" role="application" aria-label="Chavruta chat">
       <div class="panel-head">
-        <div>
+        <div class="panel-left">
           <div class="panel-title">Ask a question</div>
           <div class="panel-sub">Short, clear, Torah-first. We’ll go step by step.</div>
         </div>
-        <div class="panel-sub" id="status">Ready</div>
+
+        <div class="status">
+          <div id="statusPill">Ready</div>
+          <div id="statusHint">Peshat: plain meaning first, minimal speculation.</div>
+        </div>
       </div>
 
-      <div class="chat" id="chat">
-        <div class="msg ai">Shalom. Ask one question, and I’ll respond: (1) peshat, (2) one classical note, (3) gentle questions back.</div>
+      <div class="toolbar">
+        <div class="chips" role="tablist" aria-label="Mode">
+          <button class="chip is-active" type="button" role="tab" aria-selected="true" data-mode="peshat">Peshat</button>
+          <button class="chip" type="button" role="tab" aria-selected="false" data-mode="chavruta">Chavruta</button>
+          <button class="chip" type="button" role="tab" aria-selected="false" data-mode="sources">Sources</button>
+        </div>
+
+        <div class="opts">
+          <label class="opt" title="Include Hebrew terms/quotes when relevant">
+            <input id="optHebrew" type="checkbox" />
+            Include Hebrew
+          </label>
+
+          <label class="opt" title="Ask for citations / references">
+            <input id="optCitations" type="checkbox" checked />
+            Citations
+          </label>
+
+          <button class="btn btn-ghost" id="btnGen11" type="button">Genesis 1:1</button>
+          <button class="btn btn-ghost" id="btnStop" type="button" disabled>Stop</button>
+          <button class="btn btn-ghost" id="btnNew" type="button">New</button>
+          <button class="btn btn-ghost" id="btnClear" type="button">Clear</button>
+          <button class="btn btn-ghost" id="btnExport" type="button">Export</button>
+        </div>
       </div>
 
+      <!-- Stream output -->
+      <div id="stream" aria-live="polite"></div>
+
+      <!-- Composer -->
       <form class="composer" id="form">
-        <input id="q" type="text" autocomplete="off" placeholder="Type your question…" />
+        <input id="input" type="text" autocomplete="off" placeholder="Type your question…" />
         <button id="send" type="submit">Send</button>
       </form>
 
-      <div class="smallnote">Tip: You can ask for sources, Hebrew, or a short summary at any time.</div>
+      <div class="smallnote">
+        Tip: Bring a passage + a single question. You can ask for “peshat only”, “one Rashi”, or “sources only” anytime.
+      </div>
     </div>
   </main>
 
