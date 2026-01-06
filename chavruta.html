@@ -8,193 +8,6 @@
   <meta name="theme-color" content="#070A10" />
   <link rel="icon" href="/assets/img/gate-hero.png" />
   <link rel="stylesheet" href="/css/site.css" />
-
-  <style>
-    .app-wrap{ padding: 44px 0 70px; }
-
-    .panel{
-      border: 1px solid rgba(235,242,255,.12);
-      background: rgba(235,242,255,.04);
-      border-radius: 22px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.45);
-      overflow:hidden;
-    }
-
-    .panel-head{
-      padding: 16px 18px;
-      border-bottom: 1px solid rgba(235,242,255,.10);
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 12px;
-      background: rgba(0,0,0,.18);
-    }
-    .panel-title{ font-weight: 700; letter-spacing: .2px; }
-    .panel-sub{ color: rgba(184,195,230,.88); font-size: 13px; }
-
-    /* Warning banner shown if JS doesn't load */
-    .warn{
-      margin: 14px 18px 0;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(245,210,138,.24);
-      background: rgba(245,210,138,.10);
-      color: rgba(234,240,255,.92);
-      font-size: 13px;
-    }
-
-    .toolbar{
-      padding: 12px 18px;
-      border-bottom: 1px solid rgba(235,242,255,.10);
-      display:flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items:center;
-      justify-content: space-between;
-      background: rgba(0,0,0,.12);
-    }
-
-    .left, .right{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items:center;
-    }
-
-    .chip{
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(235,242,255,.14);
-      background: rgba(235,242,255,.06);
-      cursor:pointer;
-      font-size: 13px;
-      color: rgba(234,240,255,.92);
-      user-select:none;
-    }
-    .chip:hover{ background: rgba(235,242,255,.09); }
-    .chip.is-active{
-      border-color: rgba(245,210,138,.28);
-      background: rgba(245,210,138,.12);
-    }
-
-    .opt{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(235,242,255,.12);
-      background: rgba(0,0,0,.12);
-      color: rgba(184,195,230,.92);
-      font-size: 13px;
-    }
-    .opt input{ transform: translateY(1px); }
-
-    .btn{
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(235,242,255,.14);
-      background: rgba(235,242,255,.06);
-      color: rgba(234,240,255,.92);
-      cursor:pointer;
-      font-size: 13px;
-    }
-    .btn:hover{ background: rgba(235,242,255,.09); }
-    .btn:disabled{ opacity:.55; cursor:not-allowed; }
-
-    .btn.gold{
-      border-color: rgba(245,210,138,.28);
-      background: rgba(245,210,138,.12);
-    }
-    .btn.gold:hover{ background: rgba(245,210,138,.16); }
-
-    .status-pill{
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(235,242,255,.12);
-      background: rgba(0,0,0,.18);
-      color: rgba(184,195,230,.92);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-    .status-pill.is-thinking{
-      border-color: rgba(245,210,138,.26);
-      background: rgba(245,210,138,.10);
-      color: rgba(234,240,255,.94);
-    }
-    .hint{
-      color: rgba(184,195,230,.82);
-      font-size: 12px;
-      margin-left: 10px;
-    }
-
-    .stream{
-      padding: 18px;
-      display:flex;
-      flex-direction: column;
-      gap: 12px;
-      min-height: 320px;
-      max-height: 52vh;
-      overflow:auto;
-    }
-
-    .msg{
-      max-width: 920px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(235,242,255,.12);
-      background: rgba(235,242,255,.05);
-      color: rgba(234,240,255,.92);
-    }
-    .msg.user{
-      align-self: flex-end;
-      background: rgba(245,210,138,.12);
-      border-color: rgba(245,210,138,.22);
-    }
-    .msg.error{
-      align-self: flex-start;
-      border-color: rgba(255,120,120,.28);
-      background: rgba(255,120,120,.10);
-    }
-    .meta{
-      display:flex;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 12px;
-      color: rgba(184,195,230,.80);
-      margin-bottom: 6px;
-    }
-    .who{ font-weight: 700; color: rgba(234,240,255,.90); }
-    .body{ white-space: pre-wrap; }
-
-    .composer{
-      padding: 14px;
-      border-top: 1px solid rgba(235,242,255,.10);
-      display:flex;
-      gap: 10px;
-      background: rgba(0,0,0,.16);
-    }
-    .composer input{
-      flex:1;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(235,242,255,.14);
-      background: rgba(235,242,255,.06);
-      color: var(--ink);
-      outline: none;
-    }
-    .composer button{
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(245,210,138,.28);
-      background: rgba(245,210,138,.18);
-      color: var(--ink);
-      cursor:pointer;
-    }
-    .composer button:disabled{ opacity:.6; cursor:not-allowed; }
-
-    .smallnote{ padding: 0 18px 18px; color: rgba(184,195,230,.8); font-size: 12px; }
-  </style>
 </head>
 
 <body>
@@ -207,68 +20,180 @@
           <div class="brand-subtitle">Torah-first • Peshat first • One classical note • Then questions</div>
         </div>
       </div>
+
       <div class="topbar-actions">
         <a class="topbar-cta" href="/">Sanctuary</a>
       </div>
     </div>
   </header>
 
-  <main class="wrap app-wrap">
-    <div class="panel" role="application" aria-label="Chavruta chat">
-      <div class="panel-head">
+  <main class="wrap" style="padding:44px 0 70px;">
+    <!-- Visible warning if JS doesn't run -->
+    <div id="jsWarning" class="badge" style="display:inline-flex; margin-bottom:12px;">
+      JavaScript didn’t load. Chavruta needs JS enabled to run.
+    </div>
+
+    <section class="panel" style="
+      border:1px solid rgba(235,242,255,.12);
+      background: rgba(235,242,255,.04);
+      border-radius:22px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.45);
+      overflow:hidden;
+    ">
+
+      <!-- Header -->
+      <div class="panel-head" style="
+        padding:16px 18px;
+        border-bottom:1px solid rgba(235,242,255,.10);
+        display:flex; align-items:center; justify-content:space-between; gap:12px;
+        background: rgba(0,0,0,.18);
+      ">
         <div>
-          <div class="panel-title">Ask a question</div>
-          <div class="panel-sub">Bring a passage + a single question. We’ll go step by step.</div>
+          <div class="panel-title" style="font-weight:700; letter-spacing:.2px;">Ask a question</div>
+          <div class="panel-sub" style="color: rgba(184,195,230,.88); font-size:13px;">Bring a passage + a single question. We'll go step by step.</div>
         </div>
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div class="status-pill" id="statusPill">Ready</div>
-          <div class="hint" id="statusHint">Peshat: plain meaning first, minimal speculation.</div>
+
+        <div style="text-align:right;">
+          <div id="statusPill" class="badge" style="display:inline-flex;">Ready</div>
+          <div id="statusHint" class="panel-sub" style="margin-top:6px; color: rgba(184,195,230,.88); font-size:12px;">
+            Peshat: plain meaning first, minimal speculation.
+          </div>
         </div>
       </div>
 
-      <div class="warn" id="jsWarning">
-        JavaScript didn’t load. Chavruta needs JS enabled to run.
-      </div>
+      <!-- Controls row -->
+      <div style="
+        padding:12px 18px;
+        border-bottom:1px solid rgba(235,242,255,.10);
+        display:flex; align-items:center; justify-content:space-between; gap:12px;
+        flex-wrap:wrap;
+        background: rgba(0,0,0,.14);
+      ">
+        <!-- Mode chips -->
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="chip" data-mode="peshat" aria-selected="true" style="
+            padding:8px 10px; border-radius:999px;
+            border:1px solid rgba(235,242,255,.14);
+            background: rgba(235,242,255,.06);
+            color: rgba(234,240,255,.92);
+            cursor:pointer;
+          ">Peshat</button>
 
-      <div class="toolbar" aria-label="Chavruta controls">
-        <div class="left">
-          <button class="chip is-active" type="button" data-mode="peshat" aria-selected="true">Peshat</button>
-          <button class="chip" type="button" data-mode="chavruta" aria-selected="false">Chavruta</button>
-          <button class="chip" type="button" data-mode="sources" aria-selected="false">Sources</button>
+          <button type="button" class="chip" data-mode="chavruta" aria-selected="false" style="
+            padding:8px 10px; border-radius:999px;
+            border:1px solid rgba(235,242,255,.14);
+            background: rgba(235,242,255,.06);
+            color: rgba(234,240,255,.92);
+            cursor:pointer;
+          ">Chavruta</button>
+
+          <button type="button" class="chip" data-mode="sources" aria-selected="false" style="
+            padding:8px 10px; border-radius:999px;
+            border:1px solid rgba(235,242,255,.14);
+            background: rgba(235,242,255,.06);
+            color: rgba(234,240,255,.92);
+            cursor:pointer;
+          ">Sources</button>
         </div>
 
-        <div class="right">
-          <label class="opt" title="Include Hebrew lines">
+        <!-- Options -->
+        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+          <label style="display:flex; align-items:center; gap:8px; color: rgba(184,195,230,.92); font-size:13px;">
             <input id="optHebrew" type="checkbox" />
-            <span>Include Hebrew</span>
+            Include Hebrew
           </label>
 
-          <label class="opt" title="Ask for citations when possible">
+          <label style="display:flex; align-items:center; gap:8px; color: rgba(184,195,230,.92); font-size:13px;">
             <input id="optCitations" type="checkbox" checked />
-            <span>Citations</span>
+            Citations
           </label>
 
-          <button class="btn" id="btnGen11" type="button">Genesis 1:1</button>
-          <button class="btn" id="btnStop" type="button" disabled>Stop</button>
-          <button class="btn" id="btnNew" type="button">New</button>
-          <button class="btn" id="btnClear" type="button">Clear</button>
-          <button class="btn gold" id="btnExport" type="button">Export</button>
+          <button id="btnGen11" type="button" class="btn" style="
+            padding:8px 10px; border-radius:999px;
+            border:1px solid rgba(235,242,255,.14);
+            background: rgba(235,242,255,.06);
+            color: rgba(234,240,255,.92);
+            cursor:pointer;
+          ">Genesis 1:1</button>
+
+          <button id="btnStop" type="button" class="btn" style="
+            padding:8px 10px; border-radius:999px;
+            border:1px solid rgba(235,242,255,.14);
+            background: rgba(235,242,255,.06);
+            color: rgba(234,240,255,.92);
+            cursor:pointer;
+          " disabled>Stop</button>
+
+          <button id="btnNew" type="button" class="btn" style="
+            padding:8px 10px; border-radius:999px;
+            border:1px solid rgba(235,242,255,.14);
+            background: rgba(235,242,255,.06);
+            color: rgba(234,240,255,.92);
+            cursor:pointer;
+          ">New</button>
+
+          <button id="btnClear" type="button" class="btn" style="
+            padding:8px 10px; border-radius:999px;
+            border:1px solid rgba(235,242,255,.14);
+            background: rgba(235,242,255,.06);
+            color: rgba(234,240,255,.92);
+            cursor:pointer;
+          ">Clear</button>
+
+          <button id="btnExport" type="button" class="btn" style="
+            padding:8px 10px; border-radius:999px;
+            border:1px solid rgba(235,242,255,.14);
+            background: rgba(235,242,255,.06);
+            color: rgba(234,240,255,.92);
+            cursor:pointer;
+          ">Export</button>
         </div>
       </div>
 
-      <div class="stream" id="stream" aria-live="polite"></div>
+      <!-- Stream -->
+      <div id="stream" class="chat" style="
+        padding:18px;
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+        min-height:320px;
+        max-height:52vh;
+        overflow:auto;
+      "></div>
 
-      <form class="composer" id="form">
-        <input id="input" type="text" autocomplete="off" placeholder="Type your question…" />
-        <button id="send" type="submit">Send</button>
+      <!-- Composer -->
+      <form id="form" class="composer" style="
+        padding:14px;
+        border-top:1px solid rgba(235,242,255,.10);
+        display:flex; gap:10px;
+        background: rgba(0,0,0,.16);
+      ">
+        <input id="input" type="text" autocomplete="off" placeholder="Type your question…" style="
+          flex:1;
+          padding:12px 12px;
+          border-radius:14px;
+          border:1px solid rgba(235,242,255,.14);
+          background: rgba(235,242,255,.06);
+          color: var(--ink);
+          outline:none;
+        "/>
+
+        <button id="send" type="submit" style="
+          padding:12px 14px;
+          border-radius:14px;
+          border:1px solid rgba(245,210,138,.28);
+          background: rgba(245,210,138,.18);
+          color: var(--ink);
+          cursor:pointer;
+        ">Send</button>
       </form>
 
-      <div class="smallnote">
+      <div class="smallnote" style="padding:0 18px 18px; color: rgba(184,195,230,.8); font-size:12px;">
         Tip: ask for “peshat only”, “one Rashi”, or “sources only” anytime.
       </div>
-    </div>
+    </section>
   </main>
 
-  <script src="/scripts/chavruta.js" defer></script>
+  <script src="/scripts/chavruta.js"></script>
 </body>
 </html>
