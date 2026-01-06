@@ -6,6 +6,268 @@
   <title>Chavruta — LuminaNexus</title>
   <meta name="description" content="Chavruta — Torah-first study partner." />
   <meta name="theme-color" content="#070A10" />
+
+  <link rel="icon" href="/assets/img/gate-hero.png" />
+  <link rel="stylesheet" href="/css/site.css" />
+
+  <style>
+    .app-wrap{ padding: 34px 0 70px; }
+    .panel{
+      border: 1px solid rgba(235,242,255,.12);
+      background: rgba(235,242,255,.04);
+      border-radius: 22px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.45);
+      overflow:hidden;
+    }
+    .panel-head{
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(235,242,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(0,0,0,.18);
+    }
+    .panel-title{ font-weight: 700; letter-spacing: .2px; }
+    .panel-sub{ color: rgba(184,195,230,.88); font-size: 13px; }
+
+    .toolbar{
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(235,242,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: rgba(0,0,0,.12);
+    }
+    .toolbar-left, .toolbar-right{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip{
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(235,242,255,.14);
+      background: rgba(235,242,255,.06);
+      color: rgba(234,240,255,.92);
+      cursor:pointer;
+      font-size: 13px;
+      user-select:none;
+    }
+    .chip.is-active{
+      border-color: rgba(245,210,138,.30);
+      background: rgba(245,210,138,.14);
+    }
+
+    .opt{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(235,242,255,.14);
+      background: rgba(235,242,255,.04);
+      color: rgba(184,195,230,.92);
+      font-size: 12px;
+    }
+    .opt input{ accent-color: #f5d28a; }
+
+    .btn-sm{
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(235,242,255,.14);
+      background: rgba(235,242,255,.06);
+      color: rgba(234,240,255,.92);
+      cursor:pointer;
+      font-size: 12px;
+    }
+    .btn-sm:hover{ background: rgba(235,242,255,.09); }
+    .btn-sm:disabled{ opacity:.6; cursor:not-allowed; }
+
+    .status-pill{
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(235,242,255,.14);
+      background: rgba(0,0,0,.18);
+      color: rgba(184,195,230,.92);
+      font-size: 12px;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+    }
+    .status-pill.is-thinking{
+      border-color: rgba(245,210,138,.30);
+      background: rgba(245,210,138,.10);
+      color: rgba(245,210,138,.95);
+    }
+
+    .hint{
+      padding: 10px 18px;
+      color: rgba(184,195,230,.85);
+      font-size: 12px;
+      border-bottom: 1px solid rgba(235,242,255,.08);
+    }
+
+    .chat{
+      padding: 18px;
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 360px;
+      max-height: 56vh;
+      overflow:auto;
+    }
+    .msg{
+      max-width: 900px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(235,242,255,.12);
+      background: rgba(235,242,255,.05);
+      color: rgba(234,240,255,.92);
+      white-space: pre-wrap;
+    }
+    .msg.user{
+      align-self: flex-end;
+      background: rgba(245,210,138,.12);
+      border-color: rgba(245,210,138,.22);
+    }
+    .msg.error{
+      border-color: rgba(255,140,140,.35);
+      background: rgba(255,140,140,.10);
+    }
+    .meta{
+      display:flex;
+      gap: 10px;
+      justify-content: space-between;
+      opacity: .8;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .who{ font-weight: 700; }
+
+    .composer{
+      padding: 14px;
+      border-top: 1px solid rgba(235,242,255,.10);
+      display:flex;
+      gap: 10px;
+      background: rgba(0,0,0,.16);
+    }
+    .composer input{
+      flex:1;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(235,242,255,.14);
+      background: rgba(235,242,255,.06);
+      color: var(--ink);
+      outline: none;
+    }
+    .composer button{
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(245,210,138,.28);
+      background: rgba(245,210,138,.18);
+      color: var(--ink);
+      cursor:pointer;
+    }
+    .composer button:disabled{ opacity:.6; cursor:not-allowed; }
+
+    #jsWarning{
+      margin: 16px 0 0;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,140,140,.35);
+      background: rgba(255,140,140,.10);
+      color: rgba(234,240,255,.92);
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar" role="banner">
+    <div class="wrap topbar-row">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">↯</div>
+        <div class="brand-text">
+          <div class="brand-title">Chavruta</div>
+          <div class="brand-subtitle">Torah-first • Peshat first • One classical note • Then questions</div>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <a class="topbar-cta" href="/">Sanctuary</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap app-wrap">
+    <div id="jsWarning">
+      JavaScript is required for Chavruta to respond. If you see this message after load, open DevTools → Console.
+    </div>
+
+    <div class="panel" role="application" aria-label="Chavruta chat">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Ask a question</div>
+          <div class="panel-sub">Short, clear, Torah-first. We’ll go step by step.</div>
+        </div>
+
+        <div class="status-pill" id="statusPill">Ready</div>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar-left" role="tablist" aria-label="Modes">
+          <button class="chip is-active" type="button" data-mode="peshat" aria-selected="true">Peshat</button>
+          <button class="chip" type="button" data-mode="chavruta" aria-selected="false">Chavruta</button>
+          <button class="chip" type="button" data-mode="sources" aria-selected="false">Sources</button>
+        </div>
+
+        <div class="toolbar-right">
+          <label class="opt">
+            <input type="checkbox" id="optHebrew" />
+            Include Hebrew
+          </label>
+
+          <label class="opt">
+            <input type="checkbox" id="optCitations" checked />
+            Citations
+          </label>
+
+          <button class="btn-sm" type="button" id="btnGen11">Genesis 1:1</button>
+          <button class="btn-sm" type="button" id="btnStop" disabled>Stop</button>
+          <button class="btn-sm" type="button" id="btnNew">New</button>
+          <button class="btn-sm" type="button" id="btnClear">Clear</button>
+          <button class="btn-sm" type="button" id="btnExport">Export</button>
+        </div>
+      </div>
+
+      <div class="hint" id="statusHint">Peshat: plain meaning first, minimal speculation.</div>
+
+      <!-- MUST be id="stream" for your JS -->
+      <div class="chat" id="stream" aria-live="polite"></div>
+
+      <!-- MUST be id="form" and input id="input" for your JS -->
+      <form class="composer" id="form" autocomplete="off">
+        <input id="input" type="text" placeholder="Type your question…" />
+        <button id="send" type="submit">Send</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="/scripts/chavruta.js"></script>
+</body>
+</html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chavruta — LuminaNexus</title>
+  <meta name="description" content="Chavruta — Torah-first study partner." />
+  <meta name="theme-color" content="#070A10" />
   <link rel="icon" href="/assets/img/gate-hero.png" />
   <link rel="stylesheet" href="/css/site.css" />
 
