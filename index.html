@@ -3,207 +3,264 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>The Gate — LuminaNexus</title>
+  <title>LuminaNexus.org — Sanctuary of Light</title>
+  <meta name="description" content="LuminaNexus is a quiet sanctuary for study, reflection, and building: a gateway to Chavruta and the living works." />
 
-  <meta name="description" content="A Torah-first place for careful study for Noachide seekers. Peshat before abstraction. Sources before speculation. Clear boundaries, honest learning." />
+  <!-- Open Graph -->
+  <meta property="og:title" content="LuminaNexus.org — Sanctuary of Light" />
+  <meta property="og:description" content="A quiet sanctuary for study, reflection, and building — enter Chavruta." />
+  <meta property="og:image" content="/assets/img/gate-hero.png" />
+  <meta property="og:type" content="website" />
 
-  <link rel="stylesheet" href="/styles/main.css" />
+  <!-- Favicons (optional; safe if missing) -->
+  <link rel="icon" href="/assets/img/gate-hero.png" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/site.css" />
+
+  <!-- Performance hints -->
+  <link rel="preload" as="image" href="/assets/img/gate-hero.png" />
 </head>
 
-<body class="with-glow">
+<body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- ================= HEADER ================= -->
-  <header class="site-header">
-    <div class="wrap header-row">
+  <header class="topbar" role="banner">
+    <div class="wrap topbar-row">
       <div class="brand">
-        <div class="brand-mark">◈</div>
+        <div class="brand-mark" aria-hidden="true">✶</div>
         <div class="brand-text">
           <div class="brand-title">LuminaNexus</div>
-          <div class="brand-subtitle">ChavrutaGPT — Torah-first study partner</div>
+          <div class="brand-subtitle">Sanctuary • Study • Build</div>
         </div>
       </div>
 
-      <nav class="nav pill-nav" aria-label="Primary">
-        <a class="pill active" href="/index.html">The Gate</a>
-        <a class="pill" href="/pages/torah-first.html">Torah First</a>
-        <a class="pill" href="/pages/seven-laws.html">The Seven Laws</a>
-        <a class="pill" href="/pages/study-paths.html">Study Paths</a>
-        <a class="pill" href="/pages/chavruta.html">Chavruta</a>
-        <a class="pill" href="/pages/trees.html">The Trees</a>
-        <a class="pill" href="/pages/library.html">The Library</a>
-        <a class="pill" href="/pages/ivrit-haor.html">Ivrit HaOr</a>
-        <a class="pill" href="/pages/about.html">About</a>
-        <a class="pill" href="/pages/blessing.html">Blessing</a>
-      </nav>
+      <div class="topbar-actions">
+        <button class="lang-toggle" type="button" id="langToggle" aria-pressed="false" aria-label="Toggle Hebrew / English">
+          <span class="lang-pill">EN</span>
+          <span class="lang-sep">/</span>
+          <span class="lang-pill">HE</span>
+        </button>
+
+        <a class="topbar-cta" href="#enter">Enter</a>
+      </div>
     </div>
   </header>
 
-  <!-- ================= MAIN ================= -->
   <main id="main">
-
-    <!-- ================= HERO / THE GATE ================= -->
-    <section class="hero gate-hero">
-      <div class="hero-bg"></div>
+    <!-- HERO -->
+    <section class="hero" aria-label="LuminaNexus hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-glow" aria-hidden="true"></div>
 
       <div class="wrap hero-content">
-        <p class="eyebrow">THE GATE · <span class="hebrew-inline">השער</span></p>
-
-        <h1>A Torah-first place for careful study.</h1>
-
-        <div class="hero-text">
-          <p>
-            For Noachide seekers and students who value dignity, clarity, and restraint —
-            <strong>peshat before abstraction</strong>,
-            <strong>sources before speculation</strong>,
-            learning rooted in respect for Torah and for limits.
-          </p>
-
-          <p class="hebrew">
-            למבקשי דרך ולתלמידים בני נח הבוחרים בכבוד, בהירות וריסון —
-            <span class="hebrew-inline">
-              פשט לפני הפשטה · מקורות לפני ספקולציה · לימוד מתוך גבול וכבוד
-            </span>.
-          </p>
+        <div class="hero-kicker">
+          <span class="kicker-dot" aria-hidden="true"></span>
+          <span data-lang="en">A threshold for study and living light</span>
+          <span data-lang="he" dir="rtl" class="rtl">סַף לְלִמּוּד וְאוֹר חַי</span>
         </div>
 
-        <p class="hero-boundary">
-          No claims of secret knowledge. No personal authority. No promises —
-          only Torah, sources, and careful questions.
-          <br />
-          <span class="hebrew-inline">
-            בלי ידע נסתר · בלי סמכות אישית · בלי הבטחות —
-            תורה, מקורות, ושאלות זהירות בלבד
-          </span>.
+        <h1 class="hero-title">
+          <span data-lang="en">Enter the Gate. Sit with the Question.</span>
+          <span data-lang="he" dir="rtl" class="rtl">כְּנֹס בַּשַּׁעַר. שֵׁב עִם הַשְּׁאֵלָה.</span>
+        </h1>
+
+        <p class="hero-lede">
+          <span data-lang="en">
+            LuminaNexus is a quiet sanctuary—built to reduce noise, increase clarity, and keep the sacred wiring intact.
+            Here, the work is simple: learn, reflect, and build—one gate at a time.
+          </span>
+          <span data-lang="he" dir="rtl" class="rtl">
+            לוּמִינָה־נֶקְסוּס הוּא מִקְדָּשׁ שָׁקֵט—נִבְנָה כְּדֵי לְהַפְחִית רַעַשׁ, לְהַגְבִּיר בְּהִירוּת,
+            וּלְשַׁמֵּר אֶת הַחִוּוּט הַקָּדוֹשׁ. כָּאן הַמַּעֲשֶׂה פָּשׁוּט: לִלְמֹד, לְהִתְבּוֹנֵן,
+            וְלִבְנוֹת—שַׁעַר אַחַר שַׁעַר.
+          </span>
         </p>
 
-        <div class="hero-actions">
-          <a class="btn primary" href="/pages/orientation.html?dest=231">
-            Begin the 231 Gates →
+        <div class="hero-actions" id="enter">
+          <!-- Primary CTA -->
+          <a class="btn btn-primary" href="/chavruta">
+            <span class="btn-icon" aria-hidden="true">↯</span>
+            <span data-lang="en">Enter Chavruta</span>
+            <span data-lang="he" dir="rtl" class="rtl">כְּנִיסָה לְחַבְרוּתָא</span>
           </a>
-          <a class="btn ghost" href="/pages/orientation.html?dest=chavruta">
-            Begin with Orientation →
-          </a>
-          <a class="btn ghost" href="/pages/torah-first.html">
-            Read the Torah-first Covenant →
+
+          <!-- Secondary CTA -->
+          <a class="btn btn-ghost" href="#map">
+            <span class="btn-icon" aria-hidden="true">✶</span>
+            <span data-lang="en">See the Map</span>
+            <span data-lang="he" dir="rtl" class="rtl">רְאֵה אֶת הַמַּפָּה</span>
           </a>
         </div>
 
-        <p class="hero-note">
-          The Gate opens by intention, not by pressure.
-          <span class="hebrew-inline">השער נפתח לפי כוונה, לא מתוך לחץ.</span>
-        </p>
+        <div class="hero-footnote">
+          <span data-lang="en">Minimal. Intentional. Built to last.</span>
+          <span data-lang="he" dir="rtl" class="rtl">מִינִימָלִי. מְכוּוָּן. נִבְנָה לְהַחֲזִיק.</span>
+        </div>
       </div>
     </section>
 
-    <!-- ================= CARDS ================= -->
-    <section class="wrap" style="padding-top: 18px;">
+    <!-- MAP / SECTIONS -->
+    <section class="section" id="map" aria-label="LuminaNexus map">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 class="section-title">
+            <span data-lang="en">The Sanctuary Map</span>
+            <span data-lang="he" dir="rtl" class="rtl">מַפַּת הַמִּקְדָּשׁ</span>
+          </h2>
+          <p class="section-subtitle">
+            <span data-lang="en">
+              A small set of gates. No clutter. Each link earns its place.
+            </span>
+            <span data-lang="he" dir="rtl" class="rtl">
+              מִסְפָּר שְׁעָרִים מְצֻמְצָם. לְלֹא עֲרָמָה. כָּל קִשּׁוּר מַצְדִּיק אֶת מְקוֹמוֹ.
+            </span>
+          </p>
+        </div>
 
-      <div class="card-row">
-        <article class="card">
-          <div class="card-tag">COVENANT · <span class="hebrew-inline">ברית</span></div>
-          <h2>Torah First</h2>
-          <p>
-            What we do, what we avoid, and how we keep study honest:
-            no prophecy claims, no “magical techniques,” no promises of salvation —
-            just respect for Torah and people.
-          </p>
-          <p class="hebrew">
-            מה עושים, ממה נמנעים, ואיך שומרים על לימוד ישר:
-            בלי נבואה, בלי “שיטות קסם”, בלי הבטחות —
-            רק כבוד לתורה ולאדם.
-          </p>
-          <a class="card-link" href="/pages/torah-first.html">Read the covenant →</a>
-        </article>
+        <div class="grid">
+          <!-- Chavruta -->
+          <article class="card">
+            <div class="card-top">
+              <div class="card-icon" aria-hidden="true">↯</div>
+              <div class="card-title">
+                <span data-lang="en">Chavruta</span>
+                <span data-lang="he" dir="rtl" class="rtl">חַבְרוּתָא</span>
+              </div>
+            </div>
+            <p class="card-text">
+              <span data-lang="en">
+                A Torah-first study partner. Clear questions, careful steps, and a calm interface.
+              </span>
+              <span data-lang="he" dir="rtl" class="rtl">
+                שׁוּתָף לְלִמּוּד—תּוֹרָה בָּרֹאשׁ. שְׁאֵלוֹת בְּהִירוֹת, צְעָדִים מְדֻיָּקִים, וּמִמְשָׁק שָׁקֵט.
+              </span>
+            </p>
+            <a class="card-link" href="/chavruta">
+              <span data-lang="en">Enter →</span>
+              <span data-lang="he" dir="rtl" class="rtl">כְּנִיסָה ←</span>
+            </a>
+          </article>
 
-        <article class="card">
-          <div class="card-tag">PATHS · <span class="hebrew-inline">נתיבים</span></div>
-          <h2>Study Paths</h2>
-          <p>
-            Torah, Ivrit, Kabbalah (ethical / cosmological), and Physics & Order —
-            each with clear boundaries and suggested starting points.
-          </p>
-          <p class="hebrew">
-            תורה, עברית, קבלה (במובן אתי / קוסמולוגי), ופיזיקה וסדר —
-            לכל נתיב גבולות ברורים ונקודות התחלה.
-          </p>
-          <a class="card-link" href="/pages/study-paths.html">Explore paths →</a>
-        </article>
+          <!-- Library (coming soon but not broken) -->
+          <article class="card card-muted">
+            <div class="card-top">
+              <div class="card-icon" aria-hidden="true">☉</div>
+              <div class="card-title">
+                <span data-lang="en">Library</span>
+                <span data-lang="he" dir="rtl" class="rtl">סִפְרִיָּה</span>
+              </div>
+            </div>
+            <p class="card-text">
+              <span data-lang="en">
+                Canonical works and living drafts—restored later as a clean, intentional collection.
+              </span>
+              <span data-lang="he" dir="rtl" class="rtl">
+                כְּתוּבִים קָנוֹנִיִּים וְטִיוּטוֹת חַיּוֹת—יָשׁוּבוּ בְּעִתָּם כְּאֹסֶף נָקִי וּמְכֻוָּן.
+              </span>
+            </p>
+            <div class="badge">
+              <span data-lang="en">Coming soon</span>
+              <span data-lang="he" dir="rtl" class="rtl">בְּקָרוֹב</span>
+            </div>
+          </article>
 
-        <article class="card">
-          <div class="card-tag">CHAVRUTA · <span class="hebrew-inline">חברותא</span></div>
-          <h2>ChavrutaGPT</h2>
-          <p>
-            A Torah-first study partner: peshat first, one classical note, then questions —
-            no guru tone, no coercion.
-          </p>
-          <p class="hebrew">
-            חברותא ללימוד תורה־תחילה: פשט תחילה, הערה מסורתית אחת, ואז שאלות —
-            בלי “גורו”, בלי כפייה.
-          </p>
-          <a class="card-link" href="/pages/orientation.html?dest=chavruta">
-            Begin with kavanah →
+          <!-- Gates (coming soon) -->
+          <article class="card card-muted">
+            <div class="card-top">
+              <div class="card-icon" aria-hidden="true">✷</div>
+              <div class="card-title">
+                <span data-lang="en">The Gates</span>
+                <span data-lang="he" dir="rtl" class="rtl">הַשְּׁעָרִים</span>
+              </div>
+            </div>
+            <p class="card-text">
+              <span data-lang="en">
+                A future map of letters and combinations—231 pathways, restored when the ground is ready.
+              </span>
+              <span data-lang="he" dir="rtl" class="rtl">
+                מַפָּה עֲתִידִית שֶׁל אוֹתִיּוֹת וְצֵרוּפִים—רנ״א דְּרָכִים, יָשׁוּב כְּשֶׁהַקֶּרֶק יָכוֹל לָשֵׂאת.
+              </span>
+            </p>
+            <div class="badge">
+              <span data-lang="en">Coming soon</span>
+              <span data-lang="he" dir="rtl" class="rtl">בְּקָרוֹב</span>
+            </div>
+          </article>
+
+          <!-- Projects -->
+          <article class="card card-muted">
+            <div class="card-top">
+              <div class="card-icon" aria-hidden="true">⌬</div>
+              <div class="card-title">
+                <span data-lang="en">Projects</span>
+                <span data-lang="he" dir="rtl" class="rtl">מִיזָמִים</span>
+              </div>
+            </div>
+            <p class="card-text">
+              <span data-lang="en">
+                Unity builds, apps, and experiments—linked outward, never cluttering the sanctuary.
+              </span>
+              <span data-lang="he" dir="rtl" class="rtl">
+                בִּנְיָנִים בְּיוניטי, אַפְּלִיקַצְיוֹת וְנִסּוּיִים—קִשּׁוּרִים הַחוּצָה, לְעוֹלָם לֹא מְעַמְּסִים אֶת הַמִּקְדָּשׁ.
+              </span>
+            </p>
+            <div class="badge">
+              <span data-lang="en">Curating</span>
+              <span data-lang="he" dir="rtl" class="rtl">בְּאִצּוּר</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="wrap footer-row">
+        <div class="footer-left">
+          <div class="footer-title">LuminaNexus.org</div>
+          <div class="footer-sub">
+            <span data-lang="en">A sanctuary for study and building.</span>
+            <span data-lang="he" dir="rtl" class="rtl">מִקְדָּשׁ לְלִמּוּד וּלְבִנְיָן.</span>
+          </div>
+        </div>
+
+        <div class="footer-right">
+          <a class="footer-link" href="/chavruta">
+            <span data-lang="en">Chavruta</span>
+            <span data-lang="he" dir="rtl" class="rtl">חַבְרוּתָא</span>
           </a>
-        </article>
+          <span class="footer-dot" aria-hidden="true">•</span>
+          <a class="footer-link" href="#main">
+            <span data-lang="en">Top</span>
+            <span data-lang="he" dir="rtl" class="rtl">לְמַעְלָה</span>
+          </a>
+        </div>
       </div>
-
-      <div class="card-row" style="margin-top: 18px;">
-        <article class="card">
-          <div class="card-tag">LIBRARY · <span class="hebrew-inline">ספרייה</span></div>
-          <h2>The Library</h2>
-          <p>
-            Curated entry points with an embedded Sefaria reader:
-            choose one text, read slowly, bring one question.
-          </p>
-          <p class="hebrew">
-            שערי כניסה מסודרים עם קורא ספריא משולב:
-            בחר טקסט אחד, קרא לאט, הבא שאלה אחת.
-          </p>
-          <a class="card-link" href="/pages/library.html">Open the Library →</a>
-        </article>
-
-        <article class="card">
-          <div class="card-tag">LAWS · <span class="hebrew-inline">שבע מצוות</span></div>
-          <h2>The Seven Laws</h2>
-          <p>
-            A clear, respectful presentation of the Seven Laws for בני נח,
-            with sources and careful language.
-          </p>
-          <p class="hebrew">
-            הצגה בהירה ומכבדת של שבע מצוות בני נח,
-            עם מקורות ושפה זהירה.
-          </p>
-          <a class="card-link" href="/pages/seven-laws.html">Read the Seven Laws →</a>
-        </article>
-
-        <article class="card">
-          <div class="card-tag">TREES · <span class="hebrew-inline">עצים</span></div>
-          <h2>The Trees</h2>
-          <p>
-            The wider ecosystem: branches of learning, tools, and artifacts —
-            built with clean structure and sacred restraint.
-          </p>
-          <p class="hebrew">
-            המערכת הרחבה: ענפי לימוד, כלים ותוצרים —
-            במבנה נקי וריסון מקודש.
-          </p>
-          <a class="card-link" href="/pages/trees.html">Enter the Trees →</a>
-        </article>
-      </div>
-    </section>
+    </footer>
   </main>
 
-  <!-- ================= FOOTER ================= -->
-  <footer class="site-footer">
-    <div class="wrap">
-      <p>© LuminaNexus — offered freely for learning.</p>
-      <p>
-        Torah First: peshat before abstraction, tradition before novelty,
-        learning as service — with clear boundaries and gentle dignity.
-      </p>
-    </div>
-  </footer>
+  <script>
+    // Language toggle: default EN visible; toggle shows HE.
+    (function () {
+      const btn = document.getElementById('langToggle');
+      const prefers = (navigator.language || '').toLowerCase().startsWith('he');
+      let showHebrew = prefers;
 
-  <script src="/scripts/nav-active.js" defer></script>
+      function apply() {
+        document.documentElement.lang = showHebrew ? 'he' : 'en';
+        btn.setAttribute('aria-pressed', String(showHebrew));
+        document.querySelectorAll('[data-lang="he"]').forEach(el => el.style.display = showHebrew ? '' : 'none');
+        document.querySelectorAll('[data-lang="en"]').forEach(el => el.style.display = showHebrew ? 'none' : '');
+      }
+
+      btn.addEventListener('click', () => {
+        showHebrew = !showHebrew;
+        apply();
+      });
+
+      apply();
+    })();
+  </script>
 </body>
 </html>
