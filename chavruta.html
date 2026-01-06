@@ -8,6 +8,7 @@
   <meta name="theme-color" content="#070A10" />
   <link rel="icon" href="/assets/img/gate-hero.png" />
   <link rel="stylesheet" href="/css/site.css" />
+  <link rel="stylesheet" href="/css/chavruta.css" />
 </head>
 
 <body>
@@ -26,82 +27,44 @@
     </div>
   </header>
 
-  <main class="wrap" style="padding:44px 0 70px;">
-    <section class="panel" style="
-      border:1px solid rgba(235,242,255,.12);
-      background:rgba(235,242,255,.04);
-      border-radius:22px;
-      box-shadow:0 14px 40px rgba(0,0,0,.45);
-      overflow:hidden;
-    ">
+  <main class="wrap app-wrap">
+    <section class="panel" role="application" aria-label="Chavruta chat">
 
-      <!-- Header -->
-      <div style="
-        padding:16px 18px;
-        border-bottom:1px solid rgba(235,242,255,.10);
-        display:flex; align-items:center; justify-content:space-between; gap:12px;
-        background:rgba(0,0,0,.18);
-      ">
+      <div class="panel-head">
         <div>
-          <div style="font-weight:700; letter-spacing:.2px;">Ask a question</div>
-          <div style="color:rgba(184,195,230,.88); font-size:13px;">Bring a passage + a single question. We'll go step by step.</div>
+          <div class="panel-title">Ask a question</div>
+          <div class="panel-sub">Bring a passage + a single question. We’ll go step by step.</div>
         </div>
 
-        <div style="text-align:right;">
-          <div id="statusPill" style="
-            display:inline-flex; align-items:center; gap:8px;
-            padding:6px 10px; border-radius:999px;
-            border:1px solid rgba(245,210,138,.25);
-            background:rgba(245,210,138,.10);
-            font-size:12px;
-          ">Ready</div>
-          <div id="statusHint" style="color:rgba(184,195,230,.75); font-size:12px; margin-top:6px;">
-            Peshat: plain meaning first, minimal speculation.
-          </div>
+        <div class="panel-status">
+          <div id="statusPill" class="status-pill">Ready</div>
+          <div id="statusHint" class="status-hint">Peshat: plain meaning first, minimal speculation.</div>
         </div>
       </div>
 
-      <!-- JS warning (hidden automatically when script runs) -->
-      <div id="jsWarning" style="
-        margin:14px 18px 0;
-        padding:10px 12px;
-        border-radius:14px;
-        border:1px solid rgba(245,210,138,.25);
-        background:rgba(245,210,138,.08);
-        color:rgba(234,240,255,.92);
-        font-size:12px;
-      ">
+      <div id="jsWarning" class="js-warning">
         JavaScript didn’t load. Chavruta needs JS enabled to run.
       </div>
 
-      <!-- Controls -->
-      <div style="
-        padding:12px 18px 14px;
-        display:flex; flex-wrap:wrap; gap:10px; align-items:center;
-        border-bottom:1px solid rgba(235,242,255,.08);
-        background:rgba(0,0,0,.10);
-      ">
-        <!-- Mode chips -->
-        <div style="display:flex; gap:8px; align-items:center;">
+      <div class="controls">
+        <div class="modes">
           <button type="button" class="chip is-active" data-mode="peshat">Peshat</button>
           <button type="button" class="chip" data-mode="chavruta">Chavruta</button>
           <button type="button" class="chip" data-mode="sources">Sources</button>
         </div>
 
-        <div style="flex:1;"></div>
+        <div class="spacer"></div>
 
-        <!-- Options -->
-        <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:rgba(234,240,255,.9);">
+        <label class="opt">
           <input id="optHebrew" type="checkbox" />
           Include Hebrew
         </label>
 
-        <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:rgba(234,240,255,.9);">
+        <label class="opt">
           <input id="optCitations" type="checkbox" checked />
           Citations
         </label>
 
-        <!-- Quick actions -->
         <button type="button" class="chip" id="btnGen11">Genesis 1:1</button>
         <button type="button" class="chip" id="btnStop">Stop</button>
         <button type="button" class="chip" id="btnNew">New</button>
@@ -109,56 +72,20 @@
         <button type="button" class="chip" id="btnExport">Export</button>
       </div>
 
-      <!-- Stream -->
-      <div id="stream" style="
-        padding:18px;
-        display:flex; flex-direction:column; gap:12px;
-        min-height:340px;
-      "></div>
+      <div id="stream" class="stream"></div>
 
-      <!-- Composer -->
-      <form id="form" style="
-        padding:14px;
-        border-top:1px solid rgba(235,242,255,.10);
-        display:flex; gap:10px;
-        background:rgba(0,0,0,.16);
-      ">
-        <input
-          id="input"
-          type="text"
-          autocomplete="off"
-          placeholder="Type your question…"
-          style="
-            flex:1;
-            padding:12px 12px;
-            border-radius:14px;
-            border:1px solid rgba(235,242,255,.14);
-            background:rgba(235,242,255,.06);
-            color:var(--ink);
-            outline:none;
-          "
-        />
-        <button
-          id="send"
-          type="submit"
-          style="
-            padding:12px 14px;
-            border-radius:14px;
-            border:1px solid rgba(245,210,138,.28);
-            background:rgba(245,210,138,.18);
-            color:var(--ink);
-            cursor:pointer;
-          "
-        >Send</button>
+      <form id="form" class="composer">
+        <input id="input" type="text" autocomplete="off" placeholder="Type your question…" />
+        <button id="send" type="submit">Send</button>
       </form>
 
-      <div style="padding:0 18px 18px; color:rgba(184,195,230,.8); font-size:12px;">
+      <div class="smallnote">
         Tip: ask for “peshat only”, “one Rashi”, or “sources only” anytime.
       </div>
 
     </section>
   </main>
 
-  <script src="/scripts/chavruta.js"></script>
+  <script src="/scripts/chavruta.js" defer></script>
 </body>
 </html>
