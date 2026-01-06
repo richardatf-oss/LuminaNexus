@@ -1,8 +1,27 @@
 // netlify/functions/chavruta.js
-// Uses OpenAI REST via fetch so you do NOT need the "openai" npm package.
-// Works with Netlify Functions (Node 18+).
+const OpenAI = require("openai");
 
-function buildSystemPrompt({ mode, includeHebrew, askForCitations }) {
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+function voiceDirective(voice) {
+  switch (voice) {
+    case "rashi":
+      return `Classical note MUST prioritize Rashi (or Rashi-style close reading).`;
+    case "ibn_ezra":
+      return `Classical note MUST prioritize Ibn Ezra (peshat + grammar/linguistic precision).`;
+    case "ramban":
+      return `Classical note MUST prioritize Ramban (peshat + deeper covenantal/theological framing; avoid mystical claims unless asked).`;
+    case "sforno":
+      return `Classical note MUST prioritize Sforno (ethical/teleological emphasis; what the text teaches for life).`;
+    case "rambam":
+      return `Classical note MUST prioritize Rambam (philosophical clarity; Mishneh Torah / Guide framing where relevant).`;
+    default:
+      return `Classical note should be a balanced choice (Rashi / Ibn Ezra / Ramban / Sforno / etc.) based on best fit.`;
+  }
+}
+
+// One canonical system prompt (no duplicates)
+function buildSystemPrompt({ mode, voice, includeHebrew, askForCitations, textRef }) {
   return `
 You are ChavrutaGPT — a Torah-first study partner.
 
@@ -14,24 +33,35 @@ CRITICAL FORMATTING RULES:
 STYLE + METHOD:
 - Calm, precise, respectful.
 - Peshat (plain meaning) first.
-- Then ONE classical note (Rashi / Ibn Ezra / Ramban / Sforno / etc.) if appropriate.
-- Then 2–4 honest questions back to the user (chavruta-style).
+- Then ONE classical note (Rashi / Ibn Ezra / Ramban / Sforno / Rambam / etc.) if appropriate.
+- Then 2–6 honest questions back to the user (chavruta-style).
 - Do NOT claim prophecy.
 - Do NOT add mysticism unless user asks OR mode explicitly calls for it.
 - If you are unsure, say so.
+- If the user provides only a reference but not the quoted text, you may proceed generally but ASK for the exact Hebrew/line for precision.
+
+TEXT CONTEXT:
+- If a textRef is provided, treat it as the primary anchor for the discussion.
+- Do not quote modern copyrighted translations. Paraphrase in your own words.
 
 MODE:
 - peshat: plain meaning first, minimal speculation
 - chavruta: peshat + classical note + more questions and careful step-by-step
 - sources: prioritize primary sources and references; keep commentary minimal
 
+CLASSICAL VOICE:
+${voiceDirective(voice)}
+
 CITATIONS:
 - If askForCitations is true, include a short "Sources:" section at the end when possible.
+- Sources can be: Tanakh refs, Mishnah/Talmud, Rashi, Ramban, Ibn Ezra, Rambam, Shulchan Aruch, Midrash, etc.
 - If you cannot cite precisely, say "Sources: (approx.)" and be honest.
 
 Current mode: ${mode}
+voice: ${voice}
 includeHebrew: ${includeHebrew ? "true" : "false"}
 askForCitations: ${askForCitations ? "true" : "false"}
+textRef: ${textRef ? textRef : "(none)"}
 `.trim();
 }
 
@@ -39,57 +69,18 @@ function normalizeHistory(history) {
   if (!Array.isArray(history)) return [];
   const cleaned = history
     .filter(m => m && typeof m.content === "string" && typeof m.role === "string")
-    .filter(m => ["user", "assistant"].includes(m.role))
+    .filter(m => ["user", "assistant", "system"].includes(m.role))
     .map(m => ({ role: m.role, content: m.content.slice(0, 4000) }));
   return cleaned.slice(-16);
 }
 
-async function callOpenAI({ apiKey, model, messages }) {
-  const resp = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model,
-      messages,
-      temperature: 0.2,
-      max_tokens: 700,
-    }),
-  });
-
-  const text = await resp.text();
-  let data;
-  try { data = JSON.parse(text); } catch { data = { raw: text }; }
-
-  if (!resp.ok) {
-    const msg =
-      data?.error?.message ||
-      data?.raw ||
-      `OpenAI HTTP ${resp.status}`;
-    throw new Error(msg);
-  }
-
-  return data;
-}
-
-exports.handler = async (event) => {
+exports.handler = async function handler(event) {
   try {
     if (event.httpMethod !== "POST") {
       return {
         statusCode: 405,
         headers: { "Content-Type": "application/json", "Allow": "POST" },
         body: JSON.stringify({ ok: false, error: "Method not allowed" }),
-      };
-    }
-
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
-      return {
-        statusCode: 500,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ok: false, error: "Missing OPENAI_API_KEY in Netlify environment variables." }),
       };
     }
 
@@ -102,39 +93,47 @@ exports.handler = async (event) => {
 
     const options = body?.options || {};
     const mode = String(options.mode || "peshat").toLowerCase();
+    const voice = String(options.voice || "balanced").toLowerCase();
     const includeHebrew = !!options.includeHebrew;
     const askForCitations = options.askForCitations !== false;
+    const textRef = typeof options.textRef === "string" ? options.textRef.trim() : "";
 
-    if (!String(input).trim()) {
+    if (!input.trim()) {
       return {
         statusCode: 200,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ok: true, content: "Please bring a passage or ask a question." }),
+        body: JSON.stringify({
+          ok: true,
+          content: "Please bring a passage or ask a question.",
+        }),
       };
     }
 
-    const system = buildSystemPrompt({ mode, includeHebrew, askForCitations });
+    const system = buildSystemPrompt({ mode, voice, includeHebrew, askForCitations, textRef });
     const history = normalizeHistory(body.history);
 
     const userPrompt = `
+Text reference (if any): ${textRef || "(none)"}
+
 User question or text:
-${String(input).trim()}
+${input.trim()}
 
 Respond according to the mode and rules.
 `.trim();
 
-    const data = await callOpenAI({
-      apiKey,
+    const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: system },
-        ...history,
+        ...history.filter(m => m.role !== "system"),
         { role: "user", content: userPrompt },
       ],
+      temperature: 0.2,
+      max_tokens: 700,
     });
 
     const content =
-      data?.choices?.[0]?.message?.content?.trim() ||
+      completion.choices?.[0]?.message?.content?.trim() ||
       "No response generated.";
 
     return {
@@ -146,7 +145,10 @@ Respond according to the mode and rules.
     return {
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ok: false, error: err?.message || String(err) }),
+      body: JSON.stringify({
+        ok: false,
+        error: err?.message || String(err),
+      }),
     };
   }
 };
