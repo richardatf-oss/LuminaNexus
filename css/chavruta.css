@@ -1,5 +1,152 @@
 /* /css/chavruta-page.css
-   Purpose: Make Chavruta Session prominent, above-the-fold, and usable like a chat app.
+   Purpose: Make Chavruta Session /* Chavruta page styling that layers on top of site.css */
+
+.app-wrap { padding: 44px 0 70px; }
+
+.panel{
+  border: 1px solid rgba(235,242,255,.12);
+  background: rgba(235,242,255,.04);
+  border-radius: 22px;
+  box-shadow: 0 14px 40px rgba(0,0,0,.45);
+  overflow: hidden;
+}
+
+.panel-head{
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(235,242,255,.10);
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(0,0,0,.18);
+}
+
+.panel-title{ font-weight: 700; letter-spacing: .2px; }
+.panel-sub{ color: rgba(184,195,230,.88); font-size: 13px; }
+
+.panel-status { text-align:right; }
+
+.status-pill{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(245,210,138,.25);
+  background: rgba(245,210,138,.10);
+  font-size: 12px;
+}
+
+.status-pill.is-thinking{
+  border-color: rgba(245,210,138,.38);
+  background: rgba(245,210,138,.16);
+}
+
+.status-hint{
+  color: rgba(184,195,230,.75);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.js-warning{
+  margin: 14px 18px 0;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(245,210,138,.25);
+  background: rgba(245,210,138,.08);
+  color: rgba(234,240,255,.92);
+  font-size: 12px;
+}
+
+.controls{
+  padding: 12px 18px 14px;
+  display:flex;
+  flex-wrap:wrap;
+  gap: 10px;
+  align-items:center;
+  border-bottom: 1px solid rgba(235,242,255,.08);
+  background: rgba(0,0,0,.10);
+}
+
+.modes{ display:flex; gap: 8px; align-items:center; }
+.spacer{ flex: 1; }
+
+.opt{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(234,240,255,.90);
+}
+
+.stream{
+  padding: 18px;
+  display:flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 340px;
+}
+
+.msg{
+  max-width: 920px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(235,242,255,.12);
+  background: rgba(235,242,255,.05);
+  color: rgba(234,240,255,.92);
+  white-space: pre-wrap;
+}
+
+.msg.user{
+  align-self: flex-end;
+  background: rgba(245,210,138,.12);
+  border-color: rgba(245,210,138,.22);
+}
+
+.msg.error{
+  border-color: rgba(255,120,120,.25);
+  background: rgba(255,120,120,.08);
+}
+
+.meta{
+  display:flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  opacity: .78;
+  margin-bottom: 6px;
+}
+
+.composer{
+  padding: 14px;
+  border-top: 1px solid rgba(235,242,255,.10);
+  display:flex;
+  gap: 10px;
+  background: rgba(0,0,0,.16);
+}
+
+.composer input{
+  flex: 1;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(235,242,255,.14);
+  background: rgba(235,242,255,.06);
+  color: var(--ink);
+  outline: none;
+}
+
+.composer button{
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(245,210,138,.28);
+  background: rgba(245,210,138,.18);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.composer button:disabled{ opacity: .6; cursor: not-allowed; }
+.smallnote{ padding: 0 18px 18px; color: rgba(184,195,230,.8); font-size: 12px; }
+prominent, above-the-fold, and usable like a chat app.
    Safety: CSS-only; does not alter IDs/JS behavior.
 */
 
