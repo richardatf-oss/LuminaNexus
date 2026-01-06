@@ -1,7 +1,6 @@
-// netlify/functions/chavruta.js  (CommonJS for Netlify compatibility)
-const OpenAI = require("openai");
-
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// netlify/functions/chavruta.js
+// Uses OpenAI REST via fetch so you do NOT need the "openai" npm package.
+// Works with Netlify Functions (Node 18+).
 
 function buildSystemPrompt({ mode, includeHebrew, askForCitations }) {
   return `
@@ -45,6 +44,36 @@ function normalizeHistory(history) {
   return cleaned.slice(-16);
 }
 
+async function callOpenAI({ apiKey, model, messages }) {
+  const resp = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model,
+      messages,
+      temperature: 0.2,
+      max_tokens: 700,
+    }),
+  });
+
+  const text = await resp.text();
+  let data;
+  try { data = JSON.parse(text); } catch { data = { raw: text }; }
+
+  if (!resp.ok) {
+    const msg =
+      data?.error?.message ||
+      data?.raw ||
+      `OpenAI HTTP ${resp.status}`;
+    throw new Error(msg);
+  }
+
+  return data;
+}
+
 exports.handler = async (event) => {
   try {
     if (event.httpMethod !== "POST") {
@@ -52,6 +81,15 @@ exports.handler = async (event) => {
         statusCode: 405,
         headers: { "Content-Type": "application/json", "Allow": "POST" },
         body: JSON.stringify({ ok: false, error: "Method not allowed" }),
+      };
+    }
+
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      return {
+        statusCode: 500,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ok: false, error: "Missing OPENAI_API_KEY in Netlify environment variables." }),
       };
     }
 
@@ -85,19 +123,18 @@ ${String(input).trim()}
 Respond according to the mode and rules.
 `.trim();
 
-    const completion = await client.chat.completions.create({
+    const data = await callOpenAI({
+      apiKey,
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: system },
         ...history,
-        { role: "user", content: userPrompt }
+        { role: "user", content: userPrompt },
       ],
-      temperature: 0.2,
-      max_tokens: 600,
     });
 
     const content =
-      completion.choices?.[0]?.message?.content?.trim() ||
+      data?.choices?.[0]?.message?.content?.trim() ||
       "No response generated.";
 
     return {
