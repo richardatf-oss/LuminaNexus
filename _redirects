@@ -1,4 +1,23 @@
-# _redirects
+# _r# LuminaNexus — clean redirects (Chavruta-first)
+
+# Route /chavruta to the actual page file
+/chavruta                 /chavruta.html          200
+
+# Legacy routes (retired) -> home
+/pages/*                  /index.html             301
+
+# Old direct files -> home
+/pages/chavruta.html      /index.html             301
+/pages/library.html       /index.html             301
+/pages/torah-first.html   /index.html             301
+/pages/seven-laws.html    /index.html             301
+/pages/study-paths.html   /index.html             301
+/pages/trees.html         /index.html             301
+/pages/ivrit-haor.html    /index.html             301
+/pages/about.html         /index.html             301
+/pages/blessing.html      /index.html             301
+/pages/orientation.html   /index.html             301
+edirects
 # LuminaNexus — clean redirects (Chavruta-first)
 
 # /chavruta should load the Chavruta app (NOT index.html)
