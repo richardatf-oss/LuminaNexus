@@ -1,5 +1,5 @@
-// netlify/functions/chavruta.js
-import OpenAI from "openai";
+// netlify/functions/chavruta.js  (CommonJS - safest on Netlify)
+const OpenAI = require("openai");
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -40,16 +40,14 @@ askForCitations: ${askForCitations ? "true" : "false"}
 
 function normalizeHistory(history) {
   if (!Array.isArray(history)) return [];
-  // Keep only valid roles and strings; trim to last ~16 turns
   const cleaned = history
     .filter(m => m && typeof m.content === "string" && typeof m.role === "string")
-    .filter(m => ["user", "assistant", "system"].includes(m.role))
-    .map(m => ({ role: m.role, content: m.content.slice(0, 4000) })); // safety cap
-  // Keep last 16 messages max (plus the new user message we append)
+    .filter(m => ["user", "assistant"].includes(m.role)) // ignore user-supplied "system"
+    .map(m => ({ role: m.role, content: m.content.slice(0, 4000) }));
   return cleaned.slice(-16);
 }
 
-export async function handler(event) {
+exports.handler = async (event) => {
   try {
     if (event.httpMethod !== "POST") {
       return {
@@ -67,7 +65,7 @@ export async function handler(event) {
       "";
 
     const options = body?.options || {};
-    const mode = (options.mode || "peshat").toLowerCase();
+    const mode = String(options.mode || "peshat").toLowerCase();
     const includeHebrew = !!options.includeHebrew;
     const askForCitations = options.askForCitations !== false;
 
@@ -75,17 +73,13 @@ export async function handler(event) {
       return {
         statusCode: 200,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ok: true,
-          content: "Please bring a passage or ask a question.",
-        }),
+        body: JSON.stringify({ ok: true, content: "Please bring a passage or ask a question." }),
       };
     }
 
     const system = buildSystemPrompt({ mode, includeHebrew, askForCitations });
     const history = normalizeHistory(body.history);
 
-    // Build a clean user prompt (don’t overstuff)
     const userPrompt = `
 User question or text:
 ${input.trim()}
@@ -97,7 +91,7 @@ Respond according to the mode and rules.
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: system },
-        ...history.filter(m => m.role !== "system"), // avoid user-supplied system injection
+        ...history,
         { role: "user", content: userPrompt },
       ],
       temperature: 0.2,
@@ -117,10 +111,7 @@ Respond according to the mode and rules.
     return {
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ok: false,
-        error: err?.message || String(err),
-      }),
+      body: JSON.stringify({ ok: false, error: err?.message || String(err) }),
     };
   }
-}
+};
