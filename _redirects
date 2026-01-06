@@ -1,17 +1,12 @@
-# _redirects
-# LuminaNexus — Chavruta-first
+# LuminaNexus — clean redirects (Chavruta-first)
 
-# Pretty route for Chavruta (serve the actual app)
-# (This is the key fix: do NOT send /chavruta to /index.html)
- /chavruta              /chavruta.html            200
-
-# Home
-/                      /index.html               200
+# Chavruta pretty URL -> chavruta.html
+/chavruta              /chavruta.html            200
 
 # Legacy routes (retired) -> home
 /pages/*               /index.html               301
 
-# Old direct files -> home
+# Old direct files (if someone bookmarked them) -> home
 /pages/chavruta.html    /index.html              301
 /pages/library.html     /index.html              301
 /pages/torah-first.html /index.html              301
