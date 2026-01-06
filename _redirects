@@ -1,4 +1,6 @@
 # Pretty URLs for /pages/*
+/chavruta  /index.html  200
+
 /pages/chavruta        /pages/chavruta.html       200
 /pages/library         /pages/library.html        200
 /pages/torah-first     /pages/torah-first.html    200
