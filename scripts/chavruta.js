@@ -12,29 +12,39 @@
     form: $("form"),
     input: $("input"),
     send: $("send"),
+
+    // buttons (keys are NOT the same as DOM ids)
     stop: $("btnStop"),
     gen11: $("btnGen11"),
     btnNew: $("btnNew"),
     btnClear: $("btnClear"),
     btnExport: $("btnExport"),
+
     statusPill: $("statusPill"),
     statusHint: $("statusHint"),
+
     optHebrew: $("optHebrew"),
     optCitations: $("optCitations"),
+
     textPreset: $("textPreset"),
     textRef: $("textRef"),
     sefariaLink: $("sefariaLink"),
+
     modeButtons: Array.from(document.querySelectorAll(".chip[data-mode]")),
     voiceButtons: Array.from(document.querySelectorAll(".chip[data-voice]")),
   };
 
+  // ✅ FIX: these are KEYS in `els`, not DOM ids
   const required = [
-    "stream","form","input","send","btnStop","btnGen11","btnNew","btnClear","btnExport","statusPill","statusHint"
+    "stream","form","input","send",
+    "stop","gen11","btnNew","btnClear","btnExport",
+    "statusPill","statusHint"
   ];
+
   for (const key of required) {
     if (!els[key]) {
-      console.error("[chavruta] missing element:", key);
-      alert(`Chavruta wiring error: missing #${key}. Check chavruta.html IDs.`);
+      console.error("[chavruta] missing element key:", key, "dom id maybe:", key);
+      alert(`Chavruta wiring error: missing required element for "${key}". Check chavruta.html IDs.`);
       return;
     }
   }
@@ -145,9 +155,6 @@
   function sefariaUrlFor(ref) {
     const r = normalizeRef(ref);
     if (!r) return "https://www.sefaria.org/texts";
-    // Simple best-effort mapping: spaces → underscores
-    // Example: "Genesis 1:1" => https://www.sefaria.org/Genesis.1.1
-    // Example: "Berakhot 2a" => https://www.sefaria.org/Berakhot.2a
     const safe = r.replace(/\s+/g, "_");
     return `https://www.sefaria.org/${safe}`;
   }
@@ -200,8 +207,6 @@
 
     const contextLine = state.textRef ? `Text reference: ${state.textRef}` : "";
     addMessage("You", contextLine ? `${t}\n\n(${contextLine})` : t, "user");
-
-    // History: keep it compact
     pushHistory("user", contextLine ? `${t}\n\n${contextLine}` : t);
 
     setDisabled(true);
@@ -290,7 +295,6 @@
   if (els.modeButtons?.length) {
     els.modeButtons.forEach(btn => btn.addEventListener("click", () => setMode(btn.dataset.mode)));
   }
-
   if (els.voiceButtons?.length) {
     els.voiceButtons.forEach(btn => btn.addEventListener("click", () => setVoice(btn.dataset.voice)));
   }
@@ -303,7 +307,6 @@
     if (v && els.textRef) els.textRef.value = v;
     syncTextRef();
   });
-
   els.textRef?.addEventListener("input", syncTextRef);
 
   els.stop.addEventListener("click", stopInFlight);
@@ -330,8 +333,8 @@
   setVoice("balanced");
   state.includeHebrew = !!els.optHebrew?.checked;
   state.askForCitations = !!els.optCitations?.checked;
-
   syncTextRef();
+
   addMessage("Chavruta", "Bring a passage. Add a reference if you want. Then ask one question. I’ll keep speculation clearly labeled.", "assistant");
   setStatus("Ready", false);
 
