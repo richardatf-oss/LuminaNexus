@@ -1,17 +1,20 @@
-# Pretty URLs for /pages/*
-/chavruta  /index.html  200
+# LuminaNexus — clean redirects (Chavruta-first)
 
-/pages/chavruta        /pages/chavruta.html       200
-/pages/library         /pages/library.html        200
-/pages/torah-first     /pages/torah-first.html    200
-/pages/seven-laws      /pages/seven-laws.html     200
-/pages/study-paths     /pages/study-paths.html    200
-/pages/trees           /pages/trees.html          200
-/pages/ivrit-haor      /pages/ivrit-haor.html     200
-/pages/about           /pages/about.html          200
-/pages/blessing        /pages/blessing.html       200
-/pages/orientation     /pages/orientation.html    200
+# Canonical entry: /chavruta
+/chavruta              /index.html               200
 
-# (Optional) If someone hits /chavruta, send them to the real one
-/chavruta              /pages/chavruta.html       301
-/library               /pages/library.html        301
+# Legacy URLs (now retired) → send to home (or /chavruta if you prefer)
+#/pages/*              /index.html               301
+/pages/*               /index.html               301
+
+# If someone hits old direct files, also send home
+/pages/chavruta.html   /index.html               301
+/pages/library.html    /index.html               301
+/pages/torah-first.html /index.html              301
+/pages/seven-laws.html /index.html               301
+/pages/study-paths.html /index.html              301
+/pages/trees.html      /index.html               301
+/pages/ivrit-haor.html /index.html               301
+/pages/about.html      /index.html               301
+/pages/blessing.html   /index.html               301
+/pages/orientation.html /index.html              301
