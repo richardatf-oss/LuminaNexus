@@ -2,7 +2,6 @@
 (() => {
   const ENDPOINT = "/.netlify/functions/chavruta";
 
-  // If this runs, hide the warning banner immediately.
   const jsWarning = document.getElementById("jsWarning");
   if (jsWarning) jsWarning.style.display = "none";
 
@@ -25,11 +24,12 @@
     modeButtons: Array.from(document.querySelectorAll(".chip[data-mode]")),
   };
 
-  // If any required element is missing, fail loudly (and visibly).
   const required = ["stream","form","input","send","btnStop","btnGen11","btnNew","btnClear","btnExport","statusPill","statusHint"];
   for (const key of required) {
     if (!els[key]) {
       console.error("[chavruta] missing element:", key);
+      // Make it visible to you, not silent:
+      alert(`Chavruta wiring error: missing #${key}. Check chavruta.html IDs.`);
       return;
     }
   }
@@ -55,7 +55,6 @@
     els.send.disabled = disabled;
     els.stop.disabled = !disabled;
     els.input.disabled = disabled;
-    els.form.classList.toggle("ch-disabled", disabled);
   }
 
   function scrollToBottom() {
@@ -119,7 +118,6 @@
   }
 
   async function postJSON(payload, { timeoutMs = 45000 } = {}) {
-    // Cancel any existing request (prevents “tail chasing”)
     if (state.inFlight?.controller) state.inFlight.controller.abort();
 
     const controller = new AbortController();
@@ -136,13 +134,8 @@
       });
 
       const text = await res.text();
-
-      let data;
-      try {
-        data = text ? JSON.parse(text) : {};
-      } catch {
-        data = { ok: false, error: "Non-JSON response from function", raw: text };
-      }
+      let data = {};
+      try { data = JSON.parse(text); } catch { data = { raw: text }; }
 
       return { ok: res.ok, status: res.status, data };
     } finally {
@@ -174,30 +167,20 @@
 
       const r = await postJSON(payload);
 
-      // Prefer function-style ok flag if you use it
-      const funcOk = (r.data && typeof r.data.ok === "boolean") ? r.data.ok : r.ok;
-
-      if (!r.ok || !funcOk) {
-        const msg =
-          r.data?.error ||
-          r.data?.message ||
-          (r.status ? `HTTP ${r.status}` : "Request failed");
+      if (!r.ok || !r.data?.ok) {
+        const msg = r.data?.error || r.data?.raw || (r.status ? `HTTP ${r.status}` : "Request failed");
         addMessage("Chavruta", `Chavruta error: ${msg}`, "error");
         return;
       }
 
-      const reply = String(r.data.content || r.data.reply || r.data.answer || "").trim()
-        || "(No response text returned.)";
-
+      const reply = String(r.data.content || r.data.reply || "").trim() || "(No response text returned.)";
       addMessage("Chavruta", reply, "assistant");
       pushHistory("assistant", reply);
     } catch (err) {
       const isAbort = err?.name === "AbortError";
       addMessage(
         "Chavruta",
-        isAbort
-          ? "Chavruta error: Request aborted / timed out."
-          : `Chavruta error: ${err?.message || err}`,
+        isAbort ? "Chavruta error: Request aborted / timed out." : `Chavruta error: ${err?.message || err}`,
         "error"
       );
     } finally {
@@ -246,62 +229,29 @@
     addMessage("Chavruta", "Bring a passage. Then ask one question. I’ll keep speculation clearly labeled.", "assistant");
   }
 
-  // wiring (guarded: NEVER die silently)
-  try {
-    // mode buttons (optional)
-    if (els.modeButtons?.length) {
-      els.modeButtons.forEach(btn =>
-        btn.addEventListener("click", () => setMode(btn.dataset.mode))
-      );
-    } else {
-      console.warn("[chavruta] no mode buttons found (.chip[data-mode])");
-    }
-
-    // options (optional)
-    if (els.optHebrew) {
-      els.optHebrew.addEventListener("change", () => {
-        state.includeHebrew = !!els.optHebrew.checked;
-      });
-    } else {
-      console.warn("[chavruta] missing optHebrew checkbox (#optHebrew)");
-    }
-
-    if (els.optCitations) {
-      els.optCitations.addEventListener("change", () => {
-        state.askForCitations = !!els.optCitations.checked;
-      });
-    } else {
-      console.warn("[chavruta] missing optCitations checkbox (#optCitations)");
-    }
-
-    // required buttons
-    els.stop.addEventListener("click", stopInFlight);
-    els.gen11.addEventListener("click", () => { els.input.value = "Genesis 1:1"; els.input.focus(); });
-
-    els.btnClear.addEventListener("click", () => { stopInFlight(); clearUI(); });
-    els.btnNew.addEventListener("click", newThread);
-    els.btnExport.addEventListener("click", exportThread);
-
-    // submit: trim BEFORE clearing + always show something if it fails
-    els.form.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const v = String(els.input.value || "").trim();
-      if (!v) {
-        setStatus("Type a question first", false);
-        return;
-      }
-
-      els.input.value = "";
-      sendText(v);
-    });
-
-  } catch (err) {
-    console.error("[chavruta] wiring crash:", err);
-    setStatus("Chavruta crashed (see console)", false);
+  // Wiring
+  if (els.modeButtons?.length) {
+    els.modeButtons.forEach(btn => btn.addEventListener("click", () => setMode(btn.dataset.mode)));
   }
 
-  // boot
+  els.optHebrew?.addEventListener("change", () => { state.includeHebrew = !!els.optHebrew.checked; });
+  els.optCitations?.addEventListener("change", () => { state.askForCitations = !!els.optCitations.checked; });
+
+  els.stop.addEventListener("click", stopInFlight);
+  els.gen11.addEventListener("click", () => { els.input.value = "Genesis 1:1"; els.input.focus(); });
+  els.btnClear.addEventListener("click", () => { stopInFlight(); clearUI(); });
+  els.btnNew.addEventListener("click", newThread);
+  els.btnExport.addEventListener("click", exportThread);
+
+  els.form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const v = String(els.input.value || "").trim();
+    if (!v) { setStatus("Type a question first", false); return; }
+    els.input.value = "";
+    sendText(v);
+  });
+
+  // Boot
   setMode("peshat");
   state.includeHebrew = !!els.optHebrew?.checked;
   state.askForCitations = !!els.optCitations?.checked;
