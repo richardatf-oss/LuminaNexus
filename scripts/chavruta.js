@@ -1,9 +1,5 @@
-// /scripts/chavruta.js
 (() => {
   const ENDPOINT = "/.netlify/functions/chavruta";
-
-  const jsWarning = document.getElementById("jsWarning");
-  if (jsWarning) jsWarning.style.display = "none";
 
   const $ = (id) => document.getElementById(id);
 
@@ -12,8 +8,8 @@
     form: $("form"),
     input: $("input"),
     send: $("send"),
-    stop: $("btnStop"),
-    gen11: $("btnGen11"),
+    btnStop: $("btnStop"),
+    btnGen11: $("btnGen11"),
     btnNew: $("btnNew"),
     btnClear: $("btnClear"),
     btnExport: $("btnExport"),
@@ -21,18 +17,25 @@
     statusHint: $("statusHint"),
     optHebrew: $("optHebrew"),
     optCitations: $("optCitations"),
+    jsWarning: $("jsWarning"),
     modeButtons: Array.from(document.querySelectorAll(".chip[data-mode]")),
   };
 
-  const required = ["stream","form","input","send","btnStop","btnGen11","btnNew","btnClear","btnExport","statusPill","statusHint"];
+  const required = [
+    "stream","form","input","send",
+    "btnStop","btnGen11","btnNew","btnClear","btnExport",
+    "statusPill","statusHint"
+  ];
+
   for (const key of required) {
     if (!els[key]) {
       console.error("[chavruta] missing element:", key);
-      // Make it visible to you, not silent:
       alert(`Chavruta wiring error: missing #${key}. Check chavruta.html IDs.`);
       return;
     }
   }
+
+  if (els.jsWarning) els.jsWarning.style.display = "none";
 
   const state = {
     mode: "peshat",
@@ -53,7 +56,7 @@
 
   function setDisabled(disabled) {
     els.send.disabled = disabled;
-    els.stop.disabled = !disabled;
+    els.btnStop.disabled = !disabled;
     els.input.disabled = disabled;
   }
 
@@ -96,7 +99,7 @@
 
   function modePromptHint(mode) {
     if (mode === "sources") return "Give primary sources with references. Keep it Torah-first.";
-    if (mode === "chavruta") return "Text first, then 3–7 questions. Speculation clearly labeled.";
+    if (mode === "chavruta") return "Peshat + one classical note, then careful questions back.";
     return "Peshat: plain meaning first, minimal speculation.";
   }
 
@@ -173,7 +176,7 @@
         return;
       }
 
-      const reply = String(r.data.content || r.data.reply || "").trim() || "(No response text returned.)";
+      const reply = String(r.data.content || "").trim() || "(No response text returned.)";
       addMessage("Chavruta", reply, "assistant");
       pushHistory("assistant", reply);
     } catch (err) {
@@ -237,8 +240,8 @@
   els.optHebrew?.addEventListener("change", () => { state.includeHebrew = !!els.optHebrew.checked; });
   els.optCitations?.addEventListener("change", () => { state.askForCitations = !!els.optCitations.checked; });
 
-  els.stop.addEventListener("click", stopInFlight);
-  els.gen11.addEventListener("click", () => { els.input.value = "Genesis 1:1"; els.input.focus(); });
+  els.btnStop.addEventListener("click", stopInFlight);
+  els.btnGen11.addEventListener("click", () => { els.input.value = "Genesis 1:1"; els.input.focus(); });
   els.btnClear.addEventListener("click", () => { stopInFlight(); clearUI(); });
   els.btnNew.addEventListener("click", newThread);
   els.btnExport.addEventListener("click", exportThread);
