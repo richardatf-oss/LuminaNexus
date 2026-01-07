@@ -60,6 +60,9 @@
     voice: "balanced",
     includeHebrew: false,
     askForCitations: true,
+const voice = String(options.voice || "balanced").toLowerCase();
+const ref = typeof options.ref === "string" ? options.ref.trim() : "";
+const lockText = !!options.lockText;
 
     textPreset: "",
     ref: "",
