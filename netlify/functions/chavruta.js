@@ -16,12 +16,20 @@ function voiceDirective(voice) {
     case "rambam":
       return `Classical note MUST prioritize Rambam (philosophical clarity; Mishneh Torah / Guide framing where relevant).`;
     default:
-      return `Classical note should be a balanced choice (Rashi / Ibn Ezra / Ramban / Sforno / etc.) based on best fit.`;
+      return `Classical note should be a balanced choice (Rashi / Ibn Ezra / Ramban / Sforno / Rambam / etc.) based on best fit.`;
   }
 }
 
 // One canonical system prompt (no duplicates)
-function buildSystemPrompt({ mode, voice, includeHebrew, askForCitations, textRef }) {
+function buildSystemPrompt({ mode, voice, includeHebrew, askForCitations, ref, lockText }) {
+  const lockDirective = lockText && ref
+    ? `LOCKED TEXT MODE:
+- The session is locked to the reference: ${ref}
+- Keep the discussion anchored to that text.
+- If the user asks something unrelated, say: "That may be a different passage — do you want to unlock or switch references?" and WAIT for confirmation in the form of the user providing a new ref or explicitly saying "switch/unlock".`
+    : `UNLOCKED TEXT MODE:
+- If a reference is provided, use it as the default anchor, but you may follow the user's question if it clearly shifts to another text.`;
+
   return `
 You are ChavrutaGPT — a Torah-first study partner.
 
@@ -39,10 +47,11 @@ STYLE + METHOD:
 - Do NOT add mysticism unless user asks OR mode explicitly calls for it.
 - If you are unsure, say so.
 - If the user provides only a reference but not the quoted text, you may proceed generally but ASK for the exact Hebrew/line for precision.
+- Do not quote modern copyrighted translations. Paraphrase in your own words.
 
 TEXT CONTEXT:
-- If a textRef is provided, treat it as the primary anchor for the discussion.
-- Do not quote modern copyrighted translations. Paraphrase in your own words.
+- Reference (if any): ${ref ? ref : "(none)"}
+${lockDirective}
 
 MODE:
 - peshat: plain meaning first, minimal speculation
@@ -61,16 +70,17 @@ Current mode: ${mode}
 voice: ${voice}
 includeHebrew: ${includeHebrew ? "true" : "false"}
 askForCitations: ${askForCitations ? "true" : "false"}
-textRef: ${textRef ? textRef : "(none)"}
+ref: ${ref ? ref : "(none)"}
+lockText: ${lockText ? "true" : "false"}
 `.trim();
 }
 
 function normalizeHistory(history) {
   if (!Array.isArray(history)) return [];
   const cleaned = history
-    .filter(m => m && typeof m.content === "string" && typeof m.role === "string")
-    .filter(m => ["user", "assistant", "system"].includes(m.role))
-    .map(m => ({ role: m.role, content: m.content.slice(0, 4000) }));
+    .filter((m) => m && typeof m.content === "string" && typeof m.role === "string")
+    .filter((m) => ["user", "assistant", "system"].includes(m.role))
+    .map((m) => ({ role: m.role, content: m.content.slice(0, 4000) }));
   return cleaned.slice(-16);
 }
 
@@ -79,7 +89,7 @@ exports.handler = async function handler(event) {
     if (event.httpMethod !== "POST") {
       return {
         statusCode: 405,
-        headers: { "Content-Type": "application/json", "Allow": "POST" },
+        headers: { "Content-Type": "application/json", Allow: "POST" },
         body: JSON.stringify({ ok: false, error: "Method not allowed" }),
       };
     }
@@ -92,28 +102,40 @@ exports.handler = async function handler(event) {
       "";
 
     const options = body?.options || {};
+
+    // A) Parse new options (exactly as you requested)
+    const voice = (options.voice || "balanced").toLowerCase();
+    const ref = typeof options.ref === "string" ? options.ref.trim() : "";
+    const lockText = !!options.lockText;
+
+    // (existing)
     const mode = String(options.mode || "peshat").toLowerCase();
-    const voice = String(options.voice || "balanced").toLowerCase();
     const includeHebrew = !!options.includeHebrew;
     const askForCitations = options.askForCitations !== false;
-    const textRef = typeof options.textRef === "string" ? options.textRef.trim() : "";
 
     if (!input.trim()) {
       return {
         statusCode: 200,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ok: true,
-          content: "Please bring a passage or ask a question.",
-        }),
+        body: JSON.stringify({ ok: true, content: "Please bring a passage or ask a question." }),
       };
     }
 
-    const system = buildSystemPrompt({ mode, voice, includeHebrew, askForCitations, textRef });
+    // B) Pass them into buildSystemPrompt (updated signature)
+    const system = buildSystemPrompt({
+      mode,
+      voice,
+      includeHebrew,
+      askForCitations,
+      ref,
+      lockText,
+    });
+
     const history = normalizeHistory(body.history);
 
     const userPrompt = `
-Text reference (if any): ${textRef || "(none)"}
+Text reference (if any): ${ref || "(none)"}
+Lock text: ${lockText ? "true" : "false"}
 
 User question or text:
 ${input.trim()}
@@ -125,7 +147,7 @@ Respond according to the mode and rules.
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: system },
-        ...history.filter(m => m.role !== "system"),
+        ...history.filter((m) => m.role !== "system"), // avoid user-supplied system injection
         { role: "user", content: userPrompt },
       ],
       temperature: 0.2,
@@ -133,8 +155,7 @@ Respond according to the mode and rules.
     });
 
     const content =
-      completion.choices?.[0]?.message?.content?.trim() ||
-      "No response generated.";
+      completion.choices?.[0]?.message?.content?.trim() || "No response generated.";
 
     return {
       statusCode: 200,
@@ -145,10 +166,7 @@ Respond according to the mode and rules.
     return {
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ok: false,
-        error: err?.message || String(err),
-      }),
+      body: JSON.stringify({ ok: false, error: err?.message || String(err) }),
     };
   }
 };
