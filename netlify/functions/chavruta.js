@@ -22,12 +22,13 @@ function voiceDirective(voice) {
 
 // One canonical system prompt (no duplicates)
 function buildSystemPrompt({ mode, voice, includeHebrew, askForCitations, ref, lockText }) {
-  const lockDirective = lockText && ref
-    ? `LOCKED TEXT MODE:
+  const lockDirective =
+    lockText && ref
+      ? `LOCKED TEXT MODE:
 - The session is locked to the reference: ${ref}
 - Keep the discussion anchored to that text.
 - If the user asks something unrelated, say: "That may be a different passage — do you want to unlock or switch references?" and WAIT for confirmation in the form of the user providing a new ref or explicitly saying "switch/unlock".`
-    : `UNLOCKED TEXT MODE:
+      : `UNLOCKED TEXT MODE:
 - If a reference is provided, use it as the default anchor, but you may follow the user's question if it clearly shifts to another text.`;
 
   return `
@@ -103,9 +104,12 @@ exports.handler = async function handler(event) {
 
     const options = body?.options || {};
 
-    // A) Parse new options (exactly as you requested)
-    const voice = (options.voice || "balanced").toLowerCase();
-    const ref = typeof options.ref === "string" ? options.ref.trim() : "";
+    // A) Parse new options (supports both ref and textRef)
+    const voice = String(options.voice || "balanced").toLowerCase();
+    const ref =
+      (typeof options.ref === "string" && options.ref.trim()) ||
+      (typeof options.textRef === "string" && options.textRef.trim()) ||
+      "";
     const lockText = !!options.lockText;
 
     // (existing)
@@ -147,7 +151,7 @@ Respond according to the mode and rules.
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: system },
-        ...history.filter((m) => m.role !== "system"), // avoid user-supplied system injection
+        ...history.filter((m) => m.role !== "system"),
         { role: "user", content: userPrompt },
       ],
       temperature: 0.2,
