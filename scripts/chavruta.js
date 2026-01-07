@@ -1,3 +1,4 @@
+// /scripts/chavruta.js
 (() => {
   const ENDPOINT = "/.netlify/functions/chavruta";
 
@@ -60,9 +61,6 @@
     voice: "balanced",
     includeHebrew: false,
     askForCitations: true,
-const voice = String(options.voice || "balanced").toLowerCase();
-const ref = typeof options.ref === "string" ? options.ref.trim() : "";
-const lockText = !!options.lockText;
 
     textPreset: "",
     ref: "",
@@ -88,16 +86,16 @@ const lockText = !!options.lockText;
     return "Peshat: plain meaning first, minimal speculation.";
   }
 
+  function prettyVoice(v) {
+    if (v === "ibn_ezra") return "Ibn Ezra";
+    return (v || "balanced").replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  }
+
   function refreshHint() {
     const base = modePromptHint(state.mode);
     const voice = `Voice: ${prettyVoice(state.voice)}.`;
     const lock = state.lockText && state.ref ? `Locked: ${state.ref}.` : "";
     els.statusHint.textContent = [base, voice, lock].filter(Boolean).join(" ");
-  }
-
-  function prettyVoice(v) {
-    if (v === "ibn_ezra") return "Ibn Ezra";
-    return (v || "balanced").replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
   }
 
   function setMode(mode) {
@@ -262,14 +260,16 @@ const lockText = !!options.lockText;
   function openOnSefaria(ref) {
     const q = encodeURIComponent(String(ref || "").trim());
     if (!q) return;
-    // best-effort: Sefaria search works even if ref formatting varies
-    window.open(`https://www.sefaria.org/search?q=${q}&tab=text&tvar=1&tsort=relevance`, "_blank", "noopener,noreferrer");
+    window.open(
+      `https://www.sefaria.org/search?q=${q}&tab=text&tvar=1&tsort=relevance`,
+      "_blank",
+      "noopener,noreferrer"
+    );
   }
 
   function computeActiveRef() {
     const typed = String(els.refInput.value || "").trim();
     const preset = String(els.textPreset.value || "").trim();
-    // if typed exists, prefer it. Else use preset.
     return typed || preset || "";
   }
 
@@ -286,13 +286,11 @@ const lockText = !!options.lockText;
     const lines = txt.split(/\r?\n/).map(l => l.trim());
     const found = [];
 
-    // grab “Sources:” section if present
     const idx = lines.findIndex(l => /^sources\s*:/i.test(l));
     if (idx !== -1) {
       for (let i = idx; i < Math.min(lines.length, idx + 12); i++) {
         const l = lines[i].replace(/^sources\s*:\s*/i, "").trim();
         if (!l) continue;
-        // split on separators
         l.split(/;|•|\u2022|,\s(?=[A-Zא-ת])/).forEach(part => {
           const p = part.trim();
           if (p) found.push({ text: p, kind: "source" });
@@ -300,8 +298,8 @@ const lockText = !!options.lockText;
       }
     }
 
-    // also grab common refs like “Genesis 12:1”, “Berakhot 2a”, etc (best-effort)
-    const refMatches = txt.match(/\b(?:Genesis|Exodus|Leviticus|Numbers|Deuteronomy|Psalms|Proverbs)\s+\d+:\d+\b/g) || [];
+    const refMatches =
+      txt.match(/\b(?:Genesis|Exodus|Leviticus|Numbers|Deuteronomy|Psalms|Proverbs)\s+\d+:\d+\b/g) || [];
     for (const m of refMatches) found.push({ text: m, kind: "Tanakh" });
 
     return found;
@@ -328,8 +326,6 @@ const lockText = !!options.lockText;
           voice: state.voice,
           includeHebrew: state.includeHebrew,
           askForCitations: state.askForCitations,
-
-          // new:
           ref: state.ref,
           lockText: state.lockText,
         },
@@ -347,14 +343,17 @@ const lockText = !!options.lockText;
       addMessage("Chavruta", reply, "assistant");
       pushHistory("assistant", reply);
 
-      // update sources drawer
       const newly = extractSourcesFromText(reply);
       if (newly.length) setSources([...state.sources, ...newly]);
       else els.btnSources.textContent = `Sources (${state.sources.length})`;
 
     } catch (err) {
       const isAbort = err?.name === "AbortError";
-      addMessage("Chavruta", isAbort ? "Chavruta error: Request aborted / timed out." : `Chavruta error: ${err?.message || err}`, "error");
+      addMessage(
+        "Chavruta",
+        isAbort ? "Chavruta error: Request aborted / timed out." : `Chavruta error: ${err?.message || err}`,
+        "error"
+      );
     } finally {
       setDisabled(false);
       setStatus("Ready", false);
