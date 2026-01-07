@@ -8,6 +8,7 @@
   <meta name="theme-color" content="#070A10" />
   <link rel="icon" href="/assets/img/gate-hero.png" />
   <link rel="stylesheet" href="/css/site.css" />
+  <link rel="stylesheet" href="/css/chavruta.css" />
 </head>
 
 <body>
@@ -61,7 +62,7 @@
         </div>
       </div>
 
-      <!-- JS warning (hidden automatically when script runs) -->
+      <!-- JS warning -->
       <div id="jsWarning" style="
         margin:14px 18px 0;
         padding:10px 12px;
@@ -90,46 +91,6 @@
 
         <div style="flex:1;"></div>
 
-        <!-- Text selector -->
-        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-          <select id="textPreset" style="
-            padding:8px 10px;
-            border-radius:12px;
-            border:1px solid rgba(235,242,255,.14);
-            background:rgba(235,242,255,.06);
-            color:var(--ink);
-            outline:none;
-            font-size:12px;
-          ">
-            <option value="">Text preset…</option>
-            <option value="Genesis 1:1">Tanakh — Genesis 1:1</option>
-            <option value="Genesis 12:1-9">Tanakh — Genesis 12:1–9</option>
-            <option value="Exodus 20:1-14">Tanakh — Exodus 20:1–14 (Aseret HaDibrot)</option>
-            <option value="Deuteronomy 6:4-9">Tanakh — Deut. 6:4–9 (Shema)</option>
-            <option value="Mishnah Avot 1:1">Mishnah — Avot 1:1</option>
-            <option value="Berakhot 2a">Talmud — Berakhot 2a</option>
-            <option value="Rambam, Yesodei HaTorah 1:1-7">Rambam — Yesodei HaTorah 1:1–7</option>
-            <option value="Shulchan Aruch, Orach Chaim 1:1">Shulchan Aruch — O.C. 1:1</option>
-          </select>
-
-          <input id="textRef" type="text" autocomplete="off" placeholder="Or type a reference… (e.g., Bereshit 1:1, Berakhot 2a)"
-            style="
-              width:min(440px, 48vw);
-              padding:8px 10px;
-              border-radius:12px;
-              border:1px solid rgba(235,242,255,.14);
-              background:rgba(235,242,255,.06);
-              color:var(--ink);
-              outline:none;
-              font-size:12px;
-            "
-          />
-
-          <a id="sefariaLink" class="chip" href="#" target="_blank" rel="noreferrer">Open on Sefaria</a>
-        </div>
-
-        <div style="flex:1;"></div>
-
         <!-- Options -->
         <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:rgba(234,240,255,.9);">
           <input id="optHebrew" type="checkbox" />
@@ -140,26 +101,6 @@
           <input id="optCitations" type="checkbox" checked />
           Citations
         </label>
-      </div>
-
-      <!-- Voice Filters -->
-      <div style="
-        padding:10px 18px 12px;
-        display:flex; flex-wrap:wrap; gap:10px; align-items:center;
-        border-bottom:1px solid rgba(235,242,255,.08);
-        background:rgba(0,0,0,.08);
-      ">
-        <div style="color:rgba(184,195,230,.9); font-size:12px; margin-right:2px;">Classical voice:</div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button type="button" class="chip is-active" data-voice="balanced">Balanced</button>
-          <button type="button" class="chip" data-voice="rashi">Rashi</button>
-          <button type="button" class="chip" data-voice="ibn_ezra">Ibn Ezra</button>
-          <button type="button" class="chip" data-voice="ramban">Ramban</button>
-          <button type="button" class="chip" data-voice="sforno">Sforno</button>
-          <button type="button" class="chip" data-voice="rambam">Rambam</button>
-        </div>
-
-        <div style="flex:1;"></div>
 
         <!-- Quick actions -->
         <button type="button" class="chip" id="btnGen11">Genesis 1:1</button>
@@ -167,6 +108,68 @@
         <button type="button" class="chip" id="btnNew">New</button>
         <button type="button" class="chip" id="btnClear">Clear</button>
         <button type="button" class="chip" id="btnExport">Export</button>
+      </div>
+
+      <!-- NEW: Text selector + lock + source drawer -->
+      <div style="
+        padding:12px 18px 14px;
+        display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+        border-bottom:1px solid rgba(235,242,255,.08);
+        background:rgba(0,0,0,.06);
+      ">
+        <select id="textPreset" class="chip" style="min-width:220px;">
+          <option value="">Text preset…</option>
+          <option value="Genesis">Torah: Genesis</option>
+          <option value="Exodus">Torah: Exodus</option>
+          <option value="Leviticus">Torah: Leviticus</option>
+          <option value="Numbers">Torah: Numbers</option>
+          <option value="Deuteronomy">Torah: Deuteronomy</option>
+          <option value="Psalms">Tanakh: Psalms</option>
+          <option value="Proverbs">Tanakh: Proverbs</option>
+          <option value="Berakhot">Talmud: Berakhot</option>
+          <option value="Shabbat">Talmud: Shabbat</option>
+        </select>
+
+        <input
+          id="refInput"
+          type="text"
+          placeholder="Or type a reference… (e.g., Bereshit 1:1, Berakhot 2a)"
+          style="
+            flex:1;
+            min-width:260px;
+            padding:10px 12px;
+            border-radius:14px;
+            border:1px solid rgba(235,242,255,.14);
+            background:rgba(235,242,255,.06);
+            color:var(--ink);
+            outline:none;
+          "
+        />
+
+        <button type="button" class="chip" id="btnOpenSefaria">Open on Sefaria</button>
+
+        <label class="chip" style="display:flex; align-items:center; gap:8px;">
+          <input id="optLockText" type="checkbox" />
+          Lock text
+        </label>
+
+        <button type="button" class="chip" id="btnSources">Sources (0)</button>
+      </div>
+
+      <!-- Voice filters -->
+      <div style="
+        padding:12px 18px 14px;
+        display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+        border-bottom:1px solid rgba(235,242,255,.08);
+        background:rgba(0,0,0,.04);
+      ">
+        <div style="font-size:12px; color:rgba(184,195,230,.9); margin-right:6px;">Classical voice:</div>
+        <button type="button" class="chip is-active" data-voice="balanced">Balanced</button>
+        <button type="button" class="chip" data-voice="rashi">Rashi</button>
+        <button type="button" class="chip" data-voice="ibn_ezra">Ibn Ezra</button>
+        <button type="button" class="chip" data-voice="ramban">Ramban</button>
+        <button type="button" class="chip" data-voice="sforno">Sforno</button>
+        <button type="button" class="chip" data-voice="rambam">Rambam</button>
       </div>
 
       <!-- Stream -->
@@ -213,11 +216,25 @@
       </form>
 
       <div style="padding:0 18px 18px; color:rgba(184,195,230,.8); font-size:12px;">
-        Tip: paste the exact Hebrew/line if you want precision; references alone can be ambiguous.
+        Tip: ask for “peshat only”, “one Rashi”, or “sources only” anytime.
       </div>
 
     </section>
   </main>
+
+  <!-- Sources Drawer -->
+  <aside id="sourcesDrawer" class="ln-drawer" aria-hidden="true">
+    <div class="ln-drawer-card">
+      <div class="ln-drawer-head">
+        <div>
+          <div style="font-weight:800;">Sources</div>
+          <div style="opacity:.8; font-size:12px;">Click to open on Sefaria (best-effort).</div>
+        </div>
+        <button type="button" class="chip" id="btnSourcesClose">Close</button>
+      </div>
+      <div id="sourcesList" class="ln-drawer-list"></div>
+    </div>
+  </aside>
 
   <script src="/scripts/chavruta.js"></script>
 </body>
