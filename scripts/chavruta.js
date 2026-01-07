@@ -1,4 +1,3 @@
-// /scripts/chavruta.js
 (() => {
   const ENDPOINT = "/.netlify/functions/chavruta";
 
@@ -12,39 +11,46 @@
     form: $("form"),
     input: $("input"),
     send: $("send"),
-
-    // buttons (keys are NOT the same as DOM ids)
-    stop: $("btnStop"),
-    gen11: $("btnGen11"),
-    btnNew: $("btnNew"),
-    btnClear: $("btnClear"),
-    btnExport: $("btnExport"),
-
     statusPill: $("statusPill"),
     statusHint: $("statusHint"),
 
     optHebrew: $("optHebrew"),
     optCitations: $("optCitations"),
 
+    // New: text + lock + sources
     textPreset: $("textPreset"),
-    textRef: $("textRef"),
-    sefariaLink: $("sefariaLink"),
+    refInput: $("refInput"),
+    optLockText: $("optLockText"),
+    btnOpenSefaria: $("btnOpenSefaria"),
+    btnSources: $("btnSources"),
+
+    // Drawer
+    sourcesDrawer: $("sourcesDrawer"),
+    sourcesList: $("sourcesList"),
+    btnSourcesClose: $("btnSourcesClose"),
+
+    // quick actions
+    stop: $("btnStop"),
+    gen11: $("btnGen11"),
+    btnNew: $("btnNew"),
+    btnClear: $("btnClear"),
+    btnExport: $("btnExport"),
 
     modeButtons: Array.from(document.querySelectorAll(".chip[data-mode]")),
     voiceButtons: Array.from(document.querySelectorAll(".chip[data-voice]")),
   };
 
-  // ✅ FIX: these are KEYS in `els`, not DOM ids
   const required = [
-    "stream","form","input","send",
-    "stop","gen11","btnNew","btnClear","btnExport",
-    "statusPill","statusHint"
+    "stream","form","input","send","statusPill","statusHint",
+    "btnStop","btnGen11","btnNew","btnClear","btnExport",
+    "textPreset","refInput","optLockText","btnOpenSefaria","btnSources",
+    "sourcesDrawer","sourcesList","btnSourcesClose"
   ];
 
   for (const key of required) {
     if (!els[key]) {
-      console.error("[chavruta] missing element key:", key, "dom id maybe:", key);
-      alert(`Chavruta wiring error: missing required element for "${key}". Check chavruta.html IDs.`);
+      console.error("[chavruta] missing element:", key);
+      alert(`Chavruta wiring error: missing #${key}. Check chavruta.html IDs.`);
       return;
     }
   }
@@ -54,9 +60,14 @@
     voice: "balanced",
     includeHebrew: false,
     askForCitations: true,
-    textRef: "",
+
+    textPreset: "",
+    ref: "",
+    lockText: false,
+
+    sources: [], // [{ text, kind }]
     history: [],
-    inFlight: null, // { controller }
+    inFlight: null,
   };
 
   function nowTs() {
@@ -66,6 +77,44 @@
   function setStatus(text, thinking = false) {
     els.statusPill.textContent = text;
     els.statusPill.classList.toggle("is-thinking", !!thinking);
+  }
+
+  function modePromptHint(mode) {
+    if (mode === "sources") return "Sources-first. Minimal commentary. References required when possible.";
+    if (mode === "chavruta") return "Peshat → one classical note → 2–4 questions back.";
+    return "Peshat: plain meaning first, minimal speculation.";
+  }
+
+  function refreshHint() {
+    const base = modePromptHint(state.mode);
+    const voice = `Voice: ${prettyVoice(state.voice)}.`;
+    const lock = state.lockText && state.ref ? `Locked: ${state.ref}.` : "";
+    els.statusHint.textContent = [base, voice, lock].filter(Boolean).join(" ");
+  }
+
+  function prettyVoice(v) {
+    if (v === "ibn_ezra") return "Ibn Ezra";
+    return (v || "balanced").replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  function setMode(mode) {
+    state.mode = mode;
+    els.modeButtons.forEach(btn => {
+      const on = btn.dataset.mode === mode;
+      btn.classList.toggle("is-active", on);
+      btn.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    refreshHint();
+  }
+
+  function setVoice(voice) {
+    state.voice = voice;
+    els.voiceButtons.forEach(btn => {
+      const on = btn.dataset.voice === voice;
+      btn.classList.toggle("is-active", on);
+      btn.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    refreshHint();
   }
 
   function setDisabled(disabled) {
@@ -111,60 +160,6 @@
     if (state.history.length > 24) state.history.splice(0, state.history.length - 24);
   }
 
-  function modePromptHint(mode) {
-    if (mode === "sources") return "Sources-first: cite primary references; keep commentary minimal.";
-    if (mode === "chavruta") return "Chavruta: peshat → one classical note → 2–6 questions back to you.";
-    return "Peshat: plain meaning first, minimal speculation.";
-  }
-
-  function voiceLabel(v) {
-    switch (v) {
-      case "rashi": return "Rashi";
-      case "ibn_ezra": return "Ibn Ezra";
-      case "ramban": return "Ramban";
-      case "sforno": return "Sforno";
-      case "rambam": return "Rambam";
-      default: return "Balanced";
-    }
-  }
-
-  function setMode(mode) {
-    state.mode = mode;
-    els.modeButtons.forEach(btn => {
-      const on = btn.dataset.mode === mode;
-      btn.classList.toggle("is-active", on);
-      btn.setAttribute("aria-selected", on ? "true" : "false");
-    });
-    els.statusHint.textContent = `${modePromptHint(mode)} Voice: ${voiceLabel(state.voice)}.`;
-  }
-
-  function setVoice(voice) {
-    state.voice = voice;
-    els.voiceButtons.forEach(btn => {
-      const on = btn.dataset.voice === voice;
-      btn.classList.toggle("is-active", on);
-      btn.setAttribute("aria-selected", on ? "true" : "false");
-    });
-    els.statusHint.textContent = `${modePromptHint(state.mode)} Voice: ${voiceLabel(voice)}.`;
-  }
-
-  function normalizeRef(ref) {
-    return String(ref || "").trim();
-  }
-
-  function sefariaUrlFor(ref) {
-    const r = normalizeRef(ref);
-    if (!r) return "https://www.sefaria.org/texts";
-    const safe = r.replace(/\s+/g, "_");
-    return `https://www.sefaria.org/${safe}`;
-  }
-
-  function syncTextRef() {
-    const ref = normalizeRef(els.textRef?.value || "");
-    state.textRef = ref;
-    if (els.sefariaLink) els.sefariaLink.href = sefariaUrlFor(ref || els.textPreset?.value || "");
-  }
-
   function stopInFlight() {
     if (state.inFlight?.controller) state.inFlight.controller.abort();
     state.inFlight = null;
@@ -191,7 +186,6 @@
       const text = await res.text();
       let data = {};
       try { data = JSON.parse(text); } catch { data = { raw: text }; }
-
       return { ok: res.ok, status: res.status, data };
     } finally {
       clearTimeout(timer);
@@ -199,15 +193,125 @@
     }
   }
 
+  // --- Sources drawer ---
+  function setSources(list) {
+    state.sources = dedupeSources(list || []);
+    els.btnSources.textContent = `Sources (${state.sources.length})`;
+    renderSourcesDrawer();
+  }
+
+  function dedupeSources(list) {
+    const seen = new Set();
+    const out = [];
+    for (const s of list) {
+      const t = String(s?.text || "").trim();
+      if (!t) continue;
+      const key = t.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({ text: t, kind: s.kind || "source" });
+    }
+    return out.slice(0, 60);
+  }
+
+  function renderSourcesDrawer() {
+    els.sourcesList.innerHTML = "";
+    if (!state.sources.length) {
+      const empty = document.createElement("div");
+      empty.style.opacity = "0.85";
+      empty.style.fontSize = "13px";
+      empty.textContent = "No sources captured yet. Ask a question with citations enabled.";
+      els.sourcesList.appendChild(empty);
+      return;
+    }
+
+    for (const s of state.sources) {
+      const row = document.createElement("div");
+      row.className = "ln-src";
+
+      const left = document.createElement("div");
+      const t = document.createElement("div");
+      t.className = "t";
+      t.textContent = s.text;
+      const a = document.createElement("div");
+      a.className = "a";
+      a.textContent = s.kind;
+      left.appendChild(t);
+      left.appendChild(a);
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "chip";
+      btn.textContent = "Open";
+      btn.addEventListener("click", () => openOnSefaria(s.text));
+
+      row.appendChild(left);
+      row.appendChild(btn);
+      els.sourcesList.appendChild(row);
+    }
+  }
+
+  function openDrawer(open) {
+    els.sourcesDrawer.classList.toggle("is-open", !!open);
+    els.sourcesDrawer.setAttribute("aria-hidden", open ? "false" : "true");
+  }
+
+  function openOnSefaria(ref) {
+    const q = encodeURIComponent(String(ref || "").trim());
+    if (!q) return;
+    // best-effort: Sefaria search works even if ref formatting varies
+    window.open(`https://www.sefaria.org/search?q=${q}&tab=text&tvar=1&tsort=relevance`, "_blank", "noopener,noreferrer");
+  }
+
+  function computeActiveRef() {
+    const typed = String(els.refInput.value || "").trim();
+    const preset = String(els.textPreset.value || "").trim();
+    // if typed exists, prefer it. Else use preset.
+    return typed || preset || "";
+  }
+
+  function syncRefState() {
+    state.textPreset = String(els.textPreset.value || "").trim();
+    state.ref = computeActiveRef();
+    state.lockText = !!els.optLockText.checked;
+    refreshHint();
+  }
+
+  // Extract sources from assistant reply (lightweight heuristic)
+  function extractSourcesFromText(reply) {
+    const txt = String(reply || "");
+    const lines = txt.split(/\r?\n/).map(l => l.trim());
+    const found = [];
+
+    // grab “Sources:” section if present
+    const idx = lines.findIndex(l => /^sources\s*:/i.test(l));
+    if (idx !== -1) {
+      for (let i = idx; i < Math.min(lines.length, idx + 12); i++) {
+        const l = lines[i].replace(/^sources\s*:\s*/i, "").trim();
+        if (!l) continue;
+        // split on separators
+        l.split(/;|•|\u2022|,\s(?=[A-Zא-ת])/).forEach(part => {
+          const p = part.trim();
+          if (p) found.push({ text: p, kind: "source" });
+        });
+      }
+    }
+
+    // also grab common refs like “Genesis 12:1”, “Berakhot 2a”, etc (best-effort)
+    const refMatches = txt.match(/\b(?:Genesis|Exodus|Leviticus|Numbers|Deuteronomy|Psalms|Proverbs)\s+\d+:\d+\b/g) || [];
+    for (const m of refMatches) found.push({ text: m, kind: "Tanakh" });
+
+    return found;
+  }
+
   async function sendText(text) {
     const t = String(text || "").trim();
     if (!t) return;
 
-    syncTextRef();
+    syncRefState();
 
-    const contextLine = state.textRef ? `Text reference: ${state.textRef}` : "";
-    addMessage("You", contextLine ? `${t}\n\n(${contextLine})` : t, "user");
-    pushHistory("user", contextLine ? `${t}\n\n${contextLine}` : t);
+    addMessage("You", t, "user");
+    pushHistory("user", t);
 
     setDisabled(true);
     setStatus("Thinking…", true);
@@ -221,7 +325,10 @@
           voice: state.voice,
           includeHebrew: state.includeHebrew,
           askForCitations: state.askForCitations,
-          textRef: state.textRef || "",
+
+          // new:
+          ref: state.ref,
+          lockText: state.lockText,
         },
       };
 
@@ -236,13 +343,15 @@
       const reply = String(r.data.content || r.data.reply || "").trim() || "(No response text returned.)";
       addMessage("Chavruta", reply, "assistant");
       pushHistory("assistant", reply);
+
+      // update sources drawer
+      const newly = extractSourcesFromText(reply);
+      if (newly.length) setSources([...state.sources, ...newly]);
+      else els.btnSources.textContent = `Sources (${state.sources.length})`;
+
     } catch (err) {
       const isAbort = err?.name === "AbortError";
-      addMessage(
-        "Chavruta",
-        isAbort ? "Chavruta error: Request aborted / timed out." : `Chavruta error: ${err?.message || err}`,
-        "error"
-      );
+      addMessage("Chavruta", isAbort ? "Chavruta error: Request aborted / timed out." : `Chavruta error: ${err?.message || err}`, "error");
     } finally {
       setDisabled(false);
       setStatus("Ready", false);
@@ -254,11 +363,18 @@
     const lines = [];
     lines.push(`# Chavruta Export`);
     lines.push(`- Mode: ${state.mode}`);
-    lines.push(`- Voice: ${voiceLabel(state.voice)}`);
-    lines.push(`- Text ref: ${state.textRef || "(none)"}`);
+    lines.push(`- Voice: ${prettyVoice(state.voice)}`);
     lines.push(`- Include Hebrew: ${state.includeHebrew ? "yes" : "no"}`);
     lines.push(`- Ask for citations: ${state.askForCitations ? "yes" : "no"}`);
+    lines.push(`- Reference: ${state.ref || "(none)"}`);
+    lines.push(`- Lock text: ${state.lockText ? "yes" : "no"}`);
     lines.push("");
+
+    if (state.sources.length) {
+      lines.push(`## SOURCES`);
+      for (const s of state.sources) lines.push(`- ${s.text}`);
+      lines.push("");
+    }
 
     for (const m of state.history) {
       lines.push(`## ${m.role.toUpperCase()}`);
@@ -287,11 +403,13 @@
   function newThread() {
     stopInFlight();
     state.history = [];
+    state.sources = [];
+    els.btnSources.textContent = "Sources (0)";
     clearUI();
     addMessage("Chavruta", "Bring a passage. Add a reference if you want. Then ask one question. I’ll keep speculation clearly labeled.", "assistant");
   }
 
-  // Wiring
+  // --- Wiring ---
   if (els.modeButtons?.length) {
     els.modeButtons.forEach(btn => btn.addEventListener("click", () => setMode(btn.dataset.mode)));
   }
@@ -299,23 +417,20 @@
     els.voiceButtons.forEach(btn => btn.addEventListener("click", () => setVoice(btn.dataset.voice)));
   }
 
-  els.optHebrew?.addEventListener("change", () => { state.includeHebrew = !!els.optHebrew.checked; });
-  els.optCitations?.addEventListener("change", () => { state.askForCitations = !!els.optCitations.checked; });
+  els.optHebrew.addEventListener("change", () => { state.includeHebrew = !!els.optHebrew.checked; });
+  els.optCitations.addEventListener("change", () => { state.askForCitations = !!els.optCitations.checked; });
 
-  els.textPreset?.addEventListener("change", () => {
-    const v = normalizeRef(els.textPreset.value);
-    if (v && els.textRef) els.textRef.value = v;
-    syncTextRef();
-  });
-  els.textRef?.addEventListener("input", syncTextRef);
+  els.textPreset.addEventListener("change", () => { syncRefState(); });
+  els.refInput.addEventListener("input", () => { syncRefState(); });
+  els.optLockText.addEventListener("change", () => { syncRefState(); });
+
+  els.btnOpenSefaria.addEventListener("click", () => openOnSefaria(computeActiveRef()));
+  els.btnSources.addEventListener("click", () => openDrawer(true));
+  els.btnSourcesClose.addEventListener("click", () => openDrawer(false));
+  els.sourcesDrawer.addEventListener("click", (e) => { if (e.target === els.sourcesDrawer) openDrawer(false); });
 
   els.stop.addEventListener("click", stopInFlight);
-  els.gen11.addEventListener("click", () => {
-    if (els.textRef) els.textRef.value = "Genesis 1:1";
-    syncTextRef();
-    els.input.focus();
-  });
-
+  els.gen11.addEventListener("click", () => { els.refInput.value = "Genesis 1:1"; syncRefState(); els.input.focus(); });
   els.btnClear.addEventListener("click", () => { stopInFlight(); clearUI(); });
   els.btnNew.addEventListener("click", newThread);
   els.btnExport.addEventListener("click", exportThread);
@@ -331,12 +446,11 @@
   // Boot
   setMode("peshat");
   setVoice("balanced");
-  state.includeHebrew = !!els.optHebrew?.checked;
-  state.askForCitations = !!els.optCitations?.checked;
-  syncTextRef();
+  state.includeHebrew = !!els.optHebrew.checked;
+  state.askForCitations = !!els.optCitations.checked;
+  syncRefState();
 
   addMessage("Chavruta", "Bring a passage. Add a reference if you want. Then ask one question. I’ll keep speculation clearly labeled.", "assistant");
   setStatus("Ready", false);
-
   console.log("[chavruta] boot ok");
 })();
