@@ -49,15 +49,13 @@
     "optHebrew","optCitations",
     "textPreset","refInput","optLockText","btnOpenSefaria","btnSources",
     "sourcesDrawer","sourcesList","btnSourcesClose",
-   "stop","gen11","btnNew","btnClear","btnExport"
-
+    "btnStop","btnGen11","btnNew","btnClear","btnExport"
   ];
 
   for (const key of required) {
     if (!els[key]) {
       console.error("[chavruta] missing element:", key);
-  alert(`Chavruta wiring error: missing element for key "${key}". Check chavruta.html IDs.`);
-
+      alert(`Chavruta wiring error: missing #${key}. Check chavruta.html IDs.`);
       return;
     }
   }
