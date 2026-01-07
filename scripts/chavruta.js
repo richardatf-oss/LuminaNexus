@@ -244,7 +244,13 @@
       btn.type = "button";
       btn.className = "chip";
       btn.textContent = "Open";
-      btn.addEventListener("click", () => openOnSefaria(s.text));
+  els.gen11.addEventListener("click", () => {
+  els.textPreset.value = "Genesis";
+  els.refInput.value = "Genesis 1:1";
+  syncRefState();
+  els.input.focus();
+});
+
 
       row.appendChild(left);
       row.appendChild(btn);
