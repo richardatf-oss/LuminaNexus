@@ -2,147 +2,151 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>Chavruta — LuminaNexus</title>
   <meta name="description" content="Chavruta — Torah-first study partner." />
   <meta name="theme-color" content="#070A10" />
+
   <link rel="icon" href="/assets/img/gate-hero.png" />
   <link rel="stylesheet" href="/css/site.css" />
   <link rel="stylesheet" href="/css/chavruta.css" />
 </head>
 
 <body>
-  <header class="topbar" role="banner">
-    <div class="wrap topbar-row">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">↯</div>
-        <div class="brand-text">
-          <div class="brand-title">Chavruta</div>
-          <div class="brand-subtitle">Torah-first • Peshat first • One classical note • Then questions</div>
+
+<header class="topbar">
+  <div class="wrap topbar-row">
+    <div class="brand">
+      <div class="brand-mark">↯</div>
+      <div class="brand-text">
+        <div class="brand-title">Chavruta</div>
+        <div class="brand-subtitle">
+          Torah-first · Peshat first · One classical voice · Then questions
         </div>
-      </div>
-      <div class="topbar-actions">
-        <a class="topbar-cta" href="/">Sanctuary</a>
       </div>
     </div>
-  </header>
+    <a class="topbar-cta" href="/">Sanctuary</a>
+  </div>
+</header>
 
-  <main class="wrap" style="padding:44px 0 70px;">
-    <section class="panel">
+<main class="wrap" style="padding:48px 0 72px;">
+<section class="panel">
 
-      <div class="panel-head">
-        <div>
-          <div class="panel-title">Ask a question</div>
-          <div class="panel-sub">Bring a passage + a single question. We'll go step by step.</div>
-        </div>
-
-        <div style="text-align:right;">
-          <div id="statusPill" class="status-pill">Ready</div>
-          <div id="statusHint" class="status-hint">Peshat: plain meaning first, minimal speculation.</div>
-        </div>
-      </div>
-
-      <div id="jsWarning" class="js-warn">
-        JavaScript didn’t load. Chavruta needs JS enabled to run.
-      </div>
-
-      <!-- Row 1: mode + options + quick actions -->
-      <div class="controls">
-        <div class="chips">
-          <button type="button" class="chip is-active" data-mode="peshat">Peshat</button>
-          <button type="button" class="chip" data-mode="chavruta">Chavruta</button>
-          <button type="button" class="chip" data-mode="sources">Sources</button>
-        </div>
-
-        <div class="spacer"></div>
-
-        <label class="opt">
-          <input id="optHebrew" type="checkbox" />
-          Include Hebrew
-        </label>
-
-        <label class="opt">
-          <input id="optCitations" type="checkbox" checked />
-          Citations
-        </label>
-
-        <button type="button" class="chip" id="btnGen11">Genesis 1:1</button>
-        <button type="button" class="chip" id="btnStop">Stop</button>
-        <button type="button" class="chip" id="btnNew">New</button>
-        <button type="button" class="chip" id="btnClear">Clear</button>
-        <button type="button" class="chip" id="btnExport">Export</button>
-      </div>
-
-      <!-- Row 2: text selector + ref + lock + sources drawer -->
-      <div class="controls soft">
-        <select id="textPreset" class="chip" style="min-width:220px;">
-          <option value="">Text preset…</option>
-          <option value="Genesis">Torah: Genesis</option>
-          <option value="Exodus">Torah: Exodus</option>
-          <option value="Leviticus">Torah: Leviticus</option>
-          <option value="Numbers">Torah: Numbers</option>
-          <option value="Deuteronomy">Torah: Deuteronomy</option>
-          <option value="Psalms">Tanakh: Psalms</option>
-          <option value="Proverbs">Tanakh: Proverbs</option>
-          <option value="Berakhot">Talmud: Berakhot</option>
-          <option value="Shabbat">Talmud: Shabbat</option>
-        </select>
-
-        <input
-          id="refInput"
-          type="text"
-          placeholder="Or type a reference… (e.g., Bereshit 1:1, Berakhot 2a)"
-          class="ref-input"
-        />
-
-        <button type="button" class="chip" id="btnOpenSefaria">Open on Sefaria</button>
-
-        <label class="chip" style="display:flex; align-items:center; gap:8px;">
-          <input id="optLockText" type="checkbox" />
-          Lock text
-        </label>
-
-        <button type="button" class="chip" id="btnSources">Sources (0)</button>
-      </div>
-
-      <!-- Row 3: voice filters -->
-      <div class="controls softer">
-        <div class="label">Classical voice:</div>
-        <button type="button" class="chip is-active" data-voice="balanced">Balanced</button>
-        <button type="button" class="chip" data-voice="rashi">Rashi</button>
-        <button type="button" class="chip" data-voice="ibn_ezra">Ibn Ezra</button>
-        <button type="button" class="chip" data-voice="ramban">Ramban</button>
-        <button type="button" class="chip" data-voice="sforno">Sforno</button>
-        <button type="button" class="chip" data-voice="rambam">Rambam</button>
-      </div>
-
-      <div id="stream" class="stream"></div>
-
-      <form id="form" class="composer">
-        <input id="input" type="text" autocomplete="off" placeholder="Type your question…" class="composer-input" />
-        <button id="send" type="submit" class="composer-send">Send</button>
-      </form>
-
-      <div class="tip">
-        Tip: ask for “peshat only”, “one Rashi”, or “sources only” anytime.
-      </div>
-    </section>
-  </main>
-
-  <!-- Sources Drawer -->
-  <aside id="sourcesDrawer" class="ln-drawer" aria-hidden="true">
-    <div class="ln-drawer-card">
-      <div class="ln-drawer-head">
-        <div>
-          <div style="font-weight:800;">Sources</div>
-          <div style="opacity:.8; font-size:12px;">Click to open on Sefaria (best-effort).</div>
-        </div>
-        <button type="button" class="chip" id="btnSourcesClose">Close</button>
-      </div>
-      <div id="sourcesList" class="ln-drawer-list"></div>
+<!-- HEADER -->
+<div class="panel-head">
+  <div>
+    <div class="panel-title">Ask a question</div>
+    <div class="panel-sub">Bring a passage and one clear question.</div>
+  </div>
+  <div style="text-align:right">
+    <div id="statusPill" class="status-pill">Ready</div>
+    <div id="statusHint" class="status-hint">
+      Peshat: plain meaning first.
     </div>
-  </aside>
+  </div>
+</div>
 
-  <script src="/scripts/chavruta.js?v=20260107-1"></script>
+<!-- JS WARNING -->
+<div id="jsWarning" class="js-warning">
+  JavaScript didn’t load. Chavruta requires JS.
+</div>
+
+<!-- MODE + OPTIONS -->
+<div class="controls-row">
+  <div class="chip-row">
+    <button class="chip is-active" data-mode="peshat">Peshat</button>
+    <button class="chip" data-mode="chavruta">Chavruta</button>
+    <button class="chip" data-mode="sources">Sources</button>
+  </div>
+
+  <label class="opt">
+    <input id="optHebrew" type="checkbox" />
+    Include Hebrew
+  </label>
+
+  <label class="opt">
+    <input id="optCitations" type="checkbox" checked />
+    Citations
+  </label>
+
+  <button id="btnGen11" class="chip">Genesis 1:1</button>
+  <button id="btnStop" class="chip">Stop</button>
+  <button id="btnNew" class="chip">New</button>
+  <button id="btnClear" class="chip">Clear</button>
+  <button id="btnExport" class="chip">Export</button>
+</div>
+
+<!-- TEXT SELECTION -->
+<div class="controls-row subtle">
+  <select id="textPreset" class="chip">
+    <option value="">Text preset…</option>
+    <option value="Genesis">Torah — Genesis</option>
+    <option value="Exodus">Torah — Exodus</option>
+    <option value="Leviticus">Torah — Leviticus</option>
+    <option value="Numbers">Torah — Numbers</option>
+    <option value="Deuteronomy">Torah — Deuteronomy</option>
+    <option value="Psalms">Tanakh — Psalms</option>
+    <option value="Proverbs">Tanakh — Proverbs</option>
+    <option value="Berakhot">Talmud — Berakhot</option>
+    <option value="Shabbat">Talmud — Shabbat</option>
+  </select>
+
+  <input
+    id="refInput"
+    type="text"
+    placeholder="Or type a reference (e.g. Bereshit 1:1, Berakhot 2a)"
+  />
+
+  <button id="btnOpenSefaria" class="chip">Open on Sefaria</button>
+
+  <label class="chip">
+    <input id="optLockText" type="checkbox" />
+    Lock text
+  </label>
+
+  <button id="btnSources" class="chip">Sources (0)</button>
+</div>
+
+<!-- VOICE -->
+<div class="controls-row subtle">
+  <span class="label">Classical voice:</span>
+  <button class="chip is-active" data-voice="balanced">Balanced</button>
+  <button class="chip" data-voice="rashi">Rashi</button>
+  <button class="chip" data-voice="ibn_ezra">Ibn Ezra</button>
+  <button class="chip" data-voice="ramban">Ramban</button>
+  <button class="chip" data-voice="sforno">Sforno</button>
+  <button class="chip" data-voice="rambam">Rambam</button>
+</div>
+
+<!-- STREAM -->
+<div id="stream" class="stream"></div>
+
+<!-- COMPOSER -->
+<form id="form" class="composer">
+  <input id="input" type="text" placeholder="Type your question…" />
+  <button id="send" type="submit">Send</button>
+</form>
+
+</section>
+</main>
+
+<!-- SOURCES DRAWER -->
+<aside id="sourcesDrawer" class="ln-drawer" aria-hidden="true">
+  <div class="ln-drawer-card">
+    <div class="ln-drawer-head">
+      <div>
+        <strong>Sources</strong>
+        <div class="small">Open on Sefaria</div>
+      </div>
+      <button id="btnSourcesClose" class="chip">Close</button>
+    </div>
+    <div id="sourcesList" class="ln-drawer-list"></div>
+  </div>
+</aside>
+
+<!-- ✅ CACHE-BUSTED SCRIPT -->
+<script src="/scripts/chavruta.js?v=2026-01-07"></script>
+
 </body>
 </html>
