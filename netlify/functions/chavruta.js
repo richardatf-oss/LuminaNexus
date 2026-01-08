@@ -1,4 +1,4 @@
-// netlify/functions/chavruta.js
+// /netlify/functions/chavruta.js
 const OpenAI = require("openai");
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -20,15 +20,13 @@ function voiceDirective(voice) {
   }
 }
 
-// One canonical system prompt (no duplicates)
 function buildSystemPrompt({ mode, voice, includeHebrew, askForCitations, ref, lockText }) {
-  const lockDirective =
-    lockText && ref
-      ? `LOCKED TEXT MODE:
+  const lockDirective = lockText && ref
+    ? `LOCKED TEXT MODE:
 - The session is locked to the reference: ${ref}
 - Keep the discussion anchored to that text.
-- If the user asks something unrelated, say: "That may be a different passage — do you want to unlock or switch references?" and WAIT for confirmation in the form of the user providing a new ref or explicitly saying "switch/unlock".`
-      : `UNLOCKED TEXT MODE:
+- If the user asks something unrelated, say: "That may be a different passage — do you want to unlock or switch references?" and wait for the user to explicitly unlock or provide a new ref.`
+    : `UNLOCKED TEXT MODE:
 - If a reference is provided, use it as the default anchor, but you may follow the user's question if it clearly shifts to another text.`;
 
   return `
@@ -64,7 +62,6 @@ ${voiceDirective(voice)}
 
 CITATIONS:
 - If askForCitations is true, include a short "Sources:" section at the end when possible.
-- Sources can be: Tanakh refs, Mishnah/Talmud, Rashi, Ramban, Ibn Ezra, Rambam, Shulchan Aruch, Midrash, etc.
 - If you cannot cite precisely, say "Sources: (approx.)" and be honest.
 
 Current mode: ${mode}
@@ -79,9 +76,9 @@ lockText: ${lockText ? "true" : "false"}
 function normalizeHistory(history) {
   if (!Array.isArray(history)) return [];
   const cleaned = history
-    .filter((m) => m && typeof m.content === "string" && typeof m.role === "string")
-    .filter((m) => ["user", "assistant", "system"].includes(m.role))
-    .map((m) => ({ role: m.role, content: m.content.slice(0, 4000) }));
+    .filter(m => m && typeof m.content === "string" && typeof m.role === "string")
+    .filter(m => ["user", "assistant"].includes(m.role))
+    .map(m => ({ role: m.role, content: m.content.slice(0, 4000) }));
   return cleaned.slice(-16);
 }
 
@@ -104,18 +101,13 @@ exports.handler = async function handler(event) {
 
     const options = body?.options || {};
 
-    // A) Parse new options (supports both ref and textRef)
-    const voice = String(options.voice || "balanced").toLowerCase();
-    const ref =
-      (typeof options.ref === "string" && options.ref.trim()) ||
-      (typeof options.textRef === "string" && options.textRef.trim()) ||
-      "";
-    const lockText = !!options.lockText;
-
-    // (existing)
     const mode = String(options.mode || "peshat").toLowerCase();
+    const voice = String(options.voice || "balanced").toLowerCase();
     const includeHebrew = !!options.includeHebrew;
     const askForCitations = options.askForCitations !== false;
+
+    const ref = typeof options.ref === "string" ? options.ref.trim() : "";
+    const lockText = !!options.lockText;
 
     if (!input.trim()) {
       return {
@@ -125,16 +117,7 @@ exports.handler = async function handler(event) {
       };
     }
 
-    // B) Pass them into buildSystemPrompt (updated signature)
-    const system = buildSystemPrompt({
-      mode,
-      voice,
-      includeHebrew,
-      askForCitations,
-      ref,
-      lockText,
-    });
-
+    const system = buildSystemPrompt({ mode, voice, includeHebrew, askForCitations, ref, lockText });
     const history = normalizeHistory(body.history);
 
     const userPrompt = `
@@ -151,11 +134,11 @@ Respond according to the mode and rules.
       model: "gpt-4o-mini",
       messages: [
         { role: "system", content: system },
-        ...history.filter((m) => m.role !== "system"),
+        ...history,
         { role: "user", content: userPrompt },
       ],
       temperature: 0.2,
-      max_tokens: 700,
+      max_tokens: 750,
     });
 
     const content =
