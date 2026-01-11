@@ -1,293 +1,230 @@
-/* /scripts/chavruta.app.js
-   Client for /netlify/functions/chavruta.js (your exact API)
-
-   Backend expects:
-   {
-     input: string,
-     history: [{role:"user"|"assistant", content:string}],
-     options: {
-       mode, voice, includeHebrew, askForCitations, ref, lockText
-     }
-   }
-
-   Backend returns:
-   { ok: true, content: string }
-*/
+// /scripts/chavruta.app.js
+// Connects UI (chavruta-controls.js) -> Netlify function (/.netlify/functions/chavruta)
+//
+// Your function expects:
+//   { input: string, options: {...}, history: [{role:"user"|"assistant", content:string}] }
+// Returns:
+//   { ok: true, content: string }
 
 (() => {
   const ENDPOINT = "/.netlify/functions/chavruta";
 
-  let currentAbort = null;
+  let controller = null;
 
-  // Keep conversational history in the exact format your function accepts.
-  // We store "user" and "assistant" turns only.
+  // Local conversation history sent to the function (it will trim/normalize again)
   const history = [];
 
-  // Last results for Sources tab
-  const state = {
-    lastAnswer: "",
-    lastSources: [],
-    lastPayload: null
+  // Keep last parsed sources for the UI "Sources" tab count
+  let lastSources = [];
+
+  const ui = () => window.__CHAVRUTA_UI || {
+    setAnswer: (t) => console.log("[answer]", t),
+    setSources: (s) => console.log("[sources]", s),
+    setStatus: (t) => console.log("[status]", t),
   };
 
-  function ui() {
-    return window.__CHAVRUTA_UI || {
-      setAnswer: (t) => console.log("[Chavruta Answer]", t),
-      setSources: (s) => console.log("[Chavruta Sources]", s),
-      setStatus: (t) => console.log("[Chavruta Status]", t)
-    };
-  }
-
-  function setStatus(text) {
-    ui().setStatus(text);
-  }
-
-  function abortInFlight() {
-    try {
-      if (currentAbort) currentAbort.abort();
-    } catch (_) {}
-    currentAbort = null;
-  }
-
-  // Keep history small and safe (your function itself trims to last 16,
-  // but we enforce a cap too to keep payload lean).
   function pushHistory(role, content) {
     if (!content || typeof content !== "string") return;
     history.push({ role, content: content.slice(0, 4000) });
-    // keep last 16 messages
     while (history.length > 16) history.shift();
   }
 
-  // The model prints sources as plain text. We try to parse a "Sources:" block.
-  // Returns array of {title, url?, excerpt?} (best-effort).
-  function extractSourcesFromContent(text) {
+  function abort() {
+    try {
+      if (controller) controller.abort();
+    } catch (_) {}
+    controller = null;
+  }
+
+  // Best-effort parsing of "Sources:" section from the model text
+  function extractSources(text) {
     if (!text || typeof text !== "string") return [];
 
-    // Look for a Sources section near the end
-    const idx = text.toLowerCase().lastIndexOf("sources:");
+    const lower = text.toLowerCase();
+    const idx = lower.lastIndexOf("sources:");
     if (idx === -1) return [];
 
     const after = text.slice(idx + "sources:".length).trim();
     if (!after) return [];
 
-    // Take up to ~30 lines after Sources:
-    const lines = after.split(/\r?\n/).map(l => l.trim()).filter(Boolean).slice(0, 30);
+    const lines = after
+      .split(/\r?\n/)
+      .map(l => l.trim())
+      .filter(Boolean)
+      .slice(0, 40);
 
-    // Parse numbered bullets or dash bullets
-    const sources = [];
+    const out = [];
+    const seen = new Set();
+
     for (const line of lines) {
-      // Stop if we hit something that clearly ends the sources section
-      if (/^(hebrew:|questions?:|notes?:|classical note:)/i.test(line)) break;
+      // Stop parsing if it looks like a new section begins
+      if (/^(hebrew:|questions?:|classical note:|note:|peshat:)/i.test(line)) break;
 
-      // Remove leading bullets like "1." "-" "•"
       const cleaned = line.replace(/^(\d+[\).\]]\s+|[-•]\s+)/, "").trim();
       if (!cleaned) continue;
 
-      // Extract URL if present
       const urlMatch = cleaned.match(/https?:\/\/\S+/);
       const url = urlMatch ? urlMatch[0] : null;
+      const title = url ? cleaned.replace(url, "").trim() : cleaned;
 
-      const title = url ? cleaned.replace(url, "").trim().replace(/\s{2,}/g, " ") : cleaned;
-
-      // Avoid duplicates
       const key = `${title}::${url || ""}`.toLowerCase();
-      if (sources.some(s => `${s.title}::${s.url || ""}`.toLowerCase() === key)) continue;
+      if (seen.has(key)) continue;
+      seen.add(key);
 
-      sources.push({ title: title || "Source", url });
+      out.push({ title: title || "Source", url });
     }
 
-    return sources;
+    return out;
   }
 
-  // If user clicks Sources tab, we can show the last sources immediately
-  function showSourcesLocally() {
-    if (!state.lastSources || state.lastSources.length === 0) {
-      ui().setAnswer("No sources yet. Ask a question first — then Sources will populate when available.");
-      ui().setSources([]);
-      return;
+  function buildInput({ reference, passage, question }) {
+    // Your Netlify function accepts one "input" string.
+    // The function itself wraps it with its own userPrompt, so keep this concise.
+    const parts = [];
+
+    if (passage && passage.trim()) {
+      parts.push(passage.trim());
     }
 
-    const text =
-      state.lastSources
-        .map((s, i) => {
-          const n = i + 1;
-          const line1 = `${n}. ${s.title || "Source"}`;
-          const line2 = s.url ? `   ${s.url}` : "";
-          return [line1, line2].filter(Boolean).join("\n");
-        })
-        .join("\n\n");
-
-    ui().setAnswer(`Sources:\n\n${text}`);
-    ui().setSources(state.lastSources);
-  }
-
-  async function postJSON(url, body, signal) {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-      signal
-    });
-
-    if (!res.ok) {
-      let details = "";
-      try {
-        const ct = res.headers.get("content-type") || "";
-        if (ct.includes("application/json")) {
-          const j = await res.json();
-          details = j.error || j.message || JSON.stringify(j);
-        } else {
-          details = await res.text();
-        }
-      } catch (_) {}
-
-      throw new Error(`Request failed (${res.status}). ${details || "No additional details."}`);
+    if (question && question.trim()) {
+      parts.push(question.trim());
     }
 
-    const ct = res.headers.get("content-type") || "";
-    if (ct.includes("application/json")) return await res.json();
-    const t = await res.text();
-    return { ok: true, content: t };
+    // If no passage pasted, include reference in the input as a hint.
+    // (Function already receives ref in options, but redundancy is harmless.)
+    if ((!passage || !passage.trim()) && reference && reference.trim()) {
+      parts.unshift(`Reference: ${reference.trim()}`);
+    }
+
+    return parts.join("\n\n").trim();
   }
 
-  function inferModeFromUI() {
-    const active = document.querySelector(".tab.is-active");
-    const tab = active?.getAttribute("data-tab");
-    if (tab === "peshat" || tab === "chavruta" || tab === "sources") return tab;
-    return "chavruta";
-  }
+  async function askChavruta(detail) {
+    // Stop any in-flight request
+    abort();
 
-  function buildBackendPayload(detail) {
-    const prefs = detail.prefs || {};
-    const mode = inferModeFromUI();
-
-    // Your backend wants a single `input` string.
-    // We'll combine passage + question in a clean, explicit way.
-    const passage = (detail.passage || "").trim();
-    const question = (detail.question || "").trim();
-    const reference = (detail.reference || "").trim();
-
-    const inputParts = [];
-    if (passage) inputParts.push(passage);
-    if (question) inputParts.push(`Question: ${question}`);
-    const input = inputParts.join("\n\n").trim();
-
-    return {
-      input,
-      history: history.slice(), // already trimmed
-      options: {
-        mode, // "peshat" | "chavruta" | "sources"
-        voice: (prefs.voice || "balanced").toLowerCase(),
-        includeHebrew: !!prefs.includeHebrew,
-        // backend expects askForCitations; UI stores prefs.citations
-        askForCitations: !!prefs.citations,
-        ref: reference,
-        lockText: !!detail.lockText // optionally passed from UI; else false
-      }
-    };
-  }
-
-  // Watch the global abort flag set by chavruta-controls.js
-  function installAbortWatcher() {
-    let last = !!window.__CHAVRUTA_ABORT;
-    setInterval(() => {
-      const now = !!window.__CHAVRUTA_ABORT;
-      if (now && !last) {
-        abortInFlight();
-        setStatus("Stopped");
-      }
-      last = now;
-    }, 200);
-  }
-
-  async function handleAsk(detail) {
-    // Stop previous request
-    abortInFlight();
-
-    // Reset abort flag
+    // Reset abort flag used by controls.js
     window.__CHAVRUTA_ABORT = false;
 
-    // If user explicitly switched to Sources tab, show locally
-    const mode = inferModeFromUI();
+    const prefs = detail.prefs || {};
+    const lockTextEl = document.querySelector("#lockText");
+    const lockText = lockTextEl ? !!lockTextEl.checked : false;
+
+    // Determine mode based on active tab class (controls.js toggles this)
+    const activeTab = document.querySelector(".tab.is-active");
+    const mode = (activeTab?.dataset?.tab || "peshat").toLowerCase();
+
+    // If the user clicked Sources tab, show parsed sources without calling backend
     if (mode === "sources") {
-      showSourcesLocally();
+      if (!lastSources.length) {
+        ui().setAnswer("No sources yet. Ask a question first — sources will appear after an answer.");
+        ui().setSources([]);
+        return;
+      }
+      const formatted =
+        "Sources:\n\n" +
+        lastSources
+          .map((s, i) => {
+            const n = i + 1;
+            return s.url ? `${n}. ${s.title}\n   ${s.url}` : `${n}. ${s.title}`;
+          })
+          .join("\n\n");
+
+      ui().setAnswer(formatted);
+      ui().setSources(lastSources);
       return;
     }
 
-    const payload = buildBackendPayload(detail);
-    state.lastPayload = payload;
-
-    // Validate
-    if (!payload.input || !payload.input.trim()) {
-      ui().setAnswer("Please paste a passage or type a question.");
+    const input = buildInput(detail);
+    if (!input) {
+      ui().setAnswer("Please paste a passage or ask a question.");
       ui().setSources([]);
+      ui().setStatus("Ready");
       return;
     }
 
-    currentAbort = new AbortController();
-    setStatus("Working…");
+    const options = {
+      mode, // "peshat" | "chavruta" (and "sources" handled locally)
+      voice: (prefs.voice || "balanced").toLowerCase(),
+      includeHebrew: !!prefs.includeHebrew,
+      askForCitations: !!prefs.citations,
+      ref: (detail.reference || "").trim(),
+      lockText
+    };
+
+    const payload = { input, options, history: history.slice() };
+
+    controller = new AbortController();
+    ui().setStatus("Working…");
 
     try {
-      const json = await postJSON(ENDPOINT, payload, currentAbort.signal);
+      const res = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: controller.signal
+      });
 
-      if (window.__CHAVRUTA_ABORT) return;
-
-      if (!json || json.ok !== true) {
-        const err = json?.error || "Unknown error";
-        throw new Error(err);
+      if (!res.ok) {
+        const t = await res.text().catch(() => "");
+        throw new Error(`Request failed (${res.status}). ${t || "No details."}`);
       }
+
+      const json = await res.json().catch(() => null);
+      if (!json || json.ok !== true) {
+        throw new Error(json?.error || "Server returned an invalid response.");
+      }
+
+      // If Stop was pressed while awaiting, do nothing
+      if (window.__CHAVRUTA_ABORT) return;
 
       const content = (json.content || "").trim() || "No response generated.";
 
-      // Save to history in the exact roles your backend expects
-      // Note: The backend also adds system/user prompt wrappers, but history should be plain.
-      pushHistory("user", payload.input);
+      // Update history
+      pushHistory("user", input);
       pushHistory("assistant", content);
 
-      // Extract sources (best-effort) from content
-      const sources = extractSourcesFromContent(content);
+      // Parse sources from the response text (best-effort)
+      lastSources = extractSources(content);
+      ui().setSources(lastSources);
 
-      state.lastAnswer = content;
-      state.lastSources = sources;
-
-      ui().setAnswer(content);
-      ui().setSources(sources);
-
-      setStatus("Ready");
+      ui().setAnswer(content); // controls.js will append and set Ready
     } catch (err) {
       if (err?.name === "AbortError") {
-        setStatus("Stopped");
+        ui().setStatus("Stopped");
+        return;
+      }
+      if (window.__CHAVRUTA_ABORT) {
+        ui().setStatus("Stopped");
         return;
       }
 
-      console.error("[Chavruta] error:", err);
-      ui().setAnswer(`⚠️ ${err?.message || "Something went wrong. Please try again."}`);
+      console.error("[chavruta.app] error:", err);
+      ui().setAnswer(`⚠️ ${err?.message || "Something went wrong."}`);
       ui().setSources([]);
-      setStatus("Ready");
+      ui().setStatus("Ready");
     } finally {
-      currentAbort = null;
+      controller = null;
     }
   }
 
-  // Listen for UI "ask" events (emitted by chavruta-controls.js)
+  // Listen for the UI event dispatched by chavruta-controls.js
   window.addEventListener("chavruta:ask", (e) => {
-    // Pull lockText from DOM if present (matches your backend option)
-    const lock = document.querySelector("#lockText");
-    const detail = {
-      ...e.detail,
-      lockText: lock ? !!lock.checked : false
-    };
-
-    handleAsk(detail);
+    askChavruta(e.detail);
   });
 
-  // Expose for debugging
-  window.__CHAVRUTA_APP = {
-    abort: abortInFlight,
-    history,
-    state,
-    showSourcesLocally
-  };
+  // Optional: allow Stop button to abort immediately (controls.js sets the flag)
+  // If you'd like, controls.js could also dispatch a "chavruta:stop" event later.
+  const abortPoll = setInterval(() => {
+    if (window.__CHAVRUTA_ABORT) abort();
+  }, 200);
 
-  installAbortWatcher();
+  // Debug hook
+  window.__CHAVRUTA_APP = {
+    ask: askChavruta,
+    abort,
+    history,
+    get lastSources() { return lastSources; },
+    stopAbortPoll() { clearInterval(abortPoll); }
+  };
 })();
