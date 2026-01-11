@@ -1,259 +1,302 @@
-// /scripts/chavruta_app.js
+/* /scripts/chavruta.app.js
+   Chavruta client app:
+   - Receives UI events from chavruta-controls.js
+   - Calls Netlify function /.netlify/functions/chavruta
+   - Streams final result into window.__CHAVRUTA_UI
+*/
+
 (() => {
   const ENDPOINT = "/.netlify/functions/chavruta";
 
-  const els = {
-    stream: document.getElementById("stream"),
-    form: document.getElementById("form"),
-    input: document.getElementById("input"),
-    send: document.getElementById("send"),
-    stop: document.getElementById("btnStop"),
-    gen11: document.getElementById("btnGen11"),
-    btnNew: document.getElementById("btnNew"),
-    btnClear: document.getElementById("btnClear"),
-    btnExport: document.getElementById("btnExport"),
-    statusPill: document.getElementById("statusPill"),
-    statusHint: document.getElementById("statusHint"),
-    optHebrew: document.getElementById("optHebrew"),
-    optCitations: document.getElementById("optCitations"),
-    modeButtons: Array.from(document.querySelectorAll(".chip[data-mode]")),
-  };
+  // Current in-flight request controller
+  let currentAbort = null;
 
+  // Keep last answer/sources around for "Sources" tab or export add-ons
   const state = {
-    mode: "peshat",
-    includeHebrew: false,
-    askForCitations: true,
-    history: [],
-    inFlight: null, // { controller, startedAt }
+    lastPayload: null,
+    lastAnswer: "",
+    lastSources: [],
+    lastMeta: {}
   };
 
-  function nowTs() {
-    return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  // --- Helpers -------------------------------------------------------------
+
+  function safeUI() {
+    return window.__CHAVRUTA_UI || {
+      setAnswer: (t) => console.log("[Chavruta Answer]", t),
+      setSources: (s) => console.log("[Chavruta Sources]", s),
+      setStatus: (t) => console.log("[Chavruta Status]", t)
+    };
   }
 
-  function setStatus(text, thinking = false) {
-    els.statusPill.textContent = text;
-    els.statusPill.classList.toggle("is-thinking", !!thinking);
+  function setStatus(text) {
+    safeUI().setStatus(text);
   }
 
-  function setDisabled(disabled) {
-    els.send.disabled = disabled;
-    els.stop.disabled = !disabled;
-    els.input.disabled = disabled;
-    els.form.classList.toggle("ch-disabled", disabled);
-  }
-
-  function scrollToBottom() {
-    els.stream.scrollTop = els.stream.scrollHeight;
-  }
-
-  function addMessage(who, body, kind = "assistant") {
-    const wrap = document.createElement("div");
-    wrap.className = `msg ${kind === "user" ? "user" : ""} ${kind === "error" ? "error" : ""}`;
-
-    const meta = document.createElement("div");
-    meta.className = "meta";
-
-    const whoEl = document.createElement("div");
-    whoEl.className = "who";
-    whoEl.textContent = who;
-
-    const timeEl = document.createElement("div");
-    timeEl.textContent = nowTs();
-
-    meta.appendChild(whoEl);
-    meta.appendChild(timeEl);
-
-    const b = document.createElement("div");
-    b.className = "body";
-    b.textContent = body;
-
-    wrap.appendChild(meta);
-    wrap.appendChild(b);
-
-    els.stream.appendChild(wrap);
-    scrollToBottom();
-  }
-
-  function pushHistory(role, content) {
-    state.history.push({ role, content });
-    if (state.history.length > 24) state.history.splice(0, state.history.length - 24);
-  }
-
-  function modePromptHint(mode) {
-    if (mode === "sources") return "Give primary sources with references. Keep it Torah-first.";
-    if (mode === "chavruta") return "Text first, then 3–7 questions. Speculation clearly labeled.";
-    return "Peshat: plain meaning first, minimal speculation.";
-  }
-
-  function setMode(mode) {
-    state.mode = mode;
-    els.modeButtons.forEach(btn => {
-      const on = btn.dataset.mode === mode;
-      btn.classList.toggle("is-active", on);
-      btn.setAttribute("aria-selected", on ? "true" : "false");
-    });
-    els.statusHint.textContent = modePromptHint(mode);
-  }
-
-  function stopInFlight() {
-    if (state.inFlight?.controller) state.inFlight.controller.abort();
-    state.inFlight = null;
-    setDisabled(false);
-    setStatus("Ready", false);
-  }
-
-  async function postJSON(payload, { timeoutMs = 45000 } = {}) {
-    // Cancel any existing request (prevents “chasing tail” loops)
-    if (state.inFlight?.controller) state.inFlight.controller.abort();
-
-    const controller = new AbortController();
-    state.inFlight = { controller, startedAt: Date.now() };
-
-    const timer = setTimeout(() => controller.abort(), timeoutMs);
-
+  function abortInFlight() {
     try {
-      const res = await fetch(ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        signal: controller.signal,
-      });
+      if (currentAbort) currentAbort.abort();
+    } catch (_) {}
+    currentAbort = null;
+  }
 
-      const data = await res.json().catch(() => ({}));
-      return { ok: res.ok, status: res.status, data };
-    } finally {
-      clearTimeout(timer);
-      // only clear if we’re still the active request
-      if (state.inFlight?.controller === controller) state.inFlight = null;
+  function asText(x) {
+    if (x == null) return "";
+    if (typeof x === "string") return x;
+    if (typeof x === "number" || typeof x === "boolean") return String(x);
+    try {
+      return JSON.stringify(x, null, 2);
+    } catch {
+      return String(x);
     }
   }
 
-  async function sendText(text) {
-    const t = String(text || "").trim();
-    if (!t) return;
+  // Normalize sources into a consistent shape your UI can handle later.
+  // Supports: strings, {title,url}, Sefaria-like refs, etc.
+  function normalizeSources(input) {
+    const out = [];
+    const add = (s) => {
+      if (!s) return;
+      if (typeof s === "string") {
+        out.push({ title: s });
+        return;
+      }
+      if (typeof s === "object") {
+        const title =
+          s.title ||
+          s.ref ||
+          s.source ||
+          s.citation ||
+          s.name ||
+          s.label ||
+          "Source";
+        const url = s.url || s.link || s.href || null;
+        const excerpt = s.excerpt || s.snippet || s.quote || null;
+        out.push({ title, url, excerpt });
+      }
+    };
 
-    addMessage("You", t, "user");
-    pushHistory("user", t);
+    if (Array.isArray(input)) input.forEach(add);
+    else add(input);
 
-    setDisabled(true);
-    setStatus("Thinking…", true);
+    // De-dupe by title+url
+    const seen = new Set();
+    return out.filter((s) => {
+      const key = `${s.title}::${s.url || ""}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  // Many Netlify functions return different keys. We accept several.
+  function normalizeResponse(json) {
+    // Likely keys:
+    // - answer / text / output / response
+    // - sources / citations / refs
+    // - meta / usage / model
+    const answer =
+      json.answer ??
+      json.text ??
+      json.output ??
+      json.response ??
+      json.message ??
+      "";
+
+    const sourcesRaw =
+      json.sources ??
+      json.citations ??
+      json.refs ??
+      json.references ??
+      json.source_list ??
+      [];
+
+    const meta = json.meta ?? json.usage ?? { model: json.model };
+
+    return {
+      answer: asText(answer).trim(),
+      sources: normalizeSources(sourcesRaw),
+      meta
+    };
+  }
+
+  // Turn sources into a readable block (until you build a dedicated Sources renderer)
+  function sourcesToText(sources) {
+    if (!sources || sources.length === 0) return "No sources available for this answer.";
+    return sources
+      .map((s, i) => {
+        const n = i + 1;
+        const line1 = `${n}. ${s.title || "Source"}`;
+        const line2 = s.url ? `   ${s.url}` : "";
+        const line3 = s.excerpt ? `   “${s.excerpt}”` : "";
+        return [line1, line2, line3].filter(Boolean).join("\n");
+      })
+      .join("\n\n");
+  }
+
+  async function postJSON(url, body, signal) {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal
+    });
+
+    // Handle non-2xx with best-effort error message
+    if (!res.ok) {
+      let errText = "";
+      try {
+        const ct = res.headers.get("content-type") || "";
+        if (ct.includes("application/json")) {
+          const j = await res.json();
+          errText = j.error || j.message || JSON.stringify(j);
+        } else {
+          errText = await res.text();
+        }
+      } catch (_) {}
+      const msg = `Request failed (${res.status}). ${errText || "No additional error details."}`;
+      const e = new Error(msg);
+      e.status = res.status;
+      throw e;
+    }
+
+    // Parse JSON response
+    const ct = res.headers.get("content-type") || "";
+    if (ct.includes("application/json")) return await res.json();
+
+    // If server returns text (rare), accept it
+    const t = await res.text();
+    return { answer: t };
+  }
+
+  function buildRequestPayload(detail) {
+    // detail from chavruta-controls.js:
+    // { reference, passage, question, prefs }
+    const prefs = detail.prefs || {};
+
+    // We send a generous payload; your function can ignore unknown keys.
+    return {
+      mode: inferModeFromUI(), // "peshat" | "chavruta" | "sources"
+      reference: (detail.reference || "").trim(),
+      passage: (detail.passage || "").trim(),
+      question: (detail.question || "").trim(),
+      voice: prefs.voice || "balanced",
+      includeHebrew: !!prefs.includeHebrew,
+      citations: !!prefs.citations,
+      // handy context for your backend logs
+      client: {
+        app: "LuminaNexus-Chavruta",
+        version: "1.0.0"
+      }
+    };
+  }
+
+  function inferModeFromUI() {
+    // read active tab if present
+    const active = document.querySelector(".tab.is-active");
+    const tab = active?.getAttribute("data-tab");
+    if (tab === "peshat" || tab === "chavruta" || tab === "sources") return tab;
+    return "chavruta";
+  }
+
+  // --- Wire Stop button (true abort) --------------------------------------
+
+  // chavruta-controls sets window.__CHAVRUTA_ABORT = true on stop.
+  // We'll also listen for a custom event if you ever add it later.
+  function installAbortWatcher() {
+    // Poll is ugly; event-based is better. We'll do both lightly.
+    let lastAbort = !!window.__CHAVRUTA_ABORT;
+
+    setInterval(() => {
+      const nowAbort = !!window.__CHAVRUTA_ABORT;
+      if (nowAbort && !lastAbort) {
+        abortInFlight();
+        setStatus("Stopped");
+      }
+      lastAbort = nowAbort;
+    }, 200);
+  }
+
+  // --- Main ask handler ----------------------------------------------------
+
+  async function handleAsk(detail) {
+    const ui = safeUI();
+
+    // Stop any prior request
+    abortInFlight();
+
+    // Reset abort flag
+    window.__CHAVRUTA_ABORT = false;
+
+    const payload = buildRequestPayload(detail);
+    state.lastPayload = payload;
+
+    // If user clicked Sources tab without sources, we can respond locally
+    if (payload.mode === "sources") {
+      ui.setAnswer(sourcesToText(state.lastSources));
+      ui.setSources(state.lastSources);
+      return;
+    }
+
+    // Basic validation
+    if (!payload.question) {
+      ui.setAnswer("Please ask one clear question.");
+      ui.setSources([]);
+      return;
+    }
+
+    // Start request
+    currentAbort = new AbortController();
+    setStatus("Working…");
 
     try {
-      const payload = {
-        input: t,
-        history: state.history,
-        options: {
-          mode: state.mode,
-          includeHebrew: state.includeHebrew,
-          askForCitations: state.askForCitations,
-        },
-      };
+      const json = await postJSON(ENDPOINT, payload, currentAbort.signal);
 
-      const r = await postJSON(payload);
+      // If aborted mid-flight, do nothing
+      if (window.__CHAVRUTA_ABORT) return;
 
-      if (!r.ok || !r.data?.ok) {
-        const msg =
-          r.data?.error ||
-          (r.status ? `HTTP ${r.status}` : "Request failed");
+      const normalized = normalizeResponse(json);
 
-        addMessage("Chavruta", `Chavruta error: ${msg}`, "error");
+      // Save state
+      state.lastAnswer = normalized.answer || "";
+      state.lastSources = normalized.sources || [];
+      state.lastMeta = normalized.meta || {};
+
+      // Render
+      ui.setAnswer(state.lastAnswer || "(No answer returned.)");
+      ui.setSources(state.lastSources);
+
+      setStatus("Ready");
+    } catch (err) {
+      if (err?.name === "AbortError") {
+        setStatus("Stopped");
         return;
       }
 
-      const reply =
-        String(r.data.content || r.data.reply || "").trim() ||
-        "(No response text returned.)";
+      console.error("[Chavruta] error:", err);
+      const msg =
+        err?.message ||
+        "Something went wrong while asking Chavruta. Please try again.";
 
-      addMessage("Chavruta", reply, "assistant");
-      pushHistory("assistant", reply);
-    } catch (err) {
-      const isAbort = err?.name === "AbortError";
-      addMessage("Chavruta", isAbort ? "Chavruta error: Request aborted / timed out." : `Chavruta error: ${err?.message || err}`, "error");
+      ui.setAnswer(`⚠️ ${msg}`);
+      ui.setSources([]);
+      setStatus("Ready");
     } finally {
-      // This is the “never get stuck thinking” guarantee:
-      setDisabled(false);
-      setStatus("Ready", false);
-      els.input.focus();
+      currentAbort = null;
     }
   }
 
-  function exportThread() {
-    const lines = [];
-    lines.push(`# Chavruta Export`);
-    lines.push(`- Mode: ${state.mode}`);
-    lines.push(`- Include Hebrew: ${state.includeHebrew ? "yes" : "no"}`);
-    lines.push(`- Ask for citations: ${state.askForCitations ? "yes" : "no"}`);
-    lines.push("");
-    for (const m of state.history) {
-      lines.push(`## ${m.role.toUpperCase()}`);
-      lines.push(m.content);
-      lines.push("");
-    }
+  // --- Boot ---------------------------------------------------------------
 
-    const blob = new Blob([lines.join("\n")], { type: "text/markdown;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `chavruta-${new Date().toISOString().slice(0,10)}.md`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-
-    setTimeout(() => URL.revokeObjectURL(url), 500);
-  }
-
-  function clearUI() {
-    els.stream.innerHTML = "";
-    setStatus("Ready", false);
-  }
-
-  function newThread() {
-    stopInFlight();
-    state.history = [];
-    clearUI();
-    addMessage("Chavruta", "Bring a passage. Then ask one question. I’ll keep speculation clearly labeled.", "assistant");
-  }
-
-  // --- wiring ---
-  els.modeButtons.forEach(btn => {
-    btn.addEventListener("click", () => setMode(btn.dataset.mode));
+  window.addEventListener("chavruta:ask", (e) => {
+    handleAsk(e.detail);
   });
 
-  els.optHebrew.addEventListener("change", () => {
-    state.includeHebrew = !!els.optHebrew.checked;
-  });
+  // Optional: expose state for debugging
+  window.__CHAVRUTA_APP = {
+    abort: abortInFlight,
+    state
+  };
 
-  els.optCitations.addEventListener("change", () => {
-    state.askForCitations = !!els.optCitations.checked;
-  });
-
-  els.stop.addEventListener("click", stopInFlight);
-
-  els.gen11.addEventListener("click", () => {
-    els.input.value = "Genesis 1:1";
-    els.input.focus();
-  });
-
-  els.btnClear.addEventListener("click", () => {
-    stopInFlight();
-    clearUI();
-  });
-
-  els.btnNew.addEventListener("click", newThread);
-
-  els.btnExport.addEventListener("click", exportThread);
-
-  els.form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    sendText(els.input.value);
-    els.input.value = "";
-  });
-
-  // initial
-  setMode("peshat");
-  state.includeHebrew = !!els.optHebrew.checked;
-  state.askForCitations = !!els.optCitations.checked;
-  addMessage("Chavruta", "Bring a passage. Then ask one question. I’ll keep speculation clearly labeled.", "assistant");
+  installAbortWatcher();
 })();
