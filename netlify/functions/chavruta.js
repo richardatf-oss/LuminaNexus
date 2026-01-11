@@ -64,6 +64,12 @@ CITATIONS:
 - If askForCitations is true, include a short "Sources:" section at the end when possible.
 - If you cannot cite precisely, say "Sources: (approx.)" and be honest.
 
+STRUCTURED SOURCES (IMPORTANT):
+- ALSO output a final line that begins EXACTLY with: "SOURCES_JSON:"
+- After that tag, output a valid JSON array of sources: [{"title":"...","url":"..."}]
+- Keep it on a single line.
+- If you have no sources, output: SOURCES_JSON: []
+
 Current mode: ${mode}
 voice: ${voice}
 includeHebrew: ${includeHebrew ? "true" : "false"}
@@ -80,6 +86,42 @@ function normalizeHistory(history) {
     .filter(m => ["user", "assistant"].includes(m.role))
     .map(m => ({ role: m.role, content: m.content.slice(0, 4000) }));
   return cleaned.slice(-16);
+}
+
+// Extract sources array from the SOURCES_JSON line, and remove it from the visible content.
+function extractStructuredSources(fullText) {
+  if (!fullText || typeof fullText !== "string") {
+    return { content: "No response generated.", sources: [] };
+  }
+
+  const lines = fullText.split(/\r?\n/);
+  const idx = lines.findIndex(l => l.trim().startsWith("SOURCES_JSON:"));
+  if (idx === -1) {
+    // No structured line — return text as-is
+    return { content: fullText.trim(), sources: [] };
+  }
+
+  const tagLine = lines[idx].trim();
+  const jsonPart = tagLine.replace(/^SOURCES_JSON:\s*/, "").trim();
+
+  let sources = [];
+  try {
+    const parsed = JSON.parse(jsonPart);
+    if (Array.isArray(parsed)) {
+      sources = parsed
+        .filter(x => x && typeof x === "object")
+        .map(x => ({
+          title: typeof x.title === "string" ? x.title : "Source",
+          url: typeof x.url === "string" ? x.url : null
+        }));
+    }
+  } catch (_) {
+    sources = [];
+  }
+
+  // Remove the SOURCES_JSON line from the displayed content
+  const visible = lines.filter((_, i) => i !== idx).join("\n").trim();
+  return { content: visible || fullText.trim(), sources };
 }
 
 exports.handler = async function handler(event) {
@@ -113,7 +155,7 @@ exports.handler = async function handler(event) {
       return {
         statusCode: 200,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ok: true, content: "Please bring a passage or ask a question." }),
+        body: JSON.stringify({ ok: true, content: "Please bring a passage or ask a question.", sources: [] }),
       };
     }
 
@@ -138,22 +180,24 @@ Respond according to the mode and rules.
         { role: "user", content: userPrompt },
       ],
       temperature: 0.2,
-      max_tokens: 750,
+      max_tokens: 850,
     });
 
-    const content =
+    const raw =
       completion.choices?.[0]?.message?.content?.trim() || "No response generated.";
+
+    const { content, sources } = extractStructuredSources(raw);
 
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ok: true, content }),
+      body: JSON.stringify({ ok: true, content, sources }),
     };
   } catch (err) {
     return {
       statusCode: 500,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ok: false, error: err?.message || String(err) }),
+      body: JSON.stringify({ ok: false, error: err?.message || String(err), sources: [] }),
     };
   }
 };
