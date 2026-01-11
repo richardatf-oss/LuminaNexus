@@ -203,3 +203,10 @@ h1{margin:10px 0 10px; font-size:34px; line-height:1.15}
 .ft-sub{color:var(--muted); font-size:13px; margin-top:3px}
 .ft-links{display:flex; gap:12px; color:var(--muted)}
 .ft-links a:hover{color:var(--text)}
+.lib-row{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top: 8px;
+}
