@@ -4,58 +4,111 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>LuminaNexus — Sanctuary</title>
-  <meta name="description" content="Sanctuary • Study • Build" />
-  <meta name="theme-color" content="#070A10" />
-  <link rel="icon" href="/assets/img/gate-hero.png" />
-  <link rel="stylesheet" href="/css/site.css" />
+  <meta name="description" content="A Noahide-friendly sanctuary for study and building: Chavruta, the 231 Celestial Gates of Light, a curated Library, and a daily path of moral clarity." />
+  <link rel="stylesheet" href="/site.css" />
 </head>
+
 <body>
+  <!-- Topbar -->
   <header class="topbar" role="banner">
-    <div class="wrap topbar-row">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">✶</div>
-        <div class="brand-text">
-          <div class="brand-title">LuminaNexus</div>
-          <div class="brand-subtitle">Sanctuary • Study • Build</div>
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">✶</div>
+      <div class="brand-text">
+        <div class="brand-title">LuminaNexus</div>
+        <div class="brand-sub">Sanctuary · Study · Build</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="Top navigation">
+      <a class="navlink" href="/map/">Map</a>
+      <a class="navlink" href="/about/">About</a>
+      <a class="navlink nav-pill" href="/chavruta/">Enter</a>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main class="wrap hero" role="main">
+    <section class="heroCard">
+      <div class="heroLeft">
+        <div class="kicker">
+          <span class="kicker-en">A sanctuary for study and moral clarity</span>
+          <span class="kicker-he" lang="he" dir="rtl">מִקְלָט לְלִמּוּד וּלְבֵרוּר הַדֶּרֶךְ</span>
+        </div>
+
+        <h1 class="heroTitle">
+          Enter the Sanctuary of the <span class="heroEm">231 Celestial Gates of Light</span>.
+        </h1>
+
+        <p class="heroLead">
+          Letters become stars. Pairings become Gates. Gates form Alignments—patterns of responsibility,
+          speech, restraint, justice, and relationship.
+        </p>
+
+        <p class="heroNote">
+          Built for Noahides: calm, grounded, and free of mythic or astrological imagery.
+        </p>
+
+        <div class="ctaRow">
+          <a class="btn primary" href="/chavruta/">Enter Chavruta</a>
+          <a class="btn" href="/map/">See the 231 Gates</a>
+          <a class="btn ghost" href="/library/">Open the Library</a>
+        </div>
+
+        <div class="microLine">
+          Minimal. Intentional. Built to last.
+        </div>
+
+        <div class="restoreLine">
+          <span class="restoreLabel">Restoring:</span>
+          <span class="restoreItems">Library · The Gates · Daily Path</span>
         </div>
       </div>
 
-      <nav class="topbar-actions" aria-label="Primary">
-        <a class="topbar-link" href="/map">Map</a>
-        <a class="topbar-link" href="/chavruta/about.html">About</a>
-        <a class="topbar-cta" href="/chavruta">Enter</a>
-      </nav>
-    </div>
-  </header>
+      <div class="heroRight" aria-label="Primary gates">
+        <div class="grid">
+          <a class="tile" href="/chavruta/">
+            <div class="tileTitle">Chavruta</div>
+            <div class="tileSub">Ask a question. Receive careful steps. Stay calm.</div>
+          </a>
 
-  <main class="wrap hero">
-    <div class="hero-card">
-      <div class="kicker">A threshold for study and living light</div>
-      <h1>Enter the Gate. Sit with the Question.</h1>
-      <p class="lead">
-        LuminaNexus is a quiet sanctuary—built to reduce noise, increase clarity, and keep the sacred wiring intact.
-        Here, the work is simple: learn, reflect, and build—one gate at a time.
-      </p>
+          <a class="tile" href="/map/">
+            <div class="tileTitle">231 Gates Map</div>
+            <div class="tileSub">Explore the letter-stars. Hover, focus a Gate, trace Alignments.</div>
+          </a>
 
-      <div class="hero-actions">
-        <a class="btn" href="/chavruta">Enter Chavruta</a>
-        <a class="btn ghost" href="/map">See the Map</a>
+          <a class="tile coming" href="/library/" aria-disabled="false">
+            <div class="tileTitle">Library</div>
+            <div class="tileSub">Canonical notes and living drafts—curated into a clean collection.</div>
+          </a>
+
+          <a class="tile coming" href="/path/" aria-disabled="false">
+            <div class="tileTitle">Daily Path</div>
+            <div class="tileSub">Short reflections and ethical prompts—one gate at a time.</div>
+          </a>
+
+          <a class="tile" href="/projects/">
+            <div class="tileTitle">Projects</div>
+            <div class="tileSub">Unity builds, apps, and experiments—linked outward, never cluttering the sanctuary.</div>
+          </a>
+
+          <a class="tile" href="/about/">
+            <div class="tileTitle">About</div>
+            <div class="tileSub">Mission, boundaries, and design principles of the sanctuary.</div>
+          </a>
+        </div>
       </div>
-
-      <div class="micro">Minimal. Intentional. Built to last.</div>
-    </div>
+    </section>
   </main>
 
-  <footer class="footer">
-    <div class="wrap footer-row">
-      <div>
-        <div class="ft-title">LuminaNexus.org</div>
-        <div class="ft-sub">A sanctuary for study and building.</div>
-      </div>
-      <div class="ft-links">
-        <a href="/chavruta">Chavruta</a>
-        <a href="/map">Map</a>
-      </div>
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="footLeft">
+      <div class="footTitle">LuminaNexus.org</div>
+      <div class="footSub">A sanctuary for study and building.</div>
+    </div>
+    <div class="footRight">
+      <a class="footLink" href="/chavruta/">Chavruta</a>
+      <a class="footLink" href="/map/">Map</a>
     </div>
   </footer>
 </body>
