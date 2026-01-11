@@ -2,153 +2,180 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Chavruta — LuminaNexus</title>
-  <meta name="description" content="Chavruta — Torah-first study partner." />
+  <meta name="description" content="Torah-first. Peshat-first. One classical voice — then questions." />
   <meta name="theme-color" content="#070A10" />
-
   <link rel="icon" href="/assets/img/gate-hero.png" />
   <link rel="stylesheet" href="/css/site.css" />
   <link rel="stylesheet" href="/css/chavruta.css" />
 </head>
 
 <body>
-
-<header class="topbar">
-  <div class="wrap topbar-row">
-    <div class="brand">
-      <div class="brand-mark">↯</div>
-      <div class="brand-text">
-        <div class="brand-title">Chavruta</div>
-        <div class="brand-subtitle">
-          Torah-first · Peshat first · One classical voice · Then questions
+  <header class="topbar" role="banner">
+    <div class="wrap topbar-row">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">✶</div>
+        <div class="brand-text">
+          <div class="brand-title">Chavruta</div>
+          <div class="brand-subtitle">Torah-first • Peshat-first • One classical voice</div>
         </div>
       </div>
+
+      <nav class="topbar-actions" aria-label="Primary">
+        <a class="topbar-link" href="/chavruta/about.html" title="What this is and how to use it">About</a>
+        <a class="topbar-link" href="/" title="Back to LuminaNexus home">Sanctuary</a>
+      </nav>
     </div>
-<a class="topbar-cta" href="./about.html">About</a>
-<a class="topbar-cta" href="/">Sanctuary</a>
+  </header>
 
-  </div>
-</header>
+  <main class="wrap chavruta-shell">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h1 class="h1">Ask a question</h1>
+          <div class="sub">
+            <strong>How it works:</strong>
+            <span class="steps" aria-label="How to use">
+              <span class="step"><span class="n">1</span> Choose a passage</span>
+              <span class="dot">•</span>
+              <span class="step"><span class="n">2</span> Ask one clear question</span>
+              <span class="dot">•</span>
+              <span class="step"><span class="n">3</span> Send</span>
+            </span>
+          </div>
+        </div>
 
-<main class="wrap" style="padding:48px 0 72px;">
-<section class="panel">
-
-<!-- HEADER -->
-<div class="panel-head">
-  <div>
-    <div class="panel-title">Ask a question</div>
-    <div class="panel-sub">Bring a passage and one clear question.</div>
-  </div>
-  <div style="text-align:right">
-    <div id="statusPill" class="status-pill">Ready</div>
-    <div id="statusHint" class="status-hint">
-      Peshat: plain meaning first.
-    </div>
-  </div>
-</div>
-
-<!-- JS WARNING -->
-<div id="jsWarning" class="js-warning">
-  JavaScript didn’t load. Chavruta requires JS.
-</div>
-
-<!-- MODE + OPTIONS -->
-<div class="controls-row">
-  <div class="chip-row">
-    <button class="chip is-active" data-mode="peshat">Peshat</button>
-    <button class="chip" data-mode="chavruta">Chavruta</button>
-    <button class="chip" data-mode="sources">Sources</button>
-  </div>
-
-  <label class="opt">
-    <input id="optHebrew" type="checkbox" />
-    Include Hebrew
-  </label>
-
-  <label class="opt">
-    <input id="optCitations" type="checkbox" checked />
-    Citations
-  </label>
-
-  <button id="btnGen11" class="chip">Genesis 1:1</button>
-  <button id="btnStop" class="chip">Stop</button>
-  <button id="btnNew" class="chip">New</button>
-  <button id="btnClear" class="chip">Clear</button>
-  <button id="btnExport" class="chip">Export</button>
-</div>
-
-<!-- TEXT SELECTION -->
-<div class="controls-row subtle">
-  <select id="textPreset" class="chip">
-    <option value="">Text preset…</option>
-    <option value="Genesis">Torah — Genesis</option>
-    <option value="Exodus">Torah — Exodus</option>
-    <option value="Leviticus">Torah — Leviticus</option>
-    <option value="Numbers">Torah — Numbers</option>
-    <option value="Deuteronomy">Torah — Deuteronomy</option>
-    <option value="Psalms">Tanakh — Psalms</option>
-    <option value="Proverbs">Tanakh — Proverbs</option>
-    <option value="Berakhot">Talmud — Berakhot</option>
-    <option value="Shabbat">Talmud — Shabbat</option>
-  </select>
-
-  <input
-    id="refInput"
-    type="text"
-    placeholder="Or type a reference (e.g. Bereshit 1:1, Berakhot 2a)"
-  />
-
-  <button id="btnOpenSefaria" class="chip">Open on Sefaria</button>
-
-  <label class="chip">
-    <input id="optLockText" type="checkbox" />
-    Lock text
-  </label>
-
-  <button id="btnSources" class="chip">Sources (0)</button>
-</div>
-
-<!-- VOICE -->
-<div class="controls-row subtle">
-  <span class="label">Classical voice:</span>
-  <button class="chip is-active" data-voice="balanced">Balanced</button>
-  <button class="chip" data-voice="rashi">Rashi</button>
-  <button class="chip" data-voice="ibn_ezra">Ibn Ezra</button>
-  <button class="chip" data-voice="ramban">Ramban</button>
-  <button class="chip" data-voice="sforno">Sforno</button>
-  <button class="chip" data-voice="rambam">Rambam</button>
-</div>
-
-<!-- STREAM -->
-<div id="stream" class="stream"></div>
-
-<!-- COMPOSER -->
-<form id="form" class="composer">
-  <input id="input" type="text" placeholder="Type your question…" />
-  <button id="send" type="submit">Send</button>
-</form>
-
-</section>
-</main>
-
-<!-- SOURCES DRAWER -->
-<aside id="sourcesDrawer" class="ln-drawer" aria-hidden="true">
-  <div class="ln-drawer-card">
-    <div class="ln-drawer-head">
-      <div>
-        <strong>Sources</strong>
-        <div class="small">Open on Sefaria</div>
+        <div class="status" id="statusPill" title="System status">Ready</div>
       </div>
-      <button id="btnSourcesClose" class="chip">Close</button>
-    </div>
-    <div id="sourcesList" class="ln-drawer-list"></div>
-  </div>
-</aside>
 
-<!-- ✅ CACHE-BUSTED SCRIPT -->
-<script src="/scripts/chavruta.js?v=2026-01-07"></script>
+      <div class="toolbar">
+        <div class="tabs" role="tablist" aria-label="Mode">
+          <button class="tab is-active" type="button" data-tab="peshat" role="tab" aria-selected="true" title="Plain meaning first">Peshat</button>
+          <button class="tab" type="button" data-tab="chavruta" role="tab" aria-selected="false" title="Balanced study voice">Chavruta</button>
+          <button class="tab" type="button" data-tab="sources" role="tab" aria-selected="false" title="Show sources for the last answer">Sources <span id="sourcesCount" class="count"></span></button>
+        </div>
 
+        <div class="toggles">
+          <label class="check">
+            <input id="includeHebrew" type="checkbox" checked />
+            <span title="Include Hebrew text in the answer">Include Hebrew</span>
+          </label>
+
+          <label class="check">
+            <input id="includeCitations" type="checkbox" checked />
+            <span title="Add citations when sources are available">Citations</span>
+          </label>
+
+          <button class="btn-sm" type="button" id="toggleAdvanced" title="Show/Hide advanced controls">Advanced</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="ref-row">
+          <button class="chip" type="button" id="presetGen11" title="Load Genesis 1:1">Genesis 1:1</button>
+          <button class="chip" type="button" id="btnStop" title="Stop the current response">Stop</button>
+          <button class="chip" type="button" id="btnNew" title="Start a fresh question (keeps page)">New</button>
+          <button class="chip" type="button" id="btnClear" title="Clear the text fields">Clear</button>
+          <button class="chip" type="button" id="btnExport" title="Export the chat to a .txt file">Export</button>
+        </div>
+
+        <div class="ref-inputs">
+          <label class="field">
+            <span class="label" title="Optional: choose an example passage">Text preset</span>
+            <select id="textPreset">
+              <option disabled selected>Select a sample (optional)</option>
+              <option value="gen1_1">Genesis 1:1 (Heb/Eng)</option>
+              <option value="shema">Deut 6:4–5 (Shema)</option>
+              <option value="ex20_2">Exodus 20:2 (Decalogue intro)</option>
+            </select>
+          </label>
+
+          <label class="field grow">
+            <span class="label" title="Type a reference like 'Genesis 1:1' or 'Bereshit 1:1'">Reference</span>
+            <input id="refInput" type="text" placeholder="e.g., Genesis 1:1" />
+          </label>
+
+          <button class="btn-sm" type="button" id="openSefaria" title="Open the current reference on Sefaria">Open passage on Sefaria</button>
+
+          <label class="check lock">
+            <input id="lockText" type="checkbox" />
+            <span title="Prevent the passage field from being overwritten by presets">Lock text</span>
+          </label>
+        </div>
+      </div>
+
+      <div id="advancedPanel" class="advanced hidden" aria-hidden="true">
+        <div class="advanced-title">Advanced</div>
+        <div class="advanced-grid">
+          <label class="field">
+            <span class="label" title="Choose the classical voice used in the answer">Classical voice</span>
+            <div class="pills" role="group" aria-label="Classical voice">
+              <button class="pill is-active" type="button" data-voice="balanced" title="Balanced voice">Balanced</button>
+              <button class="pill" type="button" data-voice="rashi" title="Rashi-style">Rashi</button>
+              <button class="pill" type="button" data-voice="ibn_ezra" title="Ibn Ezra-style">Ibn Ezra</button>
+              <button class="pill" type="button" data-voice="ramban" title="Ramban-style">Ramban</button>
+              <button class="pill" type="button" data-voice="sforno" title="Sforno-style">Sforno</button>
+              <button class="pill" type="button" data-voice="rambam" title="Rambam-style">Rambam</button>
+            </div>
+          </label>
+
+          <div class="hint">
+            <div class="hint-title">Tip</div>
+            <div class="hint-body">
+              Best results come from a single, clear question like:
+              <em>“What does this word mean here?”</em> or <em>“What is the plain sequence of events?”</em>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="chat">
+        <div class="chatlog" id="chatlog" aria-live="polite">
+          <div class="msg system">
+            Bring a passage (or reference) and ask one clear question. I’ll keep speculation clearly labeled.
+          </div>
+        </div>
+
+        <form class="composer" id="composer" autocomplete="off">
+          <label class="field grow">
+            <span class="label">Passage (optional)</span>
+            <textarea id="passageInput" rows="4" placeholder="Paste the passage here (optional)."></textarea>
+          </label>
+
+          <label class="field grow">
+            <span class="label">Your question</span>
+            <input id="questionInput" type="text" placeholder="Type one clear question…" />
+          </label>
+
+          <button class="btn send" type="submit" id="btnSend" title="Ask the question">Ask</button>
+        </form>
+      </section>
+    </section>
+
+    <section class="side">
+      <div class="card">
+        <div class="card-title">Short ritual</div>
+        <ol class="card-list">
+          <li>Pick a reference (or paste text).</li>
+          <li>Ask one clear question.</li>
+          <li>Press <strong>Ask</strong>.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Common actions</div>
+        <div class="card-actions">
+          <button class="btn-sm" type="button" data-quick="word" title="Ask a word meaning question">Word meaning</button>
+          <button class="btn-sm" type="button" data-quick="structure" title="Ask a structure question">Structure</button>
+          <button class="btn-sm" type="button" data-quick="why" title="Ask a 'why' question">Why</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/scripts/chavruta-controls.js"></script>
+  <!-- Keep your existing app scripts if you already have them -->
+  <script src="/scripts/chavruta.app.js"></script>
 </body>
 </html>
