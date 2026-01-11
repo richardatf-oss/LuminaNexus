@@ -1,27 +1,36 @@
 /* /scripts/chavruta.app.js
-   Chavruta client app:
-   - Receives UI events from chavruta-controls.js
-   - Calls Netlify function /.netlify/functions/chavruta
-   - Streams final result into window.__CHAVRUTA_UI
+   Client for /netlify/functions/chavruta.js (your exact API)
+
+   Backend expects:
+   {
+     input: string,
+     history: [{role:"user"|"assistant", content:string}],
+     options: {
+       mode, voice, includeHebrew, askForCitations, ref, lockText
+     }
+   }
+
+   Backend returns:
+   { ok: true, content: string }
 */
 
 (() => {
   const ENDPOINT = "/.netlify/functions/chavruta";
 
-  // Current in-flight request controller
   let currentAbort = null;
 
-  // Keep last answer/sources around for "Sources" tab or export add-ons
+  // Keep conversational history in the exact format your function accepts.
+  // We store "user" and "assistant" turns only.
+  const history = [];
+
+  // Last results for Sources tab
   const state = {
-    lastPayload: null,
     lastAnswer: "",
     lastSources: [],
-    lastMeta: {}
+    lastPayload: null
   };
 
-  // --- Helpers -------------------------------------------------------------
-
-  function safeUI() {
+  function ui() {
     return window.__CHAVRUTA_UI || {
       setAnswer: (t) => console.log("[Chavruta Answer]", t),
       setSources: (s) => console.log("[Chavruta Sources]", s),
@@ -30,7 +39,7 @@
   }
 
   function setStatus(text) {
-    safeUI().setStatus(text);
+    ui().setStatus(text);
   }
 
   function abortInFlight() {
@@ -40,98 +49,76 @@
     currentAbort = null;
   }
 
-  function asText(x) {
-    if (x == null) return "";
-    if (typeof x === "string") return x;
-    if (typeof x === "number" || typeof x === "boolean") return String(x);
-    try {
-      return JSON.stringify(x, null, 2);
-    } catch {
-      return String(x);
+  // Keep history small and safe (your function itself trims to last 16,
+  // but we enforce a cap too to keep payload lean).
+  function pushHistory(role, content) {
+    if (!content || typeof content !== "string") return;
+    history.push({ role, content: content.slice(0, 4000) });
+    // keep last 16 messages
+    while (history.length > 16) history.shift();
+  }
+
+  // The model prints sources as plain text. We try to parse a "Sources:" block.
+  // Returns array of {title, url?, excerpt?} (best-effort).
+  function extractSourcesFromContent(text) {
+    if (!text || typeof text !== "string") return [];
+
+    // Look for a Sources section near the end
+    const idx = text.toLowerCase().lastIndexOf("sources:");
+    if (idx === -1) return [];
+
+    const after = text.slice(idx + "sources:".length).trim();
+    if (!after) return [];
+
+    // Take up to ~30 lines after Sources:
+    const lines = after.split(/\r?\n/).map(l => l.trim()).filter(Boolean).slice(0, 30);
+
+    // Parse numbered bullets or dash bullets
+    const sources = [];
+    for (const line of lines) {
+      // Stop if we hit something that clearly ends the sources section
+      if (/^(hebrew:|questions?:|notes?:|classical note:)/i.test(line)) break;
+
+      // Remove leading bullets like "1." "-" "•"
+      const cleaned = line.replace(/^(\d+[\).\]]\s+|[-•]\s+)/, "").trim();
+      if (!cleaned) continue;
+
+      // Extract URL if present
+      const urlMatch = cleaned.match(/https?:\/\/\S+/);
+      const url = urlMatch ? urlMatch[0] : null;
+
+      const title = url ? cleaned.replace(url, "").trim().replace(/\s{2,}/g, " ") : cleaned;
+
+      // Avoid duplicates
+      const key = `${title}::${url || ""}`.toLowerCase();
+      if (sources.some(s => `${s.title}::${s.url || ""}`.toLowerCase() === key)) continue;
+
+      sources.push({ title: title || "Source", url });
     }
+
+    return sources;
   }
 
-  // Normalize sources into a consistent shape your UI can handle later.
-  // Supports: strings, {title,url}, Sefaria-like refs, etc.
-  function normalizeSources(input) {
-    const out = [];
-    const add = (s) => {
-      if (!s) return;
-      if (typeof s === "string") {
-        out.push({ title: s });
-        return;
-      }
-      if (typeof s === "object") {
-        const title =
-          s.title ||
-          s.ref ||
-          s.source ||
-          s.citation ||
-          s.name ||
-          s.label ||
-          "Source";
-        const url = s.url || s.link || s.href || null;
-        const excerpt = s.excerpt || s.snippet || s.quote || null;
-        out.push({ title, url, excerpt });
-      }
-    };
+  // If user clicks Sources tab, we can show the last sources immediately
+  function showSourcesLocally() {
+    if (!state.lastSources || state.lastSources.length === 0) {
+      ui().setAnswer("No sources yet. Ask a question first — then Sources will populate when available.");
+      ui().setSources([]);
+      return;
+    }
 
-    if (Array.isArray(input)) input.forEach(add);
-    else add(input);
+    const text =
+      state.lastSources
+        .map((s, i) => {
+          const n = i + 1;
+          const line1 = `${n}. ${s.title || "Source"}`;
+          const line2 = s.url ? `   ${s.url}` : "";
+          return [line1, line2].filter(Boolean).join("\n");
+        })
+        .join("\n\n");
 
-    // De-dupe by title+url
-    const seen = new Set();
-    return out.filter((s) => {
-      const key = `${s.title}::${s.url || ""}`;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-  }
-
-  // Many Netlify functions return different keys. We accept several.
-  function normalizeResponse(json) {
-    // Likely keys:
-    // - answer / text / output / response
-    // - sources / citations / refs
-    // - meta / usage / model
-    const answer =
-      json.answer ??
-      json.text ??
-      json.output ??
-      json.response ??
-      json.message ??
-      "";
-
-    const sourcesRaw =
-      json.sources ??
-      json.citations ??
-      json.refs ??
-      json.references ??
-      json.source_list ??
-      [];
-
-    const meta = json.meta ?? json.usage ?? { model: json.model };
-
-    return {
-      answer: asText(answer).trim(),
-      sources: normalizeSources(sourcesRaw),
-      meta
-    };
-  }
-
-  // Turn sources into a readable block (until you build a dedicated Sources renderer)
-  function sourcesToText(sources) {
-    if (!sources || sources.length === 0) return "No sources available for this answer.";
-    return sources
-      .map((s, i) => {
-        const n = i + 1;
-        const line1 = `${n}. ${s.title || "Source"}`;
-        const line2 = s.url ? `   ${s.url}` : "";
-        const line3 = s.excerpt ? `   “${s.excerpt}”` : "";
-        return [line1, line2, line3].filter(Boolean).join("\n");
-      })
-      .join("\n\n");
+    ui().setAnswer(`Sources:\n\n${text}`);
+    ui().setSources(state.lastSources);
   }
 
   async function postJSON(url, body, signal) {
@@ -142,129 +129,129 @@
       signal
     });
 
-    // Handle non-2xx with best-effort error message
     if (!res.ok) {
-      let errText = "";
+      let details = "";
       try {
         const ct = res.headers.get("content-type") || "";
         if (ct.includes("application/json")) {
           const j = await res.json();
-          errText = j.error || j.message || JSON.stringify(j);
+          details = j.error || j.message || JSON.stringify(j);
         } else {
-          errText = await res.text();
+          details = await res.text();
         }
       } catch (_) {}
-      const msg = `Request failed (${res.status}). ${errText || "No additional error details."}`;
-      const e = new Error(msg);
-      e.status = res.status;
-      throw e;
+
+      throw new Error(`Request failed (${res.status}). ${details || "No additional details."}`);
     }
 
-    // Parse JSON response
     const ct = res.headers.get("content-type") || "";
     if (ct.includes("application/json")) return await res.json();
-
-    // If server returns text (rare), accept it
     const t = await res.text();
-    return { answer: t };
-  }
-
-  function buildRequestPayload(detail) {
-    // detail from chavruta-controls.js:
-    // { reference, passage, question, prefs }
-    const prefs = detail.prefs || {};
-
-    // We send a generous payload; your function can ignore unknown keys.
-    return {
-      mode: inferModeFromUI(), // "peshat" | "chavruta" | "sources"
-      reference: (detail.reference || "").trim(),
-      passage: (detail.passage || "").trim(),
-      question: (detail.question || "").trim(),
-      voice: prefs.voice || "balanced",
-      includeHebrew: !!prefs.includeHebrew,
-      citations: !!prefs.citations,
-      // handy context for your backend logs
-      client: {
-        app: "LuminaNexus-Chavruta",
-        version: "1.0.0"
-      }
-    };
+    return { ok: true, content: t };
   }
 
   function inferModeFromUI() {
-    // read active tab if present
     const active = document.querySelector(".tab.is-active");
     const tab = active?.getAttribute("data-tab");
     if (tab === "peshat" || tab === "chavruta" || tab === "sources") return tab;
     return "chavruta";
   }
 
-  // --- Wire Stop button (true abort) --------------------------------------
+  function buildBackendPayload(detail) {
+    const prefs = detail.prefs || {};
+    const mode = inferModeFromUI();
 
-  // chavruta-controls sets window.__CHAVRUTA_ABORT = true on stop.
-  // We'll also listen for a custom event if you ever add it later.
+    // Your backend wants a single `input` string.
+    // We'll combine passage + question in a clean, explicit way.
+    const passage = (detail.passage || "").trim();
+    const question = (detail.question || "").trim();
+    const reference = (detail.reference || "").trim();
+
+    const inputParts = [];
+    if (passage) inputParts.push(passage);
+    if (question) inputParts.push(`Question: ${question}`);
+    const input = inputParts.join("\n\n").trim();
+
+    return {
+      input,
+      history: history.slice(), // already trimmed
+      options: {
+        mode, // "peshat" | "chavruta" | "sources"
+        voice: (prefs.voice || "balanced").toLowerCase(),
+        includeHebrew: !!prefs.includeHebrew,
+        // backend expects askForCitations; UI stores prefs.citations
+        askForCitations: !!prefs.citations,
+        ref: reference,
+        lockText: !!detail.lockText // optionally passed from UI; else false
+      }
+    };
+  }
+
+  // Watch the global abort flag set by chavruta-controls.js
   function installAbortWatcher() {
-    // Poll is ugly; event-based is better. We'll do both lightly.
-    let lastAbort = !!window.__CHAVRUTA_ABORT;
-
+    let last = !!window.__CHAVRUTA_ABORT;
     setInterval(() => {
-      const nowAbort = !!window.__CHAVRUTA_ABORT;
-      if (nowAbort && !lastAbort) {
+      const now = !!window.__CHAVRUTA_ABORT;
+      if (now && !last) {
         abortInFlight();
         setStatus("Stopped");
       }
-      lastAbort = nowAbort;
+      last = now;
     }, 200);
   }
 
-  // --- Main ask handler ----------------------------------------------------
-
   async function handleAsk(detail) {
-    const ui = safeUI();
-
-    // Stop any prior request
+    // Stop previous request
     abortInFlight();
 
     // Reset abort flag
     window.__CHAVRUTA_ABORT = false;
 
-    const payload = buildRequestPayload(detail);
+    // If user explicitly switched to Sources tab, show locally
+    const mode = inferModeFromUI();
+    if (mode === "sources") {
+      showSourcesLocally();
+      return;
+    }
+
+    const payload = buildBackendPayload(detail);
     state.lastPayload = payload;
 
-    // If user clicked Sources tab without sources, we can respond locally
-    if (payload.mode === "sources") {
-      ui.setAnswer(sourcesToText(state.lastSources));
-      ui.setSources(state.lastSources);
+    // Validate
+    if (!payload.input || !payload.input.trim()) {
+      ui().setAnswer("Please paste a passage or type a question.");
+      ui().setSources([]);
       return;
     }
 
-    // Basic validation
-    if (!payload.question) {
-      ui.setAnswer("Please ask one clear question.");
-      ui.setSources([]);
-      return;
-    }
-
-    // Start request
     currentAbort = new AbortController();
     setStatus("Working…");
 
     try {
       const json = await postJSON(ENDPOINT, payload, currentAbort.signal);
 
-      // If aborted mid-flight, do nothing
       if (window.__CHAVRUTA_ABORT) return;
 
-      const normalized = normalizeResponse(json);
+      if (!json || json.ok !== true) {
+        const err = json?.error || "Unknown error";
+        throw new Error(err);
+      }
 
-      // Save state
-      state.lastAnswer = normalized.answer || "";
-      state.lastSources = normalized.sources || [];
-      state.lastMeta = normalized.meta || {};
+      const content = (json.content || "").trim() || "No response generated.";
 
-      // Render
-      ui.setAnswer(state.lastAnswer || "(No answer returned.)");
-      ui.setSources(state.lastSources);
+      // Save to history in the exact roles your backend expects
+      // Note: The backend also adds system/user prompt wrappers, but history should be plain.
+      pushHistory("user", payload.input);
+      pushHistory("assistant", content);
+
+      // Extract sources (best-effort) from content
+      const sources = extractSourcesFromContent(content);
+
+      state.lastAnswer = content;
+      state.lastSources = sources;
+
+      ui().setAnswer(content);
+      ui().setSources(sources);
 
       setStatus("Ready");
     } catch (err) {
@@ -274,28 +261,32 @@
       }
 
       console.error("[Chavruta] error:", err);
-      const msg =
-        err?.message ||
-        "Something went wrong while asking Chavruta. Please try again.";
-
-      ui.setAnswer(`⚠️ ${msg}`);
-      ui.setSources([]);
+      ui().setAnswer(`⚠️ ${err?.message || "Something went wrong. Please try again."}`);
+      ui().setSources([]);
       setStatus("Ready");
     } finally {
       currentAbort = null;
     }
   }
 
-  // --- Boot ---------------------------------------------------------------
-
+  // Listen for UI "ask" events (emitted by chavruta-controls.js)
   window.addEventListener("chavruta:ask", (e) => {
-    handleAsk(e.detail);
+    // Pull lockText from DOM if present (matches your backend option)
+    const lock = document.querySelector("#lockText");
+    const detail = {
+      ...e.detail,
+      lockText: lock ? !!lock.checked : false
+    };
+
+    handleAsk(detail);
   });
 
-  // Optional: expose state for debugging
+  // Expose for debugging
   window.__CHAVRUTA_APP = {
     abort: abortInFlight,
-    state
+    history,
+    state,
+    showSourcesLocally
   };
 
   installAbortWatcher();
