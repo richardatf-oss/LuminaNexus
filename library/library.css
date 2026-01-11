@@ -1,0 +1,62 @@
+/* Library-only styling; stays consistent with /css/site.css */
+
+.lib-ctaRow{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top: 10px;
+}
+
+.lib-search{
+  display:flex;
+  gap:10px;
+  align-items:stretch;
+  margin-top: 10px;
+  flex-wrap:wrap;
+}
+
+.lib-input{
+  flex: 1 1 260px;
+  min-width: 220px;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--line2);
+  background: rgba(0,0,0,.18);
+  color: var(--text);
+  outline: none;
+}
+
+.lib-input::placeholder{
+  color: rgba(169,183,214,.75);
+}
+
+.lib-input:focus{
+  border-color: rgba(232,212,163,.35);
+  box-shadow: 0 0 0 3px rgba(232,212,163,.18);
+}
+
+.lib-filters{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top: 10px;
+}
+
+.lib-results{
+  margin-top: 10px;
+}
+
+.lib-note{
+  margin-top: 16px;
+  padding: 12px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(0,0,0,.14);
+}
+
+.lib-footerLinks{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top: 14px;
+}
