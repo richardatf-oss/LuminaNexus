@@ -4,7 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>LuminaNexus — Sanctuary</title>
-  <meta name="description" content="LuminaNexus: a Noahide-friendly sanctuary for study and moral clarity. Enter Chavruta, explore the 231 Celestial Gates, open the Library, and link into Sefaria." />
+  <meta name="description" content="LuminaNexus is a living digital sanctuary: study, practice, creation, and moral clarity. Enter Chavruta, explore the Library, the Map, and the Seal." />
+  <meta name="theme-color" content="#0b0f14" />
+
+  <!-- Social preview (optional but nice) -->
+  <meta property="og:title" content="LuminaNexus — Sanctuary" />
+  <meta property="og:description" content="A living digital sanctuary for study, practice, creation, and moral clarity." />
+  <meta property="og:type" content="website" />
+
   <link rel="stylesheet" href="/css/site.css" />
 </head>
 
@@ -12,145 +19,159 @@
   <!-- Topbar -->
   <header class="topbar" role="banner">
     <div class="wrap topbar-row">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">✶</div>
-        <div class="brand-text">
-          <div class="brand-title">LuminaNexus</div>
-          <div class="brand-subtitle">Sanctuary · Study · Build</div>
-        </div>
-      </div>
+      <a class="brand" href="/" aria-label="LuminaNexus home">
+        <span class="brand-mark" aria-hidden="true">✶</span>
+        <span class="brand-text">
+          <span class="brand-title">LuminaNexus</span>
+          <span class="brand-subtitle">Sanctuary · Study · Build</span>
+        </span>
+      </a>
 
       <nav class="topbar-actions" aria-label="Top navigation">
-        <a class="topbar-link" href="/map/">231 Gates</a>
-        <a class="topbar-link" href="/library/">Library</a>
-        <a class="topbar-link btn-seal" href="/seal/">Seal — חותם</a>
-
-        <a class="topbar-link" href="https://www.sefaria.org/texts" target="_blank" rel="noopener">
-          Sefaria ↗
-        </a>
-
-        <a class="topbar-link" href="https://templeinstitute.org/donate/" target="_blank" rel="noopener">
-          Donate ↗
-        </a>
-
-        <a class="topbar-cta" href="/chavruta/">Enter</a>
+        <a class="nav-link" href="/about/">About</a>
+        <a class="nav-link" href="/chavruta/">Chavruta</a>
+        <a class="nav-link" href="/library/">Library</a>
+        <a class="nav-link" href="/map/">Map</a>
+        <a class="nav-link" href="/seal/">Seal</a>
+        <a class="nav-link nav-cta" href="/donate/">Support</a>
       </nav>
     </div>
   </header>
 
-  <!-- Hero -->
-  <main class="hero" role="main">
-    <div class="wrap">
-      <section class="hero-card">
-        <div class="kicker">A sanctuary for study and moral clarity</div>
+  <!-- Hero / Threshold -->
+  <main class="main" role="main">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="kicker">THE SANCTUARY · הַמִּקְדָּשׁ הַדִּיגִיטָלִי</p>
 
-        <h1>
-          The <span class="nowrap">231 Celestial Gates of Light</span> — a Map of Alignments.
-        </h1>
+          <h1 class="hero-title">
+            Enter the Trunk.
+            <span class="hero-title-sub">Grow the Branches.</span>
+          </h1>
 
-        <p class="lead">
-          Letters become stars. Pairings become Gates. Gates form Alignments—patterns of responsibility,
-          speech, restraint, justice, and relationship.
-          Built for Noahides: calm, grounded, and free of mythic or astrological imagery.
+          <p class="hero-lead">
+            LuminaNexus is a living digital sanctuary—built for slow thinking, deep learning,
+            embodied practice, and constructive creation.
+          </p>
+
+          <p class="hero-lead hebrew" dir="rtl" lang="he">
+            לוּמִינָה־נֶקְסוּס הוּא מִקְלָט חַי לְלִמּוּד אִטִּי, לְתִקּוּן הַמִּדּוֹת,
+            וּלְבִנְיָה נֶאֱמָנָה לָאוֹר.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn primary" href="/chavruta/">Enter Chavruta</a>
+            <a class="btn" href="/library/">Open the Library</a>
+            <a class="btn" href="/map/">View the Map</a>
+          </div>
+
+          <div class="hero-notes">
+            <span class="pill">No feeds</span>
+            <span class="pill">No noise</span>
+            <span class="pill">Study → Practice → Build</span>
+          </div>
+        </div>
+
+        <div class="hero-panel" aria-label="Sanctuary panel">
+          <div class="panel-card">
+            <div class="panel-title">A single rule</div>
+            <div class="panel-quote">
+              Build only what can be lived with.<br />
+              Publish only what can be stood behind.
+            </div>
+            <div class="panel-quote hebrew" dir="rtl" lang="he">
+              בְּנֵה רַק מַה שֶׁאֶפְשָׁר לָגוּר בּוֹ.<br />
+              פַּרְסֵם רַק מַה שֶׁאֶפְשָׁר לַעֲמוֹד מֵאַחֲרָיו.
+            </div>
+
+            <hr class="panel-rule" />
+
+            <ul class="panel-links">
+              <li><a href="/about/">What is this place?</a></li>
+              <li><a href="/seal/">The Seal</a></li>
+              <li><a href="/donate/">Support the work</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Branch Gates -->
+    <section class="section">
+      <div class="wrap">
+        <h2 class="section-title">Paths · דְּרָכִים</h2>
+        <p class="section-lead">
+          Each domain is a doorway. The trunk orients; the branches deepen.
         </p>
 
-        <div class="hero-actions" aria-label="Primary actions">
-          <a class="btn" href="/chavruta/">Enter Chavruta</a>
-          <a class="btn ghost" href="/map/">Open the Map</a>
-          <a class="btn ghost" href="/library/">Open the Library</a>
+        <div class="cards">
+          <article class="card">
+            <h3>Chavruta</h3>
+            <p>Study space. Dialogue. Slow clarity.</p>
+            <a class="card-link" href="/chavruta/">Enter →</a>
+          </article>
+
+          <article class="card">
+            <h3>Library</h3>
+            <p>Texts, notes, and structured learning paths.</p>
+            <a class="card-link" href="/library/">Open →</a>
+          </article>
+
+          <article class="card">
+            <h3>Map</h3>
+            <p>A navigational view of the ecosystem.</p>
+            <a class="card-link" href="/map/">View →</a>
+          </article>
+
+          <article class="card">
+            <h3>About</h3>
+            <p>What LuminaNexus is—and what it refuses to become.</p>
+            <a class="card-link" href="/about/">Read →</a>
+          </article>
+
+          <article class="card">
+            <h3>The Seal</h3>
+            <p>The closing threshold—completion without closure.</p>
+            <a class="card-link" href="/seal/">Enter →</a>
+          </article>
+
+          <article class="card">
+            <h3>Support</h3>
+            <p>Help keep the sanctuary quiet, stable, and growing.</p>
+            <a class="card-link" href="/donate/">Support →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer / Quiet ending -->
+    <footer class="footer" role="contentinfo">
+      <div class="wrap footer-grid">
+        <div>
+          <div class="footer-brand">LuminaNexus</div>
+          <div class="footer-sub">Sanctuary · Study · Build</div>
         </div>
 
-        <div class="micro">
-          Gateway sources:
-          <a href="https://www.sefaria.org/texts" target="_blank" rel="noopener">Sefaria</a>
-          · Support:
-          <a href="https://templeinstitute.org/donate/" target="_blank" rel="noopener">Temple Institute</a>
+        <div class="footer-links">
+          <a href="/about/">About</a>
+          <a href="/chavruta/">Chavruta</a>
+          <a href="/library/">Library</a>
+          <a href="/map/">Map</a>
+          <a href="/seal/">Seal</a>
+          <a href="/donate/">Support</a>
         </div>
 
-        <div class="hero-divider" aria-hidden="true"></div>
-
-        <div class="hero-grid">
-          <!-- Left column -->
-          <div>
-            <div class="kicker">Choose one door</div>
-            <p class="lead" style="margin-top:8px;">
-              This sanctuary is built to reduce noise, increase clarity, and keep the wiring intact.
-              Study, reflect, and build—one gate at a time.
-            </p>
-
-            <div class="restore-line">
-              <span class="label">Donations:</span>
-              <span class="items">
-                Donations are directed primarily to the Temple Institute.
-                A modest LuminaNexus donation option will be added once nonprofit status is formally approved
-                (soon, HaShem willing).
-              </span>
-            </div>
-
-            <div class="hero-actions" style="margin-top:14px;">
-              <a class="btn" href="https://templeinstitute.org/donate/" target="_blank" rel="noopener">
-                Donate to the Temple Institute ↗
-              </a>
-              <a class="btn ghost" href="https://www.sefaria.org/texts" target="_blank" rel="noopener">
-                Open Sefaria ↗
-              </a>
-              <a class="btn ghost" href="/about/">About</a>
-            </div>
-          </div>
-
-          <!-- Right column -->
-          <div class="doors" aria-label="Doors">
-            <a class="door" href="/map/">
-              <div class="door-title">The 231 Gates Map</div>
-              <div class="door-sub">Explore the letter-stars. Hover, focus a Gate, trace Alignments.</div>
-            </a>
-
-            <a class="door" href="/chavruta/">
-              <div class="door-title">Chavruta</div>
-              <div class="door-sub">Ask a question. Receive careful steps. Keep it calm and clear.</div>
-            </a>
-
-            <a class="door" href="/library/">
-              <div class="door-title">Library</div>
-              <div class="door-sub">Curated notes + direct gateways into primary sources (Sefaria).</div>
-            </a>
-
-            <a class="door" href="https://www.sefaria.org/texts/Tanakh" target="_blank" rel="noopener">
-              <div class="door-title">Tanakh on Sefaria ↗</div>
-              <div class="door-sub">Jump straight into the foundational library.</div>
-            </a>
-
-            <a class="door" href="https://templeinstitute.org/donate/" target="_blank" rel="noopener">
-              <div class="door-title">Donate (Temple Institute) ↗</div>
-              <div class="door-sub">Support the Temple Institute’s work directly.</div>
-            </a>
-
-            <a class="door" href="/projects/">
-              <div class="door-title">Projects</div>
-              <div class="door-sub">Apps and experiments—linked outward, never cluttering the sanctuary.</div>
-            </a>
-          </div>
+        <div class="footer-note">
+          <span>© <span id="year"></span> LuminaNexus</span>
         </div>
-      </section>
-    </div>
+      </div>
+    </footer>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer" role="contentinfo">
-    <div class="wrap footer-row">
-      <div>
-        <div class="ft-title">LuminaNexus.org</div>
-        <div class="ft-sub">A sanctuary for study and building.</div>
-      </div>
-
-      <div class="ft-links" aria-label="Footer links">
-        <a href="/chavruta/">Chavruta</a>
-        <a href="/map/">Map</a>
-        <a href="/library/">Library</a>
-        <a href="https://www.sefaria.org/texts" target="_blank" rel="noopener">Sefaria ↗</a>
-        <a href="https://templeinstitute.org/donate/" target="_blank" rel="noopener">Donate ↗</a>
-      </div>
-    </div>
-  </footer>
+  <script>
+    // tiny, safe, no-deps
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
