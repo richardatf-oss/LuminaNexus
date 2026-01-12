@@ -291,3 +291,15 @@ h1{margin:10px 0 10px; font-size:34px; line-height:1.15}
   color: var(--text);
   background: rgba(255,255,255,.05);
 }
+.btn-seal{
+  display:inline-block;
+  text-decoration:none;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  color: rgba(255,255,255,.92);
+}
+.btn-seal:hover{
+  color: rgba(255,255,255,1);
+  border-color: rgba(255,255,255,.30);
+}
