@@ -4,74 +4,216 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Map — LuminaNexus</title>
-  <meta name="theme-color" content="#070A10" />
-  <link rel="icon" href="/assets/img/gate-hero.png" />
+  <meta name="description" content="A navigational map of LuminaNexus: trunk, roots, and branches." />
+  <meta name="theme-color" content="#0b0f14" />
+
   <link rel="stylesheet" href="/css/site.css" />
 </head>
+
 <body>
+  <!-- Topbar -->
   <header class="topbar" role="banner">
     <div class="wrap topbar-row">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">✶</div>
-        <div class="brand-text">
-          <div class="brand-title">LuminaNexus</div>
-          <div class="brand-subtitle">Sanctuary • Study • Build</div>
-        </div>
-      </div>
-      <div class="topbar-actions">
-        <a class="topbar-cta" href="/">Sanctuary</a>
-      </div>
+      <a class="brand" href="/" aria-label="LuminaNexus home">
+        <span class="brand-mark" aria-hidden="true">✶</span>
+        <span class="brand-text">
+          <span class="brand-title">LuminaNexus</span>
+          <span class="brand-subtitle">Sanctuary · Study · Build</span>
+        </span>
+      </a>
+
+      <nav class="topbar-actions" aria-label="Top navigation">
+        <a class="nav-link" href="/about/">About</a>
+        <a class="nav-link" href="/chavruta/">Chavruta</a>
+        <a class="nav-link" href="/library/">Library</a>
+        <a class="nav-link" href="/map/">Map</a>
+        <a class="nav-link" href="/seal/">Seal</a>
+        <a class="nav-link nav-cta" href="/donate/">Support</a>
+      </nav>
     </div>
   </header>
 
-  <main class="wrap" style="padding:44px 0 70px;">
-    <section class="panel">
-      <div class="panel-head">
-        <div>
-          <div class="panel-title">The Sanctuary Map</div>
-          <div class="panel-sub">A small set of gates. No clutter. Each link earns its place.</div>
-        </div>
-      </div>
+  <main class="main" role="main">
+    <section class="section">
+      <div class="wrap">
+        <p class="kicker">MAP · מַפָּה</p>
+        <h1 class="hero-title">The Tree of LuminaNexus</h1>
+        <p class="hero-lead">
+          The trunk orients. The branches deepen. The roots stabilize.
+          Use this map to move through domains without losing clarity.
+        </p>
 
-      <div class="grid">
-        <a class="card" href="/chavruta">
-          <div class="card-title">Chavruta</div>
-          <div class="card-sub">Torah-first study partner. Clear questions, careful steps, calm interface.</div>
-          <div class="card-link">Enter →</div>
-        </a>
-
-        <div class="card muted">
-          <div class="card-title">Library</div>
-          <div class="card-sub">Canonical works and living drafts—restored later as a clean collection.</div>
-          <div class="pill">Coming soon</div>
+        <div class="panel-quote hebrew" dir="rtl" lang="he" style="margin-top: 14px;">
+          הַגֶּזַע מְיַשֵּׁר דֶּרֶךְ · הַשְּׂעִיפִים מַעֲמִיקִים · הַשֹּׁרָשִׁים מְיַצְּבִים
         </div>
 
-        <div class="card muted">
-          <div class="card-title">The Gates</div>
-          <div class="card-sub">A future map of letters and combinations—231 pathways, restored when ready.</div>
-          <div class="pill">Coming soon</div>
+        <div class="hero-actions" style="margin-top: 18px;">
+          <a class="btn primary" href="/chavruta/">Enter Chavruta</a>
+          <a class="btn" href="/library/">Open the Library</a>
+          <a class="btn" href="/">Return Home</a>
         </div>
 
-        <div class="card muted">
-          <div class="card-title">Projects</div>
-          <div class="card-sub">Unity builds, apps, and experiments—linked outward, never cluttering the sanctuary.</div>
-          <div class="pill">Curating</div>
+        <hr style="margin: 22px 0;" />
+
+        <h2 class="section-title">Trunk</h2>
+        <p class="section-lead">
+          Sanctuary pages that keep the unified voice: orientation, values, and thresholds.
+        </p>
+
+        <div class="cards">
+          <article class="card">
+            <h3>Home (Sanctuary)</h3>
+            <p>The threshold. Enter quietly and choose a doorway.</p>
+            <a class="card-link" href="/">Open →</a>
+          </article>
+
+          <article class="card">
+            <h3>About</h3>
+            <p>What this place is, what it refuses to become, and how to navigate the Tree.</p>
+            <a class="card-link" href="/about/">Read →</a>
+          </article>
+
+          <article class="card">
+            <h3>The Seal</h3>
+            <p>Completion without closure. A gentle ending that does not shut the gates.</p>
+            <a class="card-link" href="/seal/">Enter →</a>
+          </article>
+        </div>
+
+        <hr style="margin: 22px 0;" />
+
+        <h2 class="section-title">Core Pathways</h2>
+        <p class="section-lead">
+          These are the main routes for most visitors: study, texts, and orientation.
+        </p>
+
+        <div class="cards">
+          <article class="card">
+            <h3>Chavruta</h3>
+            <p>Study space, dialogue, notes, and slow clarity.</p>
+            <a class="card-link" href="/chavruta/">Enter →</a>
+          </article>
+
+          <article class="card">
+            <h3>Library</h3>
+            <p>Durable pages: texts, notes, and structured learning paths.</p>
+            <a class="card-link" href="/library/">Open →</a>
+          </article>
+
+          <article class="card">
+            <h3>Roadmap</h3>
+            <p>Now / Next / Archive. Transparency without noise.</p>
+            <a class="card-link" href="/roadmap/">View →</a>
+          </article>
+        </div>
+
+        <hr style="margin: 22px 0;" />
+
+        <h2 class="section-title">Branches</h2>
+        <p class="section-lead">
+          Branches are sovereign domains. Each has its own internal logic, and may grow at its own pace.
+          Doorways exist now so the Tree stays navigable.
+        </p>
+
+        <div class="cards">
+          <article class="card">
+            <h3>IvritCode</h3>
+            <p>Hebrew-rooted programming language and computational model.</p>
+            <a class="card-link" href="/ivritcode/">Enter →</a>
+          </article>
+
+          <article class="card">
+            <h3>Quantum Etz Chaim</h3>
+            <p>Structural models bridging Kabbalah and modern physics.</p>
+            <a class="card-link" href="/quantum-etz-chaim/">Enter →</a>
+          </article>
+
+          <article class="card">
+            <h3>Celestial Library (231 Gates)</h3>
+            <p>A constellation of texts and symbolic relationships.</p>
+            <a class="card-link" href="/celestial-library-231/">Enter →</a>
+          </article>
+
+          <article class="card">
+            <h3>Bookshelf</h3>
+            <p>Published and canonical written works.</p>
+            <a class="card-link" href="/bookshelf/">Open →</a>
+          </article>
+
+          <article class="card">
+            <h3>Sacred Art Foundry</h3>
+            <p>Letters, sigils, symbols, and visual theology.</p>
+            <a class="card-link" href="/sacred-art-foundry/">View →</a>
+          </article>
+
+          <article class="card">
+            <h3>Audio & Chants</h3>
+            <p>Pronunciation, chants, and embodied learning through sound.</p>
+            <a class="card-link" href="/audio-chants/">Listen →</a>
+          </article>
+
+          <article class="card">
+            <h3>Noahide Daily</h3>
+            <p>Daily structure, blessings, Shabbat guidance, lived ethics.</p>
+            <a class="card-link" href="/noahide-daily/">Enter →</a>
+          </article>
+
+          <article class="card">
+            <h3>Labs of Light</h3>
+            <p>Experiments and prototypes—useful, not yet canon.</p>
+            <a class="card-link" href="/labs-of-light/">Explore →</a>
+          </article>
+        </div>
+
+        <hr style="margin: 22px 0;" />
+
+        <h2 class="section-title">Canon vs. Lab</h2>
+        <p class="section-lead">
+          One rule protects the Tree from collapsing: drafts remain drafts until they can be carried responsibly.
+        </p>
+
+        <div class="panel-quote">
+          Draft work belongs in Labs. Durable work belongs in the Library / Bookshelf.
+          The trunk stays clear so the sanctuary remains navigable.
+        </div>
+
+        <div class="panel-quote hebrew" dir="rtl" lang="he" style="margin-top: 10px;">
+          טְיוּטָה בַּמַּעֲבָדָה · מַעֲשֶׂה עָמִיד בַּסִּפְרִיָּה · הַגֶּזַע נִשְׁאָר בָּרוּר
+        </div>
+
+        <div class="hero-actions" style="margin-top: 18px;">
+          <a class="btn primary" href="/chavruta/">Enter Chavruta</a>
+          <a class="btn" href="/roadmap/">View Roadmap</a>
+          <a class="btn" href="/">Home</a>
         </div>
       </div>
     </section>
+
+    <footer class="footer" role="contentinfo">
+      <div class="wrap footer-grid">
+        <div>
+          <div class="footer-brand">LuminaNexus</div>
+          <div class="footer-sub">Sanctuary · Study · Build</div>
+        </div>
+
+        <div class="footer-links">
+          <a href="/about/">About</a>
+          <a href="/chavruta/">Chavruta</a>
+          <a href="/library/">Library</a>
+          <a href="/map/">Map</a>
+          <a href="/seal/">Seal</a>
+          <a href="/donate/">Support</a>
+        </div>
+
+        <div class="footer-note">
+          <span>© <span id="year"></span> LuminaNexus</span>
+        </div>
+      </div>
+    </footer>
   </main>
 
-  <footer class="footer">
-    <div class="wrap footer-row">
-      <div>
-        <div class="ft-title">LuminaNexus.org</div>
-        <div class="ft-sub">A sanctuary for study and building.</div>
-      </div>
-      <div class="ft-links">
-        <a href="/chavruta">Chavruta</a>
-        <a href="/">Top</a>
-      </div>
-    </div>
-  </footer>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
