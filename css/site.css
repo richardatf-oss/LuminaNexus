@@ -326,3 +326,101 @@ h1{
   gap:10px;
   margin-top: 8px;
 }
+/* =========================================================
+   Seal Page (inherits LuminaNexus theme)
+   ========================================================= */
+
+.topnav{ margin-bottom: 14px; }
+
+.backlink{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid var(--line2);
+  background: rgba(255,255,255,.03);
+  color: var(--muted);
+}
+.backlink:hover{
+  border-color: rgba(232,212,163,.35);
+  background: rgba(232,212,163,.06);
+  color: var(--text);
+}
+
+.seal-card{
+  border:1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+
+.seal-header{
+  padding: 28px 28px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.seal-kicker{
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.one-liner{
+  margin: 0;
+  font-size: 18px;
+}
+.one-liner.he{
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.one-liner.en{
+  color: rgba(233,240,255,.72);
+}
+
+.seal-grid{
+  display:grid;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 860px){
+  .seal-grid{ grid-template-columns: 1fr 1fr; }
+  .seal-col + .seal-col{ border-left: 1px solid var(--line); }
+}
+
+.seal-col{
+  padding: 26px 28px 30px;
+}
+
+.seal-title{
+  margin: 0 0 16px;
+  font-size: 28px;
+  letter-spacing: .02em;
+}
+.seal-title.he{ font-size: 30px; }
+
+.seal-text p{
+  margin: 0 0 16px;
+  color: rgba(234,240,255,.92);
+}
+
+.seal-text.en p{
+  color: rgba(233,240,255,.86);
+}
+
+.seal-text .final{
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.seal-footer{
+  padding: 18px 28px 22px;
+}
+
+.silence-line{
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,212,163,.22), transparent);
+}
