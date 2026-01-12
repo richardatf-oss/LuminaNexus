@@ -355,6 +355,7 @@ h1{
   box-shadow: var(--shadow);
   overflow:hidden;
 }
+.seal-wrap{ padding: 48px 0; }
 
 .seal-header{
   padding: 28px 28px 18px;
