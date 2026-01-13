@@ -4,140 +4,149 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Library — LuminaNexus</title>
-  <meta name="description" content="A curated library for Noahide-friendly study. Search local entries, then jump into Sefaria." />
+  <meta name="description" content="Library: durable pages, texts, notes, and structured learning paths." />
+  <meta name="theme-color" content="#0b0f14" />
   <link rel="stylesheet" href="/css/site.css" />
-  <link rel="stylesheet" href="/library/library.css" />
 </head>
 
 <body>
+  <!-- Topbar -->
   <header class="topbar" role="banner">
     <div class="wrap topbar-row">
-      <div class="brand">
-        <div class="brand-mark" aria-hidden="true">✶</div>
-        <div class="brand-text">
-          <div class="brand-title">LuminaNexus</div>
-          <div class="brand-subtitle">Library · Sefaria Gateway</div>
-        </div>
-      </div>
+      <a class="brand" href="/" aria-label="LuminaNexus home">
+        <span class="brand-mark" aria-hidden="true">✶</span>
+        <span class="brand-text">
+          <span class="brand-title">LuminaNexus</span>
+          <span class="brand-subtitle">Sanctuary · Study · Build</span>
+        </span>
+      </a>
 
       <nav class="topbar-actions" aria-label="Top navigation">
-        <a class="topbar-link" href="/">Sanctuary</a>
-        <a class="topbar-link" href="/map/">231 Gates</a>
-
-        <!-- Sefaria -->
-        <a class="topbar-link" href="https://www.sefaria.org/texts" target="_blank" rel="noopener">
-          Sefaria ↗
-        </a>
-
-        <!-- Donate (primary) -->
-        <a class="topbar-link" href="https://templeinstitute.org/donate/" target="_blank" rel="noopener">
-          Donate ↗
-        </a>
-
-        <a class="topbar-cta" href="/chavruta/">Enter</a>
+        <a class="nav-link" href="/about/">About</a>
+        <a class="nav-link" href="/chavruta/">Chavruta</a>
+        <a class="nav-link" href="/library/">Library</a>
+        <a class="nav-link" href="/map/">Map</a>
+        <a class="nav-link" href="/seal/">Seal</a>
+        <a class="nav-link nav-cta" href="/donate/">Support</a>
       </nav>
     </div>
   </header>
 
-  <main class="hero" role="main">
-    <div class="wrap">
-      <section class="hero-card">
-        <div class="kicker">Library</div>
-        <h1>Curated entries — with a direct gateway into Sefaria.</h1>
-
-        <p class="lead">
-          Search the LuminaNexus catalog first (clean and minimal). Then, if you want the full depth of primary sources,
-          jump into Sefaria with the same query.
+  <main class="main" role="main">
+    <section class="section">
+      <div class="wrap">
+        <p class="kicker">LIBRARY · סִפְרִיָּה</p>
+        <h1 class="hero-title">The Library</h1>
+        <p class="hero-lead">
+          Durable pages meant to be revisited: texts, notes, and structured learning paths.
+          This is not a feed. It is a shelf.
         </p>
 
-        <div class="lib-ctaRow" aria-label="Primary library actions">
-          <a class="btn ghost" href="https://www.sefaria.org/texts" target="_blank" rel="noopener">
-            Open Sefaria ↗
-          </a>
-          <a class="btn ghost" href="https://www.sefaria.org/texts/Tanakh" target="_blank" rel="noopener">
-            Tanakh on Sefaria ↗
-          </a>
-          <a class="btn" href="https://templeinstitute.org/donate/" target="_blank" rel="noopener">
-            Donate to the Temple Institute ↗
-          </a>
-        </div>
-        <div class="micro">
-          Sefaria provides free access to Jewish texts online. :contentReference[oaicite:1]{index=1}
-          Donations here are directed primarily to the Temple Institute. :contentReference[oaicite:2]{index=2}
+        <div class="panel-quote hebrew" dir="rtl" lang="he" style="margin-top: 14px;">
+          זֹאת אֵינָהּ זֶרֶם — זֹאת מַדָּף.
+          טֶקְסְטִים שֶׁחוֹזְרִים אֲלֵיהֶם.
         </div>
 
-        <div class="hero-divider" aria-hidden="true"></div>
-
-        <div class="hero-grid">
-          <!-- Left: search + filters -->
-          <div>
-            <div class="kicker">Search</div>
-
-            <div class="lib-search">
-              <input id="q" class="lib-input" type="search" placeholder="Search titles, tags, notes…" autocomplete="off" />
-              <button id="btnSefariaSearch" class="btn ghost" type="button" title="Search Sefaria with this query">
-                Search Sefaria ↗
-              </button>
-            </div>
-
-            <div class="kicker" style="margin-top:14px;">Filters</div>
-            <div class="lib-filters" role="group" aria-label="Library filters">
-              <button class="mini-link" type="button" data-filter="all">All</button>
-              <button class="mini-link" type="button" data-filter="foundations">Foundations</button>
-              <button class="mini-link" type="button" data-filter="noahide">Noahide</button>
-              <button class="mini-link" type="button" data-filter="tanakh">Tanakh</button>
-              <button class="mini-link" type="button" data-filter="gates">231 Gates</button>
-              <button class="mini-link" type="button" data-filter="tools">Tools</button>
-            </div>
-
-            <div class="lib-note">
-              <div class="kicker">Donation note</div>
-              <p class="lead" style="margin-top:8px;">
-                Donations are directed primarily to the Temple Institute.
-                A modest LuminaNexus donation option will appear once nonprofit status is formally approved
-                (soon, HaShem willing).
-              </p>
-            </div>
-
-            <div class="hero-actions" style="margin-top:12px;">
-              <a class="btn ghost" href="/about/">About</a>
-              <a class="btn ghost" href="/projects/">Projects</a>
-            </div>
-          </div>
-
-          <!-- Right: results -->
-          <div>
-            <div class="kicker">Catalog</div>
-            <div id="resultsMeta" class="micro" style="margin-top:8px;">Loading…</div>
-            <div id="results" class="lib-results" aria-live="polite"></div>
-
-            <div class="lib-footerLinks">
-              <a class="mini-link" href="/map/">Open the Map</a>
-              <a class="mini-link" href="/chavruta/">Enter Chavruta</a>
-              <a class="mini-link" href="https://www.sefaria.org/texts" target="_blank" rel="noopener">Sefaria ↗</a>
-            </div>
-          </div>
+        <div class="hero-actions" style="margin-top: 18px;">
+          <a class="btn primary" href="/chavruta/">Enter Chavruta</a>
+          <a class="btn" href="/map/">View the Map</a>
+          <a class="btn" href="/">Home</a>
         </div>
-      </section>
-    </div>
+
+        <hr style="margin: 22px 0;" />
+
+        <h2 class="section-title">Shelves</h2>
+        <p class="section-lead">
+          These shelves are doorways into structured material. As pages mature, they move from Labs into the Library.
+        </p>
+
+        <div class="cards">
+          <article class="card">
+            <h3>Foundations</h3>
+            <p>Core principles, definitions, and orientation pages.</p>
+            <a class="card-link" href="/about/">Start →</a>
+          </article>
+
+          <article class="card">
+            <h3>Daily Practice</h3>
+            <p>Blessings, routines, and practical guides you can carry.</p>
+            <a class="card-link" href="/noahide-daily/">Enter →</a>
+          </article>
+
+          <article class="card">
+            <h3>Letters & Language</h3>
+            <p>Hebrew learning structures, pronunciation, and letter study.</p>
+            <a class="card-link" href="/audio-chants/">Open →</a>
+          </article>
+
+          <article class="card">
+            <h3>Quantum Etz Chaim</h3>
+            <p>Tree-structured models bridging Kabbalah and modern physics.</p>
+            <a class="card-link" href="/quantum-etz-chaim/">Enter →</a>
+          </article>
+
+          <article class="card">
+            <h3>231 Gates</h3>
+            <p>Constellated texts and symbolic navigation.</p>
+            <a class="card-link" href="/celestial-library-231/">Enter →</a>
+          </article>
+
+          <article class="card">
+            <h3>Canon</h3>
+            <p>Finished works and published material.</p>
+            <a class="card-link" href="/bookshelf/">Open →</a>
+          </article>
+        </div>
+
+        <hr style="margin: 22px 0;" />
+
+        <h2 class="section-title">A Quiet Rule</h2>
+        <p class="section-lead">
+          The Library stays readable by enforcing one boundary.
+        </p>
+
+        <div class="panel-quote">
+          Draft work belongs in Labs. Durable work belongs here.
+          The trunk stays clear so the sanctuary remains navigable.
+        </div>
+
+        <div class="panel-quote hebrew" dir="rtl" lang="he" style="margin-top: 10px;">
+          טְיוּטָה בַּמַּעֲבָדָה · מַעֲשֶׂה עָמִיד בַּסִּפְרִיָּה
+        </div>
+
+        <div class="hero-actions" style="margin-top: 18px;">
+          <a class="btn primary" href="/labs-of-light/">Go to Labs</a>
+          <a class="btn" href="/map/">Back to Map</a>
+          <a class="btn" href="/">Home</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer" role="contentinfo">
+      <div class="wrap footer-grid">
+        <div>
+          <div class="footer-brand">LuminaNexus</div>
+          <div class="footer-sub">Sanctuary · Study · Build</div>
+        </div>
+
+        <div class="footer-links">
+          <a href="/about/">About</a>
+          <a href="/chavruta/">Chavruta</a>
+          <a href="/library/">Library</a>
+          <a href="/map/">Map</a>
+          <a href="/seal/">Seal</a>
+          <a href="/donate/">Support</a>
+        </div>
+
+        <div class="footer-note">
+          <span>© <span id="year"></span> LuminaNexus</span>
+        </div>
+      </div>
+    </footer>
   </main>
 
-  <footer class="footer" role="contentinfo">
-    <div class="wrap footer-row">
-      <div>
-        <div class="ft-title">LuminaNexus.org</div>
-        <div class="ft-sub">A sanctuary for study and building.</div>
-      </div>
-
-      <div class="ft-links" aria-label="Footer links">
-        <a href="/library/">Library</a>
-        <a href="/map/">Map</a>
-        <a href="https://www.sefaria.org/texts" target="_blank" rel="noopener">Sefaria ↗</a>
-        <a href="https://templeinstitute.org/donate/" target="_blank" rel="noopener">Donate ↗</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="/library/library.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
