@@ -13,6 +13,49 @@
   <meta property="og:type" content="website" />
 
   <link rel="stylesheet" href="/css/site.css" />
+
+  <!-- Hero background (minimal + safe; keeps your site.css intact) -->
+  <style>
+    /* Adds the new hero background image without changing your existing structure */
+    .hero {
+      position: relative;
+      background-image:
+        linear-gradient(90deg, rgba(11,15,20,.92) 0%, rgba(11,15,20,.80) 52%, rgba(11,15,20,.55) 100%),
+        url("/assets/etz-chaim-hero.webp");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    /* Gentle glow so the image feels alive but stays quiet */
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(900px 600px at 15% 20%, rgba(255,190,120,.16), transparent 60%),
+        radial-gradient(900px 600px at 80% 30%, rgba(130,180,255,.12), transparent 60%);
+      opacity:.65;
+      mix-blend-mode: screen;
+    }
+
+    /* Ensure hero content stays above overlays */
+    .hero .wrap,
+    .hero .hero-grid,
+    .hero .hero-copy,
+    .hero .hero-panel {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Optional: slightly deepen the right panel for readability on bright screens */
+    .hero-panel .panel-card{
+      backdrop-filter: blur(6px);
+    }
+
+    /* If your CSS already handles Hebrew font sizing, this won't interfere */
+  </style>
 </head>
 
 <body>
@@ -64,6 +107,8 @@
             <a class="btn primary" href="/chavruta/">Enter Chavruta</a>
             <a class="btn" href="/library/">Open the Library</a>
             <a class="btn" href="/map/">View the Map</a>
+            <!-- Added (does not replace anything): -->
+            <a class="btn" href="/noahide-daily/">Seven Laws (Daily)</a>
           </div>
 
           <div class="hero-notes">
@@ -91,6 +136,8 @@
               <li><a href="/about/">What is this place?</a></li>
               <li><a href="/seal/">The Seal</a></li>
               <li><a href="/donate/">Support the work</a></li>
+              <!-- Added (does not remove anything): -->
+              <li><a href="/noahide-daily/">Seven Laws (Daily)</a></li>
             </ul>
           </div>
         </div>
@@ -141,6 +188,13 @@
             <p>Help keep the sanctuary quiet, stable, and growing.</p>
             <a class="card-link" href="/donate/">Support →</a>
           </article>
+
+          <!-- Added new path card (optional; remove if you want only the 6 originals) -->
+          <article class="card">
+            <h3>Seven Laws (Daily)</h3>
+            <p>A simple daily practice path for Noahides—steady growth, quiet clarity.</p>
+            <a class="card-link" href="/noahide-daily/">Open →</a>
+          </article>
         </div>
       </div>
     </section>
@@ -160,6 +214,7 @@
           <a href="/map/">Map</a>
           <a href="/seal/">Seal</a>
           <a href="/donate/">Support</a>
+          <a href="/noahide-daily/">Seven Laws</a>
         </div>
 
         <div class="footer-note">
