@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chavruta — LuminaNexus</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="Chavruta is the study space of LuminaNexus — for slow dialogue, source sheets, and lived practice."
+    />
+    <link rel="stylesheet" href="assets/css/global.css" />
+  </head>
+  <body>
+    <!-- Reuse same top bar -->
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="brand-title">LuminaNexus</span>
+          <span class="brand-subtitle">Sanctuary · Study · Build</span>
+        </div>
+
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="about.html">About</a>
+          <a href="chavruta.html">Chavruta</a>
+          <a href="library.html">Library</a>
+          <a href="map.html">Map</a>
+          <a href="seal.html">Seal</a>
+          <a href="support.html">Support</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero-shell">
+        <div class="hero-grid">
+          <div class="stack-lg">
+            <div class="text-pill">
+              Chavruta ·
+              <span lang="he">חֲבְרוּתָא</span>
+            </div>
+
+            <header class="stack">
+              <h1>Study in good company.</h1>
+              <p>
+                This is the study trunk of LuminaNexus. Here the pace is slow,
+                the questions are honest, and the goal is not hot takes but
+                clarified life.
+              </p>
+              <p lang="he">
+                כָּאן לוֹמְדִים לְאַט, שׁוֹאֲלִים בְּיֹשֶׁר, וּמְבַקְּשִׁים לֹא
+                רַק יְדִיעָה אֶלָּא חַיִּים מְבֹאָרִים.
+              </p>
+            </header>
+
+            <div class="btn-row">
+              <a class="btn btn-primary" href="index.html">
+                ← Back to the Sanctuary
+              </a>
+              <a class="btn btn-ghost" href="#sessions">
+                View study paths
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Placeholder content for now -->
+      <section id="sessions" class="paths">
+        <div class="paths-heading">
+          <span>Sessions ·</span>
+          <span lang="he">מַסְלֻלֵי לִמּוּד</span>
+        </div>
+        <p style="margin-top: 0.5rem; max-width: 40rem;">
+          These are example placeholders. We can later wire each one to actual
+          study flows, PDFs, or app pages.
+        </p>
+
+        <div class="paths-grid">
+          <article class="path-card">
+            <div class="path-title">Daily Chavruta</div>
+            <p class="path-description">
+              Short source sheet for daily practice — a text, a question, and a
+              small action.
+            </p>
+            <a class="btn btn-secondary" href="#">Open sheet →</a>
+          </article>
+
+          <article class="path-card">
+            <div class="path-title">Slow Series</div>
+            <p class="path-description">
+              Multi-week journey through a core topic: Shabbat, prayer,
+              middot, or the Seven Laws.
+            </p>
+            <a class="btn btn-secondary" href="#">View series →</a>
+          </article>
+
+          <article class="path-card">
+            <div class="path-title">Open Notes</div>
+            <p class="path-description">
+              Rough notes, questions, and marginalia. Less polished, more
+              laboratory.
+            </p>
+            <a class="btn btn-secondary" href="#">Browse notes →</a>
+          </article>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div>© <span id="year"></span> LuminaNexus · Chavruta.</div>
+      </footer>
+    </main>
+
+    <script>
+      document.getElementById("year").textContent =
+        new Date().getFullYear().toString();
+    </script>
+  </body>
+</html>
