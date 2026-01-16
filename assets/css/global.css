@@ -227,6 +227,43 @@ p {
   background: rgba(15, 23, 42, 0.8);
   color: #9ca3af;
 }
+/* Secondary button (used in path cards, etc.) */
+.btn-secondary {
+  border-radius: 999px;
+  padding: 0.45rem 0.95rem;
+  font-size: 0.8rem;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+}
+
+.btn-secondary:hover {
+  background: rgba(30, 64, 175, 0.7);
+  border-color: rgba(191, 219, 254, 0.9);
+}
+
+/* Hero SVG background behind the Trunk text */
+.hero-grid {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: -10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.35;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  filter: blur(1px);
+}
+
+.hero-bg img {
+  max-width: 120%;
+  height: auto;
+}
 
 /* 7. Right column “rule” card */
 
