@@ -1,232 +1,177 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LuminaNexus — Sanctuary</title>
-  <meta name="description" content="LuminaNexus is a living digital sanctuary: study, practice, creation, and moral clarity. Enter Chavruta, explore the Library, the Map, and the Seal." />
-  <meta name="theme-color" content="#0b0f14" />
-
-  <!-- Social preview (optional but nice) -->
-  <meta property="og:title" content="LuminaNexus — Sanctuary" />
-  <meta property="og:description" content="A living digital sanctuary for study, practice, creation, and moral clarity." />
-  <meta property="og:type" content="website" />
-
-  <link rel="stylesheet" href="/css/site.css" />
-
-  <!-- Hero background (minimal + safe; keeps your site.css intact) -->
-  <style>
-    /* Adds the new hero background image without changing your existing structure */
-    .hero {
-      position: relative;
-      background-image:
-        linear-gradient(90deg, rgba(11,15,20,.92) 0%, rgba(11,15,20,.80) 52%, rgba(11,15,20,.55) 100%),
-        url("/assets/etz-chaim-hero.webp");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-
-    /* Gentle glow so the image feels alive but stays quiet */
-    .hero::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:
-        radial-gradient(900px 600px at 15% 20%, rgba(255,190,120,.16), transparent 60%),
-        radial-gradient(900px 600px at 80% 30%, rgba(130,180,255,.12), transparent 60%);
-      opacity:.65;
-      mix-blend-mode: screen;
-    }
-
-    /* Ensure hero content stays above overlays */
-    .hero .wrap,
-    .hero .hero-grid,
-    .hero .hero-copy,
-    .hero .hero-panel {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Optional: slightly deepen the right panel for readability on bright screens */
-    .hero-panel .panel-card{
-      backdrop-filter: blur(6px);
-    }
-
-    /* If your CSS already handles Hebrew font sizing, this won't interfere */
-  </style>
-</head>
-
-<body>
-  <!-- Topbar -->
-  <header class="topbar" role="banner">
-    <div class="wrap topbar-row">
-      <a class="brand" href="/" aria-label="LuminaNexus home">
-        <span class="brand-mark" aria-hidden="true">✶</span>
-        <span class="brand-text">
+  <head>
+    <meta charset="UTF-8" />
+    <title>LuminaNexus — Sanctuary</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="LuminaNexus is a living digital sanctuary—built for slow thinking, deep learning, embodied practice, and constructive creation."
+    />
+    <link rel="stylesheet" href="assets/css/global.css" />
+  </head>
+  <body>
+    <!-- Top navigation -->
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
           <span class="brand-title">LuminaNexus</span>
           <span class="brand-subtitle">Sanctuary · Study · Build</span>
-        </span>
-      </a>
-
-      <nav class="topbar-actions" aria-label="Top navigation">
-        <a class="nav-link" href="/about/">About</a>
-        <a class="nav-link" href="/chavruta/">Chavruta</a>
-        <a class="nav-link" href="/library/">Library</a>
-        <a class="nav-link" href="/map/">Map</a>
-        <a class="nav-link" href="/seal/">Seal</a>
-        <a class="nav-link nav-cta" href="/donate/">Support</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero / Threshold -->
-  <main class="main" role="main">
-    <section class="hero">
-      <div class="wrap hero-grid">
-        <div class="hero-copy">
-          <p class="kicker">THE SANCTUARY · הַמִּקְדָּשׁ הַדִּיגִיטָלִי</p>
-
-          <h1 class="hero-title">
-            Enter the Trunk.
-            <span class="hero-title-sub">Grow the Branches.</span>
-          </h1>
-
-          <p class="hero-lead">
-            LuminaNexus is a living digital sanctuary—built for slow thinking, deep learning,
-            embodied practice, and constructive creation.
-          </p>
-
-          <p class="hero-lead hebrew" dir="rtl" lang="he">
-            לוּמִינָה־נֶקְסוּס הוּא מִקְלָט חַי לְלִמּוּד אִטִּי, לְתִקּוּן הַמִּדּוֹת,
-            וּלְבִנְיָה נֶאֱמָנָה לָאוֹר.
-          </p>
-
-          <div class="hero-actions">
-            <a class="btn primary" href="/chavruta/">Enter Chavruta</a>
-            <a class="btn" href="/library/">Open the Library</a>
-            <a class="btn" href="/map/">View the Map</a>
-            <!-- Added (does not replace anything): -->
-            <a class="btn" href="/noahide-daily/">Seven Laws (Daily)</a>
-          </div>
-
-          <div class="hero-notes">
-            <span class="pill">No feeds</span>
-            <span class="pill">No noise</span>
-            <span class="pill">Study → Practice → Build</span>
-          </div>
         </div>
 
-        <div class="hero-panel" aria-label="Sanctuary panel">
-          <div class="panel-card">
-            <div class="panel-title">A single rule</div>
-            <div class="panel-quote">
-              Build only what can be lived with.<br />
-              Publish only what can be stood behind.
-            </div>
-            <div class="panel-quote hebrew" dir="rtl" lang="he">
-              בְּנֵה רַק מַה שֶׁאֶפְשָׁר לָגוּר בּוֹ.<br />
-              פַּרְסֵם רַק מַה שֶׁאֶפְשָׁר לַעֲמוֹד מֵאַחֲרָיו.
-            </div>
-
-            <hr class="panel-rule" />
-
-            <ul class="panel-links">
-              <li><a href="/about/">What is this place?</a></li>
-              <li><a href="/seal/">The Seal</a></li>
-              <li><a href="/donate/">Support the work</a></li>
-              <!-- Added (does not remove anything): -->
-              <li><a href="/noahide-daily/">Seven Laws (Daily)</a></li>
-            </ul>
-          </div>
-        </div>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="about.html">About</a>
+          <a href="chavruta.html">Chavruta</a>
+          <a href="library.html">Library</a>
+          <a href="map.html">Map</a>
+          <a href="seal.html">Seal</a>
+          <a href="support.html">Support</a>
+        </nav>
       </div>
-    </section>
+    </header>
 
-    <!-- Branch Gates -->
-    <section class="section">
-      <div class="wrap">
-        <h2 class="section-title">Paths · דְּרָכִים</h2>
-        <p class="section-lead">
+    <main class="container">
+      <!-- Hero / Trunk -->
+      <section class="hero-shell">
+        <div class="hero-grid grid-2">
+          <!-- Optional SVG background holder -->
+          <div class="hero-bg" aria-hidden="true">
+            <img src="assets/svg/etz-chaim.svg" alt="" />
+          </div>
+
+          <!-- Left column: copy -->
+          <div class="stack-lg">
+            <div class="stack">
+              <div class="text-pill">
+                The Sanctuary ·
+                <span lang="he">מִקְדָּשׁ דִּיגִיטָלִי</span>
+              </div>
+
+              <header>
+                <h1>
+                  Enter the Trunk.<br />
+                  Grow the Branches.
+                </h1>
+              </header>
+
+              <p>
+                LuminaNexus is a living digital sanctuary—built for slow
+                thinking, deep learning, embodied practice, and constructive
+                creation.
+              </p>
+
+              <p lang="he">
+                לומינַהנֶקְסוּס הוּא מִקְדָּשׁ חַי לִלְמֹד עָמֹק, לִבְנוֹת אֶת
+                הָאִישִׁי, וּלְבָרֹא עוֹלָמוֹת שֶׁאֵפְשָׁר לָגוּר בָּהֶם.
+              </p>
+            </div>
+
+            <!-- Primary actions -->
+            <div class="btn-row">
+              <a class="btn btn-primary" href="chavruta.html">
+                Enter Chavruta
+              </a>
+              <a class="btn btn-ghost" href="library.html">
+                Open the Library
+              </a>
+              <a class="btn btn-ghost" href="map.html">
+                View the Map
+              </a>
+              <a class="btn btn-ghost" href="seven-laws.html">
+                Seven Laws (Daily)
+              </a>
+            </div>
+
+            <!-- Small “pills” row -->
+            <div class="btn-row">
+              <span class="btn-pill">No feeds · No noise</span>
+              <span class="btn-pill">Study → Practice → Build</span>
+            </div>
+          </div>
+
+          <!-- Right column: rule + quick links -->
+          <aside class="rule-card stack">
+            <div>
+              <div class="rule-card-title">A single rule</div>
+              <p>
+                Build only what can be lived with.<br />
+                Publish only what can be stood behind.
+              </p>
+              <p lang="he">
+                בְּנֵה רַק מַה שֶּׁאֶפְשָׁר לָגוּר בּוֹ.<br />
+                פַּרְסֵם רַק מַה שֶּׁאֶפְשָׁר לַעֲמֹד מֵאַחֲרָיו.
+              </p>
+            </div>
+
+            <div class="stack">
+              <a class="btn btn-ghost" href="about.html">What is this place?</a>
+              <a class="btn btn-ghost" href="seal.html">The Seal</a>
+              <a class="btn btn-ghost" href="support.html">Support the work</a>
+              <a class="btn btn-ghost" href="seven-laws.html">
+                Seven Laws (Daily)
+              </a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Paths / Domains -->
+      <section class="paths">
+        <div class="paths-heading">
+          <span>Paths ·</span>
+          <span lang="he">דְּרָכִים</span>
+        </div>
+        <p style="margin-top: 0.5rem; max-width: 40rem;">
           Each domain is a doorway. The trunk orients; the branches deepen.
         </p>
 
-        <div class="cards">
-          <article class="card">
-            <h3>Chavruta</h3>
-            <p>Study space. Dialogue. Slow clarity.</p>
-            <a class="card-link" href="/chavruta/">Enter →</a>
+        <div class="paths-grid">
+          <!-- Chavruta card -->
+          <article class="path-card">
+            <div class="path-title">Chavruta</div>
+            <p class="path-description">
+              Study space. Dialogue. Slow clarity. Notes, sources, and
+              reflection prompts.
+            </p>
+            <a class="btn btn-secondary" href="chavruta.html">Enter →</a>
           </article>
 
-          <article class="card">
-            <h3>Library</h3>
-            <p>Texts, notes, and structured learning paths.</p>
-            <a class="card-link" href="/library/">Open →</a>
+          <!-- Library card -->
+          <article class="path-card">
+            <div class="path-title">Library</div>
+            <p class="path-description">
+              Texts, notes, and structured learning paths. Longform essays and
+              source sheets.
+            </p>
+            <a class="btn btn-secondary" href="library.html">Open →</a>
           </article>
 
-          <article class="card">
-            <h3>Map</h3>
-            <p>A navigational view of the ecosystem.</p>
-            <a class="card-link" href="/map/">View →</a>
-          </article>
-
-          <article class="card">
-            <h3>About</h3>
-            <p>What LuminaNexus is—and what it refuses to become.</p>
-            <a class="card-link" href="/about/">Read →</a>
-          </article>
-
-          <article class="card">
-            <h3>The Seal</h3>
-            <p>The closing threshold—completion without closure.</p>
-            <a class="card-link" href="/seal/">Enter →</a>
-          </article>
-
-          <article class="card">
-            <h3>Support</h3>
-            <p>Help keep the sanctuary quiet, stable, and growing.</p>
-            <a class="card-link" href="/donate/">Support →</a>
-          </article>
-
-          <!-- Added new path card (optional; remove if you want only the 6 originals) -->
-          <article class="card">
-            <h3>Seven Laws (Daily)</h3>
-            <p>A simple daily practice path for Noahides—steady growth, quiet clarity.</p>
-            <a class="card-link" href="/noahide-daily/">Open →</a>
+          <!-- Map card -->
+          <article class="path-card">
+            <div class="path-title">Map</div>
+            <p class="path-description">
+              A navigational view of the ecosystem. See how the trunks and
+              branches connect.
+            </p>
+            <a class="btn btn-secondary" href="map.html">View →</a>
           </article>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Footer / Quiet ending -->
-    <footer class="footer" role="contentinfo">
-      <div class="wrap footer-grid">
-        <div>
-          <div class="footer-brand">LuminaNexus</div>
-          <div class="footer-sub">Sanctuary · Study · Build</div>
-        </div>
+      <!-- You can add Seal/Support preview cards later if you like -->
 
-        <div class="footer-links">
-          <a href="/about/">About</a>
-          <a href="/chavruta/">Chavruta</a>
-          <a href="/library/">Library</a>
-          <a href="/map/">Map</a>
-          <a href="/seal/">Seal</a>
-          <a href="/donate/">Support</a>
-          <a href="/noahide-daily/">Seven Laws</a>
-        </div>
+      <footer class="footer">
+        <div>© <span id="year"></span> LuminaNexus · A living digital sanctuary.</div>
+      </footer>
+    </main>
 
-        <div class="footer-note">
-          <span>© <span id="year"></span> LuminaNexus</span>
-        </div>
-      </div>
-    </footer>
-  </main>
-
-  <script>
-    // tiny, safe, no-deps
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
-</body>
+    <script>
+      // tiny helper to keep the year current
+      document.getElementById("year").textContent =
+        new Date().getFullYear().toString();
+    </script>
+  </body>
 </html>
