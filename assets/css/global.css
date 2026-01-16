@@ -353,3 +353,26 @@ p {
   border-top: 1px solid rgba(55, 65, 81, 0.7);
   text-align: center;
 }
+.page-header {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  max-width: 42rem;
+}
+
+.page-eyebrow {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #9ca3af;
+}
+
+.page-title {
+  font-size: clamp(2.1rem, 3vw, 2.6rem);
+  margin-top: 0.3rem;
+}
+
+.page-intro {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  color: #cbd5f5;
+}
