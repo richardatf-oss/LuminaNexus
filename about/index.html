@@ -1,214 +1,302 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>About — LuminaNexus</title>
-  <meta name="description" content="What LuminaNexus is, what it is not, and how to navigate the Tree." />
-  <meta name="theme-color" content="#0b0f14" />
+  <meta name="description" content="About LuminaNexus — a living digital sanctuary of Torah, Kabbalah, and constructive creation." />
 
-  <link rel="stylesheet" href="/css/site.css" />
+  <style>
+    :root{
+      --bg0:#050814;
+      --bg1:#070b18;
+      --panel:#0b1020;
+      --text:#f4f6ff;
+      --muted:#aab2d6;
+      --accent:#f5c857;
+      --border:rgba(255,255,255,.12);
+      --shadow:0 18px 45px rgba(0,0,0,.55);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 30% 0%, rgba(245,200,87,.10), transparent 45%),
+        radial-gradient(circle at 70% 10%, rgba(120,160,255,.08), transparent 40%),
+        linear-gradient(180deg, var(--bg1), var(--bg0));
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    header{
+      position:sticky; top:0; z-index:50;
+      border-bottom:1px solid var(--border);
+      background:linear-gradient(to right, rgba(5,8,20,.92), rgba(5,8,20,.75));
+      backdrop-filter: blur(10px);
+    }
+    .nav{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+    .brand{display:flex; flex-direction:column; line-height:1.05}
+    .brand .name{font-weight:650; letter-spacing:.02em}
+    .brand .tag{
+      font-size:.72rem; color:var(--muted);
+      letter-spacing:.18em; text-transform:uppercase; margin-top:2px;
+    }
+    .navlinks{display:flex; gap:18px; flex-wrap:wrap; justify-content:flex-end}
+    .navlinks a{font-size:.9rem; color:var(--muted); padding:8px 10px; border-radius:10px}
+    .navlinks a.active{
+      color:var(--text);
+      background:rgba(245,200,87,.10);
+      border:1px solid rgba(245,200,87,.22);
+    }
+
+    main{flex:1}
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:54px 18px 70px;
+    }
+
+    .kicker{
+      font-size:.78rem;
+      color:var(--muted);
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+    h1{
+      font-size:clamp(2.1rem, 4vw, 2.8rem);
+      margin:0 0 10px;
+      letter-spacing:-.02em;
+    }
+    .lead{
+      color:var(--muted);
+      max-width:78ch;
+      margin:0 0 22px;
+      font-size:1rem;
+      line-height:1.6;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1.2fr .9fr;
+      gap:16px;
+      margin-top:18px;
+    }
+    @media (max-width: 900px){
+      .grid{grid-template-columns:1fr}
+      .nav{align-items:flex-start; flex-direction:column}
+      .navlinks{justify-content:flex-start}
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(11,16,32,.96), rgba(11,16,32,.86));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .card h2{margin:0 0 10px; font-size:1.05rem}
+    .card p{margin:10px 0; color:var(--muted); font-size:.95rem; line-height:1.6}
+    .card ul{margin:10px 0 0; padding-left:18px; color:var(--muted)}
+    .card li{margin:6px 0; line-height:1.5}
+
+    .mini-title{
+      margin:26px 0 10px;
+      font-size:1rem;
+      color:var(--text);
+    }
+    .mini-sub{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-size:.95rem;
+      max-width:85ch;
+    }
+
+    .grid3{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:16px;
+      margin-top:12px;
+    }
+    @media (max-width: 900px){ .grid3{grid-template-columns:1fr} }
+
+    .givecard{
+      background:linear-gradient(180deg, rgba(11,16,32,.96), rgba(11,16,32,.86));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px 16px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height:170px;
+    }
+    .givecard h3{margin:0; font-size:.98rem}
+    .givecard p{margin:0; color:var(--muted); font-size:.92rem; line-height:1.5; flex:1}
+    .btn{
+      align-self:flex-start;
+      display:inline-flex;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(5,8,20,.55);
+      color:var(--text);
+      font-size:.9rem;
+      text-decoration:none;
+    }
+    .btn:hover{
+      border-color:rgba(245,200,87,.35);
+      background:rgba(245,200,87,.10);
+      text-decoration:none;
+    }
+
+    .contact-info{
+      margin-top:26px;
+      padding-top:18px;
+      border-top:1px solid rgba(255,255,255,.12);
+      font-size:.95rem;
+      line-height:1.6;
+    }
+    .contact-info h3{margin:0 0 10px; font-size:1rem; font-weight:650}
+    .contact-info p{margin:8px 0; color:var(--muted)}
+    .contact-info strong{color:var(--text)}
+
+    footer{
+      border-top:1px solid var(--border);
+      background:rgba(5,8,20,.92);
+      color:var(--muted);
+      text-align:center;
+      padding:18px;
+      font-size:.82rem;
+    }
+  </style>
 </head>
 
 <body>
-  <!-- Topbar -->
-  <header class="topbar" role="banner">
-    <div class="wrap topbar-row">
-      <a class="brand" href="/" aria-label="LuminaNexus home">
-        <span class="brand-mark" aria-hidden="true">✶</span>
-        <span class="brand-text">
-          <span class="brand-title">LuminaNexus</span>
-          <span class="brand-subtitle">Sanctuary · Study · Build</span>
-        </span>
-      </a>
-
-      <nav class="topbar-actions" aria-label="Top navigation">
-        <a class="nav-link" href="/about/">About</a>
-        <a class="nav-link" href="/chavruta/">Chavruta</a>
-        <a class="nav-link" href="/library/">Library</a>
-        <a class="nav-link" href="/map/">Map</a>
-        <a class="nav-link" href="/seal/">Seal</a>
-        <a class="nav-link nav-cta" href="/donate/">Support</a>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="name">LuminaNexus</div>
+        <div class="tag">SANCTUARY · STUDY · BUILD</div>
+      </div>
+      <nav class="navlinks" aria-label="Primary">
+        <a href="/sanctuary/">Sanctuary</a>
+        <a class="active" href="/about/">About</a>
+        <a href="/chavruta/">Chavruta</a>
+        <a href="/library/">Library</a>
+        <a href="/map/">Map</a>
+        <a href="/seal/">Seal</a>
+        <a href="/donate/">Support</a>
       </nav>
     </div>
   </header>
 
-  <main class="main" role="main">
-    <section class="section">
-      <div class="wrap">
-        <p class="kicker">ABOUT · עַל הַמָּקוֹם</p>
-        <h1 class="hero-title">What LuminaNexus Is</h1>
-        <p class="hero-lead">
-          LuminaNexus is a living digital sanctuary: a place for study, practice, creation,
-          and moral clarity—where ancient wisdom and modern tools meet without dilution.
+  <main>
+    <div class="wrap">
+      <div class="kicker">ABOUT · אוֹדוֹת</div>
+      <h1>About LuminaNexus</h1>
+      <p class="lead">
+        LuminaNexus is a living digital sanctuary — a meeting place of Torah, Kabbalah, and constructive creation.
+        We build tools, libraries, and guided experiences that help ancient wisdom feel close, usable, and alive.
+      </p>
+
+      <section class="grid" aria-label="About content">
+        <article class="card">
+          <h2>What we’re building</h2>
+          <p>
+            LuminaNexus is designed as a calm place for slow study: texts, diagrams, apps, and creative projects that invite real practice —
+            not performance, not noise.
+          </p>
+          <p>Some strands that gather here:</p>
+          <ul>
+            <li>Digital libraries and study tools grounded in Torah and the inner tradition</li>
+            <li>Interactive maps and visualizations (Etz Chaim, letters, gates)</li>
+            <li>Books and series that blend spiritual insight with imaginative storytelling</li>
+            <li>Experiments at the edge of faith, creativity, and modern code</li>
+          </ul>
+        </article>
+
+        <aside class="card">
+          <h2>Who is behind it?</h2>
+          <p>
+            LuminaNexus was founded by Richard Lee — a writer and builder exploring the intersections of Torah, mysticism, and modern systems.
+          </p>
+          <p>
+            The aim is steady: to serve, to illuminate, and to return a small corner of the internet back toward the light.
+          </p>
+        </aside>
+      </section>
+
+      <div class="mini-title">Support order · סֵדֶר הַתְּרֻמָה</div>
+      <p class="mini-sub">
+        LuminaNexus stands downstream from older foundations. When people ask how to give, we answer in this order:
+        <strong>Temple Institute</strong> → <strong>Chabad</strong> → <strong>LuminaNexus Foundation</strong>.
+      </p>
+
+      <section class="grid3" aria-label="Support order cards">
+        <div class="givecard">
+          <h3>1 · The Temple Institute</h3>
+          <p>Support the work toward the study, memory, and future of the Beit HaMikdash.</p>
+          <a class="btn" href="https://templeinstitute.org/" target="_blank" rel="noopener">Visit Temple Institute →</a>
+        </div>
+
+        <div class="givecard">
+          <h3>2 · Chabad</h3>
+          <p>Support Torah, mitzvot, and practical kindness in daily life through your local Chabad house or the broader network.</p>
+          <a class="btn" href="https://www.chabad.org/" target="_blank" rel="noopener">Visit Chabad →</a>
+        </div>
+
+        <div class="givecard">
+          <h3>3 · LuminaNexus Foundation</h3>
+          <p>Help sustain this sanctuary: hosting, learning resources, and the tools that make the work accessible.</p>
+          <a class="btn" href="/donate/">Support LuminaNexus →</a>
+        </div>
+      </section>
+
+      <section class="contact-info" aria-label="Contact information">
+        <h3>Contact Information</h3>
+
+        <p>
+          <strong>LuminaNexus Foundation</strong><br />
+          Richard Lee<br />
+          3190 E. Ames Ave<br />
+          Kingman, AZ 86409
         </p>
 
-        <div class="cards" style="margin-top: 18px;">
-          <article class="card">
-            <h3>Sanctuary</h3>
-            <p>
-              Not a feed. Not a stage. A threshold built for quiet attention and serious work.
-            </p>
-          </article>
-
-          <article class="card">
-            <h3>Study</h3>
-            <p>
-              Texts are approached with patience: learned slowly, tested honestly, carried responsibly.
-            </p>
-          </article>
-
-          <article class="card">
-            <h3>Build</h3>
-            <p>
-              Creativity here is accountable: code, art, and systems are designed to serve truth and life.
-            </p>
-          </article>
-        </div>
-
-        <hr style="margin: 22px 0;" />
-
-        <h2 class="section-title">The Tree</h2>
-        <p class="section-lead">
-          LuminaNexus is structured as a Tree. The trunk orients. The branches deepen.
+        <p>
+          <strong>Phone:</strong> <a href="tel:19287164485">(928) 716-4485</a><br />
+          <strong>Email:</strong> <a href="mailto:LuminaNexus@Yahoo.com">LuminaNexus@Yahoo.com</a>
         </p>
 
-        <div class="cards">
-          <article class="card">
-            <h3>The Trunk</h3>
-            <p>
-              The sanctuary hub. It states the vision, establishes shared values,
-              and points outward to the branches.
-            </p>
-            <p class="hebrew" dir="rtl" lang="he" style="margin-top: 8px;">
-              הַגֶּזַע מְיַשֵּׁר דֶּרֶךְ — מוֹרֶה עֵרוּךְ וּמַצְבִּיעַ לַשְּׂעִיפִים.
-            </p>
-          </article>
-
-          <article class="card">
-            <h3>The Branches</h3>
-            <p>
-              Independent domains. Each branch has its own integrity and focus,
-              but shares the same roots: truth, responsibility, beauty, and light.
-            </p>
-            <p class="hebrew" dir="rtl" lang="he" style="margin-top: 8px;">
-              לְכָל שְׂעִיף יֵשׁ דֶּרֶךְ שֶׁלּוֹ — וְשֹׁרָשִׁים אֶחָדִים.
-            </p>
-          </article>
-
-          <article class="card">
-            <h3>The Roots</h3>
-            <p>
-              Shared foundations—styles, navigation, shared texts, and core symbols.
-              Roots change slowly and intentionally.
-            </p>
-            <p class="hebrew" dir="rtl" lang="he" style="margin-top: 8px;">
-              הַשֹּׁרָשִׁים נִשְׁמָרִים בְּאִטִּיּוּת — בְּכַוָּנָה.
-            </p>
-          </article>
-        </div>
-
-        <hr style="margin: 22px 0;" />
-
-        <h2 class="section-title">What This Is Not</h2>
-        <p class="section-lead">
-          LuminaNexus refuses certain patterns on purpose.
+        <p>
+          <strong>Social:</strong><br />
+          <a href="https://www.facebook.com/LuminaNexus" target="_blank" rel="noopener">LuminaNexus on Facebook</a>
         </p>
+      </section>
 
-        <div class="cards">
-          <article class="card">
-            <h3>No Noise</h3>
-            <p>
-              No engagement traps, no endless scrolling, no performative novelty.
-              If it can’t be lived with, it doesn’t belong here.
-            </p>
-          </article>
-
-          <article class="card">
-            <h3>No Dilution</h3>
-            <p>
-              Ancient sources are treated with respect—studied carefully,
-              and never flattened into slogans.
-            </p>
-          </article>
-
-          <article class="card">
-            <h3>No Confusion of Draft and Canon</h3>
-            <p>
-              Experiments live in Labs. Finished work moves to the Library / Bookshelf.
-              The trunk stays clear.
-            </p>
-          </article>
-        </div>
-
-        <hr style="margin: 22px 0;" />
-
-        <h2 class="section-title">How to Navigate</h2>
-        <p class="section-lead">
-          Start with one doorway. Stay long enough to learn something real.
-        </p>
-
-        <div class="cards">
-          <article class="card">
-            <h3>Enter Chavruta</h3>
-            <p>Study with questions. Make notes. Return.</p>
-            <a class="card-link" href="/chavruta/">Enter →</a>
-          </article>
-
-          <article class="card">
-            <h3>Open the Library</h3>
-            <p>Browse structured materials and durable pages.</p>
-            <a class="card-link" href="/library/">Open →</a>
-          </article>
-
-          <article class="card">
-            <h3>See the Map</h3>
-            <p>Understand how the domains relate without collapsing them.</p>
-            <a class="card-link" href="/map/">View →</a>
-          </article>
-        </div>
-
-        <hr style="margin: 22px 0;" />
-
-        <div class="panel-quote">
-          Build only what can be lived with. Publish only what can be stood behind.
-        </div>
-        <div class="panel-quote hebrew" dir="rtl" lang="he" style="margin-top: 10px;">
-          בְּנֵה רַק מַה שֶׁאֶפְשָׁר לָגוּר בּוֹ. פַּרְסֵם רַק מַה שֶׁאֶפְשָׁר לַעֲמוֹד מֵאַחֲרָיו.
-        </div>
-
-        <div class="hero-actions" style="margin-top: 18px;">
-          <a class="btn primary" href="/chavruta/">Enter Chavruta</a>
-          <a class="btn" href="/">Return Home</a>
-        </div>
-      </div>
-    </section>
-
-    <footer class="footer" role="contentinfo">
-      <div class="wrap footer-grid">
-        <div>
-          <div class="footer-brand">LuminaNexus</div>
-          <div class="footer-sub">Sanctuary · Study · Build</div>
-        </div>
-
-        <div class="footer-links">
-          <a href="/about/">About</a>
-          <a href="/chavruta/">Chavruta</a>
-          <a href="/library/">Library</a>
-          <a href="/map/">Map</a>
-          <a href="/seal/">Seal</a>
-          <a href="/donate/">Support</a>
-        </div>
-
-        <div class="footer-note">
-          <span>© <span id="year"></span> LuminaNexus</span>
-        </div>
-      </div>
-    </footer>
+    </div>
   </main>
 
+  <footer>
+    © <span id="y"></span> LuminaNexus. All rights reserved.
+  </footer>
+
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+    document.getElementById("y").textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
