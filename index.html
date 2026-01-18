@@ -1,174 +1,153 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>LuminaNexus — Sanctuary</title>
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
-    <meta
-      name="description"
-      content="LuminaNexus is a living digital sanctuary—built for slow thinking, deep learning, embodied practice, and constructive creation."
-    />
-    <link rel="stylesheet" href="assets/css/global.css" />
-  </head>
-  <body>
-    <!-- Top navigation -->
-    <header class="topbar">
-      <div class="topbar-inner">
-        <div class="brand">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LuminaNexus — Sanctuary</title>
+  <meta name="description" content="LuminaNexus is a living digital sanctuary—built for slow thinking, deep learning, embodied practice, and constructive creation." />
+  <link rel="stylesheet" href="/css/global.css" />
+</head>
+
+<body>
+  <!-- Top navigation -->
+  <header class="topbar" role="banner">
+    <div class="wrap topbar-row">
+      <a class="brand" href="/" aria-label="LuminaNexus home">
+        <span class="brand-mark" aria-hidden="true">✶</span>
+        <span class="brand-text">
           <span class="brand-title">LuminaNexus</span>
           <span class="brand-subtitle">Sanctuary · Study · Build</span>
+        </span>
+      </a>
+
+      <nav class="topbar-actions" aria-label="Top navigation">
+        <a class="nav-link" href="/about/">About</a>
+        <a class="nav-link" href="/chavruta/">Chavruta</a>
+        <a class="nav-link" href="/library/">Library</a>
+        <a class="nav-link" href="/map/">Map</a>
+        <a class="nav-link" href="/seal/">Seal</a>
+        <!-- FIX: support goes to /donate/ -->
+        <a class="nav-link nav-link-cta" href="/donate/">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container sanctuary-main">
+    <!-- HERO (two-column, clean) -->
+    <section class="panel sanctuary-hero-panel">
+      <div class="sanctuary-hero-grid">
+        <!-- Left column -->
+        <div class="sanctuary-hero-left">
+          <p class="eyebrow">THE SANCTUARY · מִקְדָּשׁ דִּיגִיטָלִי</p>
+
+          <h1 class="sanctuary-title">
+            Enter the Trunk.<br />
+            Grow the Branches.
+          </h1>
+
+          <p class="lead">
+            LuminaNexus is a living digital sanctuary—built for slow thinking, deep learning,
+            embodied practice, and constructive creation.
+          </p>
+
+          <p class="hebrew" dir="rtl" lang="he">
+            לומיננקסוס הוא מקדש רשת חי ללימוד עמוק, לתרגול חי,
+            ולבניית דברים שאפשר לעמוד מאחוריהם.
+          </p>
+
+          <div class="cta-row">
+            <a class="btn btn-primary" href="/chavruta/">Enter Chavruta</a>
+            <a class="btn btn-ghost" href="/library/">Open the Library</a>
+            <a class="btn btn-ghost" href="/map/">View the Map</a>
+            <a class="btn btn-ghost" href="/noahide-daily/">Seven Laws (Daily)</a>
+          </div>
+
+          <div class="badge-row" aria-label="Sanctuary values">
+            <span class="badge">No feeds · No noise</span>
+            <span class="badge">Study → Practice → Build</span>
+          </div>
         </div>
 
-        <nav class="nav-links" aria-label="Main navigation">
-          <a href="about.html">About</a>
-          <a href="chavruta.html">Chavruta</a>
-          <a href="library.html">Library</a>
-          <a href="map.html">Map</a>
-          <a href="seal.html">Seal</a>
-          <a href="support.html">Support</a>
-        </nav>
+        <!-- Right column -->
+        <aside class="sanctuary-hero-right" aria-label="A single rule">
+          <p class="eyebrow">A SINGLE RULE · כְּלָל אֶחָד</p>
+
+          <h2 class="rule-title">Build only what can be lived with.</h2>
+
+          <p class="rule-text">
+            Publish only what can be stood behind.
+            If it can’t be lived, it doesn’t belong here.
+          </p>
+
+          <p class="hebrew hebrew-compact" dir="rtl" lang="he">
+            בְּנֵה רַק מַה שֶּׁנִּיתָן לִחְיוֹת אִיתוֹ.<br />
+            הוֹצֵא לָעוֹלָם רַק מַה שֶּׁאַתָּה מוּכָן לַעֲמֹד מאחוריו.
+          </p>
+
+          <div class="stack">
+            <a class="btn btn-ghost btn-full" href="/about/">What is this place?</a>
+            <a class="btn btn-ghost btn-full" href="/seal/">The Seal</a>
+
+            <!-- FIX: was /support.html (404). Now correct. -->
+            <a class="btn btn-ghost btn-full" href="/donate/">Support the work</a>
+
+            <a class="btn btn-ghost btn-full" href="/noahide-daily/">Seven Laws (Daily)</a>
+          </div>
+        </aside>
       </div>
-    </header>
+    </section>
 
-    <main class="container">
-      <!-- Hero / Trunk -->
-      <section class="hero-shell">
-        <div class="hero-grid grid-2">
-          <!-- Optional SVG background holder -->
-          <div class="hero-bg" aria-hidden="true">
-            <img src="assets/svg/etz-chaim.svg" alt="" />
-          </div>
-
-          <!-- Left column: copy -->
-          <div class="stack-lg">
-            <div class="stack">
-              <div class="text-pill">
-                The Sanctuary ·
-                <span lang="he">מִקְדָּשׁ דִּיגִיטָלִי</span>
-              </div>
-
-              <header>
-                <h1>
-                  Enter the Trunk.<br />
-                  Grow the Branches.
-                </h1>
-              </header>
-
-              <p>
-                LuminaNexus is a living digital sanctuary—built for slow
-                thinking, deep learning, embodied practice, and constructive
-                creation.
-              </p>
-
-              <p lang="he">
-                לומינַהנֶקְסוּס הוּא מִקְדָּשׁ חַי לִלְמֹד עָמֹק, לִבְנוֹת אֶת
-                הָאִישִׁי, וּלְבָרֹא עוֹלָמוֹת שֶׁאֵפְשָׁר לָגוּר בָּהֶם.
-              </p>
-            </div>
-
-            <!-- Primary actions -->
-            <div class="btn-row">
-              <a class="btn btn-primary" href="chavruta.html">
-                Enter Chavruta
-              </a>
-              <a class="btn btn-ghost" href="library.html">
-                Open the Library
-              </a>
-              <a class="btn btn-ghost" href="map.html">
-                View the Map
-              </a>
-              <a class="btn btn-ghost" href="seven-laws.html">
-                Seven Laws (Daily)
-              </a>
-            </div>
-
-            <!-- Small “pills” row -->
-            <div class="btn-row">
-              <span class="btn-pill">No feeds · No noise</span>
-              <span class="btn-pill">Study → Practice → Build</span>
-            </div>
-          </div>
-
-          <!-- Right column: rule + quick links -->
-          <aside class="rule-card stack">
-            <div>
-              <div class="rule-card-title">A single rule</div>
-              <p>
-                Build only what can be lived with.<br />
-                Publish only what can be stood behind.
-              </p>
-              <p lang="he">
-                בְּנֵה רַק מַה שֶּׁאֶפְשָׁר לָגוּר בּוֹ.<br />
-                פַּרְסֵם רַק מַה שֶּׁאֶפְשָׁר לַעֲמֹד מֵאַחֲרָיו.
-              </p>
-            </div>
-<div class="stack">
-  <a class="btn btn-ghost" href="/about/">What is this place?</a>
-  <a class="btn btn-ghost" href="/seal/">The Seal</a>
-  <a class="btn btn-ghost" href="/donate/">Support the work</a>
-  <a class="btn btn-ghost" href="/noahide-daily/">
-    Seven Laws (Daily)
-  </a>
-</div>
-
-
-      <!-- Paths / Domains -->
-      <section class="paths">
-        <div class="paths-heading">
-          <span>Paths ·</span>
-          <span lang="he">דְּרָכִים</span>
-        </div>
-        <p style="margin-top: 0.5rem; max-width: 40rem;">
-          Each domain is a doorway. The trunk orients; the branches deepen.
+    <!-- PATHS (separate full-width section = no funky lower-right cram) -->
+    <section class="sanctuary-paths">
+      <div class="paths-head">
+        <p class="eyebrow">PATHS · דְּרָכִים</p>
+        <h2 class="h2">Each domain is a doorway.</h2>
+        <p class="muted">
+          The trunk orients; the branches deepen. Choose the space that fits how you want to engage today.
         </p>
+      </div>
 
-        <div class="paths-grid">
-          <!-- Chavruta card -->
-          <article class="path-card">
-            <div class="path-title">Chavruta</div>
-            <p class="path-description">
-              Study space. Dialogue. Slow clarity. Notes, sources, and
-              reflection prompts.
-            </p>
-            <a class="btn btn-secondary" href="chavruta.html">Enter →</a>
-          </article>
+      <div class="paths-grid">
+        <article class="card">
+          <h3 class="h3">Chavruta</h3>
+          <p class="muted">
+            Study space. Dialogue. Slow clarity. Notes, sources, and reflection prompts.
+          </p>
+          <a class="btn btn-ghost" href="/chavruta/">Enter →</a>
+        </article>
 
-          <!-- Library card -->
-          <article class="path-card">
-            <div class="path-title">Library</div>
-            <p class="path-description">
-              Texts, notes, and structured learning paths. Longform essays and
-              source sheets.
-            </p>
-            <a class="btn btn-secondary" href="library.html">Open →</a>
-          </article>
+        <article class="card">
+          <h3 class="h3">Library</h3>
+          <p class="muted">
+            Texts, notes, and structured learning paths. Longform essays and source sheets.
+          </p>
+          <a class="btn btn-ghost" href="/library/">Open →</a>
+        </article>
 
-          <!-- Map card -->
-          <article class="path-card">
-            <div class="path-title">Map</div>
-            <p class="path-description">
-              A navigational view of the ecosystem. See how the trunks and
-              branches connect.
-            </p>
-            <a class="btn btn-secondary" href="map.html">View →</a>
-          </article>
-        </div>
-      </section>
+        <article class="card">
+          <h3 class="h3">Map</h3>
+          <p class="muted">
+            A navigational view of the ecosystem. See how the trunks and branches connect.
+          </p>
+          <a class="btn btn-ghost" href="/map/">View →</a>
+        </article>
+      </div>
+    </section>
+  </main>
 
-      <!-- You can add Seal/Support preview cards later if you like -->
+  <footer class="footer">
+    <div class="wrap footer-row">
+      <div class="footer-left">
+        <div class="footer-title">LuminaNexus</div>
+        <div class="footer-sub">Sanctuary · Study · Build</div>
+      </div>
 
-      <footer class="footer">
-        <div>© <span id="year"></span> LuminaNexus · A living digital sanctuary.</div>
-      </footer>
-    </main>
-
-    <script>
-      // tiny helper to keep the year current
-      document.getElementById("year").textContent =
-        new Date().getFullYear().toString();
-    </script>
-  </body>
+      <div class="footer-right">
+        <a class="footer-link" href="/donate/">Support</a>
+        <a class="footer-link" href="/about/">About</a>
+        <a class="footer-link" href="/seal/">Seal</a>
+      </div>
+    </div>
+  </footer>
+</body>
 </html>
