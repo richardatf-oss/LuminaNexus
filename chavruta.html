@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="assets/css/global.css" />
   </head>
   <body>
-    <!-- Reuse same top bar -->
+    <!-- Shared top bar -->
     <header class="topbar">
       <div class="topbar-inner">
         <div class="brand">
@@ -24,7 +24,7 @@
 
         <nav class="nav-links" aria-label="Main navigation">
           <a href="about.html">About</a>
-          <a href="chavruta.html">Chavruta</a>
+          <a href="chavruta.html" aria-current="page">Chavruta</a>
           <a href="library.html">Library</a>
           <a href="map.html">Map</a>
           <a href="seal.html">Seal</a>
@@ -38,8 +38,7 @@
         <div class="hero-grid">
           <div class="stack-lg">
             <div class="text-pill">
-              Chavruta ·
-              <span lang="he">חֲבְרוּתָא</span>
+              Chavruta · <span lang="he">חֲבְרוּתָא</span>
             </div>
 
             <header class="stack">
@@ -67,7 +66,7 @@
         </div>
       </section>
 
-      <!-- Placeholder content for now -->
+      <!-- Sessions -->
       <section id="sessions" class="paths">
         <div class="paths-heading">
           <span>Sessions ·</span>
@@ -75,7 +74,7 @@
         </div>
         <p style="margin-top: 0.5rem; max-width: 40rem;">
           These are example placeholders. We can later wire each one to actual
-          study flows, PDFs, or app pages.
+          study flows, PDFs, app pages, or Sefaria sheets.
         </p>
 
         <div class="paths-grid">
@@ -108,11 +107,39 @@
         </div>
       </section>
 
+      <!-- Optional: Sefaria embed area -->
+      <section class="paths" aria-label="Sefaria integration">
+        <div class="paths-heading">
+          <span>Live Sources ·</span>
+          <span lang="he">מְקוֹרוֹת בַּחַיִּים</span>
+        </div>
+        <p style="margin-top: 0.5rem; max-width: 40rem;">
+          Any verse or source you mention here (for example:
+          <em>Berakhot 2a</em>, <em>Tehillim 27:1</em>) can be auto-linked by
+          Sefaria. You can also embed a specific source sheet below when
+          you’re ready.
+        </p>
+
+        <!-- Placeholder for a Sefaria sheet (you can replace src with your own sheet URL) -->
+        <!--
+        <div class="sheet-frame-shell">
+          <iframe
+            src="https://www.sefaria.org/sheets/your-sheet-id-here"
+            loading="lazy"
+            class="sheet-frame"
+            title="Sefaria Source Sheet"
+          ></iframe>
+        </div>
+        -->
+      </section>
+
       <footer class="footer">
         <div>© <span id="year"></span> LuminaNexus · Chavruta.</div>
       </footer>
     </main>
 
+    <!-- Sefaria linker (auto-link refs in the text) -->
+    <script src="https://www.sefaria.org/linker.js"></script>
     <script>
       document.getElementById("year").textContent =
         new Date().getFullYear().toString();
