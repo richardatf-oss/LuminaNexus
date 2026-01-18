@@ -1,6 +1,6 @@
 // netlify/functions/chavruta-gpt.js
 
-export async function handler(event, context) {
+exports.handler = async (event, context) => {
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 204,
@@ -20,9 +20,10 @@ export async function handler(event, context) {
     };
   }
 
-  try:
+  try {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
+      console.error("Missing OPENAI_API_KEY");
       return {
         statusCode: 500,
         body: "Missing OPENAI_API_KEY",
@@ -30,16 +31,16 @@ export async function handler(event, context) {
     }
 
     const body = JSON.parse(event.body || "{}");
-    const messages = body.messages || [];
+    const messages = Array.isArray(body.messages) ? body.messages : [];
 
-    // Add a system message to shape the chavruta style
     const systemMessage = {
       role: "system",
       content:
-        "You are ChavrutaGPT, a gentle study partner for Torah and Jewish sources. " +
-        "Answer slowly, with clear structure. When you mention sources from Tanakh, Mishnah, Talmud, or classic commentaries, " +
-        "state them clearly so they can be looked up on Sefaria (for example: 'Berakhot 2a', 'Tehillim 27:1'). " +
-        "Favor traditional Jewish perspectives and avoid making up new halakhah. If you don't know, say so.",
+        "You are ChavrutaGPT, a gentle Torah study partner. " +
+        "Answer slowly, with clear paragraphs and traditional Jewish sources. " +
+        "Whenever you mention a source (Tanakh, Mishnah, Talmud, Rishonim, Acharonim), " +
+        "name it clearly so it can be looked up on Sefaria, like 'Berakhot 2a', 'Tehillim 27:1'. " +
+        "If you are unsure, say so honestly.",
     };
 
     const payload = {
@@ -67,7 +68,10 @@ export async function handler(event, context) {
     }
 
     const data = await response.json();
-    const choice = data.choices && data.choices[0] && data.choices[0].message;
+    const choice =
+      data.choices && data.choices[0] && data.choices[0].message
+        ? data.choices[0].message
+        : { role: "assistant", content: "No reply generated." };
 
     return {
       statusCode: 200,
@@ -84,4 +88,4 @@ export async function handler(event, context) {
       body: "Server error",
     };
   }
-}
+};
