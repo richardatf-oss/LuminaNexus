@@ -1,61 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>LuminaNexus — Sanctuary</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="/assets/css/styles.css" />
-</head>
-<body class="page-sanctuary">
-  <header class="site-header">
-    <div class="site-header-inner">
-      <div class="brand">
-        <a href="/" class="brand-name">LuminaNexus</a>
-        <span class="brand-tagline">Sanctuary · Study · Build</span>
-      </div>
-      <nav class="site-nav">
-        <a href="/about/">About</a>
-        <a href="/chavruta/">Chavruta</a>
-        <a href="/library/">Library</a>
-        <a href="/map/">Map</a>
-        <a href="/seal/">Seal</a>
-        <a href="/support/">Support</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="page-main">
-    <section class="hero hero-sanctuary">
-      <div class="hero-inner">
-        <p class="eyebrow">SANCTUARY · מִקְדָּשׁ</p>
-        <h1>Welcome to LuminaNexus.</h1>
-        <p class="hero-lead">
-          A slow, honest, luminous place to learn, build, and walk with good company.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="/chavruta/">Enter Chavruta</a>
-          <a class="btn btn-ghost" href="https://www.patreon.com/posts/luminanexus-148521870">
-            Support on Patreon
-          </a>
+  <head>
+    <meta charset="UTF-8" />
+    <title>LuminaNexus — Sanctuary</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="LuminaNexus is a small, luminous sanctuary for study, building, and honest questions."
+    />
+    <link rel="stylesheet" href="assets/css/global.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="brand-title">LuminaNexus</span>
+          <span class="brand-subtitle">Sanctuary · Study · Build</span>
         </div>
-      </div>
-    </section>
 
-    <section class="section">
-      <div class="section-inner">
-        <h2>Sanctuary</h2>
-        <p>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="about.html">About</a>
+          <a href="chavruta.html">Chavruta</a>
+          <a href="library.html">Library</a>
+          <a href="map.html">Map</a>
+          <a href="seal.html">Seal</a>
+          <a href="support.html">Support</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero-shell">
+        <div class="hero-grid">
+          <div class="stack-lg">
+            <div class="text-pill">
+              Sanctuary · <span lang="he">מִקְדָּשׁ</span>
+            </div>
+
+            <header class="stack">
+              <h1>Welcome to LuminaNexus.</h1>
+              <p>
+                A slow, honest, luminous place to learn, build, and walk with
+                good company.
+              </p>
+              <p lang="he">
+                מָקוֹם קָטָן וּמֵאִיר לְלִמּוּד, לַעֲשִׂיָּה, וְלַהֲלִיכָה
+                בְּחֶבְרָה טוֹבָה.
+              </p>
+            </header>
+
+            <div class="btn-row">
+              <a class="btn btn-primary" href="chavruta.html">
+                Enter Chavruta →
+              </a>
+              <a
+                class="btn btn-ghost"
+                href="https://www.patreon.com/posts/luminanexus-148521870"
+                target="_blank"
+                rel="noopener"
+              >
+                Support on Patreon
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="paths">
+        <div class="paths-heading">
+          <span>Sanctuary</span>
+        </div>
+        <p style="margin-top: 0.5rem; max-width: 40rem;">
           From here you can step into study (Chavruta), explore the Library,
-          or follow maps and seals into deeper work-in-progress.
+          or follow the Map and Seal into deeper, slower work-in-progress.
         </p>
-      </div>
-    </section>
-  </main>
+      </section>
 
-  <footer class="site-footer">
-    <div class="site-footer-inner">
-      <p>© 2026 LuminaNexus · Sanctuary</p>
-    </div>
-  </footer>
-</body>
+      <footer class="footer">
+        <div>© <span id="year"></span> LuminaNexus · Sanctuary.</div>
+      </footer>
+    </main>
+
+    <script>
+      document.getElementById("year").textContent =
+        new Date().getFullYear().toString();
+    </script>
+  </body>
 </html>
