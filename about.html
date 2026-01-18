@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>About — LuminaNexus</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <link rel="stylesheet" href="assets/css/global.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="brand-title">LuminaNexus</span>
+          <span class="brand-subtitle">Sanctuary · Study · Build</span>
+        </div>
+        <nav class="nav-links">
+          <a href="about.html" aria-current="page">About</a>
+          <a href="chavruta.html">Chavruta</a>
+          <a href="library.html">Library</a>
+          <a href="map.html">Map</a>
+          <a href="seal.html">Seal</a>
+          <a href="support.html">Support</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero-shell">
+        <div class="hero-grid">
+          <div class="stack-lg">
+            <div class="text-pill">About</div>
+            <header class="stack">
+              <h1>What is LuminaNexus?</h1>
+              <p>
+                LuminaNexus is a small, hand-built sanctuary on the web, for
+                Torah, questions, and creative building.
+              </p>
+            </header>
+          </div>
+        </div>
+      </section>
+      <footer class="footer">
+        <div>© <span id="year"></span> LuminaNexus.</div>
+      </footer>
+    </main>
+
+    <script>
+      document.getElementById("year").textContent =
+        new Date().getFullYear().toString();
+    </script>
+  </body>
+</html>
