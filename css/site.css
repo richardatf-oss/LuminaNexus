@@ -465,9 +465,218 @@ body.reading .panel-quote.hebrew {
   font-size: 1.08rem;
   line-height: 2.05;
 }
-/* === Sanctuary layout =============================== */
+/* ======================================================
+   Sanctuary Layout
+   ====================================================== */
+
 .sanctuary-main {
   padding-top: 3rem;
   padding-bottom: 4rem;
 }
-/* ...etc... */
+
+/* --- Hero panel --- */
+
+.sanctuary-hero-panel {
+  background: rgba(6, 10, 22, 0.96);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 2.5rem 2.75rem;
+  margin-bottom: 3rem;
+}
+
+.sanctuary-hero-layout,
+.sanctuary-hero-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+@media (min-width: 900px) {
+  .sanctuary-hero-layout,
+  .sanctuary-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    column-gap: 3rem;
+    align-items: start;
+  }
+}
+
+.eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 0.4rem;
+}
+
+.sanctuary-hero-title,
+.sanctuary-title {
+  font-size: clamp(2.2rem, 3vw, 2.8rem);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.sanctuary-hero-lead,
+.lead {
+  font-size: 1rem;
+  max-width: 34rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.9;
+}
+
+.sanctuary-hero-hebrew,
+.hebrew {
+  font-size: 0.95rem;
+  direction: rtl;
+  text-align: right;
+  opacity: 0.8;
+  margin-bottom: 1.4rem;
+}
+
+/* --- CTA buttons --- */
+
+.sanctuary-primary-ctas,
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.btn-sanctuary-primary,
+.btn-primary {
+  background: #ff8a3c;
+  color: #05070f;
+  border: 1px solid #ff8a3c;
+  border-radius: 999px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.btn-sanctuary-primary:hover,
+.btn-primary:hover {
+  background: #ff9a54;
+  border-color: #ff9a54;
+}
+
+.btn-sanctuary-ghost,
+.btn-ghost {
+  background: transparent;
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.btn-sanctuary-ghost:hover,
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.btn-full {
+  width: 100%;
+}
+
+/* --- Badges --- */
+
+.sanctuary-badges,
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.sanctuary-badge,
+.badge {
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  opacity: 0.9;
+}
+
+/* --- Right column (A Single Rule) --- */
+
+.sanctuary-hero-right {
+  background: radial-gradient(circle at top,
+    rgba(21, 29, 54, 0.9),
+    rgba(5, 8, 18, 0.98)
+  );
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.4rem 1.6rem 1.6rem;
+}
+
+.rule-title {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.rule-text {
+  font-size: 0.95rem;
+  margin-bottom: 0.9rem;
+  opacity: 0.9;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 1.1rem;
+}
+
+/* --- Paths section --- */
+
+.sanctuary-paths {
+  margin-top: 0.5rem;
+}
+
+.sanctuary-paths-header,
+.paths-head {
+  margin-bottom: 1.5rem;
+}
+
+.sanctuary-paths-header h2,
+.paths-head h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.sanctuary-paths-header p,
+.paths-head p {
+  max-width: 32rem;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+.sanctuary-paths-grid,
+.paths-grid {
+  margin-top: 1.75rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 800px) {
+  .sanctuary-paths-grid,
+  .paths-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.sanctuary-path-card,
+.card {
+  background: rgba(6, 10, 22, 0.9);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1.5rem 1.6rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
