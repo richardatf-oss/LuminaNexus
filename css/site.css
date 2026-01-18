@@ -465,3 +465,9 @@ body.reading .panel-quote.hebrew {
   font-size: 1.08rem;
   line-height: 2.05;
 }
+/* === Sanctuary layout =============================== */
+.sanctuary-main {
+  padding-top: 3rem;
+  padding-bottom: 4rem;
+}
+/* ...etc... */
