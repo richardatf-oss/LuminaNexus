@@ -12,6 +12,9 @@
       content="Chavruta is the study space of LuminaNexus — for slow dialogue, source sheets, and lived practice."
     />
     <link rel="stylesheet" href="assets/css/global.css" />
+
+    <!-- Front-end chat logic for ChavrutaGPT -->
+    <script src="assets/js/chavruta.js" defer></script>
   </head>
   <body>
     <!-- Shared top bar -->
@@ -34,6 +37,7 @@
     </header>
 
     <main class="container">
+      <!-- Hero -->
       <section class="hero-shell">
         <div class="hero-grid">
           <div class="stack-lg">
@@ -66,7 +70,7 @@
         </div>
       </section>
 
-      <!-- Sessions -->
+      <!-- Sessions (same as before) -->
       <section id="sessions" class="paths">
         <div class="paths-heading">
           <span>Sessions ·</span>
@@ -107,30 +111,45 @@
         </div>
       </section>
 
-      <!-- Optional: Sefaria embed area -->
-      <section class="paths" aria-label="Sefaria integration">
+      <!-- 🔥 NEW: ChavrutaGPT chat panel -->
+      <section class="paths" aria-label="ChavrutaGPT chat">
         <div class="paths-heading">
-          <span>Live Sources ·</span>
-          <span lang="he">מְקוֹרוֹת בַּחַיִּים</span>
+          <span>Ask a question ·</span>
+          <span lang="he">שְׁאֵלָה בַּחֶבְרוּתָא</span>
         </div>
+
         <p style="margin-top: 0.5rem; max-width: 40rem;">
-          Any verse or source you mention here (for example:
-          <em>Berakhot 2a</em>, <em>Tehillim 27:1</em>) can be auto-linked by
-          Sefaria. You can also embed a specific source sheet below when
-          you’re ready.
+          Ask about a verse, a sugya, a middah, or a life question. ChavrutaGPT
+          will answer slowly, with sources from Torah, Sefaria, and classic
+          commentaries where possible.
         </p>
 
-        <!-- Placeholder for a Sefaria sheet (you can replace src with your own sheet URL) -->
-        <!--
-        <div class="sheet-frame-shell">
-          <iframe
-            src="https://www.sefaria.org/sheets/your-sheet-id-here"
-            loading="lazy"
-            class="sheet-frame"
-            title="Sefaria Source Sheet"
-          ></iframe>
+        <div id="chavruta-chat" class="chat-shell">
+          <div id="chat-log" class="chat-log" aria-live="polite"></div>
+
+          <form id="chat-form" class="chat-form">
+            <label class="chat-label" for="chat-input">
+              Your question
+            </label>
+            <div class="chat-input-row">
+              <input
+                id="chat-input"
+                name="message"
+                type="text"
+                autocomplete="off"
+                placeholder="For example: What does Rashi say on Bereshit 1:1?"
+                required
+              />
+              <button type="submit" class="btn btn-primary">
+                Ask →
+              </button>
+            </div>
+            <p class="chat-hint">
+              Hints: “Explain Shema Yisrael with Rambam”, “Kavod vs. Anavah”,
+              “Tehillim 27:1 in Sefaria context”, etc.
+            </p>
+          </form>
         </div>
-        -->
       </section>
 
       <footer class="footer">
@@ -138,7 +157,7 @@
       </footer>
     </main>
 
-    <!-- Sefaria linker (auto-link refs in the text) -->
+    <!-- Sefaria linker: auto-link refs like Berakhot 2a, Tehillim 27:1, etc. -->
     <script src="https://www.sefaria.org/linker.js"></script>
     <script>
       document.getElementById("year").textContent =
