@@ -1,181 +1,96 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
   <title>Chavruta — LuminaNexus</title>
-  <meta name="description" content="Torah-first. Peshat-first. One classical voice — then questions." />
-  <meta name="theme-color" content="#070A10" />
-  <link rel="icon" href="/assets/img/gate-hero.png" />
-  <link rel="stylesheet" href="/css/site.css" />
-  <link rel="stylesheet" href="/css/chavruta.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
 </head>
-
-<body>
-  <header class="topbar" role="banner">
-    <div class="wrap topbar-row">
+<body class="page-chavruta">
+  <header class="site-header">
+    <div class="site-header-inner">
       <div class="brand">
-        <div class="brand-mark" aria-hidden="true">✶</div>
-        <div class="brand-text">
-          <div class="brand-title">Chavruta</div>
-          <div class="brand-subtitle">Torah-first • Peshat-first • One classical voice</div>
-        </div>
+        <a href="/" class="brand-name">LuminaNexus</a>
+        <span class="brand-tagline">Sanctuary · Study · Build</span>
       </div>
-
-      <nav class="topbar-actions" aria-label="Primary">
-        <a class="topbar-link" href="/chavruta/about.html" title="What this is and how to use it">About</a>
-        <a class="topbar-link" href="/" title="Back to LuminaNexus home">Sanctuary</a>
+      <nav class="site-nav">
+        <a href="/about/">About</a>
+        <a href="/chavruta/" aria-current="page">Chavruta</a>
+        <a href="/library/">Library</a>
+        <a href="/map/">Map</a>
+        <a href="/seal/">Seal</a>
+        <a href="/support/">Support</a>
       </nav>
     </div>
   </header>
 
-  <main class="wrap chavruta-shell">
-    <section class="panel">
-      <div class="panel-head">
-        <div>
-          <h1 class="h1">Ask a question</h1>
-          <div class="sub">
-            <strong>How it works:</strong>
-            <span class="steps" aria-label="How to use">
-              <span class="step"><span class="n">1</span> Choose a passage</span>
-              <span class="dot">•</span>
-              <span class="step"><span class="n">2</span> Ask one clear question</span>
-              <span class="dot">•</span>
-              <span class="step"><span class="n">3</span> Send</span>
-            </span>
-          </div>
-        </div>
-
-        <div class="status" id="statusPill" title="System status">Ready</div>
-      </div>
-
-      <div class="toolbar">
-        <div class="tabs" role="tablist" aria-label="Mode">
-          <button class="tab is-active" type="button" data-tab="peshat" role="tab" aria-selected="true" title="Plain meaning first">Peshat</button>
-          <button class="tab" type="button" data-tab="chavruta" role="tab" aria-selected="false" title="Balanced study voice">Chavruta</button>
-          <button class="tab" type="button" data-tab="sources" role="tab" aria-selected="false" title="Show sources for the last answer">Sources <span id="sourcesCount" class="count"></span></button>
-        </div>
-
-        <div class="toggles">
-          <label class="check">
-            <input id="includeHebrew" type="checkbox" checked />
-            <span title="Include Hebrew text in the answer">Include Hebrew</span>
-          </label>
-
-          <label class="check">
-            <input id="includeCitations" type="checkbox" checked />
-            <span title="Add citations when sources are available">Citations</span>
-          </label>
-
-          <button class="btn-sm" type="button" id="toggleAdvanced" title="Show/Hide advanced controls">Advanced</button>
+  <main class="page-main">
+    <!-- Hero / Intro -->
+    <section class="hero hero-chavruta">
+      <div class="hero-inner">
+        <p class="eyebrow">CHAVRUTA · חַבְרוּתָא</p>
+        <h1>Study in good company.</h1>
+        <p class="hero-lead">
+          This is the study trunk of LuminaNexus. Here the pace is slow, the questions are honest,
+          and the goal is not hot takes but clarified life.
+        </p>
+        <p class="hero-quote">
+          אָרִים עֵינַי אֶל־הֶהָרִים, מֵאַיִן יָבֹא עֶזְרִי ·
+          נִבְקָשִׁים לֹא רַק דַּעַת נְכוֹנָה, אֶלָּא חַיִּים נְקוּיִים.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-ghost" href="/">← Back to the Sanctuary</a>
+          <!-- IMPORTANT: this is the one that was 404ing -->
+          <a class="btn btn-primary" href="/chavruta/paths/">View study paths →</a>
         </div>
       </div>
-
-      <div class="row">
-        <div class="ref-row">
-          <button class="chip" type="button" id="presetGen11" title="Load Genesis 1:1">Genesis 1:1</button>
-          <button class="chip" type="button" id="btnStop" title="Stop the current response">Stop</button>
-          <button class="chip" type="button" id="btnNew" title="Start a fresh question (keeps page)">New</button>
-          <button class="chip" type="button" id="btnClear" title="Clear the text fields">Clear</button>
-          <button class="chip" type="button" id="btnExport" title="Export the chat to a .txt file">Export</button>
-        </div>
-
-        <div class="ref-inputs">
-          <label class="field">
-            <span class="label" title="Optional: choose an example passage">Text preset</span>
-            <select id="textPreset">
-              <option disabled selected>Select a sample (optional)</option>
-              <option value="gen1_1">Genesis 1:1 (Heb/Eng)</option>
-              <option value="shema">Deut 6:4–5 (Shema)</option>
-              <option value="ex20_2">Exodus 20:2 (Decalogue intro)</option>
-            </select>
-          </label>
-
-          <label class="field grow">
-            <span class="label" title="Type a reference like 'Genesis 1:1' or 'Bereshit 1:1'">Reference</span>
-            <input id="refInput" type="text" placeholder="e.g., Genesis 1:1" />
-          </label>
-
-          <button class="btn-sm" type="button" id="openSefaria" title="Open the current reference on Sefaria">Open passage on Sefaria</button>
-
-          <label class="check lock">
-            <input id="lockText" type="checkbox" />
-            <span title="Prevent the passage field from being overwritten by presets">Lock text</span>
-          </label>
-        </div>
-      </div>
-
-      <div id="advancedPanel" class="advanced hidden" aria-hidden="true">
-        <div class="advanced-title">Advanced</div>
-        <div class="advanced-grid">
-          <label class="field">
-            <span class="label" title="Choose the classical voice used in the answer">Classical voice</span>
-            <div class="pills" role="group" aria-label="Classical voice">
-              <button class="pill is-active" type="button" data-voice="balanced" title="Balanced voice">Balanced</button>
-              <button class="pill" type="button" data-voice="rashi" title="Rashi-style">Rashi</button>
-              <button class="pill" type="button" data-voice="ibn_ezra" title="Ibn Ezra-style">Ibn Ezra</button>
-              <button class="pill" type="button" data-voice="ramban" title="Ramban-style">Ramban</button>
-              <button class="pill" type="button" data-voice="sforno" title="Sforno-style">Sforno</button>
-              <button class="pill" type="button" data-voice="rambam" title="Rambam-style">Rambam</button>
-            </div>
-          </label>
-
-          <div class="hint">
-            <div class="hint-title">Tip</div>
-            <div class="hint-body">
-              Best results come from a single, clear question like:
-              <em>“What does this word mean here?”</em> or <em>“What is the plain sequence of events?”</em>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <section class="chat">
-        <div class="chatlog" id="chatlog" aria-live="polite">
-          <div class="msg system">
-            Bring a passage (or reference) and ask one clear question. I’ll keep speculation clearly labeled.
-          </div>
-        </div>
-
-        <form class="composer" id="composer" autocomplete="off">
-          <label class="field grow">
-            <span class="label">Passage (optional)</span>
-            <textarea id="passageInput" rows="4" placeholder="Paste the passage here (optional)."></textarea>
-          </label>
-
-          <label class="field grow">
-            <span class="label">Your question</span>
-            <input id="questionInput" type="text" placeholder="Type one clear question…" />
-          </label>
-
-          <button class="btn send" type="submit" id="btnSend" title="Ask the question">Ask</button>
-        </form>
-      </section>
     </section>
 
-    <section class="side">
-      <div class="card">
-        <div class="card-title">Short ritual</div>
-        <ol class="card-list">
-          <li>Pick a reference (or paste text).</li>
-          <li>Ask one clear question.</li>
-          <li>Press <strong>Ask</strong>.</li>
-        </ol>
-      </div>
+    <!-- Sessions Overview -->
+    <section class="section section-sessions">
+      <div class="section-inner">
+        <h2>Sessions · מִסְלוּלֵי לִמּוּד</h2>
+        <p>
+          These are example placeholders. Later we can wire them to real study flows, PDFs,
+          or app-based experiences.
+        </p>
 
-      <div class="card">
-        <div class="card-title">Common actions</div>
-        <div class="card-actions">
-          <button class="btn-sm" type="button" data-quick="word" title="Ask a word meaning question">Word meaning</button>
-          <button class="btn-sm" type="button" data-quick="structure" title="Ask a structure question">Structure</button>
-          <button class="btn-sm" type="button" data-quick="why" title="Ask a 'why' question">Why</button>
+        <div class="card-grid">
+          <!-- Daily Chavruta -->
+          <article class="card">
+            <h3>Daily Chavruta</h3>
+            <p>
+              Short source sheet for daily practice — a text, a question, and a small action.
+            </p>
+            <a class="btn btn-small" href="/chavruta/paths/#daily-chavruta">Open sheet →</a>
+          </article>
+
+          <!-- Slow Series -->
+          <article class="card">
+            <h3>Slow Series</h3>
+            <p>
+              Multi-week journeys through core topics like Shabbat, prayer, middot, or the Seven Laws.
+            </p>
+            <a class="btn btn-small" href="/chavruta/paths/#slow-series">View series →</a>
+          </article>
+
+          <!-- Open Notes -->
+          <article class="card">
+            <h3>Open Notes</h3>
+            <p>
+              Rough notes, questions, and margins. Less polished, more laboratory.
+            </p>
+            <a class="btn btn-small" href="/chavruta/paths/#open-notes">Browse notes →</a>
+          </article>
         </div>
       </div>
     </section>
   </main>
 
-  <script src="/scripts/chavruta-controls.js"></script>
-  <!-- Keep your existing app scripts if you already have them -->
-  <script src="/scripts/chavruta.app.js"></script>
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <p>© 2026 LuminaNexus · Chavruta</p>
+    </div>
+  </footer>
 </body>
 </html>
