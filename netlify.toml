@@ -2,7 +2,7 @@
   publish = "."
   functions = "netlify/functions"
 
-# (Optional) cache control for assets
+# Optional: cache control for static assets
 [[headers]]
   for = "/assets/*"
   [headers.values]
