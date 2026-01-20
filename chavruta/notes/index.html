@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Open Notes — LuminaNexus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../../assets/css/global.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="brand-title">LuminaNexus</span>
+          <span class="brand-subtitle">Sanctuary · Study · Build</span>
+        </div>
+
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="../../about.html">About</a>
+          <a href="../../chavruta.html">Chavruta</a>
+          <a href="../../library.html">Library</a>
+          <a href="../../map.html">Map</a>
+          <a href="../../seal.html">Seal</a>
+          <a href="../../support.html">Support</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero-shell">
+        <div class="hero-grid">
+          <div class="stack-lg">
+            <div class="text-pill">
+              Open Notes · <span lang="he">פְּתָקִים פְּתוּחִים</span>
+            </div>
+
+            <header class="stack">
+              <h1>The laboratory.</h1>
+              <p>
+                Rough notes, questions, sketches — less polished, more honest.
+              </p>
+            </header>
+
+            <div class="btn-row">
+              <a class="btn btn-primary" href="../../chavruta.html">
+                ← Back to Chavruta
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="paths">
+        <div class="paths-heading">
+          <span>Notes ·</span>
+          <span lang="he">הֶעָרוֹת</span>
+        </div>
+
+        <div class="path-card" style="margin-top: 1rem;">
+          <div class="path-title">Add notes later</div>
+          <p class="path-description">
+            For now, this page is a placeholder. Next we can: store notes as markdown,
+            render them here, or connect to a simple CMS.
+          </p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div>© <span id="year"></span> LuminaNexus · Open Notes.</div>
+      </footer>
+    </main>
+
+    <script>
+      document.getElementById("year").textContent =
+        new Date().getFullYear().toString();
+    </script>
+  </body>
+</html>
