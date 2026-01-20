@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../../assets/css/global.css" />
   </head>
   <body>
+    <!-- Top bar -->
     <header class="topbar">
       <div class="topbar-inner">
         <div class="brand">
@@ -30,6 +31,7 @@
     </header>
 
     <main class="container">
+      <!-- Hero -->
       <section class="hero-shell">
         <div class="hero-grid">
           <div class="stack-lg">
@@ -40,7 +42,8 @@
             <header class="stack">
               <h1>A small daily sheet.</h1>
               <p>
-                One text, one question, one action — steady light.
+                One text, one question, one action — steady light, a little bit
+                every day.
               </p>
             </header>
 
@@ -53,6 +56,7 @@
         </div>
       </section>
 
+      <!-- Daily source -->
       <section class="paths">
         <div class="paths-heading">
           <span>Today ·</span>
@@ -60,37 +64,36 @@
         </div>
 
         <div class="path-card" style="margin-top: 1rem;">
-          <!-- TEXT -->
+          <!-- TEXT (filled by JS) -->
           <div class="path-title">Text</div>
-          <p class="path-description Torah">
-            Tehillim 27:1–3 — Psalms 27:1–3.
+          <p class="path-description Torah" id="daily-ref-label">
+            Loading today’s source…
           </p>
           <p class="path-description">
             Open on Sefaria:
             <a
-              href="https://www.sefaria.org/Psalms.27.1-3?lang=bi"
+              id="daily-ref-link"
+              href="https://www.sefaria.org/"
               target="_blank"
               rel="noopener"
             >
-              Psalms 27:1–3 on Sefaria
-            </a>.
+              Loading…
+            </a>
           </p>
 
-          <!-- QUESTION -->
+          <!-- QUESTION (generic, works for any short text) -->
           <div class="path-title" style="margin-top: 1.25rem;">Question</div>
           <p class="path-description">
-            In this psalm, “<em>Hashem is my light and my salvation</em>”
-            becomes the anchor against fear. Which single phrase in these
-            verses feels like an anchor for you today, and why?
+            Which single phrase in today’s text feels like an anchor for you
+            right now? What changes in you when you read it slowly, twice?
           </p>
 
-          <!-- ACTION -->
+          <!-- ACTION (generic) -->
           <div class="path-title" style="margin-top: 1.25rem;">Action</div>
           <p class="path-description">
-            Choose one concrete situation today where fear or anxiety usually
-            shows up. Before you enter it, pause for one breath and quietly
-            repeat your chosen phrase from
-            <span class="Torah">Tehillim 27:1–3</span>.
+            Choose one moment today — a conversation, a task, a worry — and
+            pause for one breath before it. Quietly repeat your chosen phrase
+            from the text, and let it color what you do next.
           </p>
         </div>
       </section>
@@ -105,17 +108,93 @@
         new Date().getFullYear().toString();
     </script>
 
-    <!-- Sefaria Linker v3: turns the citation into a popup with the actual text -->
+    <!-- Sefaria Linker v3 -->
     <script
       type="text/javascript"
       charset="utf-8"
       src="https://www.sefaria.org/linker.v3.js"
     ></script>
     <script>
-      // Only look inside elements with class "Torah"
-      sefaria.link({
-        selector: ".Torah",
-        mode: "popup-click",
+      // A small rotation of daily sources.
+      // Add or change entries here; the page stays the same.
+     const dailySources = [
+  // --- Tehillim (Psalms): daily anchor texts ---
+  { ref: "Psalms.27.1-3", label: "Tehillim 27:1–3 — Psalms 27:1–3" },
+  { ref: "Psalms.16.1-3", label: "Tehillim 16:1–3 — Psalms 16:1–3" },
+  { ref: "Psalms.23.1-4", label: "Tehillim 23:1–4 — Psalms 23:1–4" },
+  { ref: "Psalms.121.1-4", label: "Tehillim 121:1–4 — Psalms 121:1–4" },
+  { ref: "Psalms.34.1-4", label: "Tehillim 34:1–4 — Psalms 34:1–4" },
+  { ref: "Psalms.46.2-4", label: "Tehillim 46:2–4 — Psalms 46:2–4" },
+  { ref: "Psalms.15.1-2", label: "Tehillim 15:1–2 — Psalms 15:1–2" },
+  { ref: "Psalms.90.12-14", label: "Tehillim 90:12–14 — Psalms 90:12–14" },
+  { ref: "Psalms.118.1-4", label: "Tehillim 118:1–4 — Psalms 118:1–4" },
+  { ref: "Psalms.119.105", label: "Tehillim 119:105 — Psalms 119:105" },
+
+  // --- Core Torah / daily declarations ---
+  { ref: "Deuteronomy.6.4-9", label: "Devarim 6:4–9 — Shema Yisrael" },
+  { ref: "Deuteronomy.11.13-21", label: "Devarim 11:13–21 — Vehaya im shamoa" },
+  { ref: "Numbers.6.24-26", label: "Bamidbar 6:24–26 — Birkat Kohanim" },
+  { ref: "Exodus.20.2-3", label: "Shemot 20:2–3 — The first utterance" },
+  { ref: "Leviticus.19.18", label: "Vayikra 19:18 — Love your neighbor as yourself" },
+  { ref: "Deuteronomy.10.12-13", label: "Devarim 10:12–13 — What does Hashem ask of you?" },
+  { ref: "Genesis.12.1-3", label: "Bereshit 12:1–3 — Lech Lecha (call and blessing)" },
+
+  // --- Mishlei (Proverbs): wisdom & character ---
+  { ref: "Proverbs.3.5-6", label: "Mishlei 3:5–6 — Trust and ישר" },
+  { ref: "Proverbs.4.23", label: "Mishlei 4:23 — Guard your heart" },
+  { ref: "Proverbs.16.32", label: "Mishlei 16:32 — Better than the mighty" },
+  { ref: "Proverbs.15.1", label: "Mishlei 15:1 — A soft answer" },
+  { ref: "Proverbs.12.18", label: "Mishlei 12:18 — The tongue heals" },
+  { ref: "Proverbs.11.2", label: "Mishlei 11:2 — Humility and wisdom" },
+
+  // --- Pirkei Avot: foundations of practice & refinement ---
+  { ref: "Pirkei_Avot.1.1", label: "Pirkei Avot 1:1 — The chain of tradition" },
+  { ref: "Pirkei_Avot.1.2", label: "Pirkei Avot 1:2 — Torah, Avodah, Gemilut Chasadim" },
+  { ref: "Pirkei_Avot.1.6", label: "Pirkei Avot 1:6 — Make for yourself a teacher" },
+  { ref: "Pirkei_Avot.1.12", label: "Pirkei Avot 1:12 — Love peace, pursue peace" },
+  { ref: "Pirkei_Avot.2.1", label: "Pirkei Avot 2:1 — Know what is above you" },
+  { ref: "Pirkei_Avot.2.4", label: "Pirkei Avot 2:4 — Do not separate from the community" },
+  { ref: "Pirkei_Avot.4.1", label: "Pirkei Avot 4:1 — Who is wise? who is strong? who is rich?" },
+  { ref: "Pirkei_Avot.4.2", label: "Pirkei Avot 4:2 — One mitzvah draws another" },
+
+  // --- Prophets: justice + humility + return ---
+  { ref: "Micah.6.8", label: "Micah 6:8 — Do justice, love kindness, walk humbly" },
+  { ref: "Isaiah.1.16-17", label: "Yeshayahu 1:16–17 — Learn to do good" },
+  { ref: "Isaiah.55.6-7", label: "Yeshayahu 55:6–7 — Seek Hashem while found" },
+  { ref: "Jeremiah.9.22-23", label: "Yirmiyahu 9:22–23 — What to boast in" },
+  { ref: "Hosea.14.2-3", label: "Hoshea 14:2–3 — Return, and words" },
+  { ref: "Zechariah.4.6", label: "Zechariah 4:6 — Not by might, not by power" },
+
+  // --- A few short “daily posture” verses ---
+  { ref: "Ecclesiastes.7.14", label: "Kohelet 7:14 — Day of good, day of adversity" },
+  { ref: "Lamentations.3.22-23", label: "Eicha 3:22–23 — Mercies renewed" },
+  { ref: "Psalms.19.15", label: "Tehillim 19:15 — Words of my mouth, meditation of my heart" },
+  { ref: "Psalms.133.1", label: "Tehillim 133:1 — How good it is when brothers dwell together" },
+];
+
+
+      // Use day-of-month to pick today's source (loops through the list)
+      const today = new Date();
+      const index = (today.getDate() - 1) % dailySources.length;
+      const src = dailySources[index];
+
+      const labelEl = document.getElementById("daily-ref-label");
+      const linkEl = document.getElementById("daily-ref-link");
+
+      if (src && labelEl && linkEl) {
+        labelEl.textContent = src.label;
+        linkEl.textContent = src.label + " on Sefaria";
+        linkEl.href = "https://www.sefaria.org/" + src.ref + "?lang=bi";
+      }
+
+      // Enable Sefaria popups inside elements with class "Torah"
+      window.addEventListener("load", function () {
+        if (window.sefaria && typeof sefaria.link === "function") {
+          sefaria.link({
+            selector: ".Torah",
+            mode: "popup-click",
+          });
+        }
       });
     </script>
   </body>
