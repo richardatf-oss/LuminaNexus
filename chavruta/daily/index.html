@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Daily Chavruta — LuminaNexus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../../assets/css/global.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="brand-title">LuminaNexus</span>
+          <span class="brand-subtitle">Sanctuary · Study · Build</span>
+        </div>
+
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="../../about.html">About</a>
+          <a href="../../chavruta.html">Chavruta</a>
+          <a href="../../library.html">Library</a>
+          <a href="../../map.html">Map</a>
+          <a href="../../seal.html">Seal</a>
+          <a href="../../support.html">Support</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero-shell">
+        <div class="hero-grid">
+          <div class="stack-lg">
+            <div class="text-pill">
+              Daily Chavruta · <span lang="he">חֲבְרוּתָא יוֹמִית</span>
+            </div>
+
+            <header class="stack">
+              <h1>A small daily sheet.</h1>
+              <p>
+                One text, one question, one action — steady light.
+              </p>
+            </header>
+
+            <div class="btn-row">
+              <a class="btn btn-primary" href="../../chavruta.html">
+                ← Back to Chavruta
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="paths">
+        <div class="paths-heading">
+          <span>Today ·</span>
+          <span lang="he">הַיּוֹם</span>
+        </div>
+
+        <div class="path-card" style="margin-top: 1rem;">
+          <div class="path-title">Text</div>
+          <p class="path-description">
+            (Placeholder) We will embed a Sefaria sheet here, or load a verse + commentary.
+          </p>
+
+          <div class="path-title" style="margin-top: 1rem;">Question</div>
+          <p class="path-description">
+            What is one word in this text that changes how you live today?
+          </p>
+
+          <div class="path-title" style="margin-top: 1rem;">Action</div>
+          <p class="path-description">
+            Choose one small practice for 24 hours: patience, honesty, gratitude, restraint.
+          </p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div>© <span id="year"></span> LuminaNexus · Daily Chavruta.</div>
+      </footer>
+    </main>
+
+    <script>
+      document.getElementById("year").textContent =
+        new Date().getFullYear().toString();
+    </script>
+  </body>
+</html>
