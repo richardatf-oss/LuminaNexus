@@ -64,8 +64,14 @@
         </div>
 
         <div class="path-card" style="margin-top: 1rem;">
+          <!-- THEME -->
+          <div class="path-title">Today's theme</div>
+          <p class="path-description" id="daily-theme">
+            Loading theme…
+          </p>
+
           <!-- TEXT (filled by JS) -->
-          <div class="path-title">Text</div>
+          <div class="path-title" style="margin-top: 1.25rem;">Text</div>
           <p class="path-description Torah" id="daily-ref-label">
             Loading today’s source…
           </p>
@@ -115,76 +121,251 @@
       src="https://www.sefaria.org/linker.v3.js"
     ></script>
     <script>
-      // A small rotation of daily sources.
-      // Add or change entries here; the page stays the same.
-     const dailySources = [
-  // --- Tehillim (Psalms): daily anchor texts ---
-  { ref: "Psalms.27.1-3", label: "Tehillim 27:1–3 — Psalms 27:1–3" },
-  { ref: "Psalms.16.1-3", label: "Tehillim 16:1–3 — Psalms 16:1–3" },
-  { ref: "Psalms.23.1-4", label: "Tehillim 23:1–4 — Psalms 23:1–4" },
-  { ref: "Psalms.121.1-4", label: "Tehillim 121:1–4 — Psalms 121:1–4" },
-  { ref: "Psalms.34.1-4", label: "Tehillim 34:1–4 — Psalms 34:1–4" },
-  { ref: "Psalms.46.2-4", label: "Tehillim 46:2–4 — Psalms 46:2–4" },
-  { ref: "Psalms.15.1-2", label: "Tehillim 15:1–2 — Psalms 15:1–2" },
-  { ref: "Psalms.90.12-14", label: "Tehillim 90:12–14 — Psalms 90:12–14" },
-  { ref: "Psalms.118.1-4", label: "Tehillim 118:1–4 — Psalms 118:1–4" },
-  { ref: "Psalms.119.105", label: "Tehillim 119:105 — Psalms 119:105" },
+      // Big rotation of daily sources with themes.
+      const dailySources = [
+        // --- Tehillim (Psalms): daily anchor texts ---
+        {
+          ref: "Psalms.27.1-3",
+          label: "Tehillim 27:1–3 — Psalms 27:1–3",
+          topic: "Light and courage",
+        },
+        {
+          ref: "Psalms.16.1-3",
+          label: "Tehillim 16:1–3 — Psalms 16:1–3",
+          topic: "Trust and refuge",
+        },
+        {
+          ref: "Psalms.23.1-4",
+          label: "Tehillim 23:1–4 — Psalms 23:1–4",
+          topic: "Shepherding and guidance",
+        },
+        {
+          ref: "Psalms.121.1-4",
+          label: "Tehillim 121:1–4 — Psalms 121:1–4",
+          topic: "Help from above",
+        },
+        {
+          ref: "Psalms.34.1-4",
+          label: "Tehillim 34:1–4 — Psalms 34:1–4",
+          topic: "Praise in distress",
+        },
+        {
+          ref: "Psalms.46.2-4",
+          label: "Tehillim 46:2–4 — Psalms 46:2–4",
+          topic: "Not fearing upheaval",
+        },
+        {
+          ref: "Psalms.15.1-2",
+          label: "Tehillim 15:1–2 — Psalms 15:1–2",
+          topic: "Who may dwell in Your tent",
+        },
+        {
+          ref: "Psalms.90.12-14",
+          label: "Tehillim 90:12–14 — Psalms 90:12–14",
+          topic: "Numbering our days",
+        },
+        {
+          ref: "Psalms.118.1-4",
+          label: "Tehillim 118:1–4 — Psalms 118:1–4",
+          topic: "Gratitude and enduring kindness",
+        },
+        {
+          ref: "Psalms.119.105",
+          label: "Tehillim 119:105 — Psalms 119:105",
+          topic: "Torah as light",
+        },
 
-  // --- Core Torah / daily declarations ---
-  { ref: "Deuteronomy.6.4-9", label: "Devarim 6:4–9 — Shema Yisrael" },
-  { ref: "Deuteronomy.11.13-21", label: "Devarim 11:13–21 — Vehaya im shamoa" },
-  { ref: "Numbers.6.24-26", label: "Bamidbar 6:24–26 — Birkat Kohanim" },
-  { ref: "Exodus.20.2-3", label: "Shemot 20:2–3 — The first utterance" },
-  { ref: "Leviticus.19.18", label: "Vayikra 19:18 — Love your neighbor as yourself" },
-  { ref: "Deuteronomy.10.12-13", label: "Devarim 10:12–13 — What does Hashem ask of you?" },
-  { ref: "Genesis.12.1-3", label: "Bereshit 12:1–3 — Lech Lecha (call and blessing)" },
+        // --- Core Torah / daily declarations ---
+        {
+          ref: "Deuteronomy.6.4-9",
+          label: "Devarim 6:4–9 — Shema Yisrael",
+          topic: "Oneness and love",
+        },
+        {
+          ref: "Deuteronomy.11.13-21",
+          label: "Devarim 11:13–21 — Vehaya im shamoa",
+          topic: "Listening with consequence",
+        },
+        {
+          ref: "Numbers.6.24-26",
+          label: "Bamidbar 6:24–26 — Birkat Kohanim",
+          topic: "Blessing and peace",
+        },
+        {
+          ref: "Exodus.20.2-3",
+          label: "Shemot 20:2–3 — The first utterance",
+          topic: "I am Hashem, your God",
+        },
+        {
+          ref: "Leviticus.19.18",
+          label: "Vayikra 19:18 — Love your neighbor",
+          topic: "Love and boundaries",
+        },
+        {
+          ref: "Deuteronomy.10.12-13",
+          label: "Devarim 10:12–13 — What does Hashem ask?",
+          topic: "A summary of avodah",
+        },
+        {
+          ref: "Genesis.12.1-3",
+          label: "Bereshit 12:1–3 — Lech Lecha",
+          topic: "Call, journey, blessing",
+        },
 
-  // --- Mishlei (Proverbs): wisdom & character ---
-  { ref: "Proverbs.3.5-6", label: "Mishlei 3:5–6 — Trust and ישר" },
-  { ref: "Proverbs.4.23", label: "Mishlei 4:23 — Guard your heart" },
-  { ref: "Proverbs.16.32", label: "Mishlei 16:32 — Better than the mighty" },
-  { ref: "Proverbs.15.1", label: "Mishlei 15:1 — A soft answer" },
-  { ref: "Proverbs.12.18", label: "Mishlei 12:18 — The tongue heals" },
-  { ref: "Proverbs.11.2", label: "Mishlei 11:2 — Humility and wisdom" },
+        // --- Mishlei (Proverbs): wisdom & character ---
+        {
+          ref: "Proverbs.3.5-6",
+          label: "Mishlei 3:5–6 — Trust and straight paths",
+          topic: "Bitachon (trust)",
+        },
+        {
+          ref: "Proverbs.4.23",
+          label: "Mishlei 4:23 — Guard your heart",
+          topic: "Inner watchfulness",
+        },
+        {
+          ref: "Proverbs.16.32",
+          label: "Mishlei 16:32 — Better than the mighty",
+          topic: "Self-mastery",
+        },
+        {
+          ref: "Proverbs.15.1",
+          label: "Mishlei 15:1 — A soft answer",
+          topic: "Speech that heals",
+        },
+        {
+          ref: "Proverbs.12.18",
+          label: "Mishlei 12:18 — The tongue heals",
+          topic: "Words as medicine",
+        },
+        {
+          ref: "Proverbs.11.2",
+          label: "Mishlei 11:2 — Humility and wisdom",
+          topic: "Anavah (humility)",
+        },
 
-  // --- Pirkei Avot: foundations of practice & refinement ---
-  { ref: "Pirkei_Avot.1.1", label: "Pirkei Avot 1:1 — The chain of tradition" },
-  { ref: "Pirkei_Avot.1.2", label: "Pirkei Avot 1:2 — Torah, Avodah, Gemilut Chasadim" },
-  { ref: "Pirkei_Avot.1.6", label: "Pirkei Avot 1:6 — Make for yourself a teacher" },
-  { ref: "Pirkei_Avot.1.12", label: "Pirkei Avot 1:12 — Love peace, pursue peace" },
-  { ref: "Pirkei_Avot.2.1", label: "Pirkei Avot 2:1 — Know what is above you" },
-  { ref: "Pirkei_Avot.2.4", label: "Pirkei Avot 2:4 — Do not separate from the community" },
-  { ref: "Pirkei_Avot.4.1", label: "Pirkei Avot 4:1 — Who is wise? who is strong? who is rich?" },
-  { ref: "Pirkei_Avot.4.2", label: "Pirkei Avot 4:2 — One mitzvah draws another" },
+        // --- Pirkei Avot: foundations of practice & refinement ---
+        {
+          ref: "Pirkei_Avot.1.1",
+          label: "Pirkei Avot 1:1 — The chain of tradition",
+          topic: "Receiving and transmitting Torah",
+        },
+        {
+          ref: "Pirkei_Avot.1.2",
+          label: "Pirkei Avot 1:2 — Torah, Avodah, Gemilut Chasadim",
+          topic: "Pillars of the world",
+        },
+        {
+          ref: "Pirkei_Avot.1.6",
+          label: "Pirkei Avot 1:6 — Make for yourself a teacher",
+          topic: "Teachers and friends",
+        },
+        {
+          ref: "Pirkei_Avot.1.12",
+          label: "Pirkei Avot 1:12 — Love peace, pursue peace",
+          topic: "Peace and love of people",
+        },
+        {
+          ref: "Pirkei_Avot.2.1",
+          label: "Pirkei Avot 2:1 — Know what is above you",
+          topic: "Awareness and accountability",
+        },
+        {
+          ref: "Pirkei_Avot.2.4",
+          label: "Pirkei Avot 2:4 — Do not separate from the community",
+          topic: "Belonging and responsibility",
+        },
+        {
+          ref: "Pirkei_Avot.4.1",
+          label: "Pirkei Avot 4:1 — Who is wise, strong, rich?",
+          topic: "Redefining success",
+        },
+        {
+          ref: "Pirkei_Avot.4.2",
+          label: "Pirkei Avot 4:2 — One mitzvah draws another",
+          topic: "Habit of holiness",
+        },
 
-  // --- Prophets: justice + humility + return ---
-  { ref: "Micah.6.8", label: "Micah 6:8 — Do justice, love kindness, walk humbly" },
-  { ref: "Isaiah.1.16-17", label: "Yeshayahu 1:16–17 — Learn to do good" },
-  { ref: "Isaiah.55.6-7", label: "Yeshayahu 55:6–7 — Seek Hashem while found" },
-  { ref: "Jeremiah.9.22-23", label: "Yirmiyahu 9:22–23 — What to boast in" },
-  { ref: "Hosea.14.2-3", label: "Hoshea 14:2–3 — Return, and words" },
-  { ref: "Zechariah.4.6", label: "Zechariah 4:6 — Not by might, not by power" },
+        // --- Prophets: justice + humility + return ---
+        {
+          ref: "Micah.6.8",
+          label: "Micah 6:8 — Justice, kindness, humility",
+          topic: "Walking humbly",
+        },
+        {
+          ref: "Isaiah.1.16-17",
+          label: "Yeshayahu 1:16–17 — Learn to do good",
+          topic: "Justice and care for the vulnerable",
+        },
+        {
+          ref: "Isaiah.55.6-7",
+          label: "Yeshayahu 55:6–7 — Seek Hashem while found",
+          topic: "Seeking and returning",
+        },
+        {
+          ref: "Jeremiah.9.22-23",
+          label: "Yirmiyahu 9:22–23 — What to boast in",
+          topic: "True praise",
+        },
+        {
+          ref: "Hosea.14.2-3",
+          label: "Hoshea 14:2–3 — Return with words",
+          topic: "Teshuvah (return)",
+        },
+        {
+          ref: "Zechariah.4.6",
+          label: "Zechariah 4:6 — Not by might, nor by power",
+          topic: "Spirit over force",
+        },
 
-  // --- A few short “daily posture” verses ---
-  { ref: "Ecclesiastes.7.14", label: "Kohelet 7:14 — Day of good, day of adversity" },
-  { ref: "Lamentations.3.22-23", label: "Eicha 3:22–23 — Mercies renewed" },
-  { ref: "Psalms.19.15", label: "Tehillim 19:15 — Words of my mouth, meditation of my heart" },
-  { ref: "Psalms.133.1", label: "Tehillim 133:1 — How good it is when brothers dwell together" },
-];
+        // --- Short “daily posture” verses ---
+        {
+          ref: "Ecclesiastes.7.14",
+          label: "Kohelet 7:14 — Day of good, day of adversity",
+          topic: "Holding both joy and challenge",
+        },
+        {
+          ref: "Lamentations.3.22-23",
+          label: "Eicha 3:22–23 — Mercies renewed",
+          topic: "New mercies each morning",
+        },
+        {
+          ref: "Psalms.19.15",
+          label: "Tehillim 19:15 — Words of my mouth",
+          topic: "Aligning speech and heart",
+        },
+        {
+          ref: "Psalms.133.1",
+          label: "Tehillim 133:1 — Brothers dwelling together",
+          topic: "Unity and togetherness",
+        },
+      ];
 
-
-      // Use day-of-month to pick today's source (loops through the list)
+      // Use day-of-year to pick today's source (so it feels more like a calendar)
       const today = new Date();
-      const index = (today.getDate() - 1) % dailySources.length;
+      const startOfYear = new Date(today.getFullYear(), 0, 0);
+      const diff = today - startOfYear;
+      const oneDay = 1000 * 60 * 60 * 24;
+      const dayOfYear = Math.floor(diff / oneDay); // 1..365/366
+
+      const index = (dayOfYear - 1) % dailySources.length;
       const src = dailySources[index];
 
       const labelEl = document.getElementById("daily-ref-label");
       const linkEl = document.getElementById("daily-ref-link");
+      const themeEl = document.getElementById("daily-theme");
 
-      if (src && labelEl && linkEl) {
-        labelEl.textContent = src.label;
-        linkEl.textContent = src.label + " on Sefaria";
-        linkEl.href = "https://www.sefaria.org/" + src.ref + "?lang=bi";
+      if (src) {
+        if (labelEl) {
+          labelEl.textContent = src.label;
+        }
+        if (linkEl) {
+          linkEl.textContent = src.label + " on Sefaria";
+          linkEl.href = "https://www.sefaria.org/" + src.ref + "?lang=bi";
+        }
+        if (themeEl) {
+          themeEl.textContent = src.topic;
+        }
       }
 
       // Enable Sefaria popups inside elements with class "Torah"
