@@ -499,3 +499,22 @@ body {
     align-items: flex-start;
   }
 }
+/* Compact hero and bring grid closer */
+.hero {
+  padding: 3rem 0 2rem;
+}
+
+.hero-card {
+  margin-bottom: 0; /* avoid extra gap below the hero */
+}
+
+/* Bring the grid up a bit */
+.section-grid {
+  padding-top: 0.75rem;
+  padding-bottom: 3.25rem;
+}
+
+/* Slightly tighter title spacing so more fits above the fold */
+.section-title {
+  margin-bottom: 0.5rem;
+}
