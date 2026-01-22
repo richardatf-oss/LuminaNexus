@@ -46,6 +46,24 @@ body {
   margin: 0 auto;
   padding: 0 1.5rem;
 }
+/* --------------------------------------------------
+   Links – soft gold (Library-wide)
+-------------------------------------------------- */
+
+a {
+  color: #e6d8a8;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #e6d8a8;
+}
+
+a:hover,
+a:focus {
+  color: #fff2c6;
+  text-decoration: underline;
+}
 
 /* ----------------------------------------------------
    Header / nav
