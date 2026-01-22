@@ -167,6 +167,33 @@ h1 {
 .hero-shell p + p {
   margin-top: 0.35rem;
 }
+/* Slow Series hero with subtle background image */
+.hero-shell--slow-series {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  padding-block: 3.5rem;
+  /* 👇 update this URL to match your actual file path */
+  background-image:
+    linear-gradient(120deg, rgba(3, 7, 18, 0.85), rgba(15, 23, 42, 0.65)),
+    url("../../assets/img/slow-series-hero.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Make sure inner content sits above the backdrop */
+.hero-shell--slow-series .hero-grid {
+  position: relative;
+  z-index: 1;
+}
+
+/* Slight glow for the pill + heading for readability */
+.hero-shell--slow-series .text-pill,
+.hero-shell--slow-series .hero-heading,
+.hero-shell--slow-series .hero-subtitle {
+  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+}
 
 .btn-row {
   margin-top: 1.5rem;
