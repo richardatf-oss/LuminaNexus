@@ -1,241 +1,149 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <title>LuminaNexus — Sanctuary · Study · Build</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     name="description"
-    content="LuminaNexus is a slow, honest, luminous sanctuary to learn, build, and walk with good company. Sanctuary · Study · Build."
+    content="LuminaNexus is a quiet digital sanctuary for Torah study, creativity, and sacred technology — a place to learn, build, and walk gently."
   />
-  <link rel="stylesheet" href="/css/site.css" />
+  <link rel="stylesheet" href="assets/css/global.css" />
 </head>
-<body>
-  <!-- Top navigation -->
-  <header class="site-header">
-    <div class="shell header-inner">
-      <a href="/" class="brand">
-        <span class="brand-mark">LuminaNexus</span>
-        <span class="brand-tagline">Sanctuary · Study · Build</span>
-      </a>
+<body class="ln-dark">
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-title">LuminaNexus</span>
+        <span class="brand-subtitle">Sanctuary · Study · Build</span>
+      </div>
 
-      <nav class="nav-main" aria-label="Primary">
-        <a href="/about/">About</a>
-        <a href="/chavruta/">Chavruta</a>
-        <a href="/library/">Library</a>
-        <a href="/map/">Map</a>
-        <!-- "Seal" currently mapped to roadmap -->
-        <a href="/roadmap/">Seal</a>
-        <a href="/donate/" class="nav-support">Support</a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="about.html">About</a>
+        <a href="chavruta/index.html">Chavruta</a>
+        <a href="library.html">Library</a>
+        <a href="map.html">Map</a>
+        <a href="seal.html">Seal</a>
+        <a href="support.html">Support</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <!-- Hero / Sanctuary card -->
-    <section class="hero">
-      <div class="shell">
-        <div class="hero-card">
-          <div class="hero-eyebrow">
-            <span class="hero-pill">Sanctuary · מקדש</span>
-          </div>
-
-          <h1 class="hero-title">Welcome to LuminaNexus.</h1>
-
-          <p class="hero-subtitle">
-            A slow, honest, luminous place to learn, build, and walk with good company.
-          </p>
-
-          <p class="hero-hebrew">
-            מקום קטן ומאיר ללימוד, לעשייה, ולליכה בחֶבְרָה טוֹבָה.<br />
-            sanctuary · study · build — לאט, באור.
-          </p>
-
-          <p class="hero-cosmology">
-            LuminaNexus is a living sanctuary — a place where time, speech, and practice
-            are shaped slowly, together.
-          </p>
-
-          <div class="hero-triad" aria-label="Core movements">
-            <div class="hero-triad-item">
-              <span class="triad-label">Sanctuary</span>
-              <span class="triad-desc">arrive, rest, orient</span>
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero-shell hero-shell--home">
+      <div class="hero-overlay">
+        <div class="hero-grid">
+          <div class="stack-lg">
+            <div class="text-pill">
+              LuminaNexus · <span lang="he">לומינאנקסוס</span>
             </div>
-            <div class="hero-triad-item">
-              <span class="triad-label">Study (Chavruta)</span>
-              <span class="triad-desc">learn in dialogue</span>
-            </div>
-            <div class="hero-triad-item">
-              <span class="triad-label">Build</span>
-              <span class="triad-desc">shape what lasts</span>
-            </div>
-          </div>
 
-          <div class="hero-actions">
-            <a href="/chavruta/" class="btn btn-primary">Enter Chavruta →</a>
-            <a href="/donate/" class="btn btn-ghost">Help sustain the Sanctuary</a>
+            <h1 class="hero-heading">
+              Sanctuary in the digital night.
+            </h1>
+
+            <p class="hero-subtitle">
+              A quiet place for Torah, learning, and luminous tools.  
+              Study slowly. Build carefully. Walk with reverence.
+            </p>
+
+            <div class="hero-actions">
+              <a href="chavruta/index.html" class="btn btn-primary">
+                Enter the Sanctuary
+              </a>
+              <a href="about.html" class="btn btn-secondary">
+                What is LuminaNexus?
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- PATHS OVERVIEW -->
+    <section class="home-section home-paths">
+      <h2 class="section-heading">
+        Paths through the Nexus
+      </h2>
+      <p class="section-subtitle">
+        You can begin anywhere. Each path is a doorway into the same light.
+      </p>
 
-    <!-- Main paths grid -->
-    <section class="section section-grid">
-      <div class="shell">
-        <h2 class="section-title">Paths you can walk</h2>
-        <p class="section-lead">
-          Each path is a small doorway into a different part of the work. Take your time.
-        </p>
+      <div class="card-grid">
+        <article class="home-card">
+          <h3>Chavruta · חַבְרוּתָא</h3>
+          <p>
+            Slow series, guided journeys, and study companions for Shabbat,
+            prayer, middot, and the Seven Laws.
+          </p>
+          <a href="chavruta/index.html" class="card-link">Open Chavruta →</a>
+        </article>
 
-        <div class="cards-grid">
-          <!-- Chavruta -->
-          <a href="/chavruta/" class="card">
-            <div class="card-eyebrow">Study · חבורה</div>
-            <h3 class="card-title">Chavruta</h3>
-            <p class="card-body">
-              Guided study, slow series, and multi-week journeys in Shabbat, prayer,
-              middot, and the Seven Laws.
-            </p>
-            <span class="card-link">Enter Chavruta →</span>
-          </a>
+        <article class="home-card">
+          <h3>Library · הַסִּפְרִיָּה</h3>
+          <p>
+            Texts, essays, and digital sefarim from the Celestial Library of the 231 Gates
+            and related projects.
+          </p>
+          <a href="library.html" class="card-link">Visit the Library →</a>
+        </article>
 
-          <!-- Library -->
-          <a href="/library/" class="card">
-            <div class="card-eyebrow">Library · ספרייה</div>
-            <h3 class="card-title">Library</h3>
-            <p class="card-body">
-              Essays, notes, and longer works — a growing bookshelf of Torah, Kabbalah,
-              and lived practice.
-            </p>
-            <span class="card-link">Browse the stacks →</span>
-          </a>
+        <article class="home-card">
+          <h3>Map · מַפָּה</h3>
+          <p>
+            A high-level map of the LuminaNexus ecosystem — apps, books, tools,
+            and experiments in sacred code.
+          </p>
+          <a href="map.html" class="card-link">Explore the Map →</a>
+        </article>
 
-          <!-- Bookshelf (published books) -->
-          <a href="/bookshelf/" class="card">
-            <div class="card-eyebrow">Bookshelf</div>
-            <h3 class="card-title">Books & print</h3>
-            <p class="card-body">
-              Finished books and print projects connected to LuminaNexus, gathered in one
-              quiet place.
-            </p>
-            <span class="card-link">Visit the bookshelf →</span>
-          </a>
+        <article class="home-card">
+          <h3>Seal · חוֹתָם</h3>
+          <p>
+            The guiding commitments of this sanctuary: kavod, safety, humility,
+            and transparent stewardship.
+          </p>
+          <a href="seal.html" class="card-link">Read the Seal →</a>
+        </article>
 
-          <!-- Map -->
-          <a href="/map/" class="card">
-            <div class="card-eyebrow">Map · מַפָּה</div>
-            <h3 class="card-title">Map</h3>
-            <p class="card-body">
-              A high-level view of the LuminaNexus ecosystem: where everything lives, and
-              how the pieces speak to each other.
-            </p>
-            <span class="card-link">Open the map →</span>
-          </a>
+        <article class="home-card">
+          <h3>Labs of Light</h3>
+          <p>
+            Experimental spaces for IvritCode, Quantum Etz Chaim,
+            and other sacred-technology prototypes.
+          </p>
+          <a href="labs-of-light/index.html" class="card-link">Enter the Labs →</a>
+        </article>
 
-          <!-- Seal / Roadmap -->
-          <a href="/roadmap/" class="card">
-            <div class="card-eyebrow">Seal · חותם</div>
-            <h3 class="card-title">Seal & Roadmap</h3>
-            <p class="card-body">
-              Long-arc intentions, vows, and the slow roadmap — what is being built next,
-              and why.
-            </p>
-            <span class="card-link">Read the seal →</span>
-          </a>
-
-          <!-- Noahide Daily -->
-          <a href="/noahide-daily/" class="card">
-            <div class="card-eyebrow">Practice</div>
-            <h3 class="card-title">Noahide Daily</h3>
-            <p class="card-body">
-              Simple, repeatable practices rooted in the Seven Laws, designed for daily
-              life in the modern world.
-            </p>
-            <span class="card-link">Begin the daily walk →</span>
-          </a>
-
-          <!-- IvritCode -->
-          <a href="/ivritcode/" class="card">
-            <div class="card-eyebrow">Labs of Light</div>
-            <h3 class="card-title">IvritCode</h3>
-            <p class="card-body">
-              A language of Hebrew letters as opcodes — exploring computation, Torah
-              text, and future-facing systems.
-            </p>
-            <span class="card-link">Visit IvritCode →</span>
-          </a>
-
-          <!-- Celestial Library of the 231 Gates -->
-          <a href="/celestial-library-231/" class="card">
-            <div class="card-eyebrow">Celestial Library</div>
-            <h3 class="card-title">231 Gates</h3>
-            <p class="card-body">
-              The Celestial Library of the 231 Gates: letter-pairs, constellations,
-              and meditations on the structure of creation.
-            </p>
-            <span class="card-link">Enter the library →</span>
-          </a>
-
-          <!-- Quantum Etz Chaim -->
-          <a href="/quantum-etz-chaim/" class="card">
-            <div class="card-eyebrow">Tree of Life</div>
-            <h3 class="card-title">Quantum Etz Chaim</h3>
-            <p class="card-body">
-              A working model of the Tree of Life as both spiritual map and
-              quantum-inspired architecture.
-            </p>
-            <span class="card-link">Explore the tree →</span>
-          </a>
-
-          <!-- Labs of Light (general) -->
-          <a href="/labs-of-light/" class="card">
-            <div class="card-eyebrow">Experiments</div>
-            <h3 class="card-title">Labs of Light</h3>
-            <p class="card-body">
-              Prototypes, sketches, and experiments that may later become
-              part of the main sanctuary.
-            </p>
-            <span class="card-link">Visit the labs →</span>
-          </a>
-
-          <!-- Audio Chants -->
-          <a href="/audio-chants/" class="card">
-            <div class="card-eyebrow">Voice · קוֹל</div>
-            <h3 class="card-title">Chants & Audio</h3>
-            <p class="card-body">
-              Spoken and sung pieces for prayer, meditation, and study companions.
-            </p>
-            <span class="card-link">Listen in →</span>
-          </a>
-
-          <!-- Donate / Support -->
-          <a href="/donate/" class="card">
-            <div class="card-eyebrow">Support</div>
-            <h3 class="card-title">Support the work</h3>
-            <p class="card-body">
-              If this sanctuary helps you, you can help sustain it — quietly,
-              without paywalls or pressure.
-            </p>
-            <span class="card-link">Support the sanctuary →</span>
-          </a>
-        </div>
+        <article class="home-card">
+          <h3>Support &amp; Donation</h3>
+          <p>
+            Help sustain LuminaNexus as a freely offered sanctuary,
+            or learn how to share it with your own community.
+          </p>
+          <a href="support.html" class="card-link">Support the work →</a>
+        </article>
       </div>
+    </section>
+
+    <!-- GENTLE CLOSING -->
+    <section class="home-section home-closing">
+      <h2 class="section-heading">
+        Begin small. Return often.
+      </h2>
+      <p class="section-subtitle">
+        You do not have to understand everything to belong here.
+        One page, one practice, one quiet step is enough.
+      </p>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="shell footer-inner">
-      <div class="footer-left">
-        <span>© 2026 LuminaNexus · Sanctuary.</span>
-      </div>
-      <div class="footer-right">
-        <a href="/about/">About</a>
-        <a href="/chavruta/">Chavruta</a>
-        <a href="/library/">Library</a>
-        <a href="/donate/">Support</a>
-      </div>
-    </div>
+  <footer class="footer">
+    <p class="footer-meta">
+      &copy; 2026 LuminaNexus · A quiet digital sanctuary.
+    </p>
   </footer>
 </body>
 </html>
