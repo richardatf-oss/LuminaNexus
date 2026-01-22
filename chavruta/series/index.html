@@ -1,95 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Slow Series — LuminaNexus</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="../../assets/css/global.css" />
-  </head>
-  <body>
-    <header class="topbar">
-      <div class="topbar-inner">
-        <div class="brand">
-          <span class="brand-title">LuminaNexus</span>
-          <span class="brand-subtitle">Sanctuary · Study · Build</span>
-        </div>
-
-        <nav class="nav-links" aria-label="Main navigation">
-          <a href="../../about.html">About</a>
-          <a href="../../chavruta.html">Chavruta</a>
-          <a href="../../library.html">Library</a>
-          <a href="../../map.html">Map</a>
-          <a href="../../seal.html">Seal</a>
-          <a href="../../support.html">Support</a>
-        </nav>
+<head>
+  <meta charset="UTF-8" />
+  <title>Slow Series — LuminaNexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+</head>
+<body class="ln-dark">
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-title">LuminaNexus</span>
+        <span class="brand-subtitle">Sanctuary · Study · Build</span>
       </div>
-    </header>
 
-    <main class="container">
-      <section class="hero-shell">
-        <div class="hero-grid">
-          <div class="stack-lg">
-            <div class="text-pill">
-              Slow Series · <span lang="he">סִדְרָה אִטִּית</span>
-            </div>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="../../about.html">About</a>
+        <a href="../index.html">Chavruta</a>
+        <a href="../../library.html">Library</a>
+        <a href="../../map.html">Map</a>
+        <a href="../../seal.html">Seal</a>
+        <a href="../../support.html">Support</a>
+      </nav>
+    </div>
+  </header>
 
-            <header class="stack">
-              <h1>Multi-week journeys.</h1>
-              <p>
-                Shabbat. Prayer. Middot. Seven Laws. Built as gentle, repeatable paths.
-              </p>
-            </header>
-
-            <div class="btn-row">
-              <a class="btn btn-primary" href="../../chavruta.html">
-                ← Back to Chavruta
-              </a>
-            </div>
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero-shell">
+      <div class="hero-grid">
+        <div class="stack-lg">
+          <div class="text-pill">
+            Slow Series · <span lang="he">סדרה איטית</span>
           </div>
+
+          <h1 class="hero-heading">
+            Multi-week journeys.
+          </h1>
+
+          <p class="hero-subtitle">
+            Shabbat. Prayer. Middot. Seven Laws. Built as gentle, repeatable paths.
+          </p>
+
+          <a href="../index.html" class="btn btn-secondary">
+            &larr; Back to Chavruta
+          </a>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="paths">
-        <div class="paths-heading">
-          <span>Series list ·</span>
-          <span lang="he">רְשִׁימַת סִדְרוֹת</span>
-        </div>
+    <!-- Series list -->
+    <section class="series-list">
+      <h2 class="series-list-title">
+        Series list · <span lang="he">רשימת סדרות</span>
+      </h2>
 
-        <div class="paths-grid" style="margin-top: 1rem;">
-          <article class="path-card">
-            <div class="path-title">Shabbat: The Palace in Time</div>
-            <p class="path-description">
-              (Placeholder) Week 1–6: entrance, preparation, light, rest, speech, joy.
-            </p>
-            <a class="btn btn-secondary" href="#">Open →</a>
-          </article>
+      <div class="series-grid">
+        <!-- Shabbat -->
+        <article class="series-card">
+          <h3 class="series-card-title">
+            Shabbat: The Palace in Time
+          </h3>
+          <p class="series-card-desc">
+            A six-week journey into Shabbat as a sanctuary in time —
+            entrance, preparation, light, rest, speech, and joy.
+          </p>
+          <a href="slow-shabbat.html" class="btn btn-primary">
+            Open →
+          </a>
+        </article>
 
-          <article class="path-card">
-            <div class="path-title">Prayer: The Ladder</div>
-            <p class="path-description">
-              (Placeholder) Week 1–4: intention, words, silence, alignment.
-            </p>
-            <a class="btn btn-secondary" href="#">Open →</a>
-          </article>
+        <!-- Prayer -->
+        <article class="series-card">
+          <h3 class="series-card-title">
+            Prayer: The Ladder
+          </h3>
+          <p class="series-card-desc">
+            A four-week ascent through prayer —
+            intention, words, silence, and alignment.
+          </p>
+          <a href="slow-prayer.html" class="btn btn-primary">
+            Open →
+          </a>
+        </article>
 
-          <article class="path-card">
-            <div class="path-title">Middot: Refinement</div>
-            <p class="path-description">
-              (Placeholder) Week 1–8: humility, patience, discipline, kindness.
-            </p>
-            <a class="btn btn-secondary" href="#">Open →</a>
-          </article>
-        </div>
-      </section>
+        <!-- Middot (coming soon) -->
+        <article class="series-card series-card-muted">
+          <h3 class="series-card-title">
+            Middot: Refinement
+          </h3>
+          <p class="series-card-desc">
+            An eight-week path of inner refinement —
+            humility, patience, discipline, kindness, and balance.
+          </p>
+          <span class="series-card-soon">
+            Coming soon
+          </span>
+        </article>
+      </div>
+    </section>
+  </main>
 
-      <footer class="footer">
-        <div>© <span id="year"></span> LuminaNexus · Slow Series.</div>
-      </footer>
-    </main>
-
-    <script>
-      document.getElementById("year").textContent =
-        new Date().getFullYear().toString();
-    </script>
-  </body>
+  <footer class="footer">
+    <p class="footer-meta">
+      &copy; 2026 LuminaNexus · Slow Series.
+    </p>
+  </footer>
+</body>
 </html>
