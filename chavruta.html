@@ -6,42 +6,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     name="description"
-    content="Cha<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Chavruta — LuminaNexus</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta
-    name="description"
     content="Chavruta is the study trunk of LuminaNexus — slow questions, honest learning, and guided journeys for Shabbat, prayer, middot, and the Seven Laws."
   />
   <link rel="stylesheet" href="/assets/css/global.css" />
 
-  <!-- Chavruta-specific polish -->
+  <!-- Chavruta-specific styling: the table for two -->
   <style>
-    /* Keep everything scoped so we don't affect other pages */
-    .chavruta-pane {
-      max-width: 760px;
-      margin: 0 auto;
-      margin-top: 2rem;
-      margin-bottom: 2.5rem;
+    .chavruta-table {
+      max-width: 960px;
+      margin: 2.5rem auto 2.75rem auto;
       padding: 2rem 2.25rem;
-      border-radius: 24px;
-      background: radial-gradient(circle at top left, rgba(255,255,255,0.05), transparent 55%),
-                  rgba(4, 10, 26, 0.94);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.07), transparent 55%),
+        rgba(4, 10, 26, 0.96);
       box-shadow:
-        0 18px 45px rgba(0, 0, 0, 0.7),
-        0 0 0 1px rgba(255,255,255,0.02);
+        0 20px 48px rgba(0, 0, 0, 0.75),
+        0 0 0 1px rgba(255,255,255,0.03);
+      box-sizing: border-box;
     }
 
-    .chavruta-pane h2.section-heading {
-      margin-bottom: 0.35rem;
+    .chavruta-table-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 1.75rem;
+      align-items: flex-start;
     }
 
-    .chavruta-pane .section-subtitle {
-      margin-bottom: 1.5rem;
-      max-width: 40rem;
+    .chavruta-table h2.section-heading {
+      margin-bottom: 0.5rem;
+    }
+
+    .chavruta-table .section-subtitle {
+      margin-bottom: 1.25rem;
+      max-width: 36rem;
     }
 
     .chavruta-form {
@@ -58,20 +56,21 @@
 
     .chavruta-textarea {
       width: 100%;
-      min-height: 150px;
+      min-height: 180px;
       resize: vertical;
-      padding: 0.85rem 1rem;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0.9rem 1rem;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
       background: rgba(3, 7, 20, 0.98);
-      color: #f7f7ff;
+      color: #f8f8ff;
       font: inherit;
-      line-height: 1.5;
+      line-height: 1.6;
       box-sizing: border-box;
     }
 
     .chavruta-textarea::placeholder {
-      color: rgba(255, 255, 255, 0.45);
+      color: rgba(255, 255, 255, 0.42);
+      font-size: 0.95rem;
     }
 
     .chavruta-input-row {
@@ -82,16 +81,46 @@
     .chavruta-hints {
       font-size: 0.85rem;
       opacity: 0.8;
-      margin-top: 0.25rem;
+      margin-top: 0.35rem;
     }
 
-    /* Sessions cards clean-up */
+    .chavruta-companion-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+      opacity: 0.9;
+    }
+
+    .chavruta-companion {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      opacity: 0.9;
+    }
+
+    .chavruta-companion ul {
+      margin: 0.5rem 0 0 1.2rem;
+      padding: 0;
+    }
+
+    .chavruta-companion li {
+      margin-bottom: 0.25rem;
+    }
+
+    .chavruta-note-soft {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.8rem;
+    }
+
+    /* Sessions row tidy */
     .chavruta-sessions .card-grid {
-      margin-top: 1.5rem;
+      margin-top: 1.6rem;
     }
 
     .chavruta-sessions .home-card {
-      min-height: 160px;
+      min-height: 170px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -101,12 +130,14 @@
       margin-bottom: 0.75rem;
     }
 
-    @media (max-width: 768px) {
-      .chavruta-pane {
-        margin-top: 1.5rem;
-        margin-bottom: 2rem;
-        padding: 1.5rem 1.25rem;
-        border-radius: 18px;
+    @media (max-width: 900px) {
+      .chavruta-table-inner {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .chavruta-table {
+        padding: 1.6rem 1.4rem;
+        margin: 2rem 0 2.3rem 0;
+        border-radius: 22px;
       }
       .chavruta-input-row {
         justify-content: flex-start;
@@ -135,7 +166,7 @@
   </header>
 
   <main class="container">
-    <!-- HERO (unchanged) -->
+    <!-- HERO (as on live site) -->
     <section class="hero-shell hero-shell--page hero-shell--chavruta" aria-labelledby="chavruta-heading">
       <div class="hero-overlay">
         <div class="hero-grid">
@@ -159,7 +190,7 @@
 
             <div class="hero-actions">
               <a href="/" class="btn btn-primary">← Back to the Sanctuary</a>
-              <a href="#ask" class="btn btn-secondary">Ask a question</a>
+              <a href="#ask" class="btn btn-secondary">Sit at the table</a>
               <a href="#sessions" class="btn btn-ghost">View study paths</a>
             </div>
           </div>
@@ -167,40 +198,65 @@
       </div>
     </section>
 
-    <!-- CHAT PANEL -->
+    <!-- CHAVRUTA TABLE (friend vibe) -->
     <section id="ask" class="home-section">
-      <div class="chavruta-pane">
-        <h2 class="section-heading">
-          Ask a question · <span lang="he">שְׁאֵלָה בְּחַבְרוּתָא</span>
-        </h2>
-        <p class="section-subtitle">
-          Ask about a verse, a sugya, a middah, or a life question. ChavrutaGPT will answer slowly,
-          with sources you can look up on Sefaria.
-        </p>
+      <div class="chavruta-table">
+        <div class="chavruta-table-inner">
+          <!-- Left: your voice -->
+          <div>
+            <h2 class="section-heading">
+              Your side of the table
+            </h2>
+            <p class="section-subtitle">
+              Bring one question. Not all of them. Write it slowly, as if you were speaking to a friend
+              across the table.
+            </p>
 
-        <form class="chavruta-form">
-          <label for="chavruta-question" class="chavruta-label">
-            Your question
-          </label>
+            <form class="chavruta-form">
+              <label for="chavruta-question" class="chavruta-label">
+                Your question
+              </label>
 
-          <textarea
-            id="chavruta-question"
-            name="question"
-            class="chavruta-textarea"
-            placeholder="For example: What does Rashi say on Bereshit 1:1?&#10;Or: How do I balance kavod and anavah at work?"
-          ></textarea>
+              <textarea
+                id="chavruta-question"
+                name="question"
+                class="chavruta-textarea"
+                placeholder="For example:&#10;• What does Rashi see in Bereshit 1:1 that I keep missing?&#10;• How do I balance kavod and anavah with my family?&#10;• What does it mean to really keep Shabbat in my situation?"
+              ></textarea>
 
-          <div class="chavruta-input-row">
-            <button type="submit" class="btn btn-primary chavruta-submit">
-              Ask →
-            </button>
+              <div class="chavruta-input-row">
+                <button type="submit" class="btn btn-primary chavruta-submit">
+                  Ask →
+                </button>
+              </div>
+
+              <p class="chavruta-hints">
+                Hints: “Explain Shema Yisrael (Devarim 6:4)”, “Kavod vs Anavah”,
+                “Tehillim 27:1 with classic mefarshim”.
+              </p>
+            </form>
           </div>
 
-          <p class="chavruta-hints">
-            Hints: “Explain Shema Yisrael (Devarim 6:4)”, “Kavod vs Anavah”,
-            “Tehillim 27:1 with classic mefarshim”.
-          </p>
-        </form>
+          <!-- Right: companion voice -->
+          <div>
+            <div class="chavruta-companion-title">
+              Your chavruta will…
+            </div>
+            <div class="chavruta-companion">
+              <ul>
+                <li>Read your question as if you were sitting together in a quiet beit midrash.</li>
+                <li>Point you to sources you can open yourself on Sefaria.</li>
+                <li>Respond slowly, trying to clarify rather than to win.</li>
+                <li>Invite you to turn the answer into one small action this week.</li>
+              </ul>
+
+              <p class="chavruta-note-soft">
+                For now this is a design prototype; the Ask button does not yet send anything.
+                It’s here to help you shape the question you would bring to a real chavruta.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -210,8 +266,8 @@
         Sessions · <span lang="he">מַסְלוּלֵי לִמּוּד</span>
       </h2>
       <p class="section-subtitle">
-        These are example placeholders. Each will later link to actual study flows, PDFs, app pages,
-        or Sefaria sheets.
+        Choose a standing chavruta path. Each one will eventually link to guided studies, PDFs,
+        app pages, or Sefaria sheets.
       </p>
 
       <div class="card-grid">
@@ -219,27 +275,29 @@
         <article class="home-card">
           <h3>Daily Chavruta</h3>
           <p>
-            Short source sheet for daily practice — a text, a question, and a small action.
+            A small, steady table: one text, one question, and one action for the day.
           </p>
-          <a href="/chavruta/daily/" class="card-link">Open sheet →</a>
+          <a href="/chavruta/daily/" class="card-link">Open daily table →</a>
         </article>
 
         <!-- SLOW SERIES -->
         <article class="home-card">
           <h3>Slow Series</h3>
           <p>
-            Multi-week journey through a core topic: Shabbat, prayer, middot, or the Seven Laws.
+            Multi-week journeys through a core topic: Shabbat, prayer, middot,
+            or the Seven Laws.
           </p>
-          <a href="/chavruta/slow-series/" class="card-link">View series →</a>
+          <a href="/chavruta/slow-series/" class="card-link">View slow journeys →</a>
         </article>
 
         <!-- OPEN NOTES -->
         <article class="home-card">
           <h3>Open Notes</h3>
           <p>
-            Rough notes, questions, and marginalia. Less polished, more laboratory.
+            Rough notes, questions, and marginalia from past conversations.
+            Less polished, more laboratory.
           </p>
-          <a href="/library/open-notes/" class="card-link">Browse notes →</a>
+          <a href="/library/open-notes/" class="card-link">Browse open notes →</a>
         </article>
       </div>
     </section>
@@ -250,171 +308,8 @@
         Bring one question, not all of them.
       </h2>
       <p class="section-subtitle">
-        You do not have to unload your whole life at once. One verse, one dilemma,
-        one small corner of the heart is enough for today.
-      </p>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <p class="footer-meta">
-      &copy; 2026 LuminaNexus · Chavruta.
-    </p>
-  </footer>
-</body>
-</html>
-vruta is the study trunk of LuminaNexus — slow questions, honest learning, and guided journeys for Shabbat, prayer, middot, and the Seven Laws."
-  />
-  <link rel="stylesheet" href="/assets/css/global.css" />
-</head>
-<body class="ln-dark">
-  <!-- Top bar -->
-  <header class="topbar">
-    <div class="topbar-inner">
-      <a href="/" class="brand" aria-label="LuminaNexus home">
-        <span class="brand-title">LuminaNexus</span>
-        <span class="brand-subtitle">Sanctuary · Study · Build</span>
-      </a>
-
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="/about.html">About</a>
-        <a href="/chavruta.html" aria-current="page">Chavruta</a>
-        <a href="/library/">Library</a>
-        <a href="/map.html">Map</a>
-        <a href="/seal.html">Seal</a>
-        <a href="/donate/index.html">Support</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="container">
-    <!-- HERO -->
-    <section class="hero-shell hero-shell--page hero-shell--chavruta" aria-labelledby="chavruta-heading">
-      <div class="hero-overlay">
-        <div class="hero-grid">
-          <div class="stack-lg">
-            <div class="text-pill">
-              CHAVRUTA · <span lang="he">חַבְרוּתָא</span>
-            </div>
-
-            <h1 id="chavruta-heading" class="hero-heading">
-              Study in good company.
-            </h1>
-
-            <p class="hero-subtitle">
-              This is the study trunk of LuminaNexus. Here the pace is slow, the questions are honest,
-              and the goal is not hot takes but clarified life.
-            </p>
-
-            <p class="hero-subtitle hero-subtitle--hebrew" lang="he">
-              כָּאן לוֹמְדִים לֹא מַה שֶׁחוֹשְׁבִים שֶׁצָּרִיךְ לַעֲנוֹת, אֶלָּא מַה שֶׁהַלֵּב רוֹצֶה לְבָרֵר.
-            </p>
-
-            <div class="hero-actions">
-              <a href="/" class="btn btn-primary">← Back to the Sanctuary</a>
-              <a href="#ask" class="btn btn-secondary">Ask a question</a>
-              <a href="#sessions" class="btn btn-ghost">View study paths</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CHAT CARD: ASK A QUESTION -->
-    <section id="ask" class="home-section">
-      <div class="card-grid">
-        <article class="home-card">
-          <h2 class="section-heading">
-            Ask a question · <span lang="he">שְׁאֵלָה בְּחַבְרוּתָא</span>
-          </h2>
-          <p class="section-subtitle">
-            Ask about a verse, a sugya, a middah, or a life question. ChavrutaGPT will answer slowly,
-            with sources you can look up on Sefaria.
-          </p>
-
-          <form class="chavruta-form">
-            <label for="chavruta-question" class="chavruta-label">
-              Your question
-            </label>
-
-            <textarea
-              id="chavruta-question"
-              name="question"
-              rows="4"
-              class="chavruta-input"
-              placeholder="For example: What does Rashi say on Bereshit 1:1?&#10;Or: How do I balance kavod and anavah at work?"
-            ></textarea>
-
-            <div class="chavruta-input-row">
-              <button type="submit" class="btn btn-primary chavruta-submit">
-                Ask →
-              </button>
-            </div>
-
-            <p class="chavruta-hints">
-              Hints: “Explain Shema Yisrael (Devarim 6:4)”, “Kavod vs Anavah”,
-              “Tehillim 27:1 with classic mefarshim”.
-            </p>
-
-            <!-- Optional honesty line while this is still a prototype -->
-            <!--
-            <p class="chavruta-note">
-              For now this is a design prototype; the Ask button does not yet send your question anywhere.
-            </p>
-            -->
-          </form>
-        </article>
-      </div>
-    </section>
-
-    <!-- SESSIONS AS THREE CARDS -->
-    <section id="sessions" class="home-section">
-      <h2 class="section-heading">
-        Sessions · <span lang="he">מַסְלוּלֵי לִמּוּד</span>
-      </h2>
-      <p class="section-subtitle">
-        These are example placeholders. Each will later link to actual study flows, PDFs, app pages,
-        or Sefaria sheets.
-      </p>
-
-      <div class="card-grid">
-        <!-- DAILY CHAVRUTA -->
-        <article class="home-card">
-          <h3>Daily Chavruta</h3>
-          <p>
-            Short source sheet for daily practice — a text, a question, and a small action.
-          </p>
-          <a href="/chavruta/daily/" class="card-link">Open sheet →</a>
-        </article>
-
-        <!-- SLOW SERIES -->
-        <article class="home-card">
-          <h3>Slow Series</h3>
-          <p>
-            Multi-week journey through a core topic: Shabbat, prayer, middot, or the Seven Laws.
-          </p>
-          <a href="/chavruta/slow-series/" class="card-link">View series →</a>
-        </article>
-
-        <!-- OPEN NOTES -->
-        <article class="home-card">
-          <h3>Open Notes</h3>
-          <p>
-            Rough notes, questions, and marginalia. Less polished, more laboratory.
-          </p>
-          <a href="/library/open-notes/" class="card-link">Browse notes →</a>
-        </article>
-      </div>
-    </section>
-
-    <!-- GENTLE CLOSING -->
-    <section class="home-section">
-      <h2 class="section-heading">
-        Bring one question, not all of them.
-      </h2>
-      <p class="section-subtitle">
-        You do not have to unload your whole life at once. One verse, one dilemma,
-        one small corner of the heart is enough for today.
+        You can always come back to the table. One verse, one dilemma, one small corner of the heart
+        is enough for today.
       </p>
     </section>
   </main>
