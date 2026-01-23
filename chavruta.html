@@ -6,59 +6,88 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     name="description"
-    content="Chavruta is the study trunk of LuminaNexus — slow questions, honest learning, and guided journeys for Shabbat, prayer, middot, and the Seven Laws."
+    content="Chavruta is the study trunk of LuminaNexus — slow questions, honest learning, and guided journeys."
   />
   <link rel="stylesheet" href="/assets/css/global.css" />
 
-  <!-- Chavruta-specific styling: the table for two -->
   <style>
-    .chavruta-table {
-      max-width: 960px;
-      margin: 2.5rem auto 2.75rem auto;
+    /* Page-safe additions (scoped to this file) */
+    .ch-page {
+      padding-bottom: 3rem;
+    }
+
+    .ch-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* The “table” panel */
+    .ch-table {
+      margin-top: 2.25rem;
+      margin-bottom: 2.5rem;
       padding: 2rem 2.25rem;
       border-radius: 28px;
       background:
         radial-gradient(circle at top left, rgba(255,255,255,0.07), transparent 55%),
         rgba(4, 10, 26, 0.96);
       box-shadow:
-        0 20px 48px rgba(0, 0, 0, 0.75),
+        0 22px 52px rgba(0, 0, 0, 0.78),
         0 0 0 1px rgba(255,255,255,0.03);
       box-sizing: border-box;
     }
 
-    .chavruta-table-inner {
+    .ch-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
       gap: 1.75rem;
-      align-items: flex-start;
+      align-items: start;
     }
 
-    .chavruta-table h2.section-heading {
-      margin-bottom: 0.5rem;
+    .ch-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.07);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.9;
+      margin-bottom: 0.8rem;
     }
 
-    .chavruta-table .section-subtitle {
-      margin-bottom: 1.25rem;
-      max-width: 36rem;
+    .ch-h2 {
+      margin: 0 0 0.5rem 0;
+      font-size: clamp(1.4rem, 2.6vw, 1.85rem);
+      line-height: 1.15;
     }
 
-    .chavruta-form {
+    .ch-sub {
+      margin: 0 0 1.25rem 0;
+      opacity: 0.88;
+      line-height: 1.6;
+      max-width: 44rem;
+    }
+
+    .ch-form {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
     }
 
-    .chavruta-label {
+    .ch-label {
       font-size: 0.95rem;
       font-weight: 500;
-      letter-spacing: 0.02em;
+      opacity: 0.95;
     }
 
-    .chavruta-textarea {
+    .ch-textarea {
       width: 100%;
-      min-height: 180px;
+      min-height: 190px;
       resize: vertical;
-      padding: 0.9rem 1rem;
+      padding: 0.95rem 1rem;
       border-radius: 18px;
       border: 1px solid rgba(255, 255, 255, 0.14);
       background: rgba(3, 7, 20, 0.98);
@@ -68,83 +97,77 @@
       box-sizing: border-box;
     }
 
-    .chavruta-textarea::placeholder {
+    .ch-textarea::placeholder {
       color: rgba(255, 255, 255, 0.42);
+    }
+
+    .ch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 0.25rem;
+    }
+
+    .ch-meta {
+      font-size: 0.85rem;
+      opacity: 0.75;
+      line-height: 1.5;
+      max-width: 44rem;
+    }
+
+    .ch-side {
+      padding-top: 0.25rem;
+    }
+
+    .ch-side-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.9;
+      margin: 0 0 0.6rem 0;
+    }
+
+    .ch-side ul {
+      margin: 0.35rem 0 0 1.1rem;
+      padding: 0;
+      line-height: 1.7;
+      opacity: 0.88;
       font-size: 0.95rem;
     }
 
-    .chavruta-input-row {
-      display: flex;
-      justify-content: flex-end;
-    }
+    .ch-side li { margin-bottom: 0.35rem; }
 
-    .chavruta-hints {
-      font-size: 0.85rem;
-      opacity: 0.8;
-      margin-top: 0.35rem;
-    }
-
-    .chavruta-companion-title {
+    .ch-status {
+      margin-top: 0.75rem;
       font-size: 0.9rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.4rem;
-      opacity: 0.9;
+      opacity: 0.85;
+      display: none;
     }
 
-    .chavruta-companion {
-      font-size: 0.9rem;
-      line-height: 1.7;
-      opacity: 0.9;
+    /* Sessions as three cards */
+    .ch-sessions {
+      margin-top: 2rem;
     }
 
-    .chavruta-companion ul {
-      margin: 0.5rem 0 0 1.2rem;
-      padding: 0;
-    }
-
-    .chavruta-companion li {
-      margin-bottom: 0.25rem;
-    }
-
-    .chavruta-note-soft {
-      font-size: 0.8rem;
-      opacity: 0.7;
-      margin-top: 0.8rem;
-    }
-
-    /* Sessions row tidy */
-    .chavruta-sessions .card-grid {
-      margin-top: 1.6rem;
-    }
-
-    .chavruta-sessions .home-card {
-      min-height: 170px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .chavruta-sessions .home-card p {
-      margin-bottom: 0.75rem;
-    }
-
+    /* Mobile */
     @media (max-width: 900px) {
-      .chavruta-table-inner {
-        grid-template-columns: minmax(0, 1fr);
-      }
-      .chavruta-table {
-        padding: 1.6rem 1.4rem;
-        margin: 2rem 0 2.3rem 0;
-        border-radius: 22px;
-      }
-      .chavruta-input-row {
-        justify-content: flex-start;
-      }
+      .ch-table { padding: 1.5rem 1.25rem; border-radius: 22px; }
+      .ch-grid { grid-template-columns: 1fr; }
+      .ch-row { justify-content: flex-start; }
+      .ch-textarea { min-height: 170px; }
+    }
+
+    /* Small phones */
+    @media (max-width: 420px) {
+      .ch-table { padding: 1.2rem 1rem; border-radius: 18px; }
+      .ch-textarea { min-height: 160px; padding: 0.85rem 0.85rem; }
     }
   </style>
 </head>
+
 <body class="ln-dark">
   <!-- Top bar -->
   <header class="topbar">
@@ -165,8 +188,8 @@
     </div>
   </header>
 
-  <main class="container">
-    <!-- HERO (as on live site) -->
+  <main class="container ch-page">
+    <!-- HERO: reuse your existing hero shell classes -->
     <section class="hero-shell hero-shell--page hero-shell--chavruta" aria-labelledby="chavruta-heading">
       <div class="hero-overlay">
         <div class="hero-grid">
@@ -190,7 +213,7 @@
 
             <div class="hero-actions">
               <a href="/" class="btn btn-primary">← Back to the Sanctuary</a>
-              <a href="#ask" class="btn btn-secondary">Sit at the table</a>
+              <a href="#table" class="btn btn-secondary">Sit at the table</a>
               <a href="#sessions" class="btn btn-ghost">View study paths</a>
             </div>
           </div>
@@ -198,126 +221,171 @@
       </div>
     </section>
 
-    <!-- CHAVRUTA TABLE (friend vibe) -->
-    <section id="ask" class="home-section">
-      <div class="chavruta-table">
-        <div class="chavruta-table-inner">
-          <!-- Left: your voice -->
+    <!-- TABLE -->
+    <div class="ch-wrap">
+      <section id="table" class="ch-table" aria-labelledby="table-heading">
+        <div class="ch-grid">
+          <!-- Left: question -->
           <div>
-            <h2 class="section-heading">
-              Your side of the table
-            </h2>
-            <p class="section-subtitle">
-              Bring one question. Not all of them. Write it slowly, as if you were speaking to a friend
-              across the table.
+            <div class="ch-kicker">Your side of the table</div>
+            <h2 id="table-heading" class="ch-h2">Bring one question.</h2>
+            <p class="ch-sub">
+              Write it slowly, as if you were speaking to a friend across the table.
+              ChavrutaGPT will answer with sources and care.
             </p>
 
-            <form class="chavruta-form">
-              <label for="chavruta-question" class="chavruta-label">
-                Your question
-              </label>
+            <form class="ch-form" id="chForm">
+              <label class="ch-label" for="chavruta-question">Your question</label>
 
               <textarea
                 id="chavruta-question"
+                class="ch-textarea"
                 name="question"
-                class="chavruta-textarea"
-                placeholder="For example:&#10;• What does Rashi see in Bereshit 1:1 that I keep missing?&#10;• How do I balance kavod and anavah with my family?&#10;• What does it mean to really keep Shabbat in my situation?"
+                placeholder="For example:
+• What does Rashi see in Bereshit 1:1 that I keep missing?
+• How do I balance kavod and anavah with my family?
+• What does it mean to keep Shabbat in my situation?"
+                required
               ></textarea>
 
-              <div class="chavruta-input-row">
-                <button type="submit" class="btn btn-primary chavruta-submit">
-                  Ask →
-                </button>
+              <div class="ch-row">
+                <button type="submit" class="btn btn-primary" id="askBtn">Ask →</button>
+                <div class="ch-meta">
+                  Hints: “Shema Yisrael (Devarim 6:4)”, “Kavod vs Anavah”, “Tehillim 27:1 with mefarshim”.
+                </div>
               </div>
 
-              <p class="chavruta-hints">
-                Hints: “Explain Shema Yisrael (Devarim 6:4)”, “Kavod vs Anavah”,
-                “Tehillim 27:1 with classic mefarshim”.
-              </p>
+              <div class="ch-status" id="status"></div>
             </form>
           </div>
 
-          <!-- Right: companion voice -->
-          <div>
-            <div class="chavruta-companion-title">
-              Your chavruta will…
-            </div>
-            <div class="chavruta-companion">
-              <ul>
-                <li>Read your question as if you were sitting together in a quiet beit midrash.</li>
-                <li>Point you to sources you can open yourself on Sefaria.</li>
-                <li>Respond slowly, trying to clarify rather than to win.</li>
-                <li>Invite you to turn the answer into one small action this week.</li>
-              </ul>
-
-              <p class="chavruta-note-soft">
-                For now this is a design prototype; the Ask button does not yet send anything.
-                It’s here to help you shape the question you would bring to a real chavruta.
-              </p>
-            </div>
-          </div>
+          <!-- Right: companion -->
+          <aside class="ch-side">
+            <div class="ch-side-title">Your chavruta will…</div>
+            <ul>
+              <li>Answer slowly, aiming for clarity rather than winning.</li>
+              <li>Point to sources you can open yourself on Sefaria.</li>
+              <li>Offer one small practice you can carry into the week.</li>
+              <li>Keep the tone gentle, honest, and grounded.</li>
+            </ul>
+          </aside>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- SESSIONS AS THREE CARDS -->
-    <section id="sessions" class="home-section chavruta-sessions">
-      <h2 class="section-heading">
-        Sessions · <span lang="he">מַסְלוּלֵי לִמּוּד</span>
-      </h2>
-      <p class="section-subtitle">
-        Choose a standing chavruta path. Each one will eventually link to guided studies, PDFs,
-        app pages, or Sefaria sheets.
-      </p>
+      <!-- SESSIONS -->
+      <section id="sessions" class="home-section ch-sessions">
+        <h2 class="section-heading">
+          Sessions · <span lang="he">מַסְלוּלֵי לִמּוּד</span>
+        </h2>
+        <p class="section-subtitle">
+          Choose a standing chavruta path. Each one can grow into guided study flows, PDFs, or Sefaria sheets.
+        </p>
 
-      <div class="card-grid">
-        <!-- DAILY CHAVRUTA -->
-        <article class="home-card">
-          <h3>Daily Chavruta</h3>
-          <p>
-            A small, steady table: one text, one question, and one action for the day.
-          </p>
-          <a href="/chavruta/daily/" class="card-link">Open daily table →</a>
-        </article>
+        <div class="card-grid">
+          <article class="home-card">
+            <h3>Daily Chavruta</h3>
+            <p>One text, one question, one action — a steady daily practice.</p>
+            <a href="/chavruta/daily/" class="card-link">Open daily table →</a>
+          </article>
 
-        <!-- SLOW SERIES -->
-        <article class="home-card">
-          <h3>Slow Series</h3>
-          <p>
-            Multi-week journeys through a core topic: Shabbat, prayer, middot,
-            or the Seven Laws.
-          </p>
-          <a href="/chavruta/slow-series/" class="card-link">View slow journeys →</a>
-        </article>
+          <article class="home-card">
+            <h3>Slow Series</h3>
+            <p>Multi-week journeys: Shabbat, prayer, middot, or the Seven Laws.</p>
+            <a href="/chavruta/slow-series/" class="card-link">View slow journeys →</a>
+          </article>
 
-        <!-- OPEN NOTES -->
-        <article class="home-card">
-          <h3>Open Notes</h3>
-          <p>
-            Rough notes, questions, and marginalia from past conversations.
-            Less polished, more laboratory.
-          </p>
-          <a href="/library/open-notes/" class="card-link">Browse open notes →</a>
-        </article>
-      </div>
-    </section>
+          <article class="home-card">
+            <h3>Open Notes</h3>
+            <p>Rough notes, questions, and marginalia — less polished, more laboratory.</p>
+            <a href="/library/open-notes/" class="card-link">Browse notes →</a>
+          </article>
+        </div>
+      </section>
 
-    <!-- GENTLE CLOSING -->
-    <section class="home-section">
-      <h2 class="section-heading">
-        Bring one question, not all of them.
-      </h2>
-      <p class="section-subtitle">
-        You can always come back to the table. One verse, one dilemma, one small corner of the heart
-        is enough for today.
-      </p>
-    </section>
+      <!-- Closing -->
+      <section class="home-section">
+        <h2 class="section-heading">Return often.</h2>
+        <p class="section-subtitle">
+          You do not have to bring everything at once. One verse, one dilemma, one quiet step is enough.
+        </p>
+      </section>
+    </div>
   </main>
 
   <footer class="footer">
-    <p class="footer-meta">
-      &copy; 2026 LuminaNexus · Chavruta.
-    </p>
+    <p class="footer-meta">&copy; 2026 LuminaNexus · Chavruta.</p>
   </footer>
+
+  <script>
+    const form = document.getElementById("chForm");
+    const textarea = document.getElementById("chavruta-question");
+    const askBtn = document.getElementById("askBtn");
+    const statusEl = document.getElementById("status");
+
+    function showStatus(msg) {
+      statusEl.style.display = "block";
+      statusEl.textContent = msg;
+    }
+
+    function pickAnswer(payload) {
+      if (!payload) return "";
+      return (
+        payload.answer ||
+        payload.reply ||
+        payload.content ||
+        payload.message ||
+        payload.text ||
+        payload.choices?.[0]?.message?.content ||
+        ""
+      );
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const question = (textarea.value || "").trim();
+      if (question.length < 3) {
+        showStatus("Please write a fuller question.");
+        return;
+      }
+
+      askBtn.disabled = true;
+      const old = askBtn.textContent;
+      askBtn.textContent = "Thinking…";
+      showStatus("Chavruta is listening…");
+
+      try {
+        const r = await fetch("/.netlify/functions/chavruta-gpt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: [{ role: "user", content: question }]
+          }),
+        });
+
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) {
+          const detail = data?.error || data?.detail || JSON.stringify(data) || "Request failed";
+          throw new Error(detail);
+        }
+
+        const answer = pickAnswer(data);
+        if (!answer) throw new Error("No answer returned.");
+
+        sessionStorage.setItem("chavruta_last_question", question);
+        sessionStorage.setItem("chavruta_last_answer", answer);
+
+        // If you already have this page, it will show the stored answer.
+        // If not, tell me and I’ll give you a matching answer.html file.
+        location.href = "/chavruta/answer.html?q=" + encodeURIComponent(question);
+
+      } catch (err) {
+        showStatus("Error: " + (err?.message || err));
+      } finally {
+        askBtn.disabled = false;
+        askBtn.textContent = old;
+      }
+    });
+  </script>
 </body>
 </html>
