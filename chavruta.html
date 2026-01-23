@@ -31,7 +31,7 @@
   </header>
 
   <main class="container">
-    <!-- HERO -->
+    <!-- HERO (unchanged) -->
     <section class="hero-shell hero-shell--page hero-shell--chavruta" aria-labelledby="chavruta-heading">
       <div class="hero-overlay">
         <div class="hero-grid">
@@ -64,9 +64,9 @@
     </section>
 
     <!-- CHAT CARD: ASK A QUESTION -->
-    <section id="ask" class="home-section chavruta-section chavruta-chat">
+    <section id="ask" class="home-section">
       <div class="card-grid">
-        <article class="home-card home-card--chat">
+        <article class="home-card">
           <h2 class="section-heading">
             Ask a question · <span lang="he">שְׁאֵלָה בְּחַבְרוּתָא</span>
           </h2>
@@ -79,18 +79,21 @@
             <label for="chavruta-question" class="chavruta-label">
               Your question
             </label>
+
+            <textarea
+              id="chavruta-question"
+              name="question"
+              rows="4"
+              class="chavruta-input"
+              placeholder="For example: What does Rashi say on Bereshit 1:1?&#10;Or: How do I balance kavod and anavah at work?"
+            ></textarea>
+
             <div class="chavruta-input-row">
-              <input
-                id="chavruta-question"
-                name="question"
-                type="text"
-                class="chavruta-input"
-                placeholder="For example: What does Rashi say on Bereshit 1:1?"
-              />
               <button type="submit" class="btn btn-primary chavruta-submit">
                 Ask →
               </button>
             </div>
+
             <p class="chavruta-hints">
               Hints: “Explain Shema Yisrael (Devarim 6:4)”, “Kavod vs Anavah”,
               “Tehillim 27:1 with classic mefarshim”.
@@ -101,7 +104,7 @@
     </section>
 
     <!-- SESSIONS AS THREE CARDS -->
-    <section id="sessions" class="home-section chavruta-section chavruta-paths">
+    <section id="sessions" class="home-section">
       <h2 class="section-heading">
         Sessions · <span lang="he">מַסְלוּלֵי לִמּוּד</span>
       </h2>
@@ -141,7 +144,7 @@
     </section>
 
     <!-- GENTLE CLOSING -->
-    <section class="home-section chavruta-section chavruta-closing">
+    <section class="home-section">
       <h2 class="section-heading">
         Bring one question, not all of them.
       </h2>
