@@ -6,7 +6,264 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     name="description"
+    content="Cha<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chavruta — LuminaNexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
     content="Chavruta is the study trunk of LuminaNexus — slow questions, honest learning, and guided journeys for Shabbat, prayer, middot, and the Seven Laws."
+  />
+  <link rel="stylesheet" href="/assets/css/global.css" />
+
+  <!-- Chavruta-specific polish -->
+  <style>
+    /* Keep everything scoped so we don't affect other pages */
+    .chavruta-pane {
+      max-width: 760px;
+      margin: 0 auto;
+      margin-top: 2rem;
+      margin-bottom: 2.5rem;
+      padding: 2rem 2.25rem;
+      border-radius: 24px;
+      background: radial-gradient(circle at top left, rgba(255,255,255,0.05), transparent 55%),
+                  rgba(4, 10, 26, 0.94);
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(255,255,255,0.02);
+    }
+
+    .chavruta-pane h2.section-heading {
+      margin-bottom: 0.35rem;
+    }
+
+    .chavruta-pane .section-subtitle {
+      margin-bottom: 1.5rem;
+      max-width: 40rem;
+    }
+
+    .chavruta-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .chavruta-label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .chavruta-textarea {
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+      padding: 0.85rem 1rem;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(3, 7, 20, 0.98);
+      color: #f7f7ff;
+      font: inherit;
+      line-height: 1.5;
+      box-sizing: border-box;
+    }
+
+    .chavruta-textarea::placeholder {
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    .chavruta-input-row {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .chavruta-hints {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      margin-top: 0.25rem;
+    }
+
+    /* Sessions cards clean-up */
+    .chavruta-sessions .card-grid {
+      margin-top: 1.5rem;
+    }
+
+    .chavruta-sessions .home-card {
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .chavruta-sessions .home-card p {
+      margin-bottom: 0.75rem;
+    }
+
+    @media (max-width: 768px) {
+      .chavruta-pane {
+        margin-top: 1.5rem;
+        margin-bottom: 2rem;
+        padding: 1.5rem 1.25rem;
+        border-radius: 18px;
+      }
+      .chavruta-input-row {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body class="ln-dark">
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="/" class="brand" aria-label="LuminaNexus home">
+        <span class="brand-title">LuminaNexus</span>
+        <span class="brand-subtitle">Sanctuary · Study · Build</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="/about.html">About</a>
+        <a href="/chavruta.html" aria-current="page">Chavruta</a>
+        <a href="/library/">Library</a>
+        <a href="/map.html">Map</a>
+        <a href="/seal.html">Seal</a>
+        <a href="/donate/index.html">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO (unchanged) -->
+    <section class="hero-shell hero-shell--page hero-shell--chavruta" aria-labelledby="chavruta-heading">
+      <div class="hero-overlay">
+        <div class="hero-grid">
+          <div class="stack-lg">
+            <div class="text-pill">
+              CHAVRUTA · <span lang="he">חַבְרוּתָא</span>
+            </div>
+
+            <h1 id="chavruta-heading" class="hero-heading">
+              Study in good company.
+            </h1>
+
+            <p class="hero-subtitle">
+              This is the study trunk of LuminaNexus. Here the pace is slow, the questions are honest,
+              and the goal is not hot takes but clarified life.
+            </p>
+
+            <p class="hero-subtitle hero-subtitle--hebrew" lang="he">
+              כָּאן לוֹמְדִים לֹא מַה שֶׁחוֹשְׁבִים שֶׁצָּרִיךְ לַעֲנוֹת, אֶלָּא מַה שֶׁהַלֵּב רוֹצֶה לְבָרֵר.
+            </p>
+
+            <div class="hero-actions">
+              <a href="/" class="btn btn-primary">← Back to the Sanctuary</a>
+              <a href="#ask" class="btn btn-secondary">Ask a question</a>
+              <a href="#sessions" class="btn btn-ghost">View study paths</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHAT PANEL -->
+    <section id="ask" class="home-section">
+      <div class="chavruta-pane">
+        <h2 class="section-heading">
+          Ask a question · <span lang="he">שְׁאֵלָה בְּחַבְרוּתָא</span>
+        </h2>
+        <p class="section-subtitle">
+          Ask about a verse, a sugya, a middah, or a life question. ChavrutaGPT will answer slowly,
+          with sources you can look up on Sefaria.
+        </p>
+
+        <form class="chavruta-form">
+          <label for="chavruta-question" class="chavruta-label">
+            Your question
+          </label>
+
+          <textarea
+            id="chavruta-question"
+            name="question"
+            class="chavruta-textarea"
+            placeholder="For example: What does Rashi say on Bereshit 1:1?&#10;Or: How do I balance kavod and anavah at work?"
+          ></textarea>
+
+          <div class="chavruta-input-row">
+            <button type="submit" class="btn btn-primary chavruta-submit">
+              Ask →
+            </button>
+          </div>
+
+          <p class="chavruta-hints">
+            Hints: “Explain Shema Yisrael (Devarim 6:4)”, “Kavod vs Anavah”,
+            “Tehillim 27:1 with classic mefarshim”.
+          </p>
+        </form>
+      </div>
+    </section>
+
+    <!-- SESSIONS AS THREE CARDS -->
+    <section id="sessions" class="home-section chavruta-sessions">
+      <h2 class="section-heading">
+        Sessions · <span lang="he">מַסְלוּלֵי לִמּוּד</span>
+      </h2>
+      <p class="section-subtitle">
+        These are example placeholders. Each will later link to actual study flows, PDFs, app pages,
+        or Sefaria sheets.
+      </p>
+
+      <div class="card-grid">
+        <!-- DAILY CHAVRUTA -->
+        <article class="home-card">
+          <h3>Daily Chavruta</h3>
+          <p>
+            Short source sheet for daily practice — a text, a question, and a small action.
+          </p>
+          <a href="/chavruta/daily/" class="card-link">Open sheet →</a>
+        </article>
+
+        <!-- SLOW SERIES -->
+        <article class="home-card">
+          <h3>Slow Series</h3>
+          <p>
+            Multi-week journey through a core topic: Shabbat, prayer, middot, or the Seven Laws.
+          </p>
+          <a href="/chavruta/slow-series/" class="card-link">View series →</a>
+        </article>
+
+        <!-- OPEN NOTES -->
+        <article class="home-card">
+          <h3>Open Notes</h3>
+          <p>
+            Rough notes, questions, and marginalia. Less polished, more laboratory.
+          </p>
+          <a href="/library/open-notes/" class="card-link">Browse notes →</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- GENTLE CLOSING -->
+    <section class="home-section">
+      <h2 class="section-heading">
+        Bring one question, not all of them.
+      </h2>
+      <p class="section-subtitle">
+        You do not have to unload your whole life at once. One verse, one dilemma,
+        one small corner of the heart is enough for today.
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer-meta">
+      &copy; 2026 LuminaNexus · Chavruta.
+    </p>
+  </footer>
+</body>
+</html>
+vruta is the study trunk of LuminaNexus — slow questions, honest learning, and guided journeys for Shabbat, prayer, middot, and the Seven Laws."
   />
   <link rel="stylesheet" href="/assets/css/global.css" />
 </head>
