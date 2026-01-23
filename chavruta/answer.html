@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chavruta — Answer · LuminaNexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Chavruta — a calm answer with sources and one small practice."
+  />
+  <link rel="stylesheet" href="/assets/css/global.css" />
+
+  <style>
+    .ans-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-bottom: 3rem;
+    }
+
+    .ans-card {
+      margin-top: 2.25rem;
+      padding: 2rem 2.25rem;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.07), transparent 55%),
+        rgba(4, 10, 26, 0.96);
+      box-shadow:
+        0 22px 52px rgba(0, 0, 0, 0.78),
+        0 0 0 1px rgba(255,255,255,0.03);
+      box-sizing: border-box;
+    }
+
+    .ans-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.07);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.9;
+      margin-bottom: 0.9rem;
+    }
+
+    .ans-title {
+      margin: 0;
+      font-size: clamp(1.6rem, 3vw, 2.25rem);
+      line-height: 1.15;
+    }
+
+    .ans-sub {
+      margin: 0.75rem 0 1.5rem 0;
+      opacity: 0.85;
+      line-height: 1.6;
+      max-width: 60rem;
+    }
+
+    .ans-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.9fr);
+      gap: 1.75rem;
+      align-items: start;
+    }
+
+    .ans-block {
+      border-radius: 18px;
+      padding: 1.1rem 1.15rem;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(3, 7, 20, 0.6);
+    }
+
+    .ans-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 0.6rem;
+    }
+
+    .ans-question {
+      margin: 0;
+      line-height: 1.6;
+      opacity: 0.95;
+    }
+
+    .ans-answer {
+      margin: 0;
+      white-space: pre-wrap;
+      line-height: 1.75;
+      opacity: 0.95;
+      font-size: 1rem;
+    }
+
+    .ans-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+    }
+
+    .ans-note {
+      margin-top: 0.9rem;
+      font-size: 0.9rem;
+      opacity: 0.75;
+      line-height: 1.6;
+    }
+
+    .ans-side ul {
+      margin: 0.35rem 0 0 1.1rem;
+      padding: 0;
+      line-height: 1.7;
+      opacity: 0.88;
+      font-size: 0.95rem;
+    }
+
+    .ans-side li { margin-bottom: 0.35rem; }
+
+    .ans-status {
+      margin-top: 0.9rem;
+      font-size: 0.9rem;
+      opacity: 0.85;
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .ans-card { padding: 1.5rem 1.25rem; border-radius: 22px; }
+      .ans-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 420px) {
+      .ans-card { padding: 1.2rem 1rem; border-radius: 18px; }
+    }
+  </style>
+</head>
+
+<body class="ln-dark">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="/" class="brand" aria-label="LuminaNexus home">
+        <span class="brand-title">LuminaNexus</span>
+        <span class="brand-subtitle">Sanctuary · Study · Build</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="/about.html">About</a>
+        <a href="/chavruta.html" aria-current="page">Chavruta</a>
+        <a href="/library/">Library</a>
+        <a href="/map.html">Map</a>
+        <a href="/seal.html">Seal</a>
+        <a href="/donate/index.html">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="ans-wrap">
+      <section class="ans-card" aria-labelledby="ansHeading">
+        <div class="ans-kicker">CHAVRUTA · <span lang="he">חַבְרוּתָא</span></div>
+        <h1 id="ansHeading" class="ans-title">Answer</h1>
+        <p class="ans-sub">
+          A slow response, with sources you can look up, and one small practice to carry into the week.
+        </p>
+
+        <div class="ans-grid">
+          <div>
+            <div class="ans-block">
+              <div class="ans-label">Your question</div>
+              <p class="ans-question" id="qText"></p>
+            </div>
+
+            <div class="ans-block" style="margin-top: 1rem;">
+              <div class="ans-label">ChavrutaGPT</div>
+              <p class="ans-answer" id="aText"></p>
+              <div class="ans-status" id="status"></div>
+            </div>
+
+            <div class="ans-actions">
+              <a class="btn btn-primary" href="/chavruta.html">Ask another →</a>
+              <button class="btn btn-secondary" id="copyBtn" type="button">Copy answer</button>
+              <button class="btn btn-ghost" id="printBtn" type="button">Print</button>
+            </div>
+
+            <p class="ans-note" id="missingNote" style="display:none;">
+              The answer isn’t available in this tab yet. This page reads the answer from your browser’s
+              session storage. Please go back, ask again, and you’ll land here with the response.
+            </p>
+          </div>
+
+          <aside class="ans-side">
+            <div class="ans-block">
+              <div class="ans-label">Next gentle steps</div>
+              <ul>
+                <li>Open the sources listed and read them inside (not just about them).</li>
+                <li>Write one sentence: “What changed in me after reading?”</li>
+                <li>Choose one small action for seven days.</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer-meta">&copy; 2026 LuminaNexus · Chavruta.</p>
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const q = params.get("q") || "";
+
+    const qText = document.getElementById("qText");
+    const aText = document.getElementById("aText");
+    const status = document.getElementById("status");
+    const missingNote = document.getElementById("missingNote");
+
+    qText.textContent = q || "—";
+
+    const answer =
+      sessionStorage.getItem("chavruta_last_answer") ||
+      sessionStorage.getItem("chavruta_answer") ||
+      "";
+
+    if (answer && answer.trim().length > 0) {
+      aText.textContent = answer;
+      missingNote.style.display = "none";
+    } else {
+      aText.textContent = "—";
+      missingNote.style.display = "block";
+    }
+
+    function flash(msg) {
+      status.style.display = "block";
+      status.textContent = msg;
+      setTimeout(() => { status.style.display = "none"; }, 1200);
+    }
+
+    document.getElementById("copyBtn").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(aText.textContent || "");
+        flash("Copied.");
+      } catch (e) {
+        flash("Copy failed.");
+      }
+    });
+
+    document.getElementById("printBtn").addEventListener("click", () => window.print());
+  </script>
+</body>
+</html>
