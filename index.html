@@ -14,16 +14,21 @@
   <!-- Top bar -->
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="brand">
+      <a href="/" class="brand" aria-label="LuminaNexus home">
         <span class="brand-title">LuminaNexus</span>
         <span class="brand-subtitle">Sanctuary · Study · Build</span>
-      </div>
+      </a>
 
       <nav class="nav-links" aria-label="Main navigation">
+        <!-- SANCTUARY -->
         <a href="/about.html">About</a>
+
+        <!-- STUDY -->
         <a href="/chavruta.html">Chavruta</a>
         <a href="/library.html">Library</a>
         <a href="/map.html">Map</a>
+
+        <!-- BUILD / COMMITMENTS -->
         <a href="/seal.html">Seal</a>
         <a href="/donate/index.html">Support</a>
       </nav>
@@ -31,8 +36,8 @@
   </header>
 
   <main class="container">
-    <!-- HERO -->
-    <section class="hero-shell hero-shell--home">
+    <!-- HERO: SANCTUARY ENTRY -->
+    <section class="hero-shell hero-shell--home" aria-labelledby="hero-heading">
       <div class="hero-overlay">
         <div class="hero-grid">
           <div class="stack-lg">
@@ -40,7 +45,7 @@
               LUMINA NEXUS · <span lang="he">לומינאנקסוס</span>
             </div>
 
-            <h1 class="hero-heading">
+            <h1 id="hero-heading" class="hero-heading">
               Sanctuary in the digital night.
             </h1>
 
@@ -50,6 +55,7 @@
             </p>
 
             <div class="hero-actions">
+              <!-- Primary doorway is Chavruta (Sanctuary trunk) -->
               <a href="/chavruta.html" class="btn btn-primary">
                 Enter the Sanctuary
               </a>
@@ -62,8 +68,59 @@
       </div>
     </section>
 
-    <!-- PATHS OVERVIEW -->
-    <section class="home-section home-paths">
+    <!-- HIGH-LEVEL STRUCTURE: SANCTUARY · STUDY · BUILD -->
+    <section class="home-section home-structure">
+      <h2 class="section-heading">
+        One Nexus, three trunks.
+      </h2>
+      <p class="section-subtitle">
+        LuminaNexus grows along three intertwined paths:
+        <strong>Sanctuary</strong> for the heart,
+        <strong>Study</strong> for the mind,
+        and <strong>Build</strong> for the hands.
+      </p>
+
+      <div class="card-grid">
+        <article class="home-card home-card--sanctuary">
+          <h3>Sanctuary · מִקְדָּשׁ קָטָן</h3>
+          <p>
+            A quiet, lit place to ask questions, sit with Torah, and walk gently
+            through practice and prayer.
+          </p>
+          <ul class="card-list">
+            <li><a href="/chavruta.html" class="card-link">Chavruta trunk →</a></li>
+            <li><a href="/chavruta.html#slow-series" class="card-link">Slow Series (Shabbat, prayer, middot) →</a></li>
+          </ul>
+        </article>
+
+        <article class="home-card home-card--study">
+          <h3>Study · לִמּוּד</h3>
+          <p>
+            Sources, journeys, and notes from the Celestial Library of the 231 Gates
+            and its companion projects.
+          </p>
+          <ul class="card-list">
+            <li><a href="/library.html" class="card-link">Library of 231 Gates →</a></li>
+            <li><a href="/map.html" class="card-link">Map of the ecosystem →</a></li>
+          </ul>
+        </article>
+
+        <article class="home-card home-card--build">
+          <h3>Build · מַעֲשֵׂה</h3>
+          <p>
+            Labs and tools for sacred technology: IvritCode, Quantum Etz Chaim,
+            and other experiments in holy code.
+          </p>
+          <ul class="card-list">
+            <li><a href="/labs-of-light/index.html" class="card-link">Labs of Light →</a></li>
+            <li><a href="/seal.html" class="card-link">Read the Seal (commitments) →</a></li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- PATHS OVERVIEW: INDIVIDUAL ENTRY POINTS -->
+    <section class="home-section home-paths" aria-label="Paths through the Nexus">
       <h2 class="section-heading">
         Paths through the Nexus
       </h2>
@@ -72,6 +129,7 @@
       </p>
 
       <div class="card-grid">
+        <!-- STUDY / SANCTUARY -->
         <article class="home-card">
           <h3>Chavruta · חַבְרוּתָא</h3>
           <p>
@@ -81,6 +139,7 @@
           <a href="/chavruta.html" class="card-link">Open Chavruta →</a>
         </article>
 
+        <!-- STUDY -->
         <article class="home-card">
           <h3>Library · הַסִּפְרִיָּה</h3>
           <p>
@@ -90,6 +149,7 @@
           <a href="/library.html" class="card-link">Visit the Library →</a>
         </article>
 
+        <!-- STUDY -->
         <article class="home-card">
           <h3>Map · מַפָּה</h3>
           <p>
@@ -99,6 +159,7 @@
           <a href="/map.html" class="card-link">Explore the Map →</a>
         </article>
 
+        <!-- BUILD / COMMITMENTS -->
         <article class="home-card">
           <h3>Seal · חוֹתָם</h3>
           <p>
@@ -108,6 +169,7 @@
           <a href="/seal.html" class="card-link">Read the Seal →</a>
         </article>
 
+        <!-- BUILD -->
         <article class="home-card">
           <h3>Labs of Light</h3>
           <p>
@@ -117,6 +179,7 @@
           <a href="/labs-of-light/index.html" class="card-link">Enter the Labs →</a>
         </article>
 
+        <!-- SUPPORT -->
         <article class="home-card">
           <h3>Support &amp; Donation</h3>
           <p>
