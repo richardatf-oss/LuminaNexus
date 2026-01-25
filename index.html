@@ -8,8 +8,6 @@
       name="description"
       content="LuminaNexus is a quiet place for Torah, learning, and luminous tools. Sanctuary for the heart, study for the mind, and build for the hands."
     />
-
-    <!-- Shared styles -->
     <link rel="stylesheet" href="/assets/css/main.css" />
   </head>
   <body class="page home-page">
@@ -55,7 +53,7 @@
     </header>
 
     <main>
-      <!-- FULL HERO IMAGE -->
+      <!-- FULL-SCREEN HERO IMAGE -->
       <section class="hero-full">
         <div class="hero-full-inner">
           <img
@@ -63,16 +61,17 @@
             alt="A luminous sanctuary at night with candles, books, and an open space for learning — LuminaNexus."
             class="hero-full-image"
           />
+
           <div class="hero-full-overlay">
             <div class="hero-full-tagline">
-              LUMINA NEXUS · Sanctuary · Study · Build
+              LUMINA NEXUS · SANCTUARY · STUDY · BUILD
             </div>
             <div class="hero-full-buttons">
-              <!-- This replaces 'Enter the Sanctuary' -->
+              <!-- replaces old 'Enter the Sanctuary' hero CTA -->
               <a href="/chavruta" class="btn-primary hero-full-btn">
-                Begin the Journey
+                Begin the journey
               </a>
-              <!-- This replaces 'What is LuminaNexus' -->
+              <!-- replaces 'What is LuminaNexus' -->
               <a href="#trunks" class="btn-ghost hero-full-btn hero-full-btn-secondary">
                 Learn more
               </a>
@@ -81,7 +80,7 @@
         </div>
       </section>
 
-      <!-- TRUNKS SECTION (OVERLAYED UP INTO HERO) -->
+      <!-- THREE TRUNKS, OVERLAID UP INTO HERO -->
       <section id="trunks" class="trunks-shell trunks-overlay">
         <header class="trunks-header">
           <h2>One Nexus, three trunks.</h2>
@@ -188,13 +187,12 @@
       </div>
     </footer>
 
-    <!-- Small nav toggle script -->
+    <!-- Nav toggle -->
     <script>
       (function () {
         const toggle = document.querySelector(".nav-toggle");
         const mobileNav = document.getElementById("mobileNav");
         if (!toggle || !mobileNav) return;
-
         toggle.addEventListener("click", () => {
           mobileNav.classList.toggle("is-open");
         });
