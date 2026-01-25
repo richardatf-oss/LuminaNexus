@@ -760,3 +760,115 @@ footer {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+/* === FULL HERO IMAGE LAYOUT FOR HOME PAGE === */
+
+.hero-full {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 64px); /* header height approx; adjust if needed */
+  background: #020617;
+  overflow: hidden;
+}
+
+.hero-full-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-full-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Darken bottom so buttons read clearly */
+.hero-full-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 3.25rem 1.5rem 3.5rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(2, 6, 23, 0.1) 0%,
+    rgba(2, 6, 23, 0.3) 40%,
+    rgba(2, 6, 23, 0.7) 70%,
+    rgba(2, 6, 23, 0.95) 100%
+  );
+}
+
+.hero-full-tagline {
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(248, 250, 252, 0.85);
+  margin-bottom: 0.9rem;
+  text-align: center;
+}
+
+.hero-full-buttons {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.hero-full-btn {
+  padding: 0.8rem 1.5rem;
+  font-size: 0.92rem;
+}
+
+.hero-full-btn-secondary {
+  border-radius: 999px;
+}
+
+/* Overlay trunks up into the hero */
+
+.trunks-shell.trunks-overlay {
+  position: relative;
+  z-index: 2;
+  max-width: var(--max-width);
+  margin: -3.5rem auto 2.5rem;
+  padding: 0 1.5rem 2.5rem;
+}
+
+/* tighten header spacing slightly to feel like a single composition */
+.trunks-overlay .trunks-header {
+  margin-bottom: 1.1rem;
+}
+
+/* Make sure nav stays above the hero image */
+.nav-shell {
+  position: relative;
+  z-index: 3;
+}
+
+/* Responsive tweaks */
+
+@media (max-width: 768px) {
+  .hero-full {
+    min-height: 80vh;
+  }
+
+  .hero-full-overlay {
+    padding: 2.5rem 1.1rem 2.6rem;
+  }
+
+  .hero-full-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-full-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .trunks-shell.trunks-overlay {
+    margin-top: -2rem;
+  }
+}
