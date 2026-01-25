@@ -220,10 +220,46 @@
 
     qText.textContent = q || "—";
 
-    const answer =
+    function normalizeStoredAnswer(raw) {
+      if (!raw) return "";
+
+      // If it’s not obviously JSON, just use it
+      const trimmed = raw.trim();
+      if (!trimmed.startsWith("{") && !trimmed.startsWith("[")) {
+        return trimmed;
+      }
+
+      try {
+        const obj = JSON.parse(trimmed);
+        if (!obj || typeof obj !== "object") return trimmed;
+
+        if (typeof obj.answer === "string") return obj.answer;
+        if (typeof obj.reply === "string") return obj.reply;
+        if (typeof obj.content === "string") return obj.content;
+        if (typeof obj.text === "string") return obj.text;
+        if (typeof obj.message === "string") return obj.message;
+
+        const c1 = obj?.choices?.[0]?.message?.content;
+        if (typeof c1 === "string") return c1;
+
+        const c2 = obj?.choices?.[0]?.text;
+        if (typeof c2 === "string") return c2;
+
+        const out = obj?.output?.[0]?.content?.[0]?.text;
+        if (typeof out === "string") return out;
+
+        return JSON.stringify(obj, null, 2);
+      } catch {
+        return trimmed;
+      }
+    }
+
+    let raw =
       sessionStorage.getItem("chavruta_last_answer") ||
       sessionStorage.getItem("chavruta_answer") ||
       "";
+
+    let answer = normalizeStoredAnswer(raw);
 
     if (answer && answer.trim().length > 0) {
       aText.textContent = answer;
