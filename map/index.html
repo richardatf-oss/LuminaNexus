@@ -1,216 +1,311 @@
-<!doctype html>
+<!-- map.html or map/index.html -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Map — LuminaNexus</title>
-  <meta name="description" content="A navigational map of LuminaNexus: trunk, roots, and branches." />
-  <meta name="theme-color" content="#0b0f14" />
+  <meta charset="UTF-8" />
+  <title>Sanctuary Map — LuminaNexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Sanctuary map for LuminaNexus — choose your gate into chavruta, the Library of 231 Gates, Tree of LuminaNexus, IvritCode, Labs of Light, and Support."
+  />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <style>
+    .page-shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+    }
 
-  <link rel="stylesheet" href="/css/site.css" />
+    .hero-card {
+      border-radius: 1.75rem;
+      padding: 2.25rem 2.25rem 2rem;
+      background: radial-gradient(circle at top left, rgba(255, 194, 120, 0.18), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(93, 147, 255, 0.12), transparent 55%),
+                  rgba(5, 16, 40, 0.96);
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(255, 255, 255, 0.02);
+      margin-bottom: 2.75rem;
+      text-align: left;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: rgba(255, 165, 0, 0.18);
+      color: #ffd799;
+      border: 1px solid rgba(255, 199, 128, 0.35);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 3vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.4rem;
+      color: #ffffff;
+    }
+
+    .hero-subtitle {
+      max-width: 650px;
+      color: rgba(235, 239, 255, 0.8);
+      font-size: 0.98rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-note {
+      font-size: 0.85rem;
+      color: rgba(211, 220, 255, 0.8);
+    }
+
+    .map-grid {
+      margin-top: 0.75rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.2rem;
+    }
+
+    .map-tile {
+      position: relative;
+      border-radius: 1.3rem;
+      padding: 1.2rem 1.2rem 1.05rem;
+      background:
+        radial-gradient(circle at top left, rgba(255, 208, 149, 0.22), transparent 60%),
+        rgba(4, 13, 34, 0.96);
+      border: 1px solid rgba(118, 143, 205, 0.55);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75);
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .map-tile-header {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .map-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: radial-gradient(circle at 30% 10%, #ffe6bf, #ffaf66);
+      color: #201010;
+      box-shadow: 0 0 0 2px rgba(14, 9, 4, 0.85);
+    }
+
+    .map-tile-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .map-tile-subtitle {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(201, 212, 255, 0.86);
+    }
+
+    .map-tile p {
+      font-size: 0.86rem;
+      line-height: 1.6;
+      color: rgba(220, 228, 255, 0.9);
+      margin: 0.2rem 0 0.35rem;
+    }
+
+    .map-tile a {
+      margin-top: 0.35rem;
+      align-self: flex-start;
+      font-size: 0.84rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: #ffd7a0;
+    }
+
+    .map-tile a:hover {
+      text-decoration: underline;
+    }
+
+    .map-muted {
+      opacity: 0.88;
+    }
+
+    @media (max-width: 960px) {
+      .map-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page-shell {
+        padding-top: 3rem;
+      }
+
+      .hero-card {
+        padding: 1.8rem 1.4rem 1.6rem;
+        border-radius: 1.25rem;
+      }
+
+      .map-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
 </head>
-
-<body>
-  <!-- Topbar -->
-  <header class="topbar" role="banner">
-    <div class="wrap topbar-row">
-      <a class="brand" href="/" aria-label="LuminaNexus home">
-        <span class="brand-mark" aria-hidden="true">✶</span>
-        <span class="brand-text">
-          <span class="brand-title">LuminaNexus</span>
-          <span class="brand-subtitle">Sanctuary · Study · Build</span>
-        </span>
+<body class="ln-body">
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="/" class="site-logo">
+        <span class="site-logo-title">LUMINA NEXUS</span>
+        <span class="site-logo-subtitle">Sanctuary · Study · Build</span>
       </a>
-
-      <nav class="topbar-actions" aria-label="Top navigation">
-        <a class="nav-link" href="/about/">About</a>
-        <a class="nav-link" href="/chavruta/">Chavruta</a>
-        <a class="nav-link" href="/library/">Library</a>
-        <a class="nav-link" href="/map/">Map</a>
-        <a class="nav-link" href="/seal/">Seal</a>
-        <a class="nav-link nav-cta" href="/donate/">Support</a>
+      <nav class="site-nav">
+        <a href="/about/">About</a>
+        <a href="/chavruta/">Chavruta</a>
+        <a href="/library/">Library</a>
+        <a href="/map/" class="is-active">Map</a>
+        <a href="/seal/">Seal</a>
+        <a href="/support/">Support</a>
       </nav>
     </div>
   </header>
 
-  <main class="main" role="main">
-    <section class="section">
-      <div class="wrap">
-        <p class="kicker">MAP · מַפָּה</p>
-        <h1 class="hero-title">The Tree of LuminaNexus</h1>
-        <p class="hero-lead">
-          The trunk orients. The branches deepen. The roots stabilize.
-          Use this map to move through domains without losing clarity.
+  <main>
+    <div class="page-shell">
+      <!-- Hero -->
+      <section class="hero-card">
+        <div class="hero-pill">Sanctuary Map · מפת המקדש הקטן</div>
+        <h1 class="hero-title">Choose Your Gate</h1>
+        <p class="hero-subtitle">
+          You are already inside. Each tile below opens a different kind of work: heart,
+          mind, or hands. There is no wrong place to begin. Start where you can actually
+          move, and return as often as you like.
+        </p>
+        <p class="hero-note">
+          If you ever feel lost, step back here, choose a gentler gate, or return to the
+          Foundations shelf in the Library.
         </p>
 
-        <div class="panel-quote hebrew" dir="rtl" lang="he" style="margin-top: 14px;">
-          הַגֶּזַע מְיַשֵּׁר דֶּרֶךְ · הַשְּׂעִיפִים מַעֲמִיקִים · הַשֹּׁרָשִׁים מְיַצְּבִים
-        </div>
-
-        <div class="hero-actions" style="margin-top: 18px;">
-          <a class="btn primary" href="/chavruta/">Enter Chavruta</a>
-          <a class="btn" href="/library/">Open the Library</a>
-          <a class="btn" href="/">Return Home</a>
-        </div>
-
-        <hr style="margin: 22px 0;" />
-
-        <h2 class="section-title">Trunk</h2>
-        <p class="section-lead">
-          Sanctuary pages that keep the unified voice: orientation, values, and thresholds.
-        </p>
-
-        <div class="cards">
-          <article class="card">
-            <h3>Home (Sanctuary)</h3>
-            <p>The threshold. Enter quietly and choose a doorway.</p>
-            <a class="card-link" href="/">Open →</a>
+        <div class="map-grid">
+          <!-- Chavruta -->
+          <article class="map-tile">
+            <div class="map-tile-header">
+              <div class="map-icon">✶</div>
+              <div>
+                <div class="map-tile-title">Chavruta</div>
+                <div class="map-tile-subtitle">Gentle source-based learning</div>
+              </div>
+            </div>
+            <p>
+              Sit at the table for guided study with sources, questions, and space to think
+              out loud. Bring your real life; the text will meet you there.
+            </p>
+            <a href="/chavruta/">Sit at the table →</a>
           </article>
 
-          <article class="card">
-            <h3>About</h3>
-            <p>What this place is, what it refuses to become, and how to navigate the Tree.</p>
-            <a class="card-link" href="/about/">Read →</a>
+          <!-- Library of 231 Gates -->
+          <article class="map-tile">
+            <div class="map-tile-header">
+              <div class="map-icon">Λ</div>
+              <div>
+                <div class="map-tile-title">Library of 231 Gates</div>
+                <div class="map-tile-subtitle">Durable pages &amp; paths</div>
+              </div>
+            </div>
+            <p>
+              Structured shelves for the Gates, Foundations, Daily Practice, and long-form
+              studies. This is where pages mature and wait for your return.
+            </p>
+            <a href="/library/">Enter the stacks →</a>
           </article>
 
-          <article class="card">
-            <h3>The Seal</h3>
-            <p>Completion without closure. A gentle ending that does not shut the gates.</p>
-            <a class="card-link" href="/seal/">Enter →</a>
-          </article>
-        </div>
-
-        <hr style="margin: 22px 0;" />
-
-        <h2 class="section-title">Core Pathways</h2>
-        <p class="section-lead">
-          These are the main routes for most visitors: study, texts, and orientation.
-        </p>
-
-        <div class="cards">
-          <article class="card">
-            <h3>Chavruta</h3>
-            <p>Study space, dialogue, notes, and slow clarity.</p>
-            <a class="card-link" href="/chavruta/">Enter →</a>
+          <!-- Tree of LuminaNexus -->
+          <article class="map-tile">
+            <div class="map-tile-header">
+              <div class="map-icon">ע</div>
+              <div>
+                <div class="map-tile-title">Tree of LuminaNexus</div>
+                <div class="map-tile-subtitle">Trunks, branches, and roots</div>
+              </div>
+            </div>
+            <p>
+              The structural map of the whole project: core trunks, side branches, and
+              the hidden roots tying apps, books, and studies together.
+            </p>
+            <a href="/tree/">View the tree →</a>
           </article>
 
-          <article class="card">
-            <h3>Library</h3>
-            <p>Durable pages: texts, notes, and structured learning paths.</p>
-            <a class="card-link" href="/library/">Open →</a>
+          <!-- IvritCode -->
+          <article class="map-tile">
+            <div class="map-tile-header">
+              <div class="map-icon">א</div>
+              <div>
+                <div class="map-tile-title">IvritCode</div>
+                <div class="map-tile-subtitle">Hebrew opcodes &amp; language</div>
+              </div>
+            </div>
+            <p>
+              The experimental console where letters become instructions, and Gates become
+              programs. Notes, demos, and the live IvritCode environment.
+            </p>
+            <a href="https://ivritcode.org/" target="_blank" rel="noopener">Open the console →</a>
           </article>
 
-          <article class="card">
-            <h3>Roadmap</h3>
-            <p>Now / Next / Archive. Transparency without noise.</p>
-            <a class="card-link" href="/roadmap/">View →</a>
-          </article>
-        </div>
-
-        <hr style="margin: 22px 0;" />
-
-        <h2 class="section-title">Branches</h2>
-        <p class="section-lead">
-          Branches are sovereign domains. Each has its own internal logic, and may grow at its own pace.
-          Doorways exist now so the Tree stays navigable.
-        </p>
-
-        <div class="cards">
-          <article class="card">
-            <h3>IvritCode</h3>
-            <p>Hebrew-rooted programming language and computational model.</p>
-            <a class="card-link" href="/ivritcode/">Enter →</a>
+          <!-- Labs of Light -->
+          <article class="map-tile">
+            <div class="map-tile-header">
+              <div class="map-icon">⚗</div>
+              <div>
+                <div class="map-tile-title">Labs of Light</div>
+                <div class="map-tile-subtitle">Prototypes &amp; experiments</div>
+              </div>
+            </div>
+            <p>
+              The workshop side of the sanctuary: prototypes, quantum Etz Chaim diagrams,
+              early tools, and half-built ideas still finding their shape.
+            </p>
+            <a href="/labs/">Enter the lab →</a>
           </article>
 
-          <article class="card">
-            <h3>Quantum Etz Chaim</h3>
-            <p>Structural models bridging Kabbalah and modern physics.</p>
-            <a class="card-link" href="/quantum-etz-chaim/">Enter →</a>
-          </article>
-
-          <article class="card">
-            <h3>Celestial Library (231 Gates)</h3>
-            <p>A constellation of texts and symbolic relationships.</p>
-            <a class="card-link" href="/celestial-library-231/">Enter →</a>
-          </article>
-
-          <article class="card">
-            <h3>Bookshelf</h3>
-            <p>Published and canonical written works.</p>
-            <a class="card-link" href="/bookshelf/">Open →</a>
-          </article>
-
-          <article class="card">
-            <h3>Sacred Art Foundry</h3>
-            <p>Letters, sigils, symbols, and visual theology.</p>
-            <a class="card-link" href="/sacred-art-foundry/">View →</a>
-          </article>
-
-          <article class="card">
-            <h3>Audio & Chants</h3>
-            <p>Pronunciation, chants, and embodied learning through sound.</p>
-            <a class="card-link" href="/audio-chants/">Listen →</a>
-          </article>
-
-          <article class="card">
-            <h3>Noahide Daily</h3>
-            <p>Daily structure, blessings, Shabbat guidance, lived ethics.</p>
-            <a class="card-link" href="/noahide-daily/">Enter →</a>
-          </article>
-
-          <article class="card">
-            <h3>Labs of Light</h3>
-            <p>Experiments and prototypes—useful, not yet canon.</p>
-            <a class="card-link" href="/labs-of-light/">Explore →</a>
+          <!-- Support -->
+          <article class="map-tile map-muted">
+            <div class="map-tile-header">
+              <div class="map-icon">♥</div>
+              <div>
+                <div class="map-tile-title">Support the Work</div>
+                <div class="map-tile-subtitle">Keep the light burning</div>
+              </div>
+            </div>
+            <p>
+              Help keep this sanctuary quiet, open, and freely shared. Small offerings of
+              kavod make it possible for the lamps to stay lit.
+            </p>
+            <a href="/support/">Give kavod →</a>
           </article>
         </div>
-
-        <hr style="margin: 22px 0;" />
-
-        <h2 class="section-title">Canon vs. Lab</h2>
-        <p class="section-lead">
-          One rule protects the Tree from collapsing: drafts remain drafts until they can be carried responsibly.
-        </p>
-
-        <div class="panel-quote">
-          Draft work belongs in Labs. Durable work belongs in the Library / Bookshelf.
-          The trunk stays clear so the sanctuary remains navigable.
-        </div>
-
-        <div class="panel-quote hebrew" dir="rtl" lang="he" style="margin-top: 10px;">
-          טְיוּטָה בַּמַּעֲבָדָה · מַעֲשֶׂה עָמִיד בַּסִּפְרִיָּה · הַגֶּזַע נִשְׁאָר בָּרוּר
-        </div>
-
-        <div class="hero-actions" style="margin-top: 18px;">
-          <a class="btn primary" href="/chavruta/">Enter Chavruta</a>
-          <a class="btn" href="/roadmap/">View Roadmap</a>
-          <a class="btn" href="/">Home</a>
-        </div>
-      </div>
-    </section>
-
-    <footer class="footer" role="contentinfo">
-      <div class="wrap footer-grid">
-        <div>
-          <div class="footer-brand">LuminaNexus</div>
-          <div class="footer-sub">Sanctuary · Study · Build</div>
-        </div>
-
-        <div class="footer-links">
-          <a href="/about/">About</a>
-          <a href="/chavruta/">Chavruta</a>
-          <a href="/library/">Library</a>
-          <a href="/map/">Map</a>
-          <a href="/seal/">Seal</a>
-          <a href="/donate/">Support</a>
-        </div>
-
-        <div class="footer-note">
-          <span>© <span id="year"></span> LuminaNexus</span>
-        </div>
-      </div>
-    </footer>
+      </section>
+    </div>
   </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <p>© <span id="year"></span> LuminaNexus. Sanctuary · Study · Build.</p>
+    </div>
+  </footer>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
