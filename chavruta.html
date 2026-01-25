@@ -153,36 +153,47 @@
             </p>
 
             <div class="chav-session-grid">
-              <article class="chav-session">
-                <h3>Slow Series</h3>
-                <p>
-                  Multi-week, text-centered learning with one core sugya. Expect sources,
-                  questions, and one practice to carry into the week.
-                </p>
-                <p class="chav-session-meta">Best for: deep dives, chavruta notes.</p>
-              </article>
+              <a class="chav-session" href="/chavruta/slow-series/">
+                <div class="chav-session-icon">📖</div>
+                <div class="chav-session-body">
+                  <h3>Slow Series</h3>
+                  <p>
+                    Multi-week, text-centered learning with one core sugya. Expect
+                    sources, questions, and one practice to carry into the week.
+                  </p>
+                  <p class="chav-session-meta">
+                    Best for: deep dives, chavruta notes.
+                  </p>
+                </div>
+              </a>
 
-              <article class="chav-session">
-                <h3>Table Question</h3>
-                <p>
-                  One focused question, one sitting. A clear answer, a few sources, and a
-                  small next step – no rush, no pressure.
-                </p>
-                <p class="chav-session-meta">
-                  Best for: “this is on my heart today.”
-                </p>
-              </article>
+              <a class="chav-session" href="/chavruta/table-question/">
+                <div class="chav-session-icon">🕯️</div>
+                <div class="chav-session-body">
+                  <h3>Table Question</h3>
+                  <p>
+                    One focused question, one sitting. A clear answer, a few sources, and
+                    a small next step – no rush, no pressure.
+                  </p>
+                  <p class="chav-session-meta">
+                    Best for: “this is on my heart today.”
+                  </p>
+                </div>
+              </a>
 
-              <article class="chav-session">
-                <h3>Walking Companion</h3>
-                <p>
-                  Ongoing, lighter touch. Bring the week’s moments; your chavruta helps
-                  you weave them into Torah and practice.
-                </p>
-                <p class="chav-session-meta">
-                  Best for: gentle, continuous chavruta.
-                </p>
-              </article>
+              <a class="chav-session" href="/chavruta/walking-companion/">
+                <div class="chav-session-icon">🚶‍♂️</div>
+                <div class="chav-session-body">
+                  <h3>Walking Companion</h3>
+                  <p>
+                    Ongoing, lighter touch. Bring the week’s moments; your chavruta helps
+                    you weave them into Torah and practice.
+                  </p>
+                  <p class="chav-session-meta">
+                    Best for: gentle, continuous chavruta.
+                  </p>
+                </div>
+              </a>
             </div>
           </section>
         </div>
@@ -219,10 +230,31 @@
         let conversation = [];
 
         function addMessage(role, content) {
-          const div = document.createElement("div");
-          div.classList.add("chat-message", role);
-          div.textContent = content;
-          log.appendChild(div);
+          const wrapper = document.createElement("div");
+          wrapper.classList.add("chat-message", role);
+
+          const meta = document.createElement("div");
+          meta.classList.add("chat-meta");
+          const label =
+            role === "user"
+              ? "You"
+              : role === "assistant"
+              ? "ChavrutaGPT"
+              : "System";
+          const time = new Date();
+          const timeStr = time.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+          });
+          meta.textContent = label + " · " + timeStr;
+
+          const body = document.createElement("div");
+          body.classList.add("chat-text");
+          body.textContent = content;
+
+          wrapper.appendChild(meta);
+          wrapper.appendChild(body);
+          log.appendChild(wrapper);
           log.scrollTop = log.scrollHeight;
         }
 
@@ -246,7 +278,15 @@
 
           const thinking = document.createElement("div");
           thinking.classList.add("chat-message", "system");
-          thinking.textContent = "Thinking…";
+          const thinkingMeta = document.createElement("div");
+          thinkingMeta.classList.add("chat-meta");
+          thinkingMeta.textContent = "ChavrutaGPT · …";
+          const thinkingBody = document.createElement("div");
+          thinkingBody.classList.add("chat-text");
+          thinkingBody.textContent = "Thinking…";
+          thinking.appendChild(thinkingMeta);
+          thinking.appendChild(thinkingBody);
+
           log.appendChild(thinking);
           log.scrollTop = log.scrollHeight;
 
@@ -264,7 +304,6 @@
             let replyText = "";
 
             if (data) {
-              // Common patterns for your Netlify function:
               if (typeof data.reply === "string") {
                 replyText = data.reply;
               } else if (data.reply && typeof data.reply === "object") {
@@ -274,7 +313,6 @@
                   data.reply.text ||
                   "";
               } else if (Array.isArray(data.choices)) {
-                // OpenAI-style response
                 const first = data.choices[0];
                 if (first && first.message && first.message.content) {
                   replyText = first.message.content;
