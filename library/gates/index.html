@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>231 Gates · Library of 231 Gates — LuminaNexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Index of the 231 Gates in the LuminaNexus Library — letter pairings drawn from Sefer Yetzirah, with Gate Aleph–Bet (א–ב) available and more coming."
+  />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <style>
+    .page-shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+    }
+
+    .hero-card {
+      border-radius: 1.75rem;
+      padding: 2.25rem 2.25rem 2rem;
+      background: radial-gradient(circle at top left, rgba(255, 194, 120, 0.18), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(93, 147, 255, 0.14), transparent 55%),
+                  rgba(5, 16, 40, 0.95);
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.75),
+        0 0 0 1px rgba(255, 255, 255, 0.02);
+      margin-bottom: 2.75rem;
+    }
+
+    .hero-pill-row {
+      display: inline-flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: rgba(255, 165, 0, 0.18);
+      color: #ffd799;
+      border: 1px solid rgba(255, 199, 128, 0.35);
+    }
+
+    .hero-pill-secondary {
+      background: rgba(120, 165, 255, 0.14);
+      color: #c4d9ff;
+      border-color: rgba(162, 196, 255, 0.35);
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 3vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+      color: #ffffff;
+    }
+
+    .hero-subtitle {
+      max-width: 650px;
+      color: rgba(235, 239, 255, 0.8);
+      font-size: 0.98rem;
+      line-height: 1.7;
+      margin-bottom: 1.3rem;
+    }
+
+    .hero-meta {
+      font-size: 0.88rem;
+      color: rgba(207, 217, 255, 0.9);
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      margin-top: 1.7rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .hero-actions a {
+      text-decoration: none;
+    }
+
+    .btn-soft,
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.55rem 1.25rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 500;
+      transition: background 150ms ease, color 150ms ease, border-color 150ms ease,
+                  transform 120ms ease;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-soft {
+      background: linear-gradient(135deg, #ffb878, #ff9350);
+      color: #1a1110;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-soft:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
+    }
+
+    .btn-ghost {
+      background: rgba(5, 20, 60, 0.8);
+      color: #f0f3ff;
+      border-color: rgba(148, 179, 255, 0.45);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(16, 38, 94, 0.95);
+    }
+
+    .pill-heading {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(196, 206, 255, 0.86);
+      margin-bottom: 0.5rem;
+    }
+
+    .content-section {
+      margin-bottom: 2.6rem;
+    }
+
+    .content-section h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.35rem;
+      color: #f7f4ff;
+    }
+
+    .content-section p {
+      color: rgba(224, 231, 255, 0.85);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      max-width: 78ch;
+    }
+
+    .hebrew-line {
+      font-family: "SBL Hebrew", "Ezra SIL", "Noto Serif Hebrew", system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.06em;
+      color: rgba(233, 232, 255, 0.96);
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(90, 112, 160, 0.5);
+      margin: 2.4rem 0 2.2rem;
+    }
+
+    /* Gate grid */
+
+    .gate-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.1rem;
+    }
+
+    .gate-card {
+      position: relative;
+      border-radius: 1.1rem;
+      padding: 0.95rem 0.95rem 0.85rem;
+      background:
+        radial-gradient(circle at top left, rgba(255, 208, 149, 0.22), transparent 60%),
+        rgba(4, 13, 34, 0.96);
+      border: 1px solid rgba(118, 143, 205, 0.55);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-height: 90px;
+    }
+
+    .gate-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.3rem;
+    }
+
+    .gate-pair {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .gate-pair span {
+      display: inline-block;
+      margin: 0 0.07rem;
+    }
+
+    .gate-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(201, 212, 255, 0.86);
+    }
+
+    .gate-status {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(199, 214, 255, 0.88);
+    }
+
+    .gate-desc {
+      font-size: 0.8rem;
+      line-height: 1.5;
+      color: rgba(223, 230, 255, 0.9);
+    }
+
+    .gate-card a {
+      margin-top: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: #ffd7a0;
+      align-self: flex-start;
+    }
+
+    .gate-card a:hover {
+      text-decoration: underline;
+    }
+
+    .gate-card.disabled {
+      opacity: 0.65;
+      border-style: dashed;
+    }
+
+    .gate-card.disabled .gate-status {
+      color: rgba(184, 197, 233, 0.9);
+    }
+
+    @media (max-width: 1024px) {
+      .gate-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 800px) {
+      .gate-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .page-shell {
+        padding-top: 3rem;
+      }
+
+      .hero-card {
+        padding: 1.8rem 1.45rem 1.6rem;
+        border-radius: 1.25rem;
+      }
+
+      .gate-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body class="ln-body">
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="/" class="site-logo">
+        <span class="site-logo-title">LUMINA NEXUS</span>
+        <span class="site-logo-subtitle">Sanctuary · Study · Build</span>
+      </a>
+      <nav class="site-nav">
+        <a href="/about/">About</a>
+        <a href="/chavruta/">Chavruta</a>
+        <a href="/library/" class="is-active">Library</a>
+        <a href="/map/">Map</a>
+        <a href="/seal/">Seal</a>
+        <a href="/support/">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-shell">
+      <!-- Hero -->
+      <section class="hero-card">
+        <div class="hero-pill-row">
+          <div class="hero-pill">Library · מִסְפְּרִיָּה</div>
+          <div class="hero-pill hero-pill-secondary">231 Gates · רל״א שערים</div>
+        </div>
+        <h1 class="hero-title">The Gates Hall</h1>
+        <p class="hero-subtitle">
+          From <span class="hebrew-line">א</span> to <span class="hebrew-line">ת</span>,
+          every unique pairing of the twenty-two Hebrew letters becomes a Gate — a
+          relationship to be walked, not just understood. This page gathers those pairings
+          and marks which ones are ready to enter.
+        </p>
+        <p class="hero-meta">
+          Begin with Gate א–ב, the passage from silence to the first word. The remaining
+          Gates will appear over time as they ripen into stable paths of study and practice.
+        </p>
+
+        <div class="hero-actions">
+          <a href="/library/foundations/" class="btn-soft">← Return to Foundations</a>
+          <a href="/library/" class="btn-ghost">Back to Library shelves</a>
+          <a href="/map/" class="btn-ghost">View the Sanctuary map</a>
+        </div>
+      </section>
+
+      <!-- Intro text -->
+      <section class="content-section">
+        <div class="pill-heading">How to Use This Page · איך להשתמש בדף זה</div>
+        <h2>Choose One Gate, Not All of Them</h2>
+        <p>
+          The 231 Gates are not meant to be conquered in order. They are an atlas. In any
+          given week you might walk a single Gate with intention: reading, reflecting, and
+          trying one small practice. When another Gate calls, you may circle back here and
+          choose again.
+        </p>
+        <p class="hebrew-line">
+          אל תנסו “לסיים” את כל השערים. בחרו שער אחד שיכול לפגוש את חייכם עכשיו.
+        </p>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- Gate grid -->
+      <section class="content-section">
+        <div class="pill-heading">Available &amp; Ripening Gates · שערים זמינים ומתבשלים</div>
+        <h2>Letter Pairings</h2>
+        <p>
+          Below are a few of the 231 Gates. Those marked as
+          <strong>“open for walking”</strong> link to a full page. Others are present only
+          as placeholders: acknowledged, named, and waiting to be written in this house.
+        </p>
+
+        <div class="gate-grid">
+          <!-- Active Gate: Aleph–Bet -->
+          <article class="gate-card">
+            <div class="gate-card-header">
+              <div>
+                <div class="gate-label">Gate · שער</div>
+                <div class="gate-pair hebrew-line">
+                  <span>א</span><span>–</span><span>ב</span>
+                </div>
+              </div>
+              <div class="gate-status">Open for walking</div>
+            </div>
+            <div class="gate-desc">
+              From silent source to first word: the move from “I feel something” to “I dare
+              to say it.”
+            </div>
+            <a href="/library/gates/aleph-bet.html">Enter Gate א–ב →</a>
+          </article>
+
+          <!-- A few neighboring gates as placeholders -->
+          <article class="gate-card disabled">
+            <div class="gate-card-header">
+              <div>
+                <div class="gate-label">Gate · שער</div>
+                <div class="gate-pair hebrew-line">
+                  <span>א</span><span>–</span><span>ג</span>
+                </div>
+              </div>
+              <div class="gate-status">Ripening</div>
+            </div>
+            <div class="gate-desc">
+              Aleph–Gimel. Acknowledged gate, waiting to be written in this Library.
+            </div>
+          </article>
+
+          <article class="gate-card disabled">
+            <div class="gate-card-header">
+              <div>
+                <div class="gate-label">Gate · שער</div>
+                <div class="gate-pair hebrew-line">
+                  <span>א</span><span>–</span><span>ד</span>
+                </div>
+              </div>
+              <div class="gate-status">Ripening</div>
+            </div>
+            <div class="gate-desc">
+              Aleph–Dalet. Placeholder for a future path from hidden source into a door.
+            </div>
+          </article>
+
+          <article class="gate-card disabled">
+            <div class="gate-card-header">
+              <div>
+                <div class="gate-label">Gate · שער</div>
+                <div class="gate-pair hebrew-line">
+                  <span>ב</span><span>–</span><span>ג</span>
+                </div>
+              </div>
+              <div class="gate-status">Ripening</div>
+            </div>
+            <div class="gate-desc">
+              Bet–Gimel. A gate between house and growth, named here and held for later.
+            </div>
+          </article>
+
+          <!-- You can duplicate these disabled cards to seed more pairs visually -->
+          <article class="gate-card disabled">
+            <div class="gate-card-header">
+              <div>
+                <div class="gate-label">Gate · שער</div>
+                <div class="gate-pair hebrew-line">
+                  <span>ב</span><span>–</span><span>ד</span>
+                </div>
+              </div>
+              <div class="gate-status">Ripening</div>
+            </div>
+            <div class="gate-desc">
+              Bet–Dalet. Another pairing acknowledged; the writing will follow the walking.
+            </div>
+          </article>
+
+          <article class="gate-card disabled">
+            <div class="gate-card-header">
+              <div>
+                <div class="gate-label">Gate · שער</div>
+                <div class="gate-pair hebrew-line">
+                  <span>ג</span><span>–</span><span>ד</span>
+                </div>
+              </div>
+              <div class="gate-status">Ripening</div>
+            </div>
+            <div class="gate-desc">
+              Gimel–Dalet. Marked for future study within this house of 231 paths.
+            </div>
+          </article>
+
+          <article class="gate-card disabled">
+            <div class="gate-card-header">
+              <div>
+                <div class="gate-label">Gate · שער</div>
+                <div class="gate-pair hebrew-line">
+                  <span>ש</span><span>–</span><span>ת</span>
+                </div>
+              </div>
+              <div class="gate-status">Ripening</div>
+            </div>
+            <div class="gate-desc">
+              Shin–Tav. One of the closing gates of the alphabet, present in name only for now.
+            </div>
+          </article>
+
+          <article class="gate-card disabled">
+            <div class="gate-card-header">
+              <div>
+                <div class="gate-label">Gate · שער</div>
+                <div class="gate-pair hebrew-line">
+                  <span>א</span><span>–</span><span>ת</span>
+                </div>
+              </div>
+              <div class="gate-status">Ripening</div>
+            </div>
+            <div class="gate-desc">
+              Aleph–Tav. The long arc from first silence to last mark, awaiting its own scroll.
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <p>© <span id="year"></span> LuminaNexus. Sanctuary · Study · Build.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
