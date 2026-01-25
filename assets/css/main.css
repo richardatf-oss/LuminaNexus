@@ -60,7 +60,7 @@ a {
   background: transparent;
 }
 
-/* Make sure hero can truly span full width */
+/* Full-width home */
 .home-page,
 .home-page main {
   max-width: none;
@@ -68,7 +68,7 @@ a {
 }
 
 /* ===========================
-   Nav
+   Dark header / nav
    =========================== */
 
 .nav-shell {
@@ -78,14 +78,9 @@ a {
   right: 0;
   height: var(--nav-height);
   z-index: 20;
-  backdrop-filter: blur(12px);
-  background: linear-gradient(
-    to bottom,
-    rgba(2, 6, 23, 0.9),
-    rgba(2, 6, 23, 0.6),
-    transparent
-  );
+  background: #000000; /* darker, no grey */
   border-bottom: 1px solid rgba(15, 23, 42, 0.85);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.85);
 }
 
 .nav-inner {
@@ -202,7 +197,7 @@ a {
   flex-direction: column;
   padding: 0.5rem 1.5rem 1rem;
   gap: 0.6rem;
-  background: rgba(2, 6, 23, 0.98);
+  background: #000;
   border-bottom: 1px solid rgba(15, 23, 42, 0.9);
 }
 
@@ -274,7 +269,7 @@ a {
   text-decoration: none;
   font-size: 0.9rem;
   color: var(--text);
-  background: rgba(15, 23, 42, 0.9);
+  background: rgba(15, 23, 42, 0.96);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
 }
 
@@ -283,7 +278,7 @@ a {
 }
 
 /* ===========================
-   Full-bleed hero
+   Layout / hero
    =========================== */
 
 main {
@@ -314,7 +309,7 @@ main {
   object-fit: cover;
 }
 
-/* Overlay gradient + buttons */
+/* Overlay gradient + centered CTA */
 
 .hero-full-overlay {
   position: absolute;
@@ -326,8 +321,8 @@ main {
   padding: 3.25rem 1.5rem 3.75rem;
   background: linear-gradient(
     to bottom,
-    rgba(2, 6, 23, 0.1) 0%,
-    rgba(2, 6, 23, 0.35) 40%,
+    rgba(2, 6, 23, 0.05) 0%,
+    rgba(2, 6, 23, 0.35) 35%,
     rgba(2, 6, 23, 0.8) 72%,
     rgba(2, 6, 23, 0.98) 100%
   );
@@ -371,7 +366,7 @@ main {
 .trunks-overlay {
   position: relative;
   z-index: 5;
-  margin-top: -22vh; /* pulls the cards up into the hero */
+  margin-top: -22vh;
 }
 
 .trunks-header {
@@ -452,7 +447,7 @@ main {
    =========================== */
 
 footer {
-  border-top: 1px solid rgba(15, 23, 42, 0.9);
+  border-top: 1px solid rgba(15, 23, 42, 0.95);
   padding: 0.9rem 1.5rem 1.4rem;
   font-size: 0.78rem;
   color: var(--text-muted);
