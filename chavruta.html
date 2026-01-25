@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="/assets/css/global.css" />
 
   <style>
-    /* Page-safe additions (scoped to this file) */
     .ch-page {
       padding-bottom: 3rem;
     }
@@ -21,7 +20,6 @@
       margin: 0 auto;
     }
 
-    /* The “table” panel */
     .ch-table {
       margin-top: 2.25rem;
       margin-bottom: 2.5rem;
@@ -147,12 +145,10 @@
       display: none;
     }
 
-    /* Sessions as three cards */
     .ch-sessions {
       margin-top: 2rem;
     }
 
-    /* Mobile */
     @media (max-width: 900px) {
       .ch-table { padding: 1.5rem 1.25rem; border-radius: 22px; }
       .ch-grid { grid-template-columns: 1fr; }
@@ -160,7 +156,6 @@
       .ch-textarea { min-height: 170px; }
     }
 
-    /* Small phones */
     @media (max-width: 420px) {
       .ch-table { padding: 1.2rem 1rem; border-radius: 18px; }
       .ch-textarea { min-height: 160px; padding: 0.85rem 0.85rem; }
@@ -189,7 +184,7 @@
   </header>
 
   <main class="container ch-page">
-    <!-- HERO: reuse your existing hero shell classes -->
+    <!-- HERO -->
     <section class="hero-shell hero-shell--page hero-shell--chavruta" aria-labelledby="chavruta-heading">
       <div class="hero-overlay">
         <div class="hero-grid">
@@ -327,17 +322,35 @@
       statusEl.textContent = msg;
     }
 
-    function pickAnswer(payload) {
+    function extractAnswer(payload) {
       if (!payload) return "";
-      return (
-        payload.answer ||
-        payload.reply ||
-        payload.content ||
-        payload.message ||
-        payload.text ||
-        payload.choices?.[0]?.message?.content ||
-        ""
-      );
+
+      // If backend already returns a plain string
+      if (typeof payload === "string") return payload;
+
+      // Common wrap fields
+      if (typeof payload.answer === "string") return payload.answer;
+      if (typeof payload.reply === "string") return payload.reply;
+      if (typeof payload.content === "string") return payload.content;
+      if (typeof payload.text === "string") return payload.text;
+      if (typeof payload.message === "string") return payload.message;
+
+      // OpenAI chat completion style
+      const c1 = payload?.choices?.[0]?.message?.content;
+      if (typeof c1 === "string") return c1;
+
+      const c2 = payload?.choices?.[0]?.text;
+      if (typeof c2 === "string") return c2;
+
+      const out = payload?.output?.[0]?.content?.[0]?.text;
+      if (typeof out === "string") return out;
+
+      // If it's still an object, stringify nicely
+      try {
+        return JSON.stringify(payload, null, 2);
+      } catch {
+        return String(payload);
+      }
     }
 
     form.addEventListener("submit", async (e) => {
@@ -369,14 +382,14 @@
           throw new Error(detail);
         }
 
-        const answer = pickAnswer(data);
-        if (!answer) throw new Error("No answer returned.");
+        const answerText = extractAnswer(data);
+        if (!answerText || !answerText.trim()) {
+          throw new Error("No answer returned from ChavrutaGPT.");
+        }
 
         sessionStorage.setItem("chavruta_last_question", question);
-        sessionStorage.setItem("chavruta_last_answer", answer);
+        sessionStorage.setItem("chavruta_last_answer", answerText);
 
-        // If you already have this page, it will show the stored answer.
-        // If not, tell me and I’ll give you a matching answer.html file.
         location.href = "/chavruta/answer.html?q=" + encodeURIComponent(question);
 
       } catch (err) {
