@@ -1,70 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>LuminaNexus · Sanctuary · Study · Build</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta
-    name="description"
-    content="LuminaNexus is a quiet sanctuary in the digital night – a place for Torah, learning, and luminous tools. Sanctuary for the heart, Study for the mind, Build for the hands."
-  />
+  <head>
+    <meta charset="UTF-8" />
+    <title>LuminaNexus — Sanctuary · Study · Build</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="LuminaNexus is a quiet place for Torah, learning, and luminous tools. Sanctuary for the heart, study for the mind, and build for the hands."
+    />
 
-  <!-- Optional Google Font (can remove if you prefer system fonts only) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
-
-  <!-- External stylesheet -->
-  <link rel="stylesheet" href="assets/css/main.css" />
-</head>
-
-<body>
-  <div class="page">
+    <!-- Shared styles -->
+    <link rel="stylesheet" href="/assets/css/main.css" />
+  </head>
+  <body class="page home-page">
     <!-- Top navigation -->
     <header class="nav-shell">
       <div class="nav-inner">
         <a href="/" class="brand">
-          <div class="brand-title">LUMINA NEXUS</div>
-          <div class="brand-subtitle">Sanctuary · Study · Build</div>
+          <span class="brand-title">LUMINA NEXUS</span>
+          <span class="brand-subtitle">Sanctuary · Study · Build</span>
         </a>
 
-        <nav class="nav-links" aria-label="Main navigation">
+        <nav class="nav-links-desktop">
           <a href="/about/">About</a>
-          <a href="/chavruta/">Chavruta</a>
+          <a href="/chavruta">Chavruta</a>
           <a href="/library/">Library</a>
           <a href="/map/">Map</a>
           <a href="/seal/">Seal</a>
           <a href="/support/">Support</a>
-          <a href="/chavruta/" class="nav-cta">
-            Enter Sanctuary
-            <span>⟶</span>
+          <a href="/chavruta" class="nav-cta">
+            <span>Enter Sanctuary</span>
+            <span>→</span>
           </a>
         </nav>
+
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation">
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+        </button>
       </div>
+
+      <nav class="nav-links-mobile" id="mobileNav">
+        <a href="/about/">About</a>
+        <a href="/chavruta">Chavruta</a>
+        <a href="/library/">Library</a>
+        <a href="/map/">Map</a>
+        <a href="/seal/">Seal</a>
+        <a href="/support/">Support</a>
+        <a href="/chavruta" class="nav-cta-mobile">
+          <span>Enter Sanctuary</span>
+          <span>→</span>
+        </a>
+      </nav>
     </header>
 
     <main>
-      <!-- Hero -->
+      <!-- HERO -->
       <section class="hero-shell">
-        <div class="hero-card">
-          <div class="hero-orbit" aria-hidden="true"></div>
-
-          <div class="hero-content">
-            <div class="pill-row">
-              <span class="pill-label-main">Lumina Nexus · לומינאנקסוס</span>
-              <span class="pill-divider" aria-hidden="true"></span>
-              <span>Sanctuary · Study · Build</span>
-              <span class="pill-tag">
-                <span class="pill-tag-dot"></span>
-                Quiet place in the digital night
-              </span>
+        <div class="hero-grid">
+          <!-- Left: copy -->
+          <div class="hero-copy">
+            <div class="hero-pill-row">
+              <span class="hero-pill-main">LUMINA NEXUS</span>
+              <span class="hero-pill-tag">Sanctuary · Study · Build</span>
+              <span class="hero-pill-tag-alt">Quiet place in the digital night</span>
             </div>
 
             <h1 class="hero-title">
-              Sanctuary in the <span>digital night.</span>
+              Sanctuary in the <span class="hero-title-highlight">digital night.</span>
             </h1>
 
             <p class="hero-subtitle">
@@ -73,104 +76,131 @@
             </p>
 
             <div class="hero-ctas">
-              <a href="/chavruta/" class="btn-primary">
-                <span class="icon">✶</span>
-                Enter the Sanctuary
+              <a href="/chavruta" class="btn-primary hero-primary">
+                <span>★ Enter the Sanctuary</span>
               </a>
-
-              <a href="/about/" class="btn-ghost">
-                <span class="icon">?</span>
-                What is LuminaNexus
+              <a href="#trunks" class="btn-ghost hero-secondary">
+                <span>? What is LuminaNexus</span>
               </a>
             </div>
 
             <p class="hero-footnote">
-              <em>Three trunks</em> — Sanctuary for the heart, Study for the mind, and Build for the hands.
+              Three trunks — Sanctuary for the heart, Study for the mind, and Build for
+              the hands.
             </p>
           </div>
 
-          <div class="hero-visual" aria-hidden="true">
-            <div class="hero-image-frame">
-              <div class="hero-image-inner">
+          <!-- Right: hero image card -->
+          <aside class="hero-visual">
+            <div class="hero-image-card">
+              <figure class="hero-figure">
                 <img
-                  src="assets/img/gate-hero.png"
-                  alt="A luminous gate opening into a field of stars."
+                  src="/assets/img/lumina-hero.webp"
+                  alt="A luminous sanctuary at night with candles, books, and an open space for learning — LuminaNexus."
+                  class="hero-image"
                   loading="lazy"
                 />
-                <div class="hero-image-caption">
-                  <span class="hero-image-caption-dot"></span>
-                  Gate of Light · שער אור
-                </div>
-              </div>
+                <figcaption class="hero-caption">
+                  <span class="hero-caption-label">Sanctuary hall · אוֹר לַיְלָה</span>
+                </figcaption>
+              </figure>
             </div>
-          </div>
+          </aside>
         </div>
       </section>
 
-      <!-- One Nexus, three trunks -->
-      <section class="section">
-        <div class="section-header">
-          <h2 class="section-title">One Nexus, three trunks.</h2>
-          <p class="section-subtitle">
+      <!-- TRUNKS SECTION -->
+      <section id="trunks" class="trunks-shell">
+        <header class="trunks-header">
+          <h2>One Nexus, three trunks.</h2>
+          <p class="trunks-subtitle">
             LuminaNexus grows along three intertwined paths:
             <strong>Sanctuary</strong> for the heart,
-            <strong>Study</strong> for the mind,
-            and <strong>Build</strong> for the hands.
+            <strong>Study</strong> for the mind, and
+            <strong>Build</strong> for the hands.
           </p>
-        </div>
+        </header>
 
-        <div class="columns">
-          <!-- Sanctuary -->
-          <article class="column-card">
-            <h3 class="column-title">
-              Sanctuary
-              <span class="he">קְדוּשָׁה קְטַנָּה</span>
+        <div class="trunks-grid">
+          <!-- Sanctuary card -->
+          <article class="trunk-card">
+            <h3 class="trunk-title">
+              SANCTUARY
+              <span class="trunk-title-he">קָדוֹשׁ קָטָן</span>
             </h3>
-            <p class="column-tagline">
-              A quiet, lit place to ask questions, sit with Torah, and walk gently through practice and prayer.
+            <p class="trunk-body">
+              A quiet, lit place to ask questions, sit with Torah, and walk gently
+              through practice and prayer.
             </p>
-            <ul class="column-list">
-              <li><a href="/chavruta/">Chavruta trunk &rarr;</a></li>
-              <li><a href="/noahide-daily/">Slow Series (Shabbat, prayer, middot) &rarr;</a></li>
+            <ul class="trunk-links">
+              <li>
+                <a href="/chavruta" class="trunk-link">
+                  Chavruta trunk →
+                </a>
+              </li>
+              <li>
+                <a href="/chavruta/slow-series/" class="trunk-link">
+                  Slow Series (Shabbat, prayer, middot) →
+                </a>
+              </li>
             </ul>
-            <p class="column-footer">
+            <p class="trunk-footnote">
               Begin here if you want companionship in learning and life questions.
             </p>
           </article>
 
-          <!-- Study -->
-          <article class="column-card">
-            <h3 class="column-title">
-              Study
-              <span class="he">לִמּוּד</span>
+          <!-- Study card -->
+          <article class="trunk-card">
+            <h3 class="trunk-title">
+              STUDY
+              <span class="trunk-title-he">לִמּוּד</span>
             </h3>
-            <p class="column-tagline">
-              Sources, journeys, and notes from the Celestial Library of the 231 Gates and its companion projects.
+            <p class="trunk-body">
+              Sources, journeys, and notes from the Celestial Library of the 231 Gates
+              and its companion projects.
             </p>
-            <ul class="column-list">
-              <li><a href="/celestial-library-231/">Library of 231 Gates &rarr;</a></li>
-              <li><a href="/map/">Map of the ecosystem &rarr;</a></li>
+            <ul class="trunk-links">
+              <li>
+                <a href="/library/" class="trunk-link">
+                  Library of 231 Gates →
+                </a>
+              </li>
+              <li>
+                <a href="/map/" class="trunk-link">
+                  Map of the ecosystem →
+                </a>
+              </li>
             </ul>
-            <p class="column-footer">
+            <p class="trunk-footnote">
               Begin here if you want texts, essays, and structured learning paths.
             </p>
           </article>
 
-          <!-- Build -->
-          <article class="column-card">
-            <h3 class="column-title">
-              Build
-              <span class="he">מַעֲשֶׂה</span>
+          <!-- Build card -->
+          <article class="trunk-card">
+            <h3 class="trunk-title">
+              BUILD
+              <span class="trunk-title-he">מַעֲשֶׂה</span>
             </h3>
-            <p class="column-tagline">
-              Tools, code, and experiments — from IvritCode to Quantum Etz Chaim and other luminous projects.
+            <p class="trunk-body">
+              Tools, code, and experiments — from IvritCode to Quantum Etz Chaim and
+              other luminous projects.
             </p>
-            <ul class="column-list">
-              <li><a href="/ivritcode/">IvritCode · Hebrew opcodes &rarr;</a></li>
-              <li><a href="/labs-of-light/">Labs of Light &rarr;</a></li>
+            <ul class="trunk-links">
+              <li>
+                <a href="/ivritcode/" class="trunk-link">
+                  IvritCode · Hebrew opcodes →
+                </a>
+              </li>
+              <li>
+                <a href="/labs-of-light/" class="trunk-link">
+                  Labs of Light →
+                </a>
+              </li>
             </ul>
-            <p class="column-footer">
-              Begin here if you want to build, test, or contribute to the tools themselves.
+            <p class="trunk-footnote">
+              Begin here if you want to build, test, or contribute to the tools
+              themselves.
             </p>
           </article>
         </div>
@@ -179,19 +209,24 @@
 
     <footer>
       <div class="footer-inner">
-        <div>
-          &copy; <span id="year"></span> LuminaNexus. A quiet nexus for luminous work.
-        </div>
+        <span>© 2026 LuminaNexus. A quiet nexus for luminous work.</span>
         <div class="footer-right">
           <span>Crafted with kavod in the digital night.</span>
         </div>
       </div>
     </footer>
-  </div>
 
-  <script>
-    // Set current year in footer
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
-</body>
+    <!-- Small nav toggle script -->
+    <script>
+      (function () {
+        const toggle = document.querySelector(".nav-toggle");
+        const mobileNav = document.getElementById("mobileNav");
+        if (!toggle || !mobileNav) return;
+
+        toggle.addEventListener("click", () => {
+          mobileNav.classList.toggle("is-open");
+        });
+      })();
+    </script>
+  </body>
 </html>
