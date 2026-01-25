@@ -1,221 +1,407 @@
+<!-- library.html or library/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>The Library — LuminaNexus</title>
+  <title>The Library · 231 Gates — LuminaNexus</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     name="description"
-    content="The Library of LuminaNexus — durable pages, structured learning paths, and sefarim from the Celestial Library of the 231 Gates."
+    content="The Library of 231 Gates at LuminaNexus: shelves for Foundations, Daily Practice, and deeper long-form Gates."
   />
-  <link rel="stylesheet" href="/assets/css/global.css" />
-</head>
-<body class="ln-dark">
-  <!-- Top bar -->
-  <header class="topbar">
-    <div class="topbar-inner">
-      <a href="/" class="brand" aria-label="LuminaNexus home">
-        <span class="brand-title">LuminaNexus</span>
-        <span class="brand-subtitle">Sanctuary · Study · Build</span>
-      </a>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <style>
+    .page-shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+    }
 
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="/about.html">About</a>
-        <a href="/chavruta.html">Chavruta</a>
-        <a href="/library/" aria-current="page">Library</a>
-        <a href="/map.html">Map</a>
-        <a href="/seal.html">Seal</a>
-        <a href="/donate/index.html">Support</a>
+    .hero-card {
+      border-radius: 1.75rem;
+      padding: 2.25rem 2.25rem 2rem;
+      background: radial-gradient(circle at top left, rgba(255, 194, 120, 0.18), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(93, 147, 255, 0.12), transparent 55%),
+                  rgba(5, 16, 40, 0.96);
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.75),
+        0 0 0 1px rgba(255, 255, 255, 0.02);
+      margin-bottom: 2.75rem;
+    }
+
+    .hero-pill-row {
+      display: inline-flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: rgba(255, 165, 0, 0.18);
+      color: #ffd799;
+      border: 1px solid rgba(255, 199, 128, 0.35);
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 3vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+    }
+
+    .hero-subtitle {
+      max-width: 640px;
+      color: rgba(235, 239, 255, 0.78);
+      font-size: 0.98rem;
+      line-height: 1.7;
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .hero-actions a {
+      text-decoration: none;
+    }
+
+    .btn-soft,
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.55rem 1.25rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 500;
+      transition: background 150ms ease, color 150ms ease, border-color 150ms ease,
+                  transform 120ms ease;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-soft {
+      background: linear-gradient(135deg, #ffb878, #ff9350);
+      color: #1a1110;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-soft:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
+    }
+
+    .btn-ghost {
+      background: rgba(5, 20, 60, 0.8);
+      color: #f0f3ff;
+      border-color: rgba(148, 179, 255, 0.45);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(16, 38, 94, 0.95);
+    }
+
+    .pill-heading {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(196, 206, 255, 0.86);
+      margin-bottom: 0.4rem;
+    }
+
+    .content-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .content-section h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.35rem;
+      color: #f7f4ff;
+    }
+
+    .content-section p {
+      color: rgba(224, 231, 255, 0.85);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      max-width: 78ch;
+    }
+
+    .content-section ul {
+      color: rgba(224, 231, 255, 0.85);
+      padding-left: 1.25rem;
+      margin-top: 0.35rem;
+      margin-bottom: 0.9rem;
+      font-size: 0.95rem;
+      line-height: 1.75;
+      max-width: 75ch;
+    }
+
+    .content-section li + li {
+      margin-top: 0.2rem;
+    }
+
+    .shelf-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.35rem;
+      margin-top: 1.25rem;
+    }
+
+    .shelf-card {
+      position: relative;
+      border-radius: 1.35rem;
+      padding: 1.35rem 1.3rem 1.2rem;
+      background: radial-gradient(circle at top left, rgba(255, 208, 149, 0.2), transparent 55%),
+                  rgba(4, 13, 34, 0.96);
+      border: 1px solid rgba(118, 143, 205, 0.45);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .shelf-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    .shelf-card p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: rgba(220, 228, 255, 0.88);
+      margin: 0;
+    }
+
+    .shelf-card small {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(197, 208, 255, 0.85);
+    }
+
+    .shelf-card a {
+      margin-top: 0.75rem;
+      align-self: flex-start;
+      text-decoration: none;
+      font-size: 0.86rem;
+      font-weight: 500;
+      color: #ffd7a0;
+    }
+
+    .shelf-card a:hover {
+      text-decoration: underline;
+    }
+
+    .hebrew-line {
+      font-family: "SBL Hebrew", "Ezra SIL", "Noto Serif Hebrew", system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      color: rgba(233, 232, 255, 0.94);
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(90, 112, 160, 0.5);
+      margin: 2.5rem 0 2.25rem;
+    }
+
+    @media (max-width: 960px) {
+      .shelf-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page-shell {
+        padding-top: 3rem;
+      }
+
+      .hero-card {
+        padding: 1.8rem 1.4rem 1.6rem;
+        border-radius: 1.25rem;
+      }
+
+      .shelf-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body class="ln-body">
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="/" class="site-logo">
+        <span class="site-logo-title">LUMINA NEXUS</span>
+        <span class="site-logo-subtitle">Sanctuary · Study · Build</span>
+      </a>
+      <nav class="site-nav">
+        <a href="/about/">About</a>
+        <a href="/chavruta/">Chavruta</a>
+        <a href="/library/" class="is-active">Library</a>
+        <a href="/map/">Map</a>
+        <a href="/seal/">Seal</a>
+        <a href="/support/">Support</a>
       </nav>
     </div>
   </header>
 
-  <main class="container">
-    <!-- LIBRARY HERO -->
-    <section class="hero-shell hero-shell--page hero-shell--library" aria-labelledby="library-heading">
-      <div class="hero-overlay">
-        <div class="hero-grid">
-          <div class="stack-lg">
-            <div class="text-pill">
-              LIBRARY · <span lang="he">הַסִּפְרִיָּה</span>
-            </div>
-
-            <h1 id="library-heading" class="hero-heading">
-              The Library
-            </h1>
-
-            <p class="hero-subtitle">
-              Durable pages meant to be revisited: texts, notes, and structured learning paths.
-              This is not a feed. It is a shelf.
-            </p>
-
-            <div class="hero-actions">
-              <a href="/chavruta.html" class="btn btn-secondary">Enter Chavruta</a>
-              <a href="/map.html" class="btn btn-secondary">View the Map</a>
-              <a href="/" class="btn btn-ghost">Home</a>
-            </div>
-          </div>
+  <main>
+    <div class="page-shell">
+      <!-- Hero -->
+      <section class="hero-card">
+        <div class="hero-pill-row">
+          <div class="hero-pill">Library · מִסְפְּרִיָּה</div>
         </div>
-      </div>
-    </section>
-
-    <!-- SHELVES OVERVIEW -->
-    <section class="library-section library-intro">
-      <h2 class="section-heading">
-        Shelves · מַדָּפִים
-      </h2>
-      <p class="section-subtitle">
-        These shelves are doorways into structured material. As pages mature, they move from Labs into the Library.
-      </p>
-
-      <p class="library-meta">
-        Library order · <span lang="he">סֵדֶר סֵפֶר</span>
-      </p>
-
-      <div class="stack-md">
-        <h3 class="section-subheading">How to use this Library</h3>
-        <ol class="numbered-list">
-          <li>
-            <strong>Begin with Foundations.</strong>
-            Orient to the core principles, definitions, and language of this sanctuary.
-            This gives you a shared map and vocabulary.
-          </li>
-          <li>
-            <strong>Move into Daily Practice.</strong>
-            Choose one blessing, one routine, or one small action you can actually carry
-            into your life this week.
-          </li>
-          <li>
-            <strong>Then explore the deeper trunks.</strong>
-            When you’re ready, step into <em>Quantum Etz Chaim</em> and the
-            <em>231 Gates</em> as long-form paths — slow studies that connect Kabbalah,
-            language, and modern physics.
-          </li>
-        </ol>
-
-        <p class="library-note">
-          If you ever feel lost, return to <strong>Foundations</strong>. The Library is cyclical, not linear:
-          you can always circle back, deepen, and walk the shelves again.
+        <h1 class="hero-title">The Library of 231 Gates</h1>
+        <p class="hero-subtitle">
+          Durable pages meant to be revisited: texts, notes, and structured learning paths.
+          This is not a feed. It is a shelf. As pages mature, they move here from the Labs,
+          take their place among the Gates, and wait for your return.
         </p>
-      </div>
-    </section>
+        <div class="hero-actions">
+          <a href="/chavruta/" class="btn-soft">Enter Chavruta</a>
+          <a href="/map/" class="btn-ghost">View the Sanctuary map</a>
+          <a href="/" class="btn-ghost">Home</a>
+        </div>
+      </section>
 
-    <!-- SHELVES AS CARDS -->
-    <section class="library-section library-shelves">
-      <h2 class="section-heading">
-        Walk the shelves
-      </h2>
-      <p class="section-subtitle">
-        Start with the first shelf that matches where you are right now.
-      </p>
+      <!-- Shelves intro -->
+      <section class="content-section">
+        <div class="pill-heading">Shelves · מדפים</div>
+        <h2>Walk the Shelves</h2>
+        <p>
+          These shelves are doorways into structured material. The Library is cyclical, not
+          linear: you may start on any shelf that meets your life right now, and you can
+          always circle back, deepen, and walk the shelves again.
+        </p>
+        <p class="hebrew-line">
+          ספרייה זו איננה שורה של דפים, אלא מעגל של מדפים — אליהם אפשר לשוב שוב ושוב.
+        </p>
+      </section>
 
-      <div class="card-grid">
-        <!-- FOUNDATIONS -->
-        <article id="foundations" class="home-card shelf-card">
-          <h3>Foundations</h3>
-          <p>
-            Core principles, definitions, and orientation pages for LuminaNexus:
-            language, commitments, and the basic map of the Nexus.
-          </p>
-          <ul class="card-list">
-            <!-- Wire these once the pages exist -->
-            <li><a href="/library/foundations/" class="card-link">Foundations overview →</a></li>
-            <li><a href="/seal.html" class="card-link">The Seal and commitments →</a></li>
-          </ul>
-          <p class="card-footer">Start here.</p>
-        </article>
+      <!-- Shelf cards -->
+      <section class="content-section">
+        <div class="shelf-grid">
+          <!-- Foundations -->
+          <article class="shelf-card">
+            <small>Foundations · יסודות</small>
+            <h3>Orientation and Language</h3>
+            <p>
+              Shared commitments about speech, study, and the use of sacred terms. How to
+              read a living Library, what a “Gate” really is, and why returning to basics is
+              a strength, not a failure.
+            </p>
+            <a href="/library/foundations.html">Walk the Foundations shelf →</a>
+          </article>
 
-        <!-- DAILY PRACTICE -->
-        <article id="daily-practice" class="home-card shelf-card">
-          <h3>Daily Practice</h3>
-          <p>
-            Blessings, routines, and practical guides you can carry:
-            short source sheets, kavvanot, and gentle checklists.
-          </p>
-          <ul class="card-list">
-            <li><a href="/library/daily-practice/" class="card-link">Daily practice shelf →</a></li>
-            <li><a href="/chavruta.html#daily-chavruta" class="card-link">Daily Chavruta sessions →</a></li>
-          </ul>
-          <p class="card-footer">Choose one small action.</p>
-        </article>
+          <!-- Daily Practice -->
+          <article class="shelf-card">
+            <small>Daily Practice · מעשה יומי</small>
+            <h3>Blessings, Rhythm, Embodied Study</h3>
+            <p>
+              Short pages that lean toward action: blessings to speak aloud, small shifts in
+              language, and weekly practices that bring the Gates into hands, heart, and
+              schedule.
+            </p>
+            <a href="/library/practice/">Enter Daily Practice →</a>
+          </article>
 
-        <!-- QUANTUM ETZ CHAIM -->
-        <article id="quantum-etz-chaim" class="home-card shelf-card">
-          <h3>Quantum Etz Chaim</h3>
-          <p>
-            Studies and diagrams that weave the Tree of Life, physics, and sacred code —
-            the backbone for the Quantum Etz Chaim project.
-          </p>
-          <ul class="card-list">
-            <li><a href="/library/quantum-etz-chaim/" class="card-link">Tree of Life studies →</a></li>
-            <li><a href="https://quantumetzchaim.com" class="card-link">QuantumEtzChaim.com →</a></li>
-          </ul>
-          <p class="card-footer">For deeper, slower study.</p>
-        </article>
+          <!-- 231 Gates -->
+          <article class="shelf-card">
+            <small>231 Gates · רל״א שערים</small>
+            <h3>Letter Pairings as Paths</h3>
+            <p>
+              Pages devoted to individual Gates — pairings of Hebrew letters drawn from
+              <em>Sefer Yetzirah</em>. Each page offers language, pattern, and a small
+              experiment in living that Gate.
+            </p>
+            <a href="/library/gates/">Browse the Gates →</a>
+          </article>
 
-        <!-- 231 GATES -->
-        <article id="gates-231" class="home-card shelf-card">
-          <h3>231 Gates · רל״א שְׁעָרִים</h3>
-          <p>
-            The Celestial Library of the 231 letter-pairs: maps, essays, and
-            star-cluster meditations built on the Hebrew alef-bet.
-          </p>
-          <ul class="card-list">
-            <li><a href="/library/231-gates/" class="card-link">231 Gates overview →</a></li>
-            <li><a href="/map.html#celestial-library" class="card-link">See where it lives on the Map →</a></li>
-          </ul>
-          <p class="card-footer">Walk the gates one by one.</p>
-        </article>
+          <!-- Quantum Etz Chaim -->
+          <article class="shelf-card">
+            <small>Trunks &amp; Branches · עץ החיים</small>
+            <h3>Quantum Etz Chaim Studies</h3>
+            <p>
+              Longer-form essays and notes at the intersection of Kabbalah, language, and
+              modern physics. Slow paths intended for deep, repeated study rather than a
+              single sitting.
+            </p>
+            <a href="/library/quantum-etz-chaim/">Enter the deep trunks →</a>
+          </article>
 
-        <!-- LANGUAGE & CODE -->
-        <article id="language-code" class="home-card shelf-card">
-          <h3>Language &amp; Code</h3>
-          <p>
-            IvritCode notes, glossaries, and essays on Hebrew as a living code:
-            letters as opcodes, vowels as modifiers, and beyond.
-          </p>
-          <ul class="card-list">
-            <li><a href="/library/ivritcode/" class="card-link">IvritCode notes →</a></li>
-            <li><a href="https://ivritcode.org" class="card-link">IvritCode.org →</a></li>
-          </ul>
-          <p class="card-footer">For builders and tinkerers.</p>
-        </article>
+          <!-- IvritCode -->
+          <article class="shelf-card">
+            <small>IvritCode · עבריתקוד</small>
+            <h3>Hebrew Opcodes and Logic</h3>
+            <p>
+              Technical notes and specifications for IvritCode — letters as opcodes, Gates
+              as operations, and the link between textual study and executable structure.
+            </p>
+            <a href="/library/ivritcode/">Open the IvritCode notes →</a>
+          </article>
 
-        <!-- OPEN NOTES -->
-        <article id="open-notes" class="home-card shelf-card">
-          <h3>Open Notes &amp; Drafts</h3>
-          <p>
-            Rough notes, experimental pages, and works-in-progress.
-            Less polished, more laboratory.
-          </p>
-          <ul class="card-list">
-            <li><a href="/library/open-notes/" class="card-link">Browse open notes →</a></li>
-          </ul>
-          <p class="card-footer">Enter if you don’t mind pencil marks.</p>
-        </article>
-      </div>
-    </section>
+          <!-- Archive / Notes -->
+          <article class="shelf-card">
+            <small>Archive &amp; Notes · גניזה</small>
+            <h3>Older Pages, Still Breathing</h3>
+            <p>
+              Drafts, early studies, and older paths that still carry light. Material here
+              is stable enough to keep, but not yet fully shaped for the main shelves.
+            </p>
+            <a href="/library/archive/">Visit the archive →</a>
+          </article>
+        </div>
+      </section>
 
-    <!-- GENTLE CLOSING -->
-    <section class="library-section library-closing">
-      <h2 class="section-heading">
-        Read slowly. Return often.
-      </h2>
-      <p class="section-subtitle">
-        You do not have to finish a shelf to benefit from it.
-        One page, one blessing, one clear thought is enough.
-      </p>
-      <p class="library-note">
-        When your eyes are tired, close the browser like you would close a sefer.
-        The Library will be here when you return.
-      </p>
-    </section>
+      <hr class="divider" />
+
+      <!-- How to use -->
+      <section class="content-section">
+        <div class="pill-heading">How to Use This Library · איך להשתמש בספרייה</div>
+        <h2>Not a Line to Finish, but a Circle to Walk</h2>
+        <ul>
+          <li><strong>Begin with Foundations.</strong> Align language and posture.</li>
+          <li>
+            <strong>Move into Daily Practice.</strong> Choose one blessing, one phrase, or
+            one small action you can actually carry into this week.
+          </li>
+          <li>
+            <strong>Then explore the deeper trunks.</strong> When you are ready, walk into
+            Quantum Etz Chaim and the 231 Gates as long-form paths.
+          </li>
+        </ul>
+        <p>
+          Whenever you feel lost, return to the Foundations shelf. The Library is designed
+          to meet you where you are, and to be walked more than once.
+        </p>
+      </section>
+    </div>
   </main>
 
-  <footer class="footer">
-    <p class="footer-meta">
-      &copy; 2026 LuminaNexus · The Library of the Celestial Gates.
-    </p>
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <p>© <span id="year"></span> LuminaNexus. Sanctuary · Study · Build.</p>
+    </div>
   </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
