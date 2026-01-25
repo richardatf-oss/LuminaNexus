@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gate א–ב · Library of 231 Gates — LuminaNexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Gate Aleph–Bet (א–ב) in the Library of 231 Gates at LuminaNexus — from silent source to first articulation, with practice."
+  />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <style>
+    .page-shell {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+    }
+
+    .hero-card {
+      border-radius: 1.75rem;
+      padding: 2.25rem 2.25rem 2rem;
+      background: radial-gradient(circle at top left, rgba(255, 194, 120, 0.18), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(93, 147, 255, 0.14), transparent 55%),
+                  rgba(5, 16, 40, 0.95);
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.75),
+        0 0 0 1px rgba(255, 255, 255, 0.02);
+      margin-bottom: 2.75rem;
+    }
+
+    .hero-pill-row {
+      display: inline-flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: rgba(255, 165, 0, 0.18);
+      color: #ffd799;
+      border: 1px solid rgba(255, 199, 128, 0.35);
+    }
+
+    .hero-pill-secondary {
+      background: rgba(120, 165, 255, 0.14);
+      color: #c4d9ff;
+      border-color: rgba(162, 196, 255, 0.35);
+    }
+
+    .hero-pill-tertiary {
+      background: rgba(76, 214, 167, 0.16);
+      color: #d1ffe8;
+      border-color: rgba(143, 238, 195, 0.4);
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 3vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.35rem;
+      color: #ffffff;
+    }
+
+    .hero-subtitle {
+      max-width: 650px;
+      color: rgba(235, 239, 255, 0.8);
+      font-size: 0.98rem;
+      line-height: 1.7;
+      margin-bottom: 1.3rem;
+    }
+
+    .hero-meta {
+      font-size: 0.88rem;
+      color: rgba(207, 217, 255, 0.9);
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      margin-top: 1.7rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .hero-actions a {
+      text-decoration: none;
+    }
+
+    .btn-soft,
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.55rem 1.25rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 500;
+      transition: background 150ms ease, color 150ms ease, border-color 150ms ease,
+                  transform 120ms ease;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-soft {
+      background: linear-gradient(135deg, #ffb878, #ff9350);
+      color: #1a1110;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-soft:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
+    }
+
+    .btn-ghost {
+      background: rgba(5, 20, 60, 0.8);
+      color: #f0f3ff;
+      border-color: rgba(148, 179, 255, 0.45);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(16, 38, 94, 0.95);
+    }
+
+    .pill-heading {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(196, 206, 255, 0.86);
+      margin-bottom: 0.5rem;
+    }
+
+    .content-section {
+      margin-bottom: 2.6rem;
+    }
+
+    .content-section h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.35rem;
+      color: #f7f4ff;
+    }
+
+    .content-section h3 {
+      font-size: 1.05rem;
+      margin-top: 1.25rem;
+      margin-bottom: 0.2rem;
+      color: #f2eaff;
+    }
+
+    .content-section p {
+      color: rgba(224, 231, 255, 0.85);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      max-width: 72ch;
+    }
+
+    .content-section ul {
+      color: rgba(224, 231, 255, 0.85);
+      padding-left: 1.25rem;
+      margin-top: 0.4rem;
+      margin-bottom: 0.9rem;
+      font-size: 0.95rem;
+      line-height: 1.75;
+      max-width: 72ch;
+    }
+
+    .content-section li + li {
+      margin-top: 0.2rem;
+    }
+
+    .hebrew-line {
+      font-family: "SBL Hebrew", "Ezra SIL", "Noto Serif Hebrew", system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.06em;
+      color: rgba(233, 232, 255, 0.96);
+    }
+
+    .hebrew-note {
+      font-size: 0.95rem;
+      color: rgba(212, 222, 255, 0.9);
+    }
+
+    .gate-diagram {
+      border-radius: 1.25rem;
+      padding: 1.3rem 1.4rem 1.1rem;
+      background: radial-gradient(circle at top left, rgba(255, 208, 149, 0.2), transparent 60%),
+                  rgba(4, 13, 34, 0.96);
+      border: 1px solid rgba(118, 143, 205, 0.55);
+      max-width: 72ch;
+      margin-top: 0.75rem;
+    }
+
+    .gate-diagram-row {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .gate-pair {
+      font-size: 2.1rem;
+      font-weight: 700;
+    }
+
+    .gate-pair span {
+      display: inline-block;
+      margin: 0 0.15rem;
+    }
+
+    .gate-label {
+      font-size: 0.9rem;
+      color: rgba(213, 223, 255, 0.9);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(90, 112, 160, 0.5);
+      margin: 2.4rem 0 2.2rem;
+    }
+
+    .practice-card {
+      border-radius: 1.35rem;
+      padding: 1.6rem 1.6rem 1.3rem;
+      background: radial-gradient(circle at top left, rgba(76, 214, 167, 0.18), transparent 60%),
+                  rgba(3, 18, 36, 0.97);
+      border: 1px solid rgba(143, 238, 195, 0.4);
+      max-width: 72ch;
+    }
+
+    .practice-card h3 {
+      margin-top: 0;
+    }
+
+    @media (max-width: 720px) {
+      .hero-card {
+        padding: 1.65rem 1.4rem 1.6rem;
+        border-radius: 1.25rem;
+      }
+
+      .page-shell {
+        padding-top: 3rem;
+      }
+    }
+  </style>
+</head>
+<body class="ln-body">
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="/" class="site-logo">
+        <span class="site-logo-title">LUMINA NEXUS</span>
+        <span class="site-logo-subtitle">Sanctuary · Study · Build</span>
+      </a>
+      <nav class="site-nav">
+        <a href="/about/">About</a>
+        <a href="/chavruta/">Chavruta</a>
+        <a href="/library/" class="is-active">Library</a>
+        <a href="/map/">Map</a>
+        <a href="/seal/">Seal</a>
+        <a href="/support/">Support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-shell">
+      <!-- Hero -->
+      <section class="hero-card">
+        <div class="hero-pill-row">
+          <div class="hero-pill">Library · רל״א שערים</div>
+          <div class="hero-pill hero-pill-secondary">Gate · שער</div>
+          <div class="hero-pill hero-pill-tertiary">א–ב · Aleph–Bet</div>
+        </div>
+        <h1 class="hero-title">Gate א–ב · From Silence to First Word</h1>
+        <p class="hero-subtitle">
+          Aleph, the silent opening; Bet, the first housed sound of creation. Together they
+          form a gate from unspoken source to articulated beginning — the move from “I feel
+          something” to “I dare to say it.”
+        </p>
+        <p class="hero-meta">
+          This page is not a full doctrine of the letters. It is one way of walking this
+          Gate: slowly, with attention, and with at least one small action you can carry
+          into your week.
+        </p>
+
+        <div class="hero-actions">
+          <a href="/library/" class="btn-soft">← Back to the Library</a>
+          <a href="/library/foundations/" class="btn-ghost">Return to Foundations</a>
+          <a href="/map/" class="btn-ghost">View the Sanctuary map</a>
+        </div>
+      </section>
+
+      <!-- Diagram / basic definition -->
+      <section class="content-section">
+        <div class="pill-heading">Gate Shape · צורת השער</div>
+        <h2>Aleph–Bet as a Relationship</h2>
+        <p>
+          On its own, Aleph (א) is silent breath — a letter that shapes air without a fixed
+          sound. Bet (ב) is voiced and housed, the first letter of <em>Bereshit</em>,
+          “In the beginning.” When they join as a Gate, א–ב becomes a pattern:
+          <strong>what is felt but not yet said meets the first word that dares to leave the
+          heart.</strong>
+        </p>
+
+        <div class="gate-diagram">
+          <div class="gate-diagram-row">
+            <div>
+              <div class="gate-label">Gate · שער</div>
+              <div class="gate-pair hebrew-line">
+                <span>א</span><span>–</span><span>ב</span>
+              </div>
+            </div>
+            <div>
+              <p class="hebrew-line">
+                א — אוויר שקט, נשימה שאין לה צליל קבוע.<br />
+                ב — בית הקול, צליל ראשון שנאמר בתוך מסגרת.
+              </p>
+              <p class="hebrew-note">
+                Together: from unshaped breath to word housed in a mouth, a room, a world.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- Layer 1: Inner experience -->
+      <section class="content-section">
+        <div class="pill-heading">Layer 1 · Inner Experience · חוויה פנימית</div>
+        <h2>The Moment Before You Speak</h2>
+        <p>
+          Every honest sentence begins with a silent pause — a gathering of intention
+          before sound. That pause is Aleph. The moment you shape that intention into a
+          word that can be heard is Bet.
+        </p>
+        <ul>
+          <li>
+            <strong>Aleph:</strong> “Something is true inside me, but I have not yet found
+            the right word.”
+          </li>
+          <li>
+            <strong>Bet:</strong> “I will risk saying it, even imperfectly, so it can enter
+            the shared space between us.”
+          </li>
+        </ul>
+        <p>
+          Walking this Gate means noticing that hinge: the tiny threshold between keeping
+          something entirely inside and letting it join the world.
+        </p>
+      </section>
+
+      <!-- Layer 2: Textual/Kabbalistic hint -->
+      <section class="content-section">
+        <div class="pill-heading">Layer 2 · Text &amp; Tradition · טקסט ומסורת</div>
+        <h2>From Hidden Aleph to Spoken Bet</h2>
+        <p>
+          Hebrew tradition plays with a paradox: the Torah begins not with Aleph, but with
+          Bet — <em>Bereshit</em>. Commentators ask: where did Aleph go?
+        </p>
+        <p>
+          One answer: Aleph precedes the text as unspoken divine intention. Bet is creation
+          entering a structure — a “house” (<em>bayit</em>) for that intention. In this
+          reading, Gate א–ב is not merely alphabetical; it is the passage from invisible
+          will to visible, structured world.
+        </p>
+        <p class="hebrew-line">
+          א — רצון נעלם. ב — בית לָרָצוֹן. השער: מעבר מן הסוד אל המילים.
+        </p>
+      </section>
+
+      <!-- Layer 3: IvritCode / technical hint -->
+      <section class="content-section">
+        <div class="pill-heading">Layer 3 · Structure &amp; Code · מבנה וקוד</div>
+        <h2>Aleph–Bet as Operation</h2>
+        <p>
+          Within IvritCode and Quantum Etz Chaim work, we may treat this Gate as a basic
+          operation:
+        </p>
+        <ul>
+          <li><strong>Aleph:</strong> input space — raw, unformatted signal or intention.</li>
+          <li>
+            <strong>Bet:</strong> first framing — the choice of a container: data structure,
+            sentence, or blessing form.
+          </li>
+        </ul>
+        <p>
+          The Gate א–ב then becomes a repeatable step: <strong>receive silently, then
+          frame gently</strong>. In code terms: do not publish a value before you have
+          chosen the right type.
+        </p>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- Practice -->
+      <section class="content-section">
+        <div class="pill-heading">Practice · מעשה</div>
+        <div class="practice-card">
+          <h3>Small Practice for This Week</h3>
+          <p>
+            Choose <strong>one conversation</strong> today where you will consciously walk
+            Gate א–ב.
+          </p>
+          <ul>
+            <li>
+              Before you respond, allow yourself <strong>one quiet breath</strong>
+              (Aleph). Notice what is truly present in you — not just your first reaction.
+            </li>
+            <li>
+              Then shape **one simple, honest sentence** (Bet). Prefer clarity over
+              cleverness. Let the sentence be small enough that you can say it without
+              pretending.
+            </li>
+          </ul>
+          <p>
+            You can mark the practice quietly before or after with the words:
+          </p>
+          <p class="hebrew-line">
+            שַׁעַר א–ב — מִן הַשֶּׁקֶט אֶל הַמִּלָּה הָרִאשׁוֹנָה.
+          </p>
+          <p>
+            “Gate Aleph–Bet — from silence to the first word.”
+          </p>
+        </div>
+      </section>
+
+      <!-- Closing -->
+      <section class="content-section">
+        <div class="pill-heading">Return · חזרה</div>
+        <h2>Closing the Gate, Keeping the Path</h2>
+        <p>
+          You have not finished Gate א–ב; you have only walked it once. Each time you pause
+          before speaking and then choose a truer, gentler first word, you are walking this
+          Gate again.
+        </p>
+        <p>
+          When the practice feels heavy or confusing, step back to the
+          <a href="/library/foundations/">Foundations Shelf</a>. When you are ready, you
+          may move on to another Gate — but Aleph–Bet will always be waiting at the
+          threshold.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <p>© <span id="year"></span> LuminaNexus. Sanctuary · Study · Build.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
