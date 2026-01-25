@@ -20,9 +20,10 @@
       margin: 0 auto;
     }
 
+    /* Table card */
     .ch-table {
       margin-top: 2.25rem;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2.25rem;
       padding: 2rem 2.25rem;
       border-radius: 28px;
       background:
@@ -145,8 +146,9 @@
       display: none;
     }
 
+    /* Sessions strip */
     .ch-sessions {
-      margin-top: 2rem;
+      margin-top: 1.5rem;
     }
 
     @media (max-width: 900px) {
@@ -246,7 +248,7 @@
               <div class="ch-row">
                 <button type="submit" class="btn btn-primary" id="askBtn">Ask →</button>
                 <div class="ch-meta">
-                  Hints: “Shema Yisrael (Devarim 6:4)”, “Kavod vs Anavah”, “Tehillim 27:1 with mefarshim”.
+                  Enter to ask · Shift+Enter for a new line.
                 </div>
               </div>
 
@@ -267,42 +269,34 @@
         </div>
       </section>
 
-      <!-- SESSIONS -->
+      <!-- SESSIONS: three cards -->
       <section id="sessions" class="home-section ch-sessions">
         <h2 class="section-heading">
           Sessions · <span lang="he">מַסְלוּלֵי לִמּוּד</span>
         </h2>
         <p class="section-subtitle">
-          Choose a standing chavruta path. Each one can grow into guided study flows, PDFs, or Sefaria sheets.
+          Start with whichever trunk you need most this week. Each card will grow into guided study flows.
         </p>
 
         <div class="card-grid">
           <article class="home-card">
             <h3>Daily Chavruta</h3>
-            <p>One text, one question, one action — a steady daily practice.</p>
+            <p>One short source, one question, one small action — a steady daily companion.</p>
             <a href="/chavruta/daily/" class="card-link">Open daily table →</a>
           </article>
 
           <article class="home-card">
             <h3>Slow Series</h3>
-            <p>Multi-week journeys: Shabbat, prayer, middot, or the Seven Laws.</p>
+            <p>Multi-week journeys through Shabbat, tefillah, middot, or the Seven Laws.</p>
             <a href="/chavruta/slow-series/" class="card-link">View slow journeys →</a>
           </article>
 
           <article class="home-card">
             <h3>Open Notes</h3>
-            <p>Rough notes, questions, and marginalia — less polished, more laboratory.</p>
+            <p>Rough notes and questions — less polished, more laboratory, still part of the tree.</p>
             <a href="/library/open-notes/" class="card-link">Browse notes →</a>
           </article>
         </div>
-      </section>
-
-      <!-- Closing -->
-      <section class="home-section">
-        <h2 class="section-heading">Return often.</h2>
-        <p class="section-subtitle">
-          You do not have to bring everything at once. One verse, one dilemma, one quiet step is enough.
-        </p>
       </section>
     </div>
   </main>
@@ -322,20 +316,34 @@
       statusEl.textContent = msg;
     }
 
+    // Enter to send, Shift+Enter for newline
+    textarea.addEventListener("keydown", (e) => {
+      if (
+        e.key === "Enter" &&
+        !e.shiftKey &&
+        !e.ctrlKey &&
+        !e.altKey &&
+        !e.metaKey
+      ) {
+        e.preventDefault();
+        if (form.requestSubmit) {
+          form.requestSubmit();
+        } else {
+          form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+        }
+      }
+    });
+
     function extractAnswer(payload) {
       if (!payload) return "";
 
-      // If backend already returns a plain string
       if (typeof payload === "string") return payload;
-
-      // Common wrap fields
       if (typeof payload.answer === "string") return payload.answer;
       if (typeof payload.reply === "string") return payload.reply;
       if (typeof payload.content === "string") return payload.content;
       if (typeof payload.text === "string") return payload.text;
       if (typeof payload.message === "string") return payload.message;
 
-      // OpenAI chat completion style
       const c1 = payload?.choices?.[0]?.message?.content;
       if (typeof c1 === "string") return c1;
 
@@ -345,7 +353,6 @@
       const out = payload?.output?.[0]?.content?.[0]?.text;
       if (typeof out === "string") return out;
 
-      // If it's still an object, stringify nicely
       try {
         return JSON.stringify(payload, null, 2);
       } catch {
