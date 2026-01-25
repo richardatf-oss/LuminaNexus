@@ -55,62 +55,34 @@
     </header>
 
     <main>
-      <!-- HERO -->
-      <section class="hero-shell">
-        <div class="hero-grid">
-          <!-- Left: copy -->
-          <div class="hero-copy">
-            <div class="hero-pill-row">
-              <span class="hero-pill-main">LUMINA NEXUS</span>
-              <span class="hero-pill-tag">Sanctuary · Study · Build</span>
-              <span class="hero-pill-tag-alt">Quiet place in the digital night</span>
+      <!-- FULL HERO IMAGE -->
+      <section class="hero-full">
+        <div class="hero-full-inner">
+          <img
+            src="/assets/img/lumina-hero.webp"
+            alt="A luminous sanctuary at night with candles, books, and an open space for learning — LuminaNexus."
+            class="hero-full-image"
+          />
+          <div class="hero-full-overlay">
+            <div class="hero-full-tagline">
+              LUMINA NEXUS · Sanctuary · Study · Build
             </div>
-
-            <h1 class="hero-title">
-              Sanctuary in the <span class="hero-title-highlight">digital night.</span>
-            </h1>
-
-            <p class="hero-subtitle">
-              A quiet place for <strong>Torah</strong>, learning, and luminous tools.
-              Study slowly. Build carefully. Walk with reverence.
-            </p>
-
-            <div class="hero-ctas">
-              <a href="/chavruta" class="btn-primary hero-primary">
-                <span>★ Enter the Sanctuary</span>
+            <div class="hero-full-buttons">
+              <!-- This replaces 'Enter the Sanctuary' -->
+              <a href="/chavruta" class="btn-primary hero-full-btn">
+                Begin the Journey
               </a>
-              <a href="#trunks" class="btn-ghost hero-secondary">
-                <span>? What is LuminaNexus</span>
+              <!-- This replaces 'What is LuminaNexus' -->
+              <a href="#trunks" class="btn-ghost hero-full-btn hero-full-btn-secondary">
+                Learn more
               </a>
             </div>
-
-            <p class="hero-footnote">
-              Three trunks — Sanctuary for the heart, Study for the mind, and Build for
-              the hands.
-            </p>
           </div>
-
-          <!-- Right: hero image card -->
-          <aside class="hero-visual">
-            <div class="hero-image-card">
-              <figure class="hero-figure">
-                <img
-                  src="/assets/img/lumina-hero.webp"
-                  alt="A luminous sanctuary at night with candles, books, and an open space for learning — LuminaNexus."
-                  class="hero-image"
-                  loading="lazy"
-                />
-                <figcaption class="hero-caption">
-                  <span class="hero-caption-label">Sanctuary hall · אוֹר לַיְלָה</span>
-                </figcaption>
-              </figure>
-            </div>
-          </aside>
         </div>
       </section>
 
-      <!-- TRUNKS SECTION -->
-      <section id="trunks" class="trunks-shell">
+      <!-- TRUNKS SECTION (OVERLAYED UP INTO HERO) -->
+      <section id="trunks" class="trunks-shell trunks-overlay">
         <header class="trunks-header">
           <h2>One Nexus, three trunks.</h2>
           <p class="trunks-subtitle">
