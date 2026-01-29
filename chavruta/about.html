@@ -1,308 +1,123 @@
-<!-- File: chavruta/about.html -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="color-scheme" content="dark light" />
-  <title>About • Chavruta</title>
-  <meta name="description" content="About Chavruta — a disciplined, text-first Torah learning companion: peshat first, sources named, speculation marked." />
-
-  <style>
-    :root{
-      --bg0:#070a10;
-      --bg1:#0b1220;
-      --card:rgba(255,255,255,.06);
-      --card2:rgba(255,255,255,.08);
-      --line:rgba(255,255,255,.12);
-      --text:rgba(255,255,255,.88);
-      --muted:rgba(255,255,255,.65);
-      --faint:rgba(255,255,255,.45);
-      --accent:rgba(255,255,255,.92);
-      --shadow: 0 10px 30px rgba(0,0,0,.45);
-      --radius: 18px;
-      --radius2: 14px;
-      --max: 980px;
-    }
-
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color:var(--text);
-      background:
-        radial-gradient(1100px 700px at 20% 8%, rgba(255,255,255,.09), transparent 60%),
-        radial-gradient(900px 600px at 85% 15%, rgba(255,255,255,.06), transparent 55%),
-        radial-gradient(1200px 900px at 45% 85%, rgba(255,255,255,.05), transparent 65%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      line-height:1.6;
-    }
-
-    a{ color:var(--accent); text-decoration:none; }
-    a:hover{ text-decoration:underline; }
-
-    .topbar{
-      position:sticky;
-      top:0;
-      z-index:20;
-      backdrop-filter: blur(10px);
-      background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.20));
-      border-bottom:1px solid var(--line);
-    }
-    .topbar-inner{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:14px 18px;
-      display:flex;
-      align-items:center;
-      gap:14px;
-      justify-content:space-between;
-    }
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-      min-width:0;
-    }
-    .brand .title{
-      font-weight:650;
-      letter-spacing:.2px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      white-space:nowrap;
-    }
-    .dot{
-      width:10px;height:10px;border-radius:999px;
-      background: rgba(255,255,255,.75);
-      box-shadow: 0 0 18px rgba(255,255,255,.35);
-      flex:0 0 auto;
-    }
-    .brand .sub{
-      color:var(--muted);
-      font-size:.9rem;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .nav{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .pill{
-      padding:8px 12px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.04);
-      border-radius:999px;
-      color:var(--text);
-      font-size:.92rem;
-    }
-    .pill:hover{
-      background: rgba(255,255,255,.06);
-      text-decoration:none;
-    }
-
-    main{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:28px 18px 56px;
-    }
-
-    .hero{
-      margin-top:10px;
-      padding:22px 22px;
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      box-shadow: var(--shadow);
-    }
-    .hero h1{
-      margin:0 0 6px 0;
-      font-size:1.6rem;
-      letter-spacing:.2px;
-    }
-    .hero p{
-      margin:0;
-      color:var(--muted);
-      max-width: 70ch;
-    }
-
-    .grid{
-      margin-top:16px;
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:14px;
-    }
-    @media (max-width: 900px){
-      .grid{ grid-template-columns:1fr; }
-    }
-
-    .card{
-      padding:18px 18px;
-      border:1px solid var(--line);
-      border-radius:var(--radius2);
-      background: var(--card);
-    }
-    .card h2{
-      margin:0 0 10px 0;
-      font-size:1.05rem;
-      letter-spacing:.2px;
-    }
-    .card p{
-      margin:0 0 10px 0;
-      color:var(--muted);
-    }
-    .card p:last-child{ margin-bottom:0; }
-
-    .list{
-      margin:0;
-      padding-left: 18px;
-      color:var(--muted);
-    }
-    .list li{ margin: 8px 0; }
-
-    .callout{
-      margin-top:14px;
-      padding:16px 16px;
-      border:1px solid var(--line);
-      border-radius:var(--radius2);
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
-    }
-    .callout .label{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      font-weight:650;
-      margin-bottom:6px;
-    }
-    .callout .label .mini{
-      width:8px;height:8px;border-radius:999px;
-      background: rgba(255,255,255,.70);
-      box-shadow: 0 0 14px rgba(255,255,255,.28);
-    }
-
-    blockquote{
-      margin:14px 0 0;
-      padding:12px 14px;
-      border-left:3px solid rgba(255,255,255,.28);
-      background: rgba(255,255,255,.04);
-      border-radius: 10px;
-      color: rgba(255,255,255,.78);
-    }
-
-    .footer{
-      margin-top:18px;
-      color:var(--faint);
-      font-size:.92rem;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-      border-top:1px solid var(--line);
-      padding-top:16px;
-    }
-    .footer a{ color:rgba(255,255,255,.8); }
-  </style>
+  <meta charset="UTF-8" />
+  <title>About – LuminaNexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="LuminaNexus is a quiet sanctuary on the web for Torah, study, and careful creative building."
+  />
+  <link rel="stylesheet" href="/assets/css/global.css" />
 </head>
 
 <body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="title"><span class="dot"></span> Chavruta</div>
-        <div class="sub">Torah-first • Peshat first • Sources named • Speculation marked</div>
-      </div>
 
-      <nav class="nav" aria-label="Primary">
-        <a class="pill" href="./">Back to Chavruta</a>
-        <a class="pill" href="/">Sanctuary</a>
-      </nav>
-    </div>
-  </header>
+  <!-- Header is inherited via global layout -->
 
-  <main>
-    <section class="hero" aria-labelledby="about-title">
-      <h1 id="about-title">About Chavruta</h1>
+  <main class="page-wrap">
+
+    <section class="card">
+      <span class="kicker">About</span>
+      <h1>What is LuminaNexus?</h1>
+
       <p>
-        Chavruta is a disciplined space for learning Torah aloud—text-first, source-aware, and restrained.
-        It is designed to support real study by slowing the learner down, naming assumptions, and staying anchored to the words.
+        LuminaNexus is a small, hand-built sanctuary on the web.
+        It exists for Torah, honest questions, and careful creative work.
+      </p>
+
+      <p>
+        This is not a platform for speed, hot takes, or constant noise.
+        It is a place to slow down, to study with intention,
+        and to build things that carry light rather than attention.
       </p>
     </section>
 
-    <section class="grid" aria-label="About content">
-      <article class="card">
-        <h2>What Chavruta Is</h2>
-        <ul class="list">
-          <li><strong>Text-first learning.</strong> The verse comes before the voice. Interpretation follows the text.</li>
-          <li><strong>Peshat first.</strong> Plain meaning is established before commentary or speculation.</li>
-          <li><strong>Source-aware.</strong> Classical voices (Rashi, Ibn Ezra, Ramban, Sforno, Rambam) are named explicitly.</li>
-          <li><strong>One question at a time.</strong> Focus sharpens understanding and keeps the discussion honest.</li>
-          <li><strong>Speculation clearly marked.</strong> When ideas move beyond text or classical consensus, they are labeled.</li>
-        </ul>
+    <section class="card">
+      <h2>Three intertwined paths</h2>
 
-        <div class="callout">
-          <div class="label"><span class="mini"></span> A disciplined chavruta</div>
-          <div style="color: var(--muted);">
-            Chavruta aims for clarity, fidelity to sources, and careful inquiry—rather than speed, novelty, or performance.
-          </div>
-        </div>
-      </article>
-
-      <aside class="card">
-        <h2>What Chavruta Is Not</h2>
-        <ul class="list">
-          <li>Not a sermon.</li>
-          <li>Not mystical improvisation.</li>
-          <li>Not anonymous authority.</li>
-          <li>Not ideological rewriting of the text.</li>
-          <li>Not artificial harmony—honest tension is permitted.</li>
-        </ul>
-
-        <div class="callout" style="margin-top:14px;">
-          <div class="label"><span class="mini"></span> Hebrew with care</div>
-          <div style="color: var(--muted);">
-            Hebrew (Lashon HaKodesh) may be shown alongside translation. The Hebrew is presented without embellishment,
-            and without forced interpretation unless requested.
-          </div>
-        </div>
-
-        <div class="callout" style="margin-top:14px;">
-          <div class="label"><span class="mini"></span> Locked Text Mode</div>
-          <div style="color: var(--muted);">
-            When the text is locked, Chavruta will not reframe, paraphrase, or expand it—only examine what is already present.
-          </div>
-        </div>
-      </aside>
-    </section>
-
-    <section class="card" style="margin-top:14px;">
-      <h2>A Guarded Gate</h2>
       <p>
-        Chavruta is built to be a guarded gate for sacred text: open to sincere questions, closed to distortion.
-        It does not replace a human chavruta. It exists to support one.
+        LuminaNexus grows along three connected paths.
+        Each supports the others.
       </p>
-      <blockquote>
-        “Turn it and turn it again, for everything is in it.” — Pirkei Avot 5:22
-      </blockquote>
+
+      <ul>
+        <li>
+          <strong>Sanctuary</strong> —
+          a quiet space for reflection, prayer, and presence.
+        </li>
+        <li>
+          <strong>Study</strong> —
+          learning Torah slowly, in good company,
+          with sources you can return to.
+        </li>
+        <li>
+          <strong>Build</strong> —
+          creative and technical work done with care,
+          reverence, and responsibility.
+        </li>
+      </ul>
     </section>
 
-    <div class="footer">
-      <div>© <span id="year"></span> Chavruta • LuminaNexus</div>
-      <div>
-        <a href="./">Chavruta</a> ·
-        <a href="/">Sanctuary</a>
-      </div>
-    </div>
+    <section class="card">
+      <h2>Chavruta at the center</h2>
+
+      <p>
+        At the heart of LuminaNexus is <em>chavruta</em> —
+        learning through relationship.
+      </p>
+
+      <p>
+        Questions are welcomed here.
+        Answers are offered gently.
+        The goal is not to win an argument,
+        but to clarify life.
+      </p>
+
+      <p>
+        ChavrutaGPT is designed to support this spirit:
+        answering slowly, pointing to sources,
+        and inviting one small practice rather than overwhelming conclusions.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Who this is for</h2>
+
+      <p>
+        LuminaNexus is for people who want to learn without rushing,
+        build without burning out,
+        and engage Torah without pretending to have everything figured out.
+      </p>
+
+      <p>
+        You do not need credentials here.
+        You only need honesty, patience, and care.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>An invitation</h2>
+
+      <p>
+        Bring one question.
+        Sit at the table.
+        Study in good company.
+      </p>
+
+      <p>
+        If you leave with a little more clarity,
+        a source to return to,
+        or one small practice to carry into the week,
+        then LuminaNexus has done its work.
+      </p>
+    </section>
+
   </main>
 
-  <script>
-    // tiny, safe enhancement
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <footer class="site-footer">
+    <p>© 2026 LuminaNexus. A quiet nexus for luminous work.</p>
+  </footer>
+
 </body>
 </html>
