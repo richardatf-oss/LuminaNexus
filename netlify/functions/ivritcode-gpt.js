@@ -1,136 +1,75 @@
 // netlify/functions/ivritcode-gpt.js
+import OpenAI from "openai";
 
-export const handler = async (event, _context) => {
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+export const handler = async (event) => {
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: "Method not allowed" }),
+    };
+  }
+
   try {
-    if (event.httpMethod === "OPTIONS") {
-      // CORS preflight
-      return {
-        statusCode: 200,
-        headers: corsHeaders(),
-        body: ""
-      };
-    }
+    const { prompt } = JSON.parse(event.body || "{}");
 
-    if (event.httpMethod !== "POST") {
-      return {
-        statusCode: 405,
-        headers: corsHeaders(),
-        body: JSON.stringify({ error: "Use POST" })
-      };
-    }
-
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
-      return {
-        statusCode: 500,
-        headers: corsHeaders(),
-        body: JSON.stringify({ error: "OPENAI_API_KEY not configured" })
-      };
-    }
-
-    const body = JSON.parse(event.body || "{}");
-    const { program, initialState, finalState, trace } = body;
-
-    // Very light validation
-    if (typeof program !== "string" || !Array.isArray(initialState) || !Array.isArray(finalState)) {
+    if (!prompt) {
       return {
         statusCode: 400,
-        headers: corsHeaders(),
-        body: JSON.stringify({ error: "Missing or invalid program/initialState/finalState" })
+        body: JSON.stringify({ error: "Missing prompt" }),
       };
     }
 
-    // Build a compact description of the run to send to GPT
-    const payloadForModel = {
-      program,
-      initialState,
-      finalState,
-      trace
-    };
-
+    // Here you embed your IvritCode SPEC + instructions
     const systemPrompt = `
-You are IvritCodeGPT, a Kabbalistic commentator for a symbolic machine language called IvritCode.
-The user sends you:
-- a Hebrew "program" string,
-- an initial state vector of 23 registers (א–ת and A),
-- a final state vector,
-- and a step-by-step execution trace.
+You are the IvritCode Chavruta.
 
-Your job:
-1. Explain in clear English (optionally with a bit of Hebrew) what the program did.
-2. Mention which opcodes (letters) were most important and why.
-3. Use classical gematria where helpful to interpret the program text and key numbers.
-4. Describe movement of Aleph-Olam (A) in symbolic terms (e.g., aggregation, revelation, contraction).
-5. Keep it grounded and non-theurgic: interpret, do not promise any metaphysical effects.
-6. Return markdown text, no HTML.
-`;
+- IvritCode is a 23-register VM (R0–R22) with 22 letters plus hidden Aleph Olam.
+- Letters = opcodes; niqqud & taamim = modifiers (planned).
+- Output MUST be JSON: { "code": "<letters>", "explanation": "<text>" }.
+- "code" is pure IvritCode letters (no spaces), "explanation" may be Hebrew or English.
 
-    const userPrompt = `
-Here is an IvritCode run. Please comment on it Kabbalistically and technically.
+User request:
+${prompt}
+    `.trim();
 
-PROGRAM:
-${program}
-
-INITIAL STATE (23 registers):
-${JSON.stringify(initialState)}
-
-FINAL STATE (23 registers):
-${JSON.stringify(finalState)}
-
-EXECUTION TRACE (may be truncated):
-${JSON.stringify(trace)}
-`;
-
-    // Call OpenAI
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-4.1-mini", // or whatever you're using elsewhere
-        messages: [
-          { role: "system", content: systemPrompt.trim() },
-          { role: "user", content: userPrompt.trim() }
-        ],
-        max_tokens: 800
-      })
+    const completion = await client.responses.create({
+      model: "gpt-4.1-mini",
+      input: [
+        {
+          role: "system",
+          content: systemPrompt,
+        },
+      ],
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      return {
-        statusCode: 500,
-        headers: corsHeaders(),
-        body: JSON.stringify({ error: "OpenAI error", details: errorText })
-      };
-    }
+    // Very simple extraction of the text from the first output
+    const raw =
+      completion.output[0]?.content?.[0]?.text || "No response from model.";
 
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content || "";
+    // Try to parse JSON from the text; fallback if no JSON found
+    let payload;
+    try {
+      payload = JSON.parse(raw);
+    } catch {
+      payload = { code: "", explanation: raw };
+    }
 
     return {
       statusCode: 200,
-      headers: corsHeaders(),
-      body: JSON.stringify({ commentary: content })
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+        // allow IvritCode.org front-end to talk to it
+        "Access-Control-Allow-Origin": "*",
+      },
     };
   } catch (err) {
+    console.error(err);
     return {
       statusCode: 500,
-      headers: corsHeaders(),
-      body: JSON.stringify({ error: "Server error", details: String(err) })
+      body: JSON.stringify({ error: "Server error", details: String(err) }),
     };
   }
 };
-
-function corsHeaders() {
-  return {
-    "Access-Control-Allow-Origin": "https://ivritcode.org, https://lumianexus.org".includes("*")
-      ? "*"
-      : "https://ivritcode.org",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type"
-  };
-}
-
