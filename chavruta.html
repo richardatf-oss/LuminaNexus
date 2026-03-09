@@ -16,7 +16,7 @@
     }
 
     .hero-shell--compact {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
     }
 
     .chavruta-layout {
@@ -52,10 +52,6 @@
       margin: 0 0 0.7rem;
       line-height: 1.6;
       opacity: 0.9;
-    }
-
-    .chavruta-panel small {
-      opacity: 0.8;
     }
 
     .chavruta-label {
@@ -104,6 +100,13 @@
       flex-wrap: wrap;
     }
 
+    .chavruta-status {
+      margin-top: 0.8rem;
+      font-size: 0.9rem;
+      opacity: 0.9;
+      display: none;
+    }
+
     .chavruta-sessions-heading {
       font-size: 0.85rem;
       letter-spacing: 0.1em;
@@ -132,7 +135,7 @@
 
     @media (max-width: 900px) {
       .hero-shell--compact {
-        margin-bottom: 1.25rem;
+        margin-bottom: 1rem;
       }
 
       .chavruta-layout {
@@ -145,30 +148,9 @@
       }
     }
   </style>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const textarea = document.getElementById("question");
-      const form = document.getElementById("chavruta-form");
-
-      if (textarea) {
-        textarea.focus();
-
-        textarea.addEventListener("keydown", function (event) {
-          if (event.key === "Enter" && !event.shiftKey) {
-            event.preventDefault();
-            if (!form) return;
-            if (textarea.value.trim().length === 0) return;
-            form.submit();
-          }
-        });
-      }
-    });
-  </script>
 </head>
 
 <body class="ln-dark">
-  <!-- Top bar -->
   <header class="topbar">
     <div class="topbar-inner">
       <a href="/" class="brand" aria-label="LuminaNexus home">
@@ -188,7 +170,6 @@
   </header>
 
   <main class="container chavruta-main">
-    <!-- HERO -->
     <section class="hero-shell hero-shell--chavruta hero-shell--compact">
       <div class="hero-overlay">
         <div class="hero-grid">
@@ -222,10 +203,8 @@
       </div>
     </section>
 
-    <!-- TABLE + SESSIONS ABOVE THE FOLD -->
     <section class="home-section">
       <div class="chavruta-layout">
-        <!-- LEFT: QUESTION PANEL -->
         <section class="chavruta-panel" aria-labelledby="your-question-heading">
           <span class="chavruta-label">Your side of the table</span>
           <h2 id="your-question-heading">Bring one question.</h2>
@@ -235,11 +214,7 @@
             ChavrutaGPT will answer with sources and one small practice for the week.
           </p>
 
-          <form
-            id="chavruta-form"
-            action="/chavruta/answer.html"
-            method="GET"
-          >
+          <form id="chavruta-form">
             <label for="question" class="chavruta-label">Your question</label>
             <textarea
               id="question"
@@ -257,14 +232,15 @@
             </div>
 
             <div class="chavruta-actions">
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn btn-primary" id="askBtn">
                 Ask your chavruta →
               </button>
             </div>
+
+            <div class="chavruta-status" id="status"></div>
           </form>
         </section>
 
-        <!-- RIGHT: STUDY PATHS PANEL -->
         <aside class="chavruta-panel" aria-labelledby="sessions-heading">
           <div class="chavruta-sessions-heading" id="sessions-heading">
             Choose a session.
@@ -292,7 +268,7 @@
             <h3>Table Question</h3>
             <p>
               One focused question, one sitting. A clear answer, a few sources,
-              and one small next step. Best for “this is on my heart today.”
+              and one small next step.
             </p>
             <p>
               <a href="#question" class="card-link">
@@ -305,8 +281,7 @@
             <h3>Walking Companion</h3>
             <p>
               Ongoing, lighter touch. Bring the week’s moments; your chavruta
-              helps you weave them into Torah and practice. Best for gentle,
-              continuous chavruta over time.
+              helps you weave them into Torah and practice.
             </p>
             <p>
               <a href="/library/open-notes/" class="card-link">
@@ -324,5 +299,112 @@
       &copy; 2026 LuminaNexus · Chavruta.
     </p>
   </footer>
+
+  <script>
+    const form = document.getElementById("chavruta-form");
+    const textarea = document.getElementById("question");
+    const askBtn = document.getElementById("askBtn");
+    const statusEl = document.getElementById("status");
+
+    function showStatus(msg) {
+      statusEl.style.display = "block";
+      statusEl.textContent = msg;
+    }
+
+    function extractAnswer(payload) {
+      if (!payload) return "";
+
+      if (typeof payload === "string") return payload;
+
+      if (typeof payload.answer === "string") return payload.answer;
+      if (typeof payload.reply === "string") return payload.reply;
+      if (typeof payload.content === "string") return payload.content;
+      if (typeof payload.text === "string") return payload.text;
+      if (typeof payload.message === "string") return payload.message;
+
+      if (typeof payload?.reply?.content === "string") return payload.reply.content;
+      if (typeof payload?.response === "string") return payload.response;
+
+      const c1 = payload?.choices?.[0]?.message?.content;
+      if (typeof c1 === "string") return c1;
+
+      const c2 = payload?.choices?.[0]?.text;
+      if (typeof c2 === "string") return c2;
+
+      const out = payload?.output?.[0]?.content?.[0]?.text;
+      if (typeof out === "string") return out;
+
+      try {
+        return JSON.stringify(payload, null, 2);
+      } catch {
+        return String(payload);
+      }
+    }
+
+    if (textarea) {
+      textarea.focus();
+
+      textarea.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault();
+          if (textarea.value.trim().length === 0) return;
+          if (form.requestSubmit) {
+            form.requestSubmit();
+          } else {
+            form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+          }
+        }
+      });
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const question = textarea.value.trim();
+      if (!question) return;
+
+      askBtn.disabled = true;
+      const originalText = askBtn.textContent;
+      askBtn.textContent = "Thinking…";
+      showStatus("Chavruta is listening…");
+
+      try {
+        const response = await fetch("/.netlify/functions/chavruta-gpt", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            messages: [
+              { role: "user", content: question }
+            ]
+          })
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          const detail = data?.error || data?.detail || JSON.stringify(data) || "Request failed";
+          throw new Error(detail);
+        }
+
+        const answerText = extractAnswer(data);
+
+        if (!answerText || !answerText.trim()) {
+          throw new Error("No answer returned from ChavrutaGPT.");
+        }
+
+        sessionStorage.setItem("chavruta_last_question", question);
+        sessionStorage.setItem("chavruta_last_answer", answerText);
+
+        window.location.href = "/chavruta/answer.html?q=" + encodeURIComponent(question);
+      } catch (err) {
+        showStatus("Error: " + (err?.message || err));
+      } finally {
+        askBtn.disabled = false;
+        askBtn.textContent = originalText;
+      }
+    });
+  </script>
 </body>
 </html>
