@@ -1,376 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Support — LuminaNexus</title>
-  <meta name="description" content="Support the work of LuminaNexus. Giving order: Temple Institute → Chabad → LuminaNexus Foundation." />
-
-  <style>
-    :root{
-      --bg0:#050814;
-      --bg1:#070b18;
-      --panel:#0b1020;
-      --panel2:#0d1430;
-      --text:#f4f6ff;
-      --muted:#aab2d6;
-      --accent:#f5c857;
-      --border:rgba(255,255,255,.12);
-      --shadow:0 18px 45px rgba(0,0,0,.55);
-      --radius:18px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at 30% 0%, rgba(245,200,87,.12), transparent 45%),
-        radial-gradient(circle at 70% 10%, rgba(120,160,255,.10), transparent 40%),
-        radial-gradient(circle at 50% 25%, rgba(20,30,70,.65), transparent 55%),
-        linear-gradient(180deg, var(--bg1), var(--bg0));
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
-    }
-    a{color:var(--accent); text-decoration:none}
-    a:hover{text-decoration:underline}
-
-    /* Top nav */
-    header{
-      position:sticky; top:0; z-index:50;
-      border-bottom:1px solid var(--border);
-      background:linear-gradient(to right, rgba(5,8,20,.92), rgba(5,8,20,.75));
-      backdrop-filter: blur(10px);
-    }
-    .nav{
-      max-width:1100px;
-      margin:0 auto;
-      padding:14px 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:18px;
-    }
-    .brand{
-      display:flex;
-      flex-direction:column;
-      line-height:1.05;
-    }
-    .brand .name{
-      font-weight:650;
-      letter-spacing:.02em;
-    }
-    .brand .tag{
-      font-size:.72rem;
-      color:var(--muted);
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      margin-top:2px;
-    }
-    .navlinks{
-      display:flex;
-      gap:18px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .navlinks a{
-      font-size:.9rem;
-      color:var(--muted);
-      padding:8px 10px;
-      border-radius:10px;
-    }
-    .navlinks a.active{
-      color:var(--text);
-      background:rgba(245,200,87,.10);
-      border:1px solid rgba(245,200,87,.22);
-    }
-
-    main{flex:1}
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-      padding:54px 18px 70px;
-    }
-
-    .kicker{
-      font-size:.78rem;
-      color:var(--muted);
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      margin-bottom:10px;
-    }
-    h1{
-      font-size:clamp(2.2rem, 4vw, 3rem);
-      margin:0 0 10px;
-      letter-spacing:-.02em;
-    }
-    .lead{
-      color:var(--muted);
-      max-width:72ch;
-      margin:0 0 26px;
-      font-size:1rem;
-    }
-
-    .section-title{
-      margin:34px 0 10px;
-      font-size:1.02rem;
-      color:var(--text);
-      letter-spacing:.02em;
-    }
-    .section-sub{
-      margin:0 0 18px;
-      color:var(--muted);
-      max-width:80ch;
-      font-size:.95rem;
-    }
-
-    .grid3{
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0,1fr));
-      gap:16px;
-      margin-top:14px;
-    }
-    @media (max-width: 900px){
-      .grid3{grid-template-columns:1fr}
-      .nav{align-items:flex-start; flex-direction:column}
-      .navlinks{justify-content:flex-start}
-    }
-
-    .card{
-      background:linear-gradient(180deg, rgba(11,16,32,.96), rgba(11,16,32,.86));
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:18px 18px 16px;
-      min-height:190px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .card h3{
-      margin:0;
-      font-size:1rem;
-      font-weight:650;
-    }
-    .card p{
-      margin:0;
-      color:var(--muted);
-      font-size:.92rem;
-      line-height:1.5;
-      flex:1;
-    }
-    .btn{
-      align-self:flex-start;
-      display:inline-flex;
-      gap:10px;
-      align-items:center;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(5,8,20,.55);
-      color:var(--text);
-      font-size:.9rem;
-      cursor:pointer;
-      text-decoration:none;
-    }
-    .btn:hover{
-      border-color:rgba(245,200,87,.35);
-      background:rgba(245,200,87,.10);
-      text-decoration:none;
-    }
-
-    .split{
-      display:grid;
-      grid-template-columns:1.2fr .9fr;
-      gap:16px;
-      margin-top:18px;
-    }
-    @media (max-width: 900px){ .split{grid-template-columns:1fr} }
-
-    .panel{
-      background:linear-gradient(180deg, rgba(11,16,32,.96), rgba(11,16,32,.86));
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:18px;
-    }
-    .panel h3{
-      margin:0 0 8px;
-      font-size:1rem;
-    }
-    .panel p{
-      margin:0;
-      color:var(--muted);
-      font-size:.92rem;
-      line-height:1.6;
-    }
-    .meta{
-      margin-top:12px;
-      padding-top:12px;
-      border-top:1px solid rgba(255,255,255,.10);
-      color:var(--muted);
-      font-size:.9rem;
-      line-height:1.55;
-    }
-
-    .contact-info{
-      margin-top:26px;
-      padding-top:18px;
-      border-top:1px solid rgba(255,255,255,.12);
-      font-size:.95rem;
-      line-height:1.6;
-    }
-    .contact-info h3{
-      margin:0 0 10px;
-      font-size:1rem;
-      font-weight:650;
-    }
-    .contact-info p{margin:8px 0; color:var(--muted)}
-    .contact-info strong{color:var(--text)}
-
-    footer{
-      border-top:1px solid var(--border);
-      background:rgba(5,8,20,.92);
-      color:var(--muted);
-      text-align:center;
-      padding:18px;
-      font-size:.82rem;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Support LuminaNexus</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/assets/css/global.css">
 </head>
 
-<body>
-  <header>
-    <div class="nav">
-      <div class="brand">
-        <div class="name">LuminaNexus</div>
-        <div class="tag">SANCTUARY · STUDY · BUILD</div>
-      </div>
-      <nav class="navlinks" aria-label="Primary">
-        <a href="/sanctuary/">Sanctuary</a>
-        <a href="/about/">About</a>
-        <a href="/chavruta/">Chavruta</a>
-        <a href="/library/">Library</a>
-        <a href="/map/">Map</a>
-        <a href="/seal/">Seal</a>
-        <a class="active" href="/donate/">Support</a>
-      </nav>
-    </div>
-  </header>
+<body class="ln-dark">
 
-  <main>
-    <div class="wrap">
-      <div class="kicker">SUPPORT · תְּמִיכָה</div>
-      <h1>Support the work.</h1>
-      <p class="lead">
-        LuminaNexus stands downstream from older, deeper roots. We invite you to support those foundations first,
-        and then — if it feels right — to partner with the LuminaNexus Foundation.
-      </p>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="/" class="brand">
+      <span class="brand-title">LuminaNexus</span>
+      <span class="brand-subtitle">Sanctuary · Study · Build</span>
+    </a>
 
-      <div class="section-title">Giving order · סֵדֶר הַתְּרֻמָה</div>
-      <p class="section-sub">
-        When people ask how to give, we answer in this order:
-        <strong>Temple Institute</strong> → <strong>Chabad</strong> → <strong>LuminaNexus Foundation</strong>.
-        The tree should honor its own roots.
-      </p>
-
-      <section class="grid3" aria-label="Giving order">
-        <article class="card">
-          <h3>1 · The Temple Institute</h3>
-          <p>
-            The Temple Institute works toward the study, memory, and future of the Beit HaMikdash.
-            We encourage donors to support their work before supporting LuminaNexus.
-          </p>
-          <a class="btn" href="https://templeinstitute.org/" target="_blank" rel="noopener">Give to the Temple Institute →</a>
-        </article>
-
-        <article class="card">
-          <h3>2 · Chabad</h3>
-          <p>
-            Chabad centers bring Torah, mitzvot, and practical kindness into daily life across the world.
-            After supporting the Temple Institute, we invite you to support your local Chabad house or the broader network.
-          </p>
-          <a class="btn" href="https://www.chabad.org/" target="_blank" rel="noopener">Give to Chabad →</a>
-        </article>
-
-        <article class="card">
-          <h3>3 · LuminaNexus Foundation</h3>
-          <p>
-            Once you have supported these foundations, you are warmly invited to support the LuminaNexus Foundation —
-            the living digital sanctuary behind this site, dedicated to slow study, embodied practice, and constructive creation.
-          </p>
-          <a class="btn" href="#luminanexus-giving">Give to LuminaNexus Foundation →</a>
-        </article>
-      </section>
-
-      <div id="luminanexus-giving" class="section-title" style="margin-top:40px;">LuminaNexus Foundation · קֶרֶן לוּמִינָה־נֶקְסוּס</div>
-      <p class="section-sub">
-        The LuminaNexus Foundation exists to sustain this sanctuary: hosting costs, learning resources,
-        tools for study and practice, and support for future development.
-      </p>
-<article class="card">
-  <h3>How to give</h3>
-
-  <p>
-    You can give by check, bank transfer, or online (coming soon).
-    For now, please email us for current donation options and instructions.
-  </p>
-
-  <div class="meta">
-    <div><strong>Email:</strong>
-      <a href="mailto:LuminaNexus@Yahoo.com">LuminaNexus@Yahoo.com</a>
-    </div>
-    <div><strong>Name:</strong> LuminaNexus Foundation</div>
-    <div><strong>EIN:</strong> 41-3623969</div>
+    <nav class="nav-links">
+      <a href="/about">About</a>
+      <a href="/chavruta">Chavruta</a>
+      <a href="/library">Library</a>
+      <a href="/map">Map</a>
+      <a href="/seal">Seal</a>
+      <a href="/donate" aria-current="page">Support</a>
+    </nav>
   </div>
+</header>
+
+<main class="container">
+
+<section class="hero-shell">
+<div class="hero-overlay">
+
+<div class="stack-lg">
+
+<div class="text-pill">
+SUPPORT · תְּרוּמָה
+</div>
+
+<h1 class="hero-heading">
+Help sustain LuminaNexus
+</h1>
+
+<p class="hero-subtitle">
+LuminaNexus is a small, hand-built sanctuary on the web for Torah,
+study, and careful creative building.
+</p>
+
+<p class="hero-subtitle">
+Your support helps keep the site online, develop new learning tools,
+and expand free access to Torah study.
+</p>
+
+</div>
+</div>
+</section>
+
+<section class="home-section">
+
+<div class="card-grid">
+
+<article class="home-card">
+<h3>Keep the lights on</h3>
+<p>
+Help cover hosting, infrastructure, and the quiet work of maintaining
+the LuminaNexus sanctuary.
+</p>
+
+<a href="https://buy.stripe.com/YOUR_LINK_SMALL" class="btn btn-primary">
+Give $18
+</a>
+
 </article>
 
+<article class="home-card">
+<h3>Support Torah study</h3>
+<p>
+Support development of Chavruta, the Slow Series, and the growing
+LuminaNexus library.
+</p>
 
+<a href="https://buy.stripe.com/YOUR_LINK_MEDIUM" class="btn btn-primary">
+Give $54
+</a>
 
-        <div class="panel">
-          <h3>Status &amp; tax information</h3>
-          <p>
-            LuminaNexus Foundation has applied to the IRS for recognition as a tax-exempt organization under Section 501(c)(3).
-            Our federal tax-exempt status is currently pending.
-          </p>
-          <div class="meta">
-            At this time, we cannot guarantee that donations are tax-deductible. If the IRS approves our application,
-            tax-deductible status for eligible donations may be retroactive to our formation.
-          </div>
-        </div>
-      </section>
+</article>
 
-      <section class="contact-info" aria-label="Contact information">
-        <h3>Contact Information</h3>
+<article class="home-card">
+<h3>Sustain the project</h3>
+<p>
+Help LuminaNexus grow into a lasting sanctuary for study,
+technology, and sacred creativity.
+</p>
 
-        <p>
-          <strong>LuminaNexus Foundation</strong><br />
-          Richard Lee<br />
-          3190 E. Ames Ave<br />
-          Kingman, AZ 86409
-        </p>
+<a href="https://buy.stripe.com/YOUR_LINK_LARGE" class="btn btn-primary">
+Give $180
+</a>
 
-        <p>
-          <strong>Phone:</strong> <a href="tel:19287164485">(928) 716-4485</a><br />
-          <strong>Email:</strong> <a href="mailto:LuminaNexus@Yahoo.com">LuminaNexus@Yahoo.com</a>
-        </p>
+</article>
 
-        <p>
-          <strong>Social:</strong><br />
-          <a href="https://www.facebook.com/LuminaNexus" target="_blank" rel="noopener">LuminaNexus on Facebook</a>
-        </p>
-      </section>
+</div>
 
-    </div>
-  </main>
+</section>
 
-  <footer>
-    © <span id="y"></span> LuminaNexus. All rights reserved.
-  </footer>
+<section class="home-section">
 
-  <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
-  </script>
+<h2 class="section-heading">
+Become a monthly supporter
+</h2>
+
+<p class="section-subtitle">
+Ongoing support allows LuminaNexus to grow slowly and sustainably.
+</p>
+
+<div class="hero-actions">
+
+<a href="https://buy.stripe.com/YOUR_MONTHLY_LINK" class="btn btn-primary">
+Support monthly
+</a>
+
+</div>
+
+</section>
+
+<section class="home-section">
+
+<h2 class="section-heading">
+Why support LuminaNexus?
+</h2>
+
+<p class="section-subtitle">
+LuminaNexus is built slowly, without advertising, algorithms,
+or distraction. It exists to help people study Torah carefully
+and build things that carry light rather than noise.
+</p>
+
+<p class="section-subtitle">
+If this work has helped your learning, your support helps keep
+the sanctuary open.
+</p>
+
+</section>
+
+</main>
+
+<footer class="footer">
+<p class="footer-meta">
+© 2026 LuminaNexus · A quiet nexus for luminous work.
+</p>
+</footer>
+
 </body>
 </html>
